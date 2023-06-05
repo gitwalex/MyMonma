@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
 }
 
@@ -9,12 +11,19 @@ android {
 
     defaultConfig {
         applicationId "com.gerwalex.mymonma"
+        resValue "string", "dbname", "monma.db"
         minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -22,13 +31,38 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        // Compile für unchecked und deprecation
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+            kotlinOptions {
+                jvmTarget = '1.8'
+                freeCompilerArgs = [
+                        "-Xjavac-arguments='-Xlint:unchecked -Xlint:deprecation'"
+                ]
+                freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+            }
+        }
+
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
+
+    buildFeatures {
+        dataBinding true
+        viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.1'
     }
 }
 
@@ -37,7 +71,65 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //Navigation
+    def nav_version = "2.5.3"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+
+    // Room
+    def roomVersion = "2.5.1"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+
+    // retrofit für fcm
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.10.0"
+
+    // Compose
+    def compose_ui_version = "1.4.3"
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
+    implementation "androidx.compose.material:material:$compose_ui_version"
+    implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.1'
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
+//    debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
+//    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+    implementation "androidx.compose.animation:animation:$compose_ui_version"
+    implementation "androidx.compose.foundation:foundation:$compose_ui_version"
+    implementation "androidx.compose.foundation:foundation-layout:$compose_ui_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
+    implementation "androidx.compose.runtime:runtime:$compose_ui_version"
+    runtimeOnly "androidx.compose.ui:ui-tooling:$compose_ui_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
+    implementation "androidx.navigation:navigation-compose:$nav_version" // Navigation
+    // Glance (Widgets)
+    implementation "androidx.glance:glance-appwidget:1.0.0-beta01"
+// Accompanist (https://google.github.io/accompanist/permissions/)
+    implementation 'com.google.accompanist:accompanist-permissions:0.30.1'
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
+    // Material30
+    def material3_version = "1.1.0"
+    implementation "androidx.compose.material3:material3:$material3_version"
+    implementation "androidx.compose.material3:material3-window-size-class:$material3_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
+
+    // calulator
+    implementation "com.maltaisn:calcdialog:2.2.2"
+    // SplashScreen
+//    implementation 'androidx.core:core-splashscreen:1.1.0-alpha01'
 }
