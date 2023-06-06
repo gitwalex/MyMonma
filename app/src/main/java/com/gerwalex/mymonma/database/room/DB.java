@@ -9,10 +9,13 @@ import androidx.room.TypeConverters;
 
 import com.gerwalex.monmang.database.room.Migration_49_50;
 import com.gerwalex.mymonma.R;
+import com.gerwalex.mymonma.database.tables.Account;
+import com.gerwalex.mymonma.database.tables.Cat;
+import com.gerwalex.mymonma.database.tables.CatClass;
 import com.gerwalex.mymonma.database.tables.Partnerstamm;
 
 
-@Database(entities = {Partnerstamm.class},
+@Database(entities = {Account.class, Cat.class, CatClass.class, Partnerstamm.class},
         //
         version = 1,
         //

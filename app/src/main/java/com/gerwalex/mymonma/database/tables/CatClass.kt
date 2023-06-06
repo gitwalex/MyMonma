@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.database.ObservableTableRowNew
 
 @Entity
-data class Type_CatClass(
+data class CatClass(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,

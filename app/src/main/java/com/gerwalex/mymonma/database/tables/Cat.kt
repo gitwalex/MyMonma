@@ -10,29 +10,29 @@ import com.gerwalex.mymonma.database.ObservableTableRowNew
 
 @Entity(
     foreignKeys = [ForeignKey(
-        entity = Type_CatClass::class,
-        parentColumns = ["_id"],
+        entity = CatClass::class,
+        parentColumns = ["id"],
         childColumns = ["catclassid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
         deferred = true
     ), ForeignKey(
-        entity = Type_Cat::class,
-        parentColumns = ["_id"],
+        entity = Cat::class,
+        parentColumns = ["id"],
         childColumns = ["obercatid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
         deferred = true
     ), ForeignKey(
-        entity = Type_Cat::class,
-        parentColumns = ["_id"],
+        entity = Cat::class,
+        parentColumns = ["id"],
         childColumns = ["supercatid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
         deferred = true
     )]
 )
-data class Type_Cat(
+data class Cat(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
@@ -63,6 +63,7 @@ data class Type_Cat(
 
     @Ignore
     constructor(c: Cursor) : this(null) {
+        fillContent(c)
         id = getAsLong("id")
         name = getAsString("name")
         description = getAsString("description")

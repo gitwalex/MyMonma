@@ -2,12 +2,12 @@ package com.gerwalex.mymonma
 
 import android.content.Context
 import android.graphics.Color
-import com.gerwalex.mymonma.database.tables.Type_Cat
+import com.gerwalex.mymonma.database.tables.Cat
 
 enum class Kontotyp {
     Giro {
 
-        override val supercatID = Type_Cat.CASHKONTOCATID
+        override val supercatID = Cat.CASHKONTOCATID
         override var color = Color.parseColor("#0Fffff00")
         override val catID = 1003
         override val textID = R.string.shortGiro
@@ -16,7 +16,7 @@ enum class Kontotyp {
     },
     Kreditkarte {
 
-        override val supercatID = Type_Cat.CASHKONTOCATID
+        override val supercatID = Cat.CASHKONTOCATID
         override var color = Color.parseColor("#0Fffff00")
         override val textID = R.string.shortKK
         override var isVerrechnungsKontoNeeded = true
@@ -26,7 +26,7 @@ enum class Kontotyp {
     },
     Depot {
 
-        override val supercatID = Type_Cat.DEPOTCATID
+        override val supercatID = Cat.DEPOTCATID
         override var color = Color.parseColor("#0F0000FF")
         override var isVerrechnungsKontoNeeded = true
         override val catID = 1005
@@ -36,7 +36,7 @@ enum class Kontotyp {
     },
     Vermoegen {
 
-        override val supercatID = Type_Cat.CASHKONTOCATID
+        override val supercatID = Cat.CASHKONTOCATID
         override val catID = 1006
         override val textID = R.string.shortVerm
         override val description = R.string.shortVerm
@@ -44,7 +44,7 @@ enum class Kontotyp {
     },
     Anlagen {
 
-        override val supercatID = Type_Cat.CASHKONTOCATID
+        override val supercatID = Cat.CASHKONTOCATID
         override val catID = 1007
         override val textID = R.string.shortAnlg
         override val description = R.string.shortAnlg
@@ -52,7 +52,7 @@ enum class Kontotyp {
     },
     Verbindlichkeiten {
 
-        override val supercatID = Type_Cat.CASHKONTOCATID
+        override val supercatID = Cat.CASHKONTOCATID
         override val textID = R.string.shortVerb
         override var isVerrechnungsKontoNeeded = true
         override val catID = 1008
@@ -61,7 +61,7 @@ enum class Kontotyp {
     },
     Immobilien {
 
-        override val supercatID = Type_Cat.CASHKONTOCATID
+        override val supercatID = Cat.CASHKONTOCATID
         override val catID = 1009
         override val textID = R.string.longImmo
         override val description = R.string.longImmo

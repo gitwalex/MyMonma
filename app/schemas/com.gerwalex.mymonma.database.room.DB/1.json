@@ -2,8 +2,298 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "24284b5f62613390f165043521c6c574",
+    "identityHash": "d11cc873701278c73db6b59af11c7c04",
     "entities": [
+      {
+        "tableName": "Account",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `catid` INTEGER NOT NULL, `name` TEXT NOT NULL, `inhaber` TEXT, `currency` TEXT, `iban` TEXT, `blz` TEXT, `bezeichnung` TEXT, `creditlimit` INTEGER, `verrechnungskonto` INTEGER, `kontotyp` TEXT NOT NULL, `openDate` TEXT, `bankname` TEXT, `bic` TEXT, `openamount` INTEGER, FOREIGN KEY(`catid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inhaber",
+            "columnName": "inhaber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iban",
+            "columnName": "iban",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "blz",
+            "columnName": "blz",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bezeichnung",
+            "columnName": "bezeichnung",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "creditlimit",
+            "columnName": "creditlimit",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "verrechnungskonto",
+            "columnName": "verrechnungskonto",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "kontotyp",
+            "columnName": "kontotyp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openDate",
+            "columnName": "openDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bankname",
+            "columnName": "bankname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bic",
+            "columnName": "bic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "openamount",
+            "columnName": "openamount",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "CatClass",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Cat",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `description` TEXT, `obercatid` INTEGER NOT NULL, `supercatid` INTEGER NOT NULL, `catclassid` INTEGER NOT NULL, `incomecat` INTEGER, `ausgeblendet` INTEGER NOT NULL, `saldo` INTEGER NOT NULL, `cnt` INTEGER NOT NULL, FOREIGN KEY(`catclassid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`obercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`supercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "obercatid",
+            "columnName": "obercatid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supercatid",
+            "columnName": "supercatid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catclassid",
+            "columnName": "catclassid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incomecat",
+            "columnName": "incomecat",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ausgeblendet",
+            "columnName": "ausgeblendet",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "saldo",
+            "columnName": "saldo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cnt",
+            "columnName": "cnt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Cat_obercatid",
+            "unique": false,
+            "columnNames": [
+              "obercatid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Cat_obercatid` ON `${TABLE_NAME}` (`obercatid`)"
+          },
+          {
+            "name": "index_Cat_supercatid",
+            "unique": false,
+            "columnNames": [
+              "supercatid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Cat_supercatid` ON `${TABLE_NAME}` (`supercatid`)"
+          },
+          {
+            "name": "index_Cat_catclassid",
+            "unique": false,
+            "columnNames": [
+              "catclassid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Cat_catclassid` ON `${TABLE_NAME}` (`catclassid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "CatClass",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catclassid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "obercatid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "supercatid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CatClass",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `description` TEXT, `intern` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "intern",
+            "columnName": "intern",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "Partnerstamm",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)",
@@ -34,7 +324,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '24284b5f62613390f165043521c6c574')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd11cc873701278c73db6b59af11c7c04')"
     ]
   }
 }

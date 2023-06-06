@@ -1,15 +1,28 @@
 package com.gerwalex.mymonma.database.tables
 
 import android.database.Cursor
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.Kontotyp
 import com.gerwalex.mymonma.database.ObservableTableRowNew
 import java.sql.Date
 
+@Entity(
+    foreignKeys = [ForeignKey(
+        entity = CatClass::class,
+        parentColumns = ["id"],
+        childColumns = ["catid"],
+        onDelete = ForeignKey.RESTRICT,
+        onUpdate = ForeignKey.CASCADE,
+        deferred = true
+    )]
+)
 data class Account(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
+    var catid: Long = 0,
     var name: String = "Unknown",
     var inhaber: String? = null,
     var currency: String? = null,
@@ -24,15 +37,19 @@ data class Account(
 
     var bankname: String? = null,
     var bic: String? = null,
-    var openamount: Long = 0,
-
+    var openamount: Long? = 0,
+    @Ignore
     var ausgeblendet: Boolean = false,
+    @Ignore
 
     var cnt: Int = 0,
+    @Ignore
 
     val supercatid: Long = 0,
+    @Ignore
 
     val isObercat: Boolean = false,
+    @Ignore
 
     val isVerrechnungskontoNeeded: Boolean = false,
 ) : ObservableTableRowNew() {
@@ -42,6 +59,7 @@ data class Account(
     constructor(c: Cursor) : this(id = null) {
         fillContent(c)
         id = getAsLong("id")
+        catid = getAsLong("catid")
         name = getAsString("name")!!
         inhaber = getAsString("inhaber")
         currency = getAsString("currency")
@@ -54,10 +72,8 @@ data class Account(
         openDate = getAsDate("openDate")
         openamount = getAsLong("openamount")
         bankname = getAsString("bankname")
-        val obercatid = getAsLong("obercatid")
         saldo = getAsLong("saldo")
         cnt = getAsInt("cnt")
-        ausgeblendet = getAsBoolean("ausgeblendet")
     }
 
     @Ignore

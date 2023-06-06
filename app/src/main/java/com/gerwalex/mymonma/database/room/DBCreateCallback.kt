@@ -34,7 +34,13 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
             db.beginTransaction()
             val am = context.resources.assets
             `in` = am.open("partnerstamm.csv")
-            loadCSVFile(`in`, db, "Partnerstamm")
+            loadCSVFile(`in`, db, "partnerstamm")
+            `in` = am.open("catclass.csv")
+            loadCSVFile(`in`, db, "catclass")
+            `in` = am.open("cat.csv")
+            loadCSVFile(`in`, db, "cat")
+            `in` = am.open("account.csv")
+            loadCSVFile(`in`, db, "account")
             db.setTransactionSuccessful()
         } catch (e: IOException) {
             e.printStackTrace()
