@@ -18,4 +18,5 @@
     <string name="shortAnlg">Anlagen</string>
     <string name="shortVerb">Verbindlichkeit</string>
     <string name="longImmo">Immobilien</string>
+    <string name="partnername">Empfänger</string>
 </resources>

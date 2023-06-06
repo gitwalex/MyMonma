@@ -1,15 +1,22 @@
 package com.gerwalex.mymonma.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import com.gerwalex.monmang.ui.content.AutocompletePartner
 import com.gerwalex.mymonma.MonMaViewModel
+import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
 import com.gerwalex.mymonma.ui.navigation.Destination
 
 @Composable
 fun HomeScreen(viewModel: MonMaViewModel, navigatTo: (Destination) -> Unit) {
+    Column {
 
-    AutocompletePartner(viewModel = viewModel) {
-        Log.d("HomeScreen", "HomeScreen: $it")
+
+//        AutoCompletePartnerView("") {
+//            Log.d("HomeScreen", "HomeScreen: selected = $it")
+//        }
+        AutoCompletePartnerView("Alex") {
+            Log.d("HomeScreen", "HomeScreen: selected = $it")
+        }
     }
 }
