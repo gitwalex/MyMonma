@@ -19,4 +19,6 @@
     <string name="shortVerb">Verbindlichkeit</string>
     <string name="longImmo">Immobilien</string>
     <string name="partnername">Empfänger</string>
+    <string name="categorie">Kategorie</string>
+    <string name="aktie">Aktie</string>
 </resources>

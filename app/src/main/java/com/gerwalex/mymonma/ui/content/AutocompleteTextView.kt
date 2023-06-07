@@ -1,7 +1,7 @@
 package com.gerwalex.mymonma.ui.content
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -34,7 +34,6 @@ fun AutoCompleteTextView(
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
     var showSelections by remember { mutableStateOf(false) }
-    showSelections = count > 1
     LazyColumn(
         state = lazyListState,
         modifier = modifier.heightIn(max = TextFieldDefaults.MinHeight * 6)
@@ -63,13 +62,12 @@ fun AutoCompleteTextView(
             items(
                 count = count
             ) { position ->
-                Row(
+                Box(
                     Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                         .clickable {
                             view.clearFocus()
-                            showSelections = false
                             onItemClick(position)
                         }
                 ) {
