@@ -1,0 +1,283 @@
+id;partnerid;name;wpkenn;isin;wptyp;risiko;beobachten;estEarning
+0;0;Nicht angegeben;;;Aktie;0.0;1;0.00
+2;2;Dow Jones 30;969420;;Index;1.0;0;0.00
+3;3;DAX ®;846900;;Index;1.0;0;0.00
+18;18;Bayer AG;BAY001;;Aktie;0.0;1;2.00
+19;19;BASF;BASF11;;Aktie;0.0;1;3.30
+20;20;Allianz SE;840400;;Aktie;3.0;1;9.60
+21;21;Linde AG;648300;;Aktie;0.0;1;0.00
+26;26;SAP;716460;;Aktie;0.0;1;1.85
+27;27;K+S AKTIENGESELLSCHAFT - INHABER-AKTIEN O.N.;KSAG88;;Aktie;0.0;1;0.00
+28;28;Siemens AG;723610;;Aktie;0.0;1;0.00
+64;64;Osram;LED400;;Aktie;0.0;1;0.00
+69;69;Stada;725180;;Aktie;0.0;1;0.00
+73;73;Salzgitter AG;;;Aktie;0.0;1;0.00
+84;84;Bechtle AG;;;Aktie;0.0;1;0.00
+107;107;Software AG;;;Aktie;0.0;1;0.00
+111;111;MDAX ® Index  open end (UBS);UB0A2V;;Zertifikat;0.0;1;0.00
+112;112;DAX Index  open end (BNP);543741;;Zertifikat;0.0;1;0.00
+113;113;DB X-TRACKERS DAX ETF 1C;DBX1DA;;ETF;0.0;1;0.00
+114;114;Henkel;604840;;Aktie;0.0;1;0.00
+115;115;Allianz Wachstum Europa A;848182;;Fonds;0.0;1;0.06
+119;119;Call Allianz;;;Optionschein;0.0;1;0.00
+126;126;DAX Turbo;;;Optionschein;0.0;1;0.00
+127;127;DAX Put;;;Optionschein;0.0;1;0.00
+128;128;Karstadt/Quelle;;;Aktie;0.0;1;0.00
+131;131;Dt. Lufthansa;;;Aktie;0.0;1;0.00
+134;134;DAX Long 238702;;;Optionschein;0.0;1;0.00
+138;138;DAX OPEN END 654780;;;Optionschein;0.0;1;0.00
+139;139;Sal.Oppenheim Allianz 17 %;;;Anleihe;0.0;1;0.00
+140;140;DAX Short 329969;;;Optionschein;0.0;1;0.00
+142;142;DIT Deutscher Rentenfonds K;;;Fonds;0.0;1;0.00
+143;143;DIT EURO RENTENFONDS;;;Fonds;0.0;1;0.00
+145;145;ABN Dax Mini Short;;;Optionschein;0.0;1;0.00
+147;147;Celanese;;;Aktie;0.0;1;0.00
+158;158;ABN Dt. Bank Short;;;Optionschein;0.0;1;0.00
+161;161;T-Online;;;Aktie;0.0;1;0.00
+163;163;ems New Media;;;Aktie;0.0;1;0.00
+164;164;DIT Industria;;;Fonds;0.0;1;0.00
+165;165;DIT Wachstum Europa;;;Fonds;0.0;1;0.00
+167;167;Daimler Zertifikat;;;Zertifikat;0.0;1;0.00
+168;168;Dt Telekom;;;Aktie;0.0;1;0.00
+169;169;Infineon;;;Aktie;0.0;1;0.00
+171;171;DIT EUR-Bond Total Return;;;Fonds;0.0;1;0.00
+172;172;Premiere;;;Aktie;0.0;1;0.00
+173;173;3U Telekom;;;Aktie;0.0;1;0.00
+176;176;Magix;;;Aktie;0.0;1;0.00
+177;177;Commerzbank;;;Aktie;0.0;1;0.00
+178;178;MDAX Roll. Turbo Long;;;Optionschein;0.0;1;0.00
+179;179;New Energy Fund;;;Aktie;0.0;1;0.00
+180;180;World Energy;;;Aktie;0.0;1;0.00
+182;182;DIT Vermoegensbildung Europa;;;Fonds;0.0;1;0.00
+183;183;DVermoegensplan 85;;;Fonds;0.0;1;0.00
+184;184;Optionen;;;Optionschein;0.0;1;0.00
+186;186;DAX Put 7050;;;Optionschein;0.0;1;0.00
+187;187;ABN Zertifikat;;;Zertifikat;0.0;1;0.00
+188;188;BASF Zertifikat;;;Zertifikat;0.0;1;0.00
+208;208;COMMERZBANK AG - INHABER-AKTIEN O.N.;;;Aktie;0.0;1;0.00
+381;381;Euro Stoxx 50 Zert;;;Zertifikat;0.0;1;0.00
+386;386;Commerzbank Outp;;;Zertifikat;0.0;1;0.00
+388;388;DAX Disc. Call 6800;;;Discount;0.0;1;0.00
+389;389;Bayer Call;;;Optionschein;0.0;1;0.00
+401;401;MAN;;;Aktie;0.0;1;0.00
+406;406;Bonus Barriere Nikkei;;;Zertifikat;0.0;1;0.00
+630;630;Dax Rolling Turbo GS0G2W;;;Optionschein;0.0;1;0.00
+631;631;Dax Rolling Turbo GS1CWJ;;;Optionschein;0.0;1;0.00
+633;633;Tria IT Solution;;;Aktie;0.0;1;0.00
+634;634;BNP Disk. Zert Call 4400;;;Discount;0.0;1;0.00
+635;635;BNP Disk. Zert Call 4600;;;Discount;0.0;1;0.00
+640;640;Bayer Option;;;Optionschein;0.0;1;0.00
+646;646;Heiler Software;;;Aktie;0.0;1;0.00
+647;647;Altana AG;;;Aktie;0.0;1;0.00
+653;653;Altana AG Call;;;Optionschein;0.0;1;0.00
+661;661;Dt. Post;;;Aktie;0.0;1;0.00
+662;662;Ford Motor Credit;;;Aktie;0.0;1;0.00
+664;664;BNP Disk. Zert Put;;;Discount;0.0;1;0.00
+667;667;ABN TecDax Zert;;;Zertifikat;0.0;1;0.00
+668;668;Discount Zert auf DAX;;;Discount;0.0;1;0.00
+669;669;ABN Allianz Long;;;Optionschein;0.0;1;0.00
+670;670;Schering;;;Aktie;0.0;1;0.00
+673;673;Bioletic;;;Aktie;0.0;1;0.00
+674;674;Lanxass;;;Aktie;0.0;1;0.00
+675;675;Advanced Vision;;;Aktie;0.0;1;0.00
+678;678;BNP Disk. Zert Call;;;Discount;0.0;1;0.00
+680;680;Schering Diskount Zert;;;Discount;0.0;1;0.00
+681;681;Wacker Chemie;;;Aktie;0.0;1;0.00
+682;682;Kolbenschmitd;;;Aktie;0.0;1;0.00
+683;683;MDAX Wave;;;Optionschein;0.0;1;0.00
+684;684;Lloyds Outperf.;;;Optionschein;0.0;1;0.00
+685;685;Merck;;;Aktie;0.0;1;0.00
+686;686;SGL Carbon Call;;;Optionschein;0.0;1;0.00
+687;687;Fluxx;;;Aktie;0.0;1;0.00
+688;688;Bonus Zert Telekom;;;Zertifikat;0.0;1;0.00
+689;689;BNP Disk. Zert Call 5000;;;Discount;0.0;1;0.00
+690;690;BNP Disk. Zert Call 5400;;;Discount;0.0;1;0.00
+691;691;DreBa Mini Long;;;Optionschein;0.0;1;0.00
+692;692;Brent Oil Zert;;;Zertifikat;0.0;1;0.00
+693;693;Stada Mini Long;;;Optionschein;0.0;1;0.00
+695;695;SAP Mini Long;;;Optionschein;0.0;1;0.00
+697;697;Hybo Real Estate Mini Long;;;Optionschein;0.0;1;0.00
+698;698;Commerzbank Mini Long;;;Optionschein;0.0;1;0.00
+700;700;BNP Disk. Zert Call 6700;;;Discount;0.0;1;0.00
+701;701;BNP Disk. Zert Call 6600;;;Discount;0.0;1;0.00
+702;702;Thyssen/Krupp Zert;;;Zertifikat;0.0;1;0.00
+703;703;EON Outp. Zert;;;Zertifikat;0.0;1;0.00
+704;704;BNP Disk. Zert Call 6500;;;Discount;0.0;1;0.00
+706;706;BNP Disk. Zert Call 7000;;;Discount;0.0;1;0.00
+707;707;BNP Disk. Zert Call 7200;;;Discount;0.0;1;0.00
+708;708;Merck Turbo Long;;;Optionschein;0.0;1;0.00
+710;710;Linde Bonus Zert;;;Zertifikat;0.0;1;0.00
+711;711;Allianz Discount Call 160;;;Discount;0.0;1;0.00
+713;713;GS Express Euro St. 50;;;Optionschein;0.0;1;0.00
+714;714;DAX Disc. Call 8200;;;Discount;0.0;1;0.00
+736;736;DAX Disc Put 5600 16.04.2010;;;Discount;0.0;1;0.00
+748;748;DAX Turbo Short;;;Optionschein;0.0;1;0.00
+750;750;Dax Disc Call 7000;;;Discount;0.0;1;0.00
+751;751;Dax Disc Call 6900;;;Discount;0.0;1;0.00
+752;752;DAX Disc Put 7200;;;Discount;0.0;1;0.00
+753;753;I-Shares FT;;;ETF;0.0;1;0.00
+754;754;Dax Disc Put 7500;;;Discount;0.0;1;0.00
+755;755;Dax Disc. Call 7200;;;Discount;0.0;1;0.00
+756;756;Dax Turbo Short 1;;;Optionschein;0.0;1;0.00
+757;757;DAX Disc Put 6700;;;Discount;0.0;1;0.00
+758;758;DB X-TR.II-IB.EU.IN.-L.1C;;;ETF;0.0;1;0.00
+760;760;Gildemeister;;;Aktie;0.0;1;0.00
+761;761;BASF Disc. Call;;;Discount;0.0;1;0.00
+762;762;Siemens Turbo Long;;;Optionschein;0.0;1;0.00
+763;763;BASF Disc Call 70;;;Discount;0.0;1;0.00
+764;764;Bayer Disc Call;;;Discount;0.0;1;0.00
+765;765;Bayer Disc Call 55;;;Discount;0.0;1;0.00
+766;766;Siemens Disc. Call;;;Discount;0.0;1;0.00
+767;767;Thyssen Krupp;;;Aktie;0.0;1;0.00
+768;768;Pfeiffer Vacuum;;;Aktie;0.0;1;0.00
+770;770;BASF DISCC 50;;;Discount;0.0;1;0.00
+771;771;BASGF DISCP 60;;;Discount;0.0;1;0.00
+772;772;BASF DISCC+ 45;;;Discount;0.0;1;0.00
+773;773;Dax Disc Call;;;Discount;0.0;1;0.00
+774;774;Dax Disc Call+;;;Discount;0.0;1;0.00
+775;775;Wincor Turbo Call;;;Optionschein;0.0;1;0.00
+776;776;BASF Disc Put;;;Discount;0.0;1;0.00
+777;777;Pfeiffer Vaccum Call;;;Optionschein;0.0;1;0.00
+778;778;DAX Disc Put+;;;Discount;0.0;1;0.00
+779;779;Fuchs Petrolub;;;Aktie;0.0;1;0.00
+780;780;Linde DiscCall;;;Discount;0.0;1;0.00
+781;781;Linde DiscCall2;;;Discount;0.0;1;0.00
+782;782;Bayer Turbo Call;;;Optionschein;0.0;1;0.00
+783;783;Linde Turbo Pur;;;Optionschein;0.0;1;0.00
+784;784;Bayer Dic Put;;;Optionschein;0.0;1;0.00
+785;785;Münchner Rück;;;Aktie;0.0;1;0.00
+789;789;Linde DiscCall3;;;Discount;0.0;1;0.00
+800;800;Bayer Disc Call 2;;;Discount;0.0;1;0.00
+808;808;Dax Disc Put+ 3;;;Discount;0.0;1;0.00
+809;809;Dax Disc Put +3;;;Discount;0.0;1;0.00
+810;810;Dax Disc Put + 2;;;Discount;0.0;1;0.00
+811;811;Dax Disc Put;;;Discount;0.0;1;0.00
+812;812;Dax Disc Call 2;;;Discount;0.0;1;0.00
+842;842;DIT Multimedia;;;Fonds;0.0;1;0.00
+844;844;KfW UF Med.Term;;;Anleihe;0.0;1;0.00
+845;845;Thyssen Mini Long;;;Optionschein;0.0;1;0.00
+846;846;MFMC Mini Long;;;Optionschein;0.0;1;0.00
+853;853;Wincor Nixdorf;;;Aktie;0.0;1;0.00
+857;857;RWE;;;Aktie;0.0;1;0.00
+862;862;Litauen Eo-Notes 5.3.13 4,5%;;;Anleihe;0.0;1;0.00
+863;863;DB X-TR. Germany covered;;;Fonds;0.0;1;0.00
+864;864;HeidelbergerCement;;;Aktie;0.0;1;0.00
+866;866;Fraport;;;Aktie;0.0;1;0.00
+867;867;Ungarn EO-Notes 28.10.10 3,62%;;;Anleihe;0.0;1;0.00
+882;882;DaimChr Anleihe;;;Anleihe;0.0;1;0.00
+941;941;DEKARent intern.;;;Fonds;0.0;1;0.00
+963;963;WL Bank AG 01.10.2008 2,1%;;;Anleihe;0.0;1;0.00
+967;967;LFA FoerderBa 26.10.2009 2,25%;;;Anleihe;0.0;1;0.00
+968;968;DEKA EuropaSelect;;;Fonds;0.0;1;0.00
+970;970;DEKA Struktur;;;Fonds;0.0;1;0.00
+971;971;DEKA Team GlobalSelect;;;Fonds;0.0;1;0.00
+975;975;DAX Disc. Call 6200;;;Discount;0.0;1;0.00
+976;976;Thyssen Discount Call 42 12/08;;;Discount;0.0;1;0.00
+977;977;Allianz Discount Call 130;;;Discount;0.0;1;0.00
+978;978;MüRü Outperformance;;;Optionschein;0.0;1;0.00
+979;979;DAX Disc. Call 7300;;;Discount;0.0;1;0.00
+980;980;DAX Bonus Capped;;;Zertifikat;0.0;1;0.00
+987;987;Dt. Börse Sprint 120;;;Optionschein;0.0;1;0.00
+990;990;DAX Disc. Call 6900;;;Discount;0.0;1;0.00
+992;992;HELABA 24.08.2009 2,5%;;;Anleihe;0.0;1;0.00
+993;993;DAX Disc. Call 5500;;;Discount;0.0;1;0.00
+996;996;DAX Bonus Capped 5452;;;Zertifikat;0.0;1;0.00
+1001;1001;Union Fonds;;;Fonds;0.0;1;0.00
+1002;1002;Bayer/CoBa Anleihe;;;Anleihe;0.0;1;0.00
+1008;1008;Meck KGaA;;;Aktie;0.0;1;0.00
+1035;1035;Best of Asia;;;Fonds;0.0;1;0.00
+1220;1220;Fuchs Petrolub Call;;;Optionschein;0.0;1;0.00
+1243;1243;Deka-ZukunftInvest;798372;;Fonds;0.0;0;0.33
+1256;1256;Dresdner Bank AG;;;Aktie;0.0;1;0.00
+1257;1257;DIT Lux Eurozins K;;;Fonds;0.0;1;0.00
+1258;1258;Dresdner Bank Optionen;;;Optionschein;0.0;1;0.00
+1259;1259;Dresdner Bank Call;;;Optionschein;0.0;1;0.00
+1260;1260;Daimler-Chrysler Option 278,10;;;Optionschein;0.0;1;0.00
+1262;1262;DAX Put 4200;;;Optionschein;0.0;1;0.00
+1263;1263;DAX Put 4600;;;Optionschein;0.0;1;0.00
+1264;1264;Kontron;;;Aktie;0.0;1;0.00
+1265;1265;DIT Technologie;;;Aktie;0.0;1;0.00
+1266;1266;Dresdner Bank MA Optionen;;;Optionschein;0.0;1;0.00
+1268;1268;DVermoegensplan 85 VL;;;Fonds;0.0;1;0.00
+1269;1269;Basket;;;Zertifikat;0.0;1;0.00
+1270;1270;Geldmarktfond;;;Fonds;0.0;1;0.00
+1271;1271;DIT Lux Money-Market;;;Fonds;0.0;1;0.00
+1272;1272;Bundesschatzbrief;;;Anleihe;0.0;1;0.00
+1273;1273;HELABA Komm-Obl;;;Anleihe;0.0;1;0.00
+1274;1274;EPRA Eu;;;Fonds;0.0;1;0.00
+1275;1275;Lyxor Euro MT;;;Fonds;0.0;1;0.00
+1276;1276;Ishares FTSE China;;;ETF;0.0;1;0.00
+1277;1277;DAX Disc Put 5600 19.02.2010;;;Discount;0.0;1;0.00
+1278;1278;DAX Disc. Call 5100;;;Discount;0.0;1;0.00
+1279;1279;DAX Disc. Call 5800;;;Discount;0.0;1;0.00
+1281;1281;Allianz Anleihe;;;Anleihe;0.0;1;0.00
+1282;1282;DAX Disc. Call 5100 19.03;;;Discount;0.0;1;0.00
+1283;1283;DAX Disc. Call 5300 19.03;;;Discount;0.0;1;0.00
+1284;1284;DAX Disc. Call 5300 17.02;;;Discount;0.0;1;0.00
+1285;1285;Disc Put 5700 19.03.2010;;;Discount;0.0;1;0.00
+1286;1286;DAX PUT 4800;;;Optionschein;0.0;1;0.00
+1288;1288;Call Siemens;;;Optionschein;0.0;1;0.00
+1289;1289;Call Telekom;;;Optionschein;0.0;1;0.00
+1290;1290;CAATOOSEE;;;Aktie;0.0;1;0.00
+1291;1291;Dt. Postbank;;;Aktie;0.0;1;0.00
+1292;1292;DJ ES Utili. Zert.;;;Zertifikat;0.0;1;0.00
+1293;1293;Allianz Zertifikat;;;Zertifikat;0.0;1;0.00
+1294;1294;DAX Disc. Call 5700;;;Discount;0.0;1;0.00
+1295;1295;DAX Disc. Call 6000;;;Discount;0.0;1;0.00
+1296;1296;Dt. Post Outperformance;;;Zertifikat;0.0;1;0.00
+1297;1297;Fuchs Petroleum Turbo Long;;;Optionschein;0.0;1;0.00
+1298;1298;FMC Turbo Long;;;Optionschein;0.0;1;0.00
+1299;1299;Siemens Call;;;Optionschein;0.0;1;0.00
+1300;1300;BASF Call;;;Optionschein;0.0;1;0.00
+1301;1301;Tognum;;;Aktie;0.0;1;0.00
+1302;1302;Siemens Turbo;;;Optionschein;0.0;1;0.00
+1303;1303;BASF Turbo;;;Optionschein;0.0;1;0.00
+1304;1304;Bayer Turbo Long;;;Optionschein;0.0;1;0.00
+1305;1305;K+S Call;;;Optionschein;0.0;1;0.00
+1306;1306;K+S Discount;;;Discount;0.0;1;0.00
+1307;1307;RWE Discount;;;Discount;0.0;1;0.00
+1310;1310;DAX Turbo Short 4300;;;Optionschein;0.0;1;0.00
+1311;1311;DAX Knock Out;;;Optionschein;0.0;1;0.00
+1312;1312;BASF Discount Zert;;;Discount;0.0;1;0.00
+1318;1318;Dax Disc Call 6500;;;Discount;0.0;1;0.00
+1319;1319;Helaba Carrara 1,00% 18.02.2025;HLB1YS;;Anleihe;0.0;1;0.00
+1320;1320;Helaba Carrara 3,10% / 1,25% 02.07.2024;HLB1EL;;Anleihe;0.0;1;0.00
+1321;1321;Helaba Carrara 1,00% 13.02.2023;HLB1KS;;Anleihe;0.0;1;0.00
+1327;1327;ISHSIII-EO G.B.5-7YR U.DZ;A0RL81;DE000A0YBRY0;ETF;0.0;1;0.00
+1329;1329;DK DB EUROG.GERMANY 5-10;ETFL20;DE000ETFL201;ETF;0.0;1;0.00
+1330;1330;DK IBOXX EO L.GE.COV.DIV.;ETFL35;DE000ETFL359;ETF;0.0;1;0.00
+1331;1331;DK IB EO LIQ.SOV.DIV.1-10;ETFL11;DE000ETFL110;ETF;0.0;1;0.00
+1338;1338;Dax Disc Put Plus;PB1XVJ;;Discount;0.0;1;0.00
+1379;1379;BNP PAR.EHG DISCC16 DAX;PS2AZG;DE000PS2AZG0;Discount;0.0;1;0.00
+1400;1400;Dax Disc Call 10500 01.2017;PB5V0U;;Discount;0.0;1;0.00
+1468;1468;Fresenius Medical Care;578580;DE0005785802;Aktie;0.0;1;1.20
+1522;1522;BNP PAR.EHG DISPLP17 DAX;PB8BJ0;DE000PB8BJ01;Discount;0.0;1;0.00
+1538;1538;BNP PAR.EHG DISPLP17 DAX;PB8BJ4;DE000PB8BJ43;Discount;0.0;1;0.00
+1540;1540;STADA ARZNEIMITT. Z.VERK.;A2E4R0;DE000A2E4R04;Aktie;0.0;1;0.00
+1562;1562;STADA ARZNEIMITT. Z.VERK.;A2GS5A;DE000A2GS5A4;Aktie;0.0;1;0.00
+1567;1567;DK DAXPLUS MAX.DIVIDEND;ETFL23;DE000ETFL235;ETF;0.0;1;0.00
+1568;1568;Deka DAX (ausschuettend) UCITS ETF;ETFL06;DE000ETFL060;ETF;0.0;1;1.30
+1594;1594;BNP PAR.EHG DISCC17 DAX;PS2A63;DE000PS2A636;Discount;0.0;1;0.00
+1611;1611;COMSTAGE-DAX UCITS ETF I;ETF001;LU0378438732;ETF;0.0;1;0.00
+1677;1677;BAYER AG    BZR;BAY1BR;DE000BAY1BR7;Aktie;0.0;1;0.00
+1680;1680;BNP PAR.EHG DISCP18 DAX;PR01VD;DE000PR01VD5;Discount;0.0;1;0.00
+1701;1701;LYX.MSCI WORLD U.ETF D;LYX0AG;FR0010315770;ETF;0.0;1;0.00
+1719;1719;Deka MSCI World UCITS ETF;ETFL50;DE000ETFL508;ETF;0.0;0;0.28
+1746;1746;BNP PAR.EHG CAP.BZ19 DAX;PP7YF0;DE000PP7YF09;Discount;0.0;1;0.00
+1748;1748;BNP PAR.EHG R.C.BOZ19 DAX;PZ3Y68;DE000PZ3Y684;Discount;0.0;1;0.00
+1753;1753;BNP PAR.EHG R.C.BOZ19 DAX;PZ3Y7E;DE000PZ3Y7E5;Discount;0.0;1;0.00
+1762;1762;COMST.ALP.DIV.PL.UC.ETF R;ETF750;DE000ETF7508;ETF;0.0;1;0.00
+1770;1770;OSRAM LICHT AG  Z.VERK.;LED01V;DE000LED01V2;Aktie;0.0;1;0.00
+1773;1773;Henkel InlineOs 75-110 2020/03 (UCB);HZ1BNJ;;Optionschein;1.0;0;0.00
+1823;1823;iShares Global Clean Energy UCITS ETF;A0MW0M;;ETF;1.0;0;0.03
+1837;1837;Siemens Energy AG;ENER6Y;;Aktie;1.0;0;0.00
+1853;1853;SAP DiscOS C  2020/12 (BNP);PX4FNN;;Discount;1.0;0;0.00
+1887;1887;DAX® (Kurs);846744;;Index;1.0;0;0.00
+1933;1933;DAX DiscOSPlus P  2021/09 (BNP);PF572V;;Optionschein;3.0;0;0.00
+1934;1934;DAX DiscOSPlus P  2021/10 (BNP);PF5723;;Optionschein;3.0;0;0.00
+1941;1941;DAX DiscOSPlus P  2021/07 (BNP);PF572E;;Optionschein;3.0;0;0.00
+1947;1947;DAX DiscOSPlus P  2021/06 (BNP);PX6QS3;;Optionschein;3.0;0;0.00
+1948;1948;DAX DiscOSPlus P  2021/11 (BNP);PF573L;;Optionschein;3.0;0;0.00
+1982;1982;DAX DiscOSPlus P  2021/12 (BNP);PF8XJC;;Aktie;3.0;0;0.00
+1983;1983;COMMERZBANK InlineOs 5-7 2021/11 (UCB);HR8XA1;;Aktie;3.0;0;0.00
+2005;2005;iShares STOXX Europe 600 Basic Resources UCITS ETF (DE);A0F5UK;;ETF;3.0;0;0.00

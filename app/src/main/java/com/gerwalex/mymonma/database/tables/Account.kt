@@ -19,10 +19,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.gerwalex.mymonma.Kontotyp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.ObservableTableRowNew
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.enums.Kontotyp
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

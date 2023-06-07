@@ -13,9 +13,10 @@ import com.gerwalex.mymonma.database.tables.Account;
 import com.gerwalex.mymonma.database.tables.Cat;
 import com.gerwalex.mymonma.database.tables.CatClass;
 import com.gerwalex.mymonma.database.tables.Partnerstamm;
+import com.gerwalex.mymonma.database.tables.WPStamm;
 
 
-@Database(entities = {Account.class, Cat.class, CatClass.class, Partnerstamm.class},
+@Database(entities = {Account.class, Cat.class, CatClass.class, Partnerstamm.class, WPStamm.class},
         //
         version = 1,
         //

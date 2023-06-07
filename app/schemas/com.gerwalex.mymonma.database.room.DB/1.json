@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "64a9853d02ade2217941b48222905b93",
+    "identityHash": "e2e64c92c9b53ff5813a6d601470b3a9",
     "entities": [
       {
         "tableName": "Account",
@@ -262,7 +262,7 @@
       },
       {
         "tableName": "CatClass",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `description` TEXT, `intern` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `intern` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -274,7 +274,7 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "description",
@@ -323,12 +323,102 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "WPStamm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `partnerid` INTEGER NOT NULL, `name` TEXT NOT NULL, `wpkenn` TEXT, `isin` TEXT, `wptyp` TEXT NOT NULL, `risiko` INTEGER NOT NULL, `beobachten` INTEGER NOT NULL, `estEarning` TEXT NOT NULL, FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "partnerid",
+            "columnName": "partnerid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wpkenn",
+            "columnName": "wpkenn",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isin",
+            "columnName": "isin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "wptyp",
+            "columnName": "wptyp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "risiko",
+            "columnName": "risiko",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "beobachten",
+            "columnName": "beobachten",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estEarning",
+            "columnName": "estEarning",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_WPStamm_partnerid",
+            "unique": false,
+            "columnNames": [
+              "partnerid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPStamm_partnerid` ON `${TABLE_NAME}` (`partnerid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Partnerstamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "partnerid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64a9853d02ade2217941b48222905b93')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e2e64c92c9b53ff5813a6d601470b3a9')"
     ]
   }
 }

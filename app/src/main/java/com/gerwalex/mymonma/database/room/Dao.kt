@@ -25,4 +25,7 @@ abstract class Dao(val db: DB) {
     @Query("Select * from Account where name like '%'||:filter ||'%' order by name")
     abstract fun getAccountlist(filter: String): Cursor
 
+    @Query("Select * from WPStamm where name like '%'||:filter ||'%' order by name")
+    abstract fun getWPStammlist(filter: String): Cursor
+
 }

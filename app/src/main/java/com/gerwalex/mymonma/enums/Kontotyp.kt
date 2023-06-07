@@ -1,7 +1,8 @@
-package com.gerwalex.mymonma
+package com.gerwalex.mymonma.enums
 
 import android.content.Context
 import android.graphics.Color
+import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.tables.Cat
 
 enum class Kontotyp {
