@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -43,14 +44,21 @@ data class Partnerstamm(
 
 @Composable
 fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
+    val scope = rememberCoroutineScope()
     var partnername by remember { mutableStateOf(filter) }
     val cursor = MutableLiveData<Cursor>()
     val data by cursor.observeAsState()
     LaunchedEffect(partnername) {
         withContext(Dispatchers.IO) {
-            cursor.postValue(
-                DB.dao.getPartnerlist(partnername)
-            )
+            val c = DB.dao.getPartnerlist(partnername)
+            if (c.moveToFirst()) {
+                val firstPartner = Partnerstamm(c)
+                if (firstPartner.name == partnername) {
+                    // Der erste Eintrag passt vollständig - nehmen
+                    selected(firstPartner)
+                }
+            }
+            cursor.postValue(c)
         }
     }
 
@@ -60,8 +68,8 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
         query = partnername,
         queryLabel = stringResource(id = R.string.partnername),
         onQueryChanged = {
-            partnername = it
             selected(Partnerstamm(name = it))
+            partnername = it
         },
         count = data?.count ?: 0,
         onClearClick = { partnername = "" },
@@ -74,7 +82,7 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
                     selected(partner)
                 }
             }
-        }
+        },
     ) { position ->
         data?.let { c ->
             if (c.moveToPosition(position)) {

@@ -30,7 +30,8 @@ fun QuerySearch(
     label: String,
     onDoneActionClick: () -> Unit = {},
     onClearClick: () -> Unit = {},
-    onQueryChanged: (String) -> Unit
+    onQueryChanged: (String) -> Unit,
+    onFocusChanged: (isFocused: Boolean) -> Unit = {}
 ) {
 
 
@@ -53,6 +54,7 @@ fun QuerySearch(
                         selection = TextRange(0, query.length)
                     )
                 }
+                onFocusChanged(focusState.isFocused)
             },
         value = query,
         onValueChange = {

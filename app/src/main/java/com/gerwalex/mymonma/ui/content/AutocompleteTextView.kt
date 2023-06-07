@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -18,74 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 
-@Composable
-fun <T> AutoCompleteTextView(
-    modifier: Modifier,
-    query: String,
-    queryLabel: String,
-    onQueryChanged: (String) -> Unit = {},
-    predictions: List<T>,
-    onDoneActionClick: () -> Unit = {},
-    onClearClick: () -> Unit = {},
-    onItemClick: (T) -> Unit = {},
-    itemContent: @Composable (T) -> Unit = {}
-) {
-    val view = LocalView.current
-    val lazyListState = rememberLazyListState()
-    LazyColumn(
-        state = lazyListState,
-        modifier = modifier.heightIn(max = TextFieldDefaults.MinHeight * 6)
-    ) {
-        item {
-            QuerySearch(
-                query = query,
-                label = queryLabel,
-                onQueryChanged = onQueryChanged,
-                onDoneActionClick = {
-                    view.clearFocus()
-                    onDoneActionClick()
-                },
-                onClearClick = {
-                    onClearClick()
-                }
-            )
-        }
-        if (predictions.isNotEmpty()) {
-            items(items = predictions) { prediction ->
-                Row(
-                    Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .clickable {
-                            view.clearFocus()
-                            onItemClick(prediction)
-                        }
-                ) {
-                    itemContent(prediction)
-                }
-            }
-        }
-
-    }
-}
 
 @Composable
 fun AutoCompleteTextView(
     modifier: Modifier,
     query: String,
     queryLabel: String,
-    onQueryChanged: (String) -> Unit = {},
     count: Int,
+    onQueryChanged: (query: String) -> Unit = {},
     onDoneActionClick: () -> Unit = {},
     onClearClick: () -> Unit = {},
-    onItemClick: (Int) -> Unit = {},
-    itemContent: @Composable (Int) -> Unit = {}
+    onItemClick: (position: Int) -> Unit = {},
+    onFocusChanged: (isFocused: Boolean) -> Unit = {},
+    itemContent: @Composable (position: Int) -> Unit = {}
 ) {
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
-    var showSelections by remember {
-        mutableStateOf(false)
-    }
+    var showSelections by remember { mutableStateOf(false) }
     showSelections = count > 1
     LazyColumn(
         state = lazyListState,
@@ -103,7 +51,12 @@ fun AutoCompleteTextView(
                 },
                 onClearClick = {
                     onClearClick()
+                },
+                onFocusChanged = { isFocused ->
+                    showSelections = isFocused
+                    onFocusChanged(isFocused)
                 }
+
             )
         }
         if (showSelections) {

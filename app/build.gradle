@@ -129,7 +129,8 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
 
     // calulator
-    implementation "com.maltaisn:calcdialog:2.2.2"
+    implementation 'com.github.gitwalex:calcdialoglib:2.2.1'
+
     // SplashScreen
 //    implementation 'androidx.core:core-splashscreen:1.1.0-alpha01'
 }
