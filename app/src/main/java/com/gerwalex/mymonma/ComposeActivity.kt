@@ -15,8 +15,10 @@ import androidx.navigation.compose.rememberNavController
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.MyNavHost
+import com.maltaisn.calcdialog.CalcDialog
+import java.math.BigDecimal
 
-class ComposeActivity : AppCompatActivity() {
+class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
 
     private lateinit var navController: NavHostController
     private val viewModel by viewModels<MonMaViewModel>()
@@ -41,5 +43,16 @@ class ComposeActivity : AppCompatActivity() {
 
     fun navigateTo(destination: Destination) {
 
+    }
+
+    override fun onValueEntered(requestCode: Int, value: BigDecimal?) {
+        val result = Bundle().apply {
+            putString(CalcResult, value.toString())
+        }
+        supportFragmentManager.setFragmentResult(CalcResult, result)
+    }
+
+    companion object {
+        const val CalcResult = "CalcResult"
     }
 }

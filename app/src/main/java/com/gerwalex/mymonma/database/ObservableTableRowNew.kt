@@ -147,6 +147,12 @@ open class ObservableTableRowNew() {
         return BigDecimal(getAsString(column))
     }
 
+    fun getAsBigDecimalOrNull(column: String): BigDecimal? {
+        return getAsString(column)?.let {
+            BigDecimal(it)
+        }
+    }
+
     fun getAsCurrency(column: String): BigDecimal {
         val value = BigDecimal(getAsString(column))
         value.setScale(

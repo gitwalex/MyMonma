@@ -51,11 +51,6 @@ data class Cat(
     var ausgeblendet: Boolean = false,
 
     /**
-     * Summe der aufgelaufenen CashTrx-Betraege
-     */
-    var saldo: Long = 0,
-
-    /**
      * Antahl der CashTrx zu dieser catid
      */
     var cnt: Long = 0,
@@ -72,7 +67,6 @@ data class Cat(
         catclassid = getAsLong("catclassid")
         incomecat = getAsBoolean("incomecat")
         ausgeblendet = getAsBoolean("ausgeblendet")
-        saldo = getAsLong("saldo")
         cnt = getAsLong("cnt")
     }
 

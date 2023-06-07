@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
+import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.navigation.Destination
+import java.math.BigDecimal
 
 @Composable
 fun HomeScreen(viewModel: MonMaViewModel, navigatTo: (Destination) -> Unit) {
@@ -17,6 +19,9 @@ fun HomeScreen(viewModel: MonMaViewModel, navigatTo: (Destination) -> Unit) {
 //        }
         AutoCompletePartnerView("Alex") {
             Log.d("HomeScreen", "HomeScreen: selected = $it")
+        }
+        AmountEditView(value = BigDecimal("100.23")) {
+
         }
     }
 }

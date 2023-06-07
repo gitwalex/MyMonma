@@ -20,7 +20,7 @@ import com.gerwalex.mymonma.database.tables.Partnerstamm;
         version = 1,
         //
         views = {})
-@TypeConverters({MonMaConverter.class})
+@TypeConverters({MonMaConverter.class, MyConverter.class})
 public abstract class DB extends RoomDatabase {
     public static String DBNAME;
     public static Dao dao;
