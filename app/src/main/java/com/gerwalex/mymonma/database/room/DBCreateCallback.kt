@@ -45,6 +45,8 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
             loadCSVFile(`in`, db, "WPStamm")
             `in` = am.open("wpkurs.csv")
             loadCSVFile(`in`, db, "WPKurs")
+            `in` = am.open("cashtrx.csv")
+            loadCSVFile(`in`, db, "CashTrx")
             db.setTransactionSuccessful()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -90,9 +92,10 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
                         current.split(";".toRegex()).dropLastWhile { it.isEmpty() }
                             .toTypedArray()
                     for (i in csvcolumns.indices) {
-                        if (csvcolumns[i] != null) {
-                            csvcolumns[i] = csvcolumns[i]!!.trim { it <= ' ' }
-                            cv.put(colnames[i], csvcolumns[i])
+                        csvcolumns[i]?.let {
+                            if (it.isNotEmpty()) {
+                                cv.put(colnames[i], it)
+                            }
                         }
                     }
                 }

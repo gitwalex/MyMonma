@@ -26,9 +26,11 @@ abstract class Dao(val db: DB) {
     abstract fun getAccountlist(filter: String): Cursor
 
     @Query(
-        "Select * from Account " +
-                //",(select total())" +
-                " order by kontotyp, name"
+        "select * " +
+                ",(select total(amount) from cashtrx where  transferid is null and a.id = accountid) " +
+                " - (select total(amount) from cashtrx where catid = a.id) as saldo " +
+                " from account a " +
+                "order by kontotyp, name"
     )
     abstract fun getAccountlist(): Cursor
 

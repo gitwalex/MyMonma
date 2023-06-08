@@ -1,51 +1,51 @@
 id;name;description;obercatid;supercatid;catclassid;incomecat;ausgeblendet;cnt
-0;Ohne Kategorie;Standardeintrag für neue Umsätze;0;0;0;0;0;169
-1;[Alex Depot Gegenkonto];;1007;1001;2;0;0;1285
-2;[comdirect bank];;1003;1001;2;0;0;5957
-3;[comdirekt Giro];;1003;1001;2;0;1;9
-4;[comdirekt Tagesgeld];;1007;1001;2;0;1;30
-5;[Diba Extrakonto Alex];;1007;1001;2;0;0;13
-6;[DiBa Ulli];;1003;1001;2;0;1;6
-7;[Gemeinsames Konto];;1007;1001;2;0;0;1604
-8;[Giro Kostenlos];;1003;1001;2;0;1;45
-9;[Sparkonto Postbank];;1007;1001;2;0;1;17
-11;[Ulli Gehaltskonto];;1003;1001;2;0;0;2619
-12;[ADAC-Kartendoppel];;1004;1001;2;0;1;0
-13;[Allianz LV];;1007;1001;2;0;1;1
-14;[gemeinsames Konto bei FraSpa];;1007;1001;2;0;1;36
-15;[Haus Kelkheim];;1007;1001;2;0;1;2
-16;[Immobilie Oberursel];;1009;1001;2;0;1;2
-17;[Immobilie Steinbach];;1009;1001;2;0;1;6
-18;[Kautionskonto];;1009;1001;2;0;0;2
-19;[Ulli 1822 Spar];;1007;1001;2;0;0;598
-20;[Ulli Tagesgeld FraSpa];;1007;1001;2;0;1;1
-21;[Darlehen I Oberursel];;1008;1001;2;0;1;87
-22;[Darlehen II Oberursel];;1008;1001;2;0;1;19
-23;[Darlehen Steinbach];;1008;1001;2;0;1;132
-24;[Verbindlichkeiten Finanzamt];;1008;1001;2;0;1;16
-25;[Depot Alex];;1005;1002;2;0;0;931
-26;[Depot Ulli];;1005;1002;2;0;0;648
-27;[gemeinsames Depot];;1005;1002;2;0;0;1597
-41;[AccountWerte: _id=41.name];;1004;1001;2;0;1;12
-43;[BMW X1];;1006;1001;2;0;0;56
-45;[Festgeld Debeka];;1007;1001;2;0;1;1
-46;[Visa Amazon];;1004;1001;2;0;0;812
-47;[Bar];;1003;1001;2;0;0;1
-1000;<Splittbuchung>;;1000;1000;1;0;1;1443
-1001;Giro-, Kredit- und Anlagekonten;;1001;1001;2;0;1;0
-1002;Depotkonten;;1002;1002;2;0;1;0
-1003;Girokonten;;1003;1001;2;0;0;0
-1004;Visa, Mastercard, Amexco;;1004;1001;2;0;0;0
-1005;Wertpapierkonten;;1005;1002;2;0;0;0
-1006;Vermögenskonten;;1006;1001;2;0;0;0
-1007;Sparverträge, Festgelder;;1007;1001;2;0;0;0
-1008;Verbindlichkeiten und Kredite;;1008;1001;2;0;0;0
-1009;Immobilien;;1009;1001;2;0;0;0
+0;Ohne Kategorie;Standardeintrag für neue Umsätze;0;0;0;;0;169
+1;[Alex Depot Gegenkonto];;1007;1001;2;;0;1285
+2;[comdirect bank];;1003;1001;2;;0;5957
+3;[comdirekt Giro];;1003;1001;2;;1;9
+4;[comdirekt Tagesgeld];;1007;1001;2;;1;30
+5;[Diba Extrakonto Alex];;1007;1001;2;;0;13
+6;[DiBa Ulli];;1003;1001;2;;1;6
+7;[Gemeinsames Konto];;1007;1001;2;;0;1604
+8;[Giro Kostenlos];;1003;1001;2;;1;45
+9;[Sparkonto Postbank];;1007;1001;2;;1;17
+11;[Ulli Gehaltskonto];;1003;1001;2;;0;2619
+12;[ADAC-Kartendoppel];;1004;1001;2;;1;0
+13;[Allianz LV];;1007;1001;2;;1;1
+14;[gemeinsames Konto bei FraSpa];;1007;1001;2;;1;36
+15;[Haus Kelkheim];;1007;1001;2;;1;2
+16;[Immobilie Oberursel];;1009;1001;2;;1;2
+17;[Immobilie Steinbach];;1009;1001;2;;1;6
+18;[Kautionskonto];;1009;1001;2;;0;2
+19;[Ulli 1822 Spar];;1007;1001;2;;0;598
+20;[Ulli Tagesgeld FraSpa];;1007;1001;2;;1;1
+21;[Darlehen I Oberursel];;1008;1001;2;;1;87
+22;[Darlehen II Oberursel];;1008;1001;2;;1;19
+23;[Darlehen Steinbach];;1008;1001;2;;1;132
+24;[Verbindlichkeiten Finanzamt];;1008;1001;2;;1;16
+25;[Depot Alex];;1005;1002;2;;0;931
+26;[Depot Ulli];;1005;1002;2;;0;648
+27;[gemeinsames Depot];;1005;1002;2;;0;1597
+41;[AccountWerte: _id=41.name];;1004;1001;2;;1;12
+43;[BMW X1];;1006;1001;2;;0;56
+45;[Festgeld Debeka];;1007;1001;2;;1;1
+46;[Visa Amazon];;1004;1001;2;;0;812
+47;[Bar];;1003;1001;2;;0;1
+1000;<Splittbuchung>;;1000;1000;1;;1;1443
+1001;Giro-, Kredit- und Anlagekonten;;1001;1001;2;;1;0
+1002;Depotkonten;;1002;1002;2;;1;0
+1003;Girokonten;;1003;1001;2;;0;0
+1004;Visa, Mastercard, Amexco;;1004;1001;2;;0;0
+1005;Wertpapierkonten;;1005;1002;2;;0;0
+1006;Vermögenskonten;;1006;1001;2;;0;0
+1007;Sparverträge, Festgelder;;1007;1001;2;;0;0
+1008;Verbindlichkeiten und Kredite;;1008;1001;2;;0;0
+1009;Immobilien;;1009;1001;2;;0;0
 2000;WPUmsatz;Bestandsveränderungen Wertpapier;2000;2000;3;0;0;0
 2001;Kauf;Kauf;2000;2000;3;0;0;1175
 2050;Verkauf;Verkauf;2000;2000;3;1;0;691
-2090;WP_Splitt;Wertpapiersplitt;2000;2000;3;0;0;4
-2091;Spin-Off;Unternehmensaufspaltung;2000;2000;3;0;0;0
+2090;WP_Splitt;Wertpapiersplitt;2000;2000;3;;0;4
+2091;Spin-Off;Unternehmensaufspaltung;2000;2000;3;;0;0
 2100;Kapitalerträge;;2100;2100;112;1;0;0
 2101;Kapitalerträge:Stückzinsen;;2101;2100;112;0;1;8
 2103;Kapitalerträge:Thesaurierung;;2103;2100;112;1;1;75
@@ -58,7 +58,7 @@ id;name;description;obercatid;supercatid;catclassid;incomecat;ausgeblendet;cnt
 2200;Kursgewinne (realisiert);;2200;2100;112;1;0;637
 2201;Kursverluste (realisiert);;2201;2100;112;0;0;594
 2500;Steuer u. Abgab:Abgeltungssteuer;;10040;10040;112;0;0;755
-9000;<Eröffnungssaldo>;;9000;9000;1;0;1;10
+9000;<Eröffnungssaldo>;;9000;9000;1;;1;10
 10001;And. Einkommen;Andere Einkommen;10001;10001;115;1;0;93
 10002;Lohn,Gehalt,Rente;;10002;10002;101;1;0;260
 10003;Sparen;;10003;10003;103;1;0;1

@@ -140,7 +140,9 @@ open class ObservableTableRowNew() {
      * @return Date-Objekt oder null
      */
     fun getAsDate(column: String): Date? {
-        return Date.valueOf(getAsString(column))
+        return getAsString(column)?.let {
+            Date.valueOf(getAsString(column))
+        }
     }
 
     fun getAsBigDecimal(column: String): BigDecimal {

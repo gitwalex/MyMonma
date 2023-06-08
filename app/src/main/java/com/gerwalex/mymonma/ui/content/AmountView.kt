@@ -21,6 +21,7 @@ import com.gerwalex.mymonma.ComposeActivity
 import com.gerwalex.mymonma.ext.getActivity
 import com.maltaisn.calcdialog.CalcDialog
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.NumberFormat
 
 
@@ -33,12 +34,16 @@ fun AmountView(
     colorMode: Boolean = true,
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance() }
+    val myValue = value.setScale(
+        currency.maximumFractionDigits,
+        RoundingMode.HALF_UP
+    )
     Text(
         modifier = modifier,
-        text = currency.format(value),
+        text = currency.format(myValue),
         style = style ?: LocalTextStyle.current,
         fontWeight = fontWeight,
-        color = if (colorMode && value < BigDecimal(0)) Color.Red else Color.Black,
+        color = if (colorMode && myValue < BigDecimal(0)) Color.Red else Color.Black,
         textAlign = TextAlign.End,
     )
 }

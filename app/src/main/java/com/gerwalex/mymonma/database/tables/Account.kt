@@ -55,7 +55,6 @@ data class Account(
     var verrechnungskonto: Long? = null,
     var kontotyp: Kontotyp = Kontotyp.Giro,
     var openDate: Date? = Date(System.currentTimeMillis()),
-
     var bankname: String? = null,
     var bic: String? = null,
     var openamount: BigDecimal = BigDecimal.ZERO,
