@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -72,7 +71,6 @@ data class WPStamm(
 
 @Composable
 fun AutoCompleteWPStammView(filter: String, selected: (WPStamm) -> Unit) {
-    val scope = rememberCoroutineScope()
     var wpstammname by remember { mutableStateOf(filter) }
     val cursor = MutableLiveData<Cursor>()
     val data by cursor.observeAsState()
@@ -84,6 +82,8 @@ fun AutoCompleteWPStammView(filter: String, selected: (WPStamm) -> Unit) {
                 if (first.name == wpstammname) {
                     // Der erste Eintrag passt vollständig - nehmen
                     selected(first)
+                } else {
+                    selected(WPStamm(name = wpstammname))
                 }
             }
             cursor.postValue(c)
@@ -96,7 +96,6 @@ fun AutoCompleteWPStammView(filter: String, selected: (WPStamm) -> Unit) {
         query = wpstammname,
         queryLabel = stringResource(id = R.string.wpstamm),
         onQueryChanged = {
-            selected(WPStamm(name = it))
             wpstammname = it
         },
         count = data?.count ?: 0,

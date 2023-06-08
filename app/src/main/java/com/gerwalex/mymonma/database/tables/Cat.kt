@@ -107,14 +107,12 @@ fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
     var catname by remember { mutableStateOf(filter) }
     val cursor = MutableLiveData<Cursor>()
     val data by cursor.observeAsState()
-    var count by remember { mutableStateOf(0) }
     LaunchedEffect(catname) {
         withContext(Dispatchers.IO) {
             val c = DB.dao.getCatlist(catname)
             if (c.moveToFirst()) {
                 selected(Cat(c))
             }
-            count = c.count
             cursor.postValue(c)
         }
     }
@@ -125,7 +123,7 @@ fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
         query = catname,
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = { catname = it },
-        count = count,
+        count = data?.count ?: 0,
         onClearClick = { catname = "" },
         onDoneActionClick = { },
         onItemClick = { position ->
@@ -133,7 +131,6 @@ fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
                 if (c.moveToPosition(position)) {
                     val cat = Cat(c)
                     catname = cat.name
-                    count = 0
                     selected(cat)
                 }
             }

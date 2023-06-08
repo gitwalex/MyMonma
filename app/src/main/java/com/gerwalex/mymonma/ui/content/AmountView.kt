@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.ComposeActivity
 import com.gerwalex.mymonma.ext.getActivity
@@ -26,22 +27,26 @@ import java.text.NumberFormat
 @Composable
 fun AmountView(
     value: BigDecimal,
+    modifier: Modifier = Modifier,
     style: TextStyle? = null,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance() }
     Text(
+        modifier = modifier,
         text = currency.format(value),
         style = style ?: LocalTextStyle.current,
         fontWeight = fontWeight,
-        color = if (colorMode && value < BigDecimal(0)) Color.Red else Color.Black
+        color = if (colorMode && value < BigDecimal(0)) Color.Red else Color.Black,
+        textAlign = TextAlign.End,
     )
 }
 
 @Composable
 fun AmountEditView(
     value: BigDecimal,
+    modifier: Modifier = Modifier,
     style: TextStyle? = null,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
@@ -51,7 +56,7 @@ fun AmountEditView(
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     Box(
-        modifier = Modifier.clickable {
+        modifier = modifier.clickable {
             context.getActivity()?.supportFragmentManager?.let { fm ->
                 CalcDialog().apply {
                     settings.also { settings ->
@@ -72,7 +77,13 @@ fun AmountEditView(
                 }
             }
         }) {
-        AmountView(value = myValue, style = style, fontWeight, colorMode)
+        AmountView(
+            value = myValue,
+            modifier = modifier,
+            style = style,
+            fontWeight = fontWeight,
+            colorMode = colorMode
+        )
 
     }
 }

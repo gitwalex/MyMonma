@@ -19,3 +19,11 @@ when ertragestimated < 100 then "0." ||   substr("00" || ertragestimated, -2)
 else substr(ertragestimated, 1, length(ertragestimated) -2 )   || "." ||   substr("00" || ertragestimated, -2)
 end as estEarning
 from WPStammdaten
+
+WPKurs:
+select _id as id, btag, wpid,
+case
+when kurs = 0 then "0.00"
+when kurs < 100 then "0." ||   substr("00" || kurs, -2)
+else substr(kurs, 1, length(kurs) -2 )   || "." ||   substr("00" || kurs, -2) end as kurs
+from WPKurs

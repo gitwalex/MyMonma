@@ -22,6 +22,19 @@ object Home : Destination() {
         navController.popBackStack(name, false)
     }
 
+
+}
+
+object Up : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String
+        get() = "Up"
+
+    override fun navigate(navController: NavController) {
+        navController.navigateUp()
+    }
+
 }
 
 

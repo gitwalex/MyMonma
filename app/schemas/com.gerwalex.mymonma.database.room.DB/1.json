@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e2e64c92c9b53ff5813a6d601470b3a9",
+    "identityHash": "44b2df793bfc440c0604761410e6415f",
     "entities": [
       {
         "tableName": "Account",
@@ -413,12 +413,81 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "WPKurs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `wpid` INTEGER NOT NULL, `kurs` TEXT NOT NULL, FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wpid",
+            "columnName": "wpid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kurs",
+            "columnName": "kurs",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_WPKurs_btag",
+            "unique": false,
+            "columnNames": [
+              "btag"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPKurs_btag` ON `${TABLE_NAME}` (`btag`)"
+          },
+          {
+            "name": "index_WPKurs_wpid",
+            "unique": false,
+            "columnNames": [
+              "wpid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPKurs_wpid` ON `${TABLE_NAME}` (`wpid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "WPStamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "wpid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e2e64c92c9b53ff5813a6d601470b3a9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '44b2df793bfc440c0604761410e6415f')"
     ]
   }
 }

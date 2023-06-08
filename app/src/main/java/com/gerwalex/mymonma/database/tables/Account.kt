@@ -71,7 +71,6 @@ data class Account(
 
     val isObercat: Boolean = false,
     @Ignore
-
     val isVerrechnungskontoNeeded: Boolean = false,
 ) : ObservableTableRowNew() {
 

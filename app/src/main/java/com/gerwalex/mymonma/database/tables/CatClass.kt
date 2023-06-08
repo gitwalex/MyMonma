@@ -35,7 +35,7 @@ data class CatClass(
 ) : ObservableTableRowNew() {
 
     @Ignore
-    constructor(c: Cursor) : this(null) {
+    constructor(c: Cursor) : this() {
         fillContent(c)
         id = getAsLong("id")
         name = getAsString("name")!!

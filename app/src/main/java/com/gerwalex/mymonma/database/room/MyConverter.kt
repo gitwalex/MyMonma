@@ -3,6 +3,8 @@ package com.gerwalex.mymonma.database.room
 import androidx.room.TypeConverter
 import com.gerwalex.mymonma.enums.WPTyp
 import java.math.BigDecimal
+import java.sql.Date
+import java.text.DateFormat
 
 object MyConverter {
     @TypeConverter
@@ -24,5 +26,14 @@ object MyConverter {
     fun convertWPTyp(wptyp: String): WPTyp {
         return WPTyp.valueOf(wptyp)
     }
+
+    /**
+     * Convertiert ein Date
+     */
+    fun convertDate(date: Date): String {
+        val di = DateFormat.getDateInstance(DateFormat.DEFAULT)
+        return di.format(date)
+    }
+
 
 }
