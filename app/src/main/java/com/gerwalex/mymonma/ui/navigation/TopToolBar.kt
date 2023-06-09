@@ -19,6 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.ui.AppTheme
+import com.gerwalex.mymonma.ui.screens.Destination
+import com.gerwalex.mymonma.ui.screens.Home
+import com.gerwalex.mymonma.ui.screens.Up
 
 
 @Composable

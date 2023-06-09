@@ -7,7 +7,6 @@ import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.database.ObservableTableRowNew
-import java.math.BigDecimal
 import java.sql.Date
 
 @Entity(
@@ -46,7 +45,7 @@ data class CashTrx(
     var catid: Long = 0,
     @ColumnInfo(index = true)
     var partnerid: Long = 0,
-    var amount: BigDecimal = BigDecimal.ZERO,
+    var amount: Long = 0,
     var memo: String? = null,
     var transferid: Long? = null
 ) : ObservableTableRowNew() {
@@ -58,7 +57,7 @@ data class CashTrx(
         accountid = getAsLong("accountid")
         catid = getAsLong("catid")
         partnerid = getAsLong("partnerid")
-        amount = getAsBigDecimal("amount")
+        amount = getAsLong("amount")
         memo = getAsString("memo")
         transferid = getAsLong("transferid")
     }

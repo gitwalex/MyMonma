@@ -1,208 +1,208 @@
-id;name;description;obercatid;supercatid;catclassid;incomecat;ausgeblendet;cnt
-0;Ohne Kategorie;Standardeintrag für neue Umsätze;0;0;0;;0;169
-1;[Alex Depot Gegenkonto];;1007;1001;2;;0;1285
-2;[comdirect bank];;1003;1001;2;;0;5957
-3;[comdirekt Giro];;1003;1001;2;;1;9
-4;[comdirekt Tagesgeld];;1007;1001;2;;1;30
-5;[Diba Extrakonto Alex];;1007;1001;2;;0;13
-6;[DiBa Ulli];;1003;1001;2;;1;6
-7;[Gemeinsames Konto];;1007;1001;2;;0;1604
-8;[Giro Kostenlos];;1003;1001;2;;1;45
-9;[Sparkonto Postbank];;1007;1001;2;;1;17
-11;[Ulli Gehaltskonto];;1003;1001;2;;0;2619
-12;[ADAC-Kartendoppel];;1004;1001;2;;1;0
-13;[Allianz LV];;1007;1001;2;;1;1
-14;[gemeinsames Konto bei FraSpa];;1007;1001;2;;1;36
-15;[Haus Kelkheim];;1007;1001;2;;1;2
-16;[Immobilie Oberursel];;1009;1001;2;;1;2
-17;[Immobilie Steinbach];;1009;1001;2;;1;6
-18;[Kautionskonto];;1009;1001;2;;0;2
-19;[Ulli 1822 Spar];;1007;1001;2;;0;598
-20;[Ulli Tagesgeld FraSpa];;1007;1001;2;;1;1
-21;[Darlehen I Oberursel];;1008;1001;2;;1;87
-22;[Darlehen II Oberursel];;1008;1001;2;;1;19
-23;[Darlehen Steinbach];;1008;1001;2;;1;132
-24;[Verbindlichkeiten Finanzamt];;1008;1001;2;;1;16
-25;[Depot Alex];;1005;1002;2;;0;931
-26;[Depot Ulli];;1005;1002;2;;0;648
-27;[gemeinsames Depot];;1005;1002;2;;0;1597
-41;[AccountWerte: _id=41.name];;1004;1001;2;;1;12
-43;[BMW X1];;1006;1001;2;;0;56
-45;[Festgeld Debeka];;1007;1001;2;;1;1
-46;[Visa Amazon];;1004;1001;2;;0;812
-47;[Bar];;1003;1001;2;;0;1
-1000;<Splittbuchung>;;1000;1000;1;;1;1443
-1001;Giro-, Kredit- und Anlagekonten;;1001;1001;2;;1;0
-1002;Depotkonten;;1002;1002;2;;1;0
-1003;Girokonten;;1003;1001;2;;0;0
-1004;Visa, Mastercard, Amexco;;1004;1001;2;;0;0
-1005;Wertpapierkonten;;1005;1002;2;;0;0
-1006;Vermögenskonten;;1006;1001;2;;0;0
-1007;Sparverträge, Festgelder;;1007;1001;2;;0;0
-1008;Verbindlichkeiten und Kredite;;1008;1001;2;;0;0
-1009;Immobilien;;1009;1001;2;;0;0
-2000;WPUmsatz;Bestandsveränderungen Wertpapier;2000;2000;3;0;0;0
-2001;Kauf;Kauf;2000;2000;3;0;0;1175
-2050;Verkauf;Verkauf;2000;2000;3;1;0;691
-2090;WP_Splitt;Wertpapiersplitt;2000;2000;3;;0;4
-2091;Spin-Off;Unternehmensaufspaltung;2000;2000;3;;0;0
-2100;Kapitalerträge;;2100;2100;112;1;0;0
-2101;Kapitalerträge:Stückzinsen;;2101;2100;112;0;1;8
-2103;Kapitalerträge:Thesaurierung;;2103;2100;112;1;1;75
-2104;Kapitalerträge:sonstige Einnahme;;2104;2100;112;1;0;33
-2105;Kapitalerträge:Dividende Inland;;2105;2100;112;1;1;237
-2106;Kapitalerträge:Dividende Ausland;;2106;2100;112;1;1;0
-2107;Kapitalerträge:Zinseinnahme;;2107;2100;112;1;0;286
-2108;Kapitalerträge:Ausschüttung;;2108;2100;112;1;1;101
-2111;Kapitalerträge:sonstige Ausgaben;;2111;2111;112;0;0;0
-2200;Kursgewinne (realisiert);;2200;2100;112;1;0;637
-2201;Kursverluste (realisiert);;2201;2100;112;0;0;594
-2500;Steuer u. Abgab:Abgeltungssteuer;;10040;10040;112;0;0;755
-9000;<Eröffnungssaldo>;;9000;9000;1;;1;10
-10001;And. Einkommen;Andere Einkommen;10001;10001;115;1;0;93
-10002;Lohn,Gehalt,Rente;;10002;10002;101;1;0;260
-10003;Sparen;;10003;10003;103;1;0;1
-10004;Steuererst.;Steuererstattungen;10004;10004;105;1;0;13
-10005;Zuwendungen;Erhaltene Geschenke;10005;10005;115;1;0;10
-10006;Arbeitsmittel;Arbeitsmittel Büro;10006;10006;106;0;0;17
-10007;Arbeitszimmer;Arbeitszimmer Zuhause;10007;10007;106;0;0;0
-10008;Ausbildung;Seminare,Schulungen;10008;10008;106;0;0;2
-10009;BAR;;10009;10009;106;0;0;1040
-10010;Bausparen;Bauspar-Aufwendungen;10010;10010;103;0;0;0
-10011;Berufskleidung;Berufskleidung;10011;10011;106;0;0;0
-10012;Berufsverbände;Beiträge an Berufsverb.;10012;10012;106;0;0;0
-10013;Bürobedarf;Büroausgaben;10013;10013;106;0;0;0
-10014;Computer;PC und Software;10014;10014;106;0;0;0
-10015;Bankgebühren;Konto/Depotgebühren;10015;10015;102;0;0;2052
-10016;Dienstreise;Fahrtkosten,Auslagen;10016;10016;110;0;0;16
-10017;Einrichtung;Einrichtung;10017;10017;106;0;0;0
-10018;Ernährung;Lebensmittel,Essen;10018;10018;106;0;0;0
-10019;Fachliteratur;Fachzeitschriften,Bücher;10019;10019;106;0;0;0
-10020;Fahrtkosten;Diverse Fahrtkosten;10020;10020;107;0;0;26
-10021;Fahrzeuge;Ausgaben für Fahrzeuge;10021;10021;107;0;0;0
-10022;Freizeit;Freizeitaufwendungen;10022;10022;108;0;0;451
-10023;Geschenke;Geldgeschenke;10023;10023;106;0;0;33
-10024;Immobilien;Immobilien;10024;10024;111;0;0;0
-10025;Kleidung;Kleidung;10025;10025;106;0;0;365
-10026;Krankheitskost.;Krankheitskosten;10026;10026;113;0;0;21
-10027;Leasing;Leasingraten;10027;10027;107;0;0;0
-10028;Lebensmittel;;10028;10028;106;0;0;2294
-10029;Miete;Miete;10029;10029;114;0;0;250
-10030;Nebenk. Wohnung;Nebenkosten Wohnung;10030;10030;114;0;0;2
-10031;Nebenk. Wohnung:Gas,Öl;Erdgas/Heizöl;10030;10030;114;0;0;135
-10032;Nebenk. Wohnung:Wasser;Wasser;10030;10030;114;0;0;107
-10034;Nebenk. Wohnung:Versicherungen;;10030;10030;114;0;0;16
-10035;Nebenk. Wohnung:Strom;Strom,Elektrizität;10030;10030;114;0;0;231
-10036;Nebenk. Wohnung:Sonstiges;;10030;10030;114;0;0;275
-10037;Porto;Porto,Postgebühren;10037;10037;106;0;0;194
-10038;Sonstige Ausgaben;Verschiedene Ausgaben;10038;10038;110;0;0;77
-10039;Spende;Spenden,Wohltätigkeit;10039;10039;109;0;0;10
-10040;Steuer u. Abgab;;10040;10040;105;0;0;9
-10041;Steuer u. Abgab:ESt;Einkommensteuer;10040;10040;105;0;0;283
-10042;Steuer u. Abgab:Rentenvers.;;10040;10040;105;0;0;296
-10043;Steuer u. Abgab:Arbeitsl.-Vers.;;10040;10040;105;0;0;259
-10044;Steuer u. Abgab:Andere Steuer;Verschiedene Steuern;10040;10040;105;0;0;264
-10045;Steuer u. Abgab:Sonstige Steuer;;10040;10040;105;0;0;6
-10046;Steuerberatung;Steuerberatungskosten;10046;10046;105;0;0;0
-10047;Umzugskosten;Umzugskosten;10047;10047;106;0;0;26
-10048;Versicherungen;Versicherungsbeiträge;10048;10048;104;0;0;0
-10049;Versicherungen:Haftpflicht;Haftpflichtversicherung;10048;10048;104;0;0;27
-10050;Versicherungen:Krankenvers;Krankenversicherung;10048;10048;104;0;0;504
-10051;Versicherungen:Lebensvers;Lebensversicherung;10048;10048;104;0;0;0
-10052;Versicherungen:Sonstige Vers.;Sonstige Versicherungen;10048;10048;104;0;0;10
-10053;Werbung;Werbungskosten;10053;10053;106;0;0;0
-10054;Zinsausgaben;Zinsaufwendungen;10054;10054;103;0;0;212
-11000;Gewerbe;Umsätze für Gewerbe;11000;11000;116;1;0;1
-11001;Gewerbe:Einnahmen;Gewerbeeinnahmen;11000;11000;116;1;0;15
-11002;Gewerbe:Ausgaben;Ausgaben für Gewerbe;11000;11000;116;0;0;54
-11003;Gewerbe:Reise;Gewerbe Reisekosten;11000;11000;116;0;0;49
-11004;Steuer u. Abgab:Umsatzsteuer;Vorsteuer;10040;11000;105;0;0;38
-11005;Steuer u. Abgab:Umsatzsteuer:19%;Vereinnahmte UST 19%;11004;11000;105;0;0;12
-11006;Steuer u. Abgab:Umsatzsteuer:7%;Vereinnahmte UST 7%;11004;11000;105;0;0;4
-11007;Steuer u. Abgab:Steuerzhlg. u. Rückst.:Forderungen Finanzamt;;11009;10040;105;0;0;2
-11008;Steuer u. Abgab:Steuerzhlg. u. Rückst.:kalk. Steuern;;11009;10040;105;0;0;6
-11009;Steuer u. Abgab:Steuerzhlg. u. Rückst.;;10040;10040;105;0;0;0
-11010;Steuer u. Abgab:Soli;;10040;10040;105;0;0;0
-11011;Steuer u. Abgab:Pausch Steuer;;10040;10040;105;0;0;0
-11012;Versicherungen:Krankenvers:BRE;;10050;10048;104;1;0;15
-11013;Versicherungen:priv. Rentenv.;Private Rentenvorsorge;10048;10048;104;0;0;144
-11014;Versicherungen:Krankenvers:AG-Zuschuss;;10050;10048;101;1;0;261
-11015;Unterhaltszahlung;Unterhalt;11015;11015;110;0;0;64
-11016;Sonstige Ausgaben:Rainer S;;10038;10038;110;0;0;14
-11019;Nebenk. Wohnung:Telefon:Mobil;;11021;10030;114;0;0;133
-11020;Nebenk. Wohnung:Telefon:Internet - Festnetz;Internet und Festnetzkosten;11021;10030;114;0;0;273
-11021;Nebenk. Wohnung:Telefon;Telefon,Onlinedienste;10030;10030;114;0;0;1
-11028;Lohn,Gehalt,Rente:PKW;;10002;10002;101;1;0;25
-11029;Lohn,Gehalt,Rente:Reisekostenerst.;;10002;10002;101;1;0;7
-11030;Lohn,Gehalt,Rente:Rückrechnung;;10002;10002;101;1;0;2
-11031;Lohn,Gehalt,Rente:Sachbezuege;;10002;10002;101;1;0;3
-11032;Lohn,Gehalt,Rente:Stfr o. Psch-St;;10002;10002;101;1;0;4
-11033;Lohn,Gehalt,Rente:Ueberstunden;;10002;10002;101;1;0;4
-11034;Lohn,Gehalt,Rente:VL-Anlage;Anlage der VL-Leistungen;10002;10002;101;1;0;0
-11035;Lohn,Gehalt,Rente:VL-Leistungen;;10002;10002;101;1;0;0
-11036;Fahrzeuge:PKW-Kosten:Benzin;Benzin,Kraftstoffe;11104;10021;107;0;0;180
-11037;Lohn,Gehalt,Rente:Zulagen;;10002;10002;101;1;0;0
-11038;Lohn,Gehalt,Rente:Zulagen:Sonst. Zahlg.;;11037;10002;101;1;0;1
-11039;Steuererst.:ESt;ESt-Erstattung;10004;10004;105;1;0;17
-11040;Steuererst.:Kirchensteuer;Kirchensteuer-Erstattung;10004;10004;105;1;0;0
-11041;Fahrzeuge:PKW-Kosten:Sonstiges;;11104;10021;107;0;0;66
-11042;Fahrzeuge:PKW-Kosten:Steuern;;11104;10021;107;0;0;21
-11043;Fahrzeuge:PKW-Kosten:Versicherung;;11104;10021;107;0;0;30
-11044;Fahrzeuge:PKW-Kosten:Wartung;;11104;10021;107;0;0;74
-11045;Freizeit:Bücher;Romane etc.;10022;10022;108;0;0;66
-11046;Freizeit:Magazine;;10022;10022;108;0;0;99
-11047;Freizeit:Modellbahn;;10022;10022;108;0;0;2
-11048;Freizeit:Musik;CDs,Platten,Kassetten;10022;10022;108;0;0;5
-11049;Freizeit:Reise;Reisekosten;10022;10022;108;0;0;185
-11050;Freizeit:Reise:Bar;Bargeld Urlaub;11049;10022;108;0;0;12
-11051;Freizeit:Reise:Flug;Flugkosten;11049;10022;108;0;0;0
-11052;Freizeit:Reise:Hotelkosten;Hotelkosten;11049;10022;108;0;0;74
-11053;Freizeit:Reise:Zugkosten;Zugkosten;11049;10022;108;0;0;9
-11054;Freizeit:Restaurant;Restaurant,Essen;10022;10022;108;0;0;283
-11055;Freizeit:Sport;Sport;10022;10022;108;0;0;293
-11056;Freizeit:Theater;Theater;10022;10022;108;0;0;4
-11061;Freizeit:Zeitung;;10022;10022;108;0;0;67
-11062;Krankheitskost.:Arzt;Arztrechnungen;10026;10026;113;0;0;221
-11063;Krankheitskost.:Erstattung;;10026;10026;113;1;0;68
-11064;Krankheitskost.:Krankenhaus;Krankenhaus;10026;10026;113;0;0;6
-11065;Krankheitskost.:Medikamente;Arzneien und Medikamente;10026;10026;113;0;0;95
-11066;And. Einkommen:Miete Steinbach;;10024;10024;115;1;0;131
-11067;And. Einkommen:Miete Steinbach:Steuerersparnis;;10024;10024;115;1;0;5
-11068;Immobilien:Whg Steinbach;;10024;10024;111;0;0;1
-11069;Immobilien:Whg Steinbach:Nebenkosten;;11068;10024;111;0;0;283
-11070;Immobilien:Whg Steinbach:Steuerersparnis;;11068;10024;105;0;0;1
-11071;Fahrzeuge:PKW-Kosten:Parkplatz;;11104;10021;107;0;0;156
-11072;Lohn,Gehalt,Rente:Zulagen:BVV-Anteil;;11037;10002;101;1;0;121
-11073;Immobilien:Whg Steinbach:Gewinn;;11068;10024;111;0;0;1
-11075;Immobilien:Whg Steinbach:Div. Ausgaben;;11068;10024;111;0;0;2
-11076;Freizeit:Hund;;10022;10022;108;0;0;199
-11077;Freizeit:Segeln;;10022;10022;108;0;0;102
-11078;Fahrzeuge:PKW-Kosten:Reisekostenerstattung;;11104;10021;107;0;0;9
-11079;Fahrzeuge:PKW-Kosten:Firmenwagen;;11104;10021;107;0;0;24
-11080;Immobilien:Whg Steinbach:Zinszahlung;;11068;10024;111;0;0;132
-11081;Immobilien:Whg Steinbach:Grundsteuer;;11068;10024;105;0;0;47
-11082;Immobilien:Whg Steinbach:Versicherungen;;11068;10024;111;0;0;2
-11083;Immobilien:Whg. Oberursel;;10024;10024;111;0;0;2
-11084;Immobilien:Whg. Oberursel:Möbel;;11083;10024;111;0;0;5
-11085;Immobilien:Whg Steinbach:Anschaffung;;11068;10024;111;0;0;1
-11086;Immobilien:Whg. Oberursel:Diverses;;11083;10024;111;0;0;7
-11087;Immobilien:Whg Steinbach:Reparaturen;;11068;10024;111;0;0;5
-11088;Freizeit:Segeln:Bar;;11077;10022;108;0;0;14
-11089;Freizeit:Segeln:Lebensmittel;;11077;10022;108;0;0;12
-11090;Immobilien:Whg. Oberursel:Reparaturen;;11083;10024;111;0;0;3
-11091;Immobilien:Whg. Oberursel:Wohngeld;;11083;10024;111;0;0;57
-11092;And. Einkommen:Miete Oberursel;;10024;10024;115;1;0;54
-11093;Immobilien:Whg. Oberursel:Zinsen;;11083;10024;111;0;0;62
-11094;Immobilien:Whg. Oberursel:Grundsteuer;;11083;10024;105;0;0;6
-11095;Immobilien:Whg. Oberursel:Versicherungen;;11083;10024;111;0;0;2
-11096;And. Einkommen:Miete Kelkheim;;10024;10024;115;1;0;11
-11097;And. Einkommen:Payback;;10001;10001;115;1;0;4
-11098;Freizeit:Segeln:Hotelkosten;;11077;10022;108;0;0;8
-11099;And. Einkommen:LV-Einkuenfte (gesch);;10001;10001;115;1;0;9
-11100;Immobilien:Whg. Oberursel:Abschreibung;;11083;10024;111;0;0;9
-11101;Immobilien:Whg Steinbach:Abschreibung;;11068;10024;111;0;0;33
-11102;Immobilien:Whg. Oberursel:Anschaffung;;11083;10024;111;0;0;2
-11103;Fahrzeuge:PKW-Kosten:Abschreibung;;11104;10021;107;0;0;57
-11104;Fahrzeuge:PKW-Kosten;;10021;10021;107;0;0;0
-11105;Nebenk. Wohnung:Rundfunkgeb.;Rundfunkgebühren;10030;10030;114;0;0;83
-11108;Nebenk. Wohnung:NK Vorauszahlung;Vorauszahlung der Nebenkosten;10030;10030;114;0;0;217
+id;name;description;obercatid;supercatid;catclassid;incomecat;ausgeblendet;cnt;saldo
+0;Ohne Kategorie;Standardeintrag für neue Umsätze;0;0;0;;0;169;-12503941
+1;[Alex Depot Gegenkonto];;1007;1001;2;;0;1285;224549
+2;[comdirect bank];;1003;1001;2;;0;5957;259762
+3;[comdirekt Giro];;1003;1001;2;;1;9;0
+4;[comdirekt Tagesgeld];;1007;1001;2;;1;30;0
+5;[Diba Extrakonto Alex];;1007;1001;2;;0;13;5000000
+6;[DiBa Ulli];;1003;1001;2;;1;6;0
+7;[Gemeinsames Konto];;1007;1001;2;;0;1604;310864
+8;[Giro Kostenlos];;1003;1001;2;;1;45;0
+9;[Sparkonto Postbank];;1007;1001;2;;1;17;0
+11;[Ulli Gehaltskonto];;1003;1001;2;;0;2619;-77077
+12;[ADAC-Kartendoppel];;1004;1001;2;;1;0;0
+13;[Allianz LV];;1007;1001;2;;1;1;0
+14;[gemeinsames Konto bei FraSpa];;1007;1001;2;;1;36;0
+15;[Haus Kelkheim];;1007;1001;2;;1;2;0
+16;[Immobilie Oberursel];;1009;1001;2;;1;2;0
+17;[Immobilie Steinbach];;1009;1001;2;;1;6;0
+18;[Kautionskonto];;1009;1001;2;;0;2;315000
+19;[Ulli 1822 Spar];;1007;1001;2;;0;598;845767
+20;[Ulli Tagesgeld FraSpa];;1007;1001;2;;1;1;0
+21;[Darlehen I Oberursel];;1008;1001;2;;1;87;0
+22;[Darlehen II Oberursel];;1008;1001;2;;1;19;0
+23;[Darlehen Steinbach];;1008;1001;2;;1;132;0
+24;[Verbindlichkeiten Finanzamt];;1008;1001;2;;1;16;0
+25;[Depot Alex];;1005;1002;2;;0;931;6025410
+26;[Depot Ulli];;1005;1002;2;;0;648;20928198
+27;[gemeinsames Depot];;1005;1002;2;;0;1597;188201063
+41;[AccountWerte: _id=41.name];;1004;1001;2;;1;12;0
+43;[BMW X1];;1006;1001;2;;0;56;586505
+45;[Festgeld Debeka];;1007;1001;2;;1;1;0
+46;[Visa Amazon];;1004;1001;2;;0;812;-203789
+47;[Bar];;1003;1001;2;;0;1;85000
+1000;<Splittbuchung>;;1000;1000;1;;1;1443;-182518417
+1001;Giro-, Kredit- und Anlagekonten;;1001;1001;2;;1;0;0
+1002;Depotkonten;;1002;1002;2;;1;0;0
+1003;Girokonten;;1003;1001;2;;0;0;0
+1004;Visa, Mastercard, Amexco;;1004;1001;2;;0;0;0
+1005;Wertpapierkonten;;1005;1002;2;;0;0;0
+1006;Vermögenskonten;;1006;1001;2;;0;0;0
+1007;Sparverträge, Festgelder;;1007;1001;2;;0;0;0
+1008;Verbindlichkeiten und Kredite;;1008;1001;2;;0;0;0
+1009;Immobilien;;1009;1001;2;;0;0;0
+2000;WPUmsatz;Bestandsveränderungen Wertpapier;2000;2000;3;0;0;0;0
+2001;Kauf;Kauf;2000;2000;3;0;0;1175;-1071050006
+2050;Verkauf;Verkauf;2000;2000;3;1;0;691;931235054
+2090;WP_Splitt;Wertpapiersplitt;2000;2000;3;;0;4;0
+2091;Spin-Off;Unternehmensaufspaltung;2000;2000;3;;0;0;0
+2100;Kapitalerträge;;2100;2100;112;1;0;0;0
+2101;Kapitalerträge:Stückzinsen;;2101;2100;112;0;1;8;37937
+2103;Kapitalerträge:Thesaurierung;;2103;2100;112;1;1;75;-1028405
+2104;Kapitalerträge:sonstige Einnahme;;2104;2100;112;1;0;33;360000
+2105;Kapitalerträge:Dividende Inland;;2105;2100;112;1;1;237;-31704005
+2106;Kapitalerträge:Dividende Ausland;;2106;2100;112;1;1;0;0
+2107;Kapitalerträge:Zinseinnahme;;2107;2100;112;1;0;286;-5213949
+2108;Kapitalerträge:Ausschüttung;;2108;2100;112;1;1;101;-17983045
+2111;Kapitalerträge:sonstige Ausgaben;;2111;2111;112;0;0;0;0
+2200;Kursgewinne (realisiert);;2200;2100;112;1;0;637;-102079027
+2201;Kursverluste (realisiert);;2201;2100;112;0;0;594;74571183
+2500;Steuer u. Abgab:Abgeltungssteuer;;10040;10040;112;0;0;755;15786826
+9000;<Eröffnungssaldo>;;9000;9000;1;;1;10;-49053397
+10001;And. Einkommen;Andere Einkommen;10001;10001;115;1;0;93;-12347296
+10002;Lohn,Gehalt,Rente;;10002;10002;101;1;0;260;-164397702
+10003;Sparen;;10003;10003;103;1;0;1;-777515
+10004;Steuererst.;Steuererstattungen;10004;10004;105;1;0;13;-2347652
+10005;Zuwendungen;Erhaltene Geschenke;10005;10005;115;1;0;10;-6995000
+10006;Arbeitsmittel;Arbeitsmittel Büro;10006;10006;106;0;0;17;228485
+10007;Arbeitszimmer;Arbeitszimmer Zuhause;10007;10007;106;0;0;0;0
+10008;Ausbildung;Seminare,Schulungen;10008;10008;106;0;0;2;20200
+10009;BAR;;10009;10009;106;0;0;1040;14490657
+10010;Bausparen;Bauspar-Aufwendungen;10010;10010;103;0;0;0;0
+10011;Berufskleidung;Berufskleidung;10011;10011;106;0;0;0;0
+10012;Berufsverbände;Beiträge an Berufsverb.;10012;10012;106;0;0;0;0
+10013;Bürobedarf;Büroausgaben;10013;10013;106;0;0;0;0
+10014;Computer;PC und Software;10014;10014;106;0;0;0;0
+10015;Bankgebühren;Konto/Depotgebühren;10015;10015;102;0;0;2052;3649008
+10016;Dienstreise;Fahrtkosten,Auslagen;10016;10016;110;0;0;16;-3400
+10017;Einrichtung;Einrichtung;10017;10017;106;0;0;0;0
+10018;Ernährung;Lebensmittel,Essen;10018;10018;106;0;0;0;0
+10019;Fachliteratur;Fachzeitschriften,Bücher;10019;10019;106;0;0;0;0
+10020;Fahrtkosten;Diverse Fahrtkosten;10020;10020;107;0;0;26;558710
+10021;Fahrzeuge;Ausgaben für Fahrzeuge;10021;10021;107;0;0;0;0
+10022;Freizeit;Freizeitaufwendungen;10022;10022;108;0;0;451;2956227
+10023;Geschenke;Geldgeschenke;10023;10023;106;0;0;33;85620
+10024;Immobilien;Immobilien;10024;10024;111;0;0;0;0
+10025;Kleidung;Kleidung;10025;10025;106;0;0;365;3432191
+10026;Krankheitskost.;Krankheitskosten;10026;10026;113;0;0;21;606714
+10027;Leasing;Leasingraten;10027;10027;107;0;0;0;0
+10028;Lebensmittel;;10028;10028;106;0;0;2294;11639137
+10029;Miete;Miete;10029;10029;114;0;0;250;21295738
+10030;Nebenk. Wohnung;Nebenkosten Wohnung;10030;10030;114;0;0;2;-14510
+10031;Nebenk. Wohnung:Gas,Öl;Erdgas/Heizöl;10030;10030;114;0;0;135;1040070
+10032;Nebenk. Wohnung:Wasser;Wasser;10030;10030;114;0;0;107;405375
+10034;Nebenk. Wohnung:Versicherungen;;10030;10030;114;0;0;16;174229
+10035;Nebenk. Wohnung:Strom;Strom,Elektrizität;10030;10030;114;0;0;231;1191053
+10036;Nebenk. Wohnung:Sonstiges;;10030;10030;114;0;0;275;3706679
+10037;Porto;Porto,Postgebühren;10037;10037;106;0;0;194;6318
+10038;Sonstige Ausgaben;Verschiedene Ausgaben;10038;10038;110;0;0;77;3605014
+10039;Spende;Spenden,Wohltätigkeit;10039;10039;109;0;0;10;190726
+10040;Steuer u. Abgab;;10040;10040;105;0;0;9;13736
+10041;Steuer u. Abgab:ESt;Einkommensteuer;10040;10040;105;0;0;283;54406741
+10042;Steuer u. Abgab:Rentenvers.;;10040;10040;105;0;0;296;12907431
+10043;Steuer u. Abgab:Arbeitsl.-Vers.;;10040;10040;105;0;0;259;2851390
+10044;Steuer u. Abgab:Andere Steuer;Verschiedene Steuern;10040;10040;105;0;0;264;3676146
+10045;Steuer u. Abgab:Sonstige Steuer;;10040;10040;105;0;0;6;953966
+10046;Steuerberatung;Steuerberatungskosten;10046;10046;105;0;0;0;0
+10047;Umzugskosten;Umzugskosten;10047;10047;106;0;0;26;639608
+10048;Versicherungen;Versicherungsbeiträge;10048;10048;104;0;0;0;0
+10049;Versicherungen:Haftpflicht;Haftpflichtversicherung;10048;10048;104;0;0;27;180655
+10050;Versicherungen:Krankenvers;Krankenversicherung;10048;10048;104;0;0;504;20780164
+10051;Versicherungen:Lebensvers;Lebensversicherung;10048;10048;104;0;0;0;0
+10052;Versicherungen:Sonstige Vers.;Sonstige Versicherungen;10048;10048;104;0;0;10;251054
+10053;Werbung;Werbungskosten;10053;10053;106;0;0;0;0
+10054;Zinsausgaben;Zinsaufwendungen;10054;10054;103;0;0;212;6852
+11000;Gewerbe;Umsätze für Gewerbe;11000;11000;116;1;0;1;2500
+11001;Gewerbe:Einnahmen;Gewerbeeinnahmen;11000;11000;116;1;0;15;-21898400
+11002;Gewerbe:Ausgaben;Ausgaben für Gewerbe;11000;11000;116;0;0;54;599410
+11003;Gewerbe:Reise;Gewerbe Reisekosten;11000;11000;116;0;0;49;675515
+11004;Steuer u. Abgab:Umsatzsteuer;Vorsteuer;10040;11000;105;0;0;38;1984529
+11005;Steuer u. Abgab:Umsatzsteuer:19%;Vereinnahmte UST 19%;11004;11000;105;0;0;12;-2098993
+11006;Steuer u. Abgab:Umsatzsteuer:7%;Vereinnahmte UST 7%;11004;11000;105;0;0;4;-6350
+11007;Steuer u. Abgab:Steuerzhlg. u. Rückst.:Forderungen Finanzamt;;11009;10040;105;0;0;2;600000
+11008;Steuer u. Abgab:Steuerzhlg. u. Rückst.:kalk. Steuern;;11009;10040;105;0;0;6;1399175
+11009;Steuer u. Abgab:Steuerzhlg. u. Rückst.;;10040;10040;105;0;0;0;0
+11010;Steuer u. Abgab:Soli;;10040;10040;105;0;0;0;0
+11011;Steuer u. Abgab:Pausch Steuer;;10040;10040;105;0;0;0;0
+11012;Versicherungen:Krankenvers:BRE;;10050;10048;104;1;0;15;-1684194
+11013;Versicherungen:priv. Rentenv.;Private Rentenvorsorge;10048;10048;104;0;0;144;6701212
+11014;Versicherungen:Krankenvers:AG-Zuschuss;;10050;10048;101;1;0;261;-5724095
+11015;Unterhaltszahlung;Unterhalt;11015;11015;110;0;0;64;1835849
+11016;Sonstige Ausgaben:Rainer S;;10038;10038;110;0;0;14;51080
+11019;Nebenk. Wohnung:Telefon:Mobil;;11021;10030;114;0;0;133;137715
+11020;Nebenk. Wohnung:Telefon:Internet - Festnetz;Internet und Festnetzkosten;11021;10030;114;0;0;273;823167
+11021;Nebenk. Wohnung:Telefon;Telefon,Onlinedienste;10030;10030;114;0;0;1;0
+11028;Lohn,Gehalt,Rente:PKW;;10002;10002;101;1;0;25;-1211375
+11029;Lohn,Gehalt,Rente:Reisekostenerst.;;10002;10002;101;1;0;7;-189300
+11030;Lohn,Gehalt,Rente:Rückrechnung;;10002;10002;101;1;0;2;0
+11031;Lohn,Gehalt,Rente:Sachbezuege;;10002;10002;101;1;0;3;-164793
+11032;Lohn,Gehalt,Rente:Stfr o. Psch-St;;10002;10002;101;1;0;4;-13437346
+11033;Lohn,Gehalt,Rente:Ueberstunden;;10002;10002;101;1;0;4;-652606
+11034;Lohn,Gehalt,Rente:VL-Anlage;Anlage der VL-Leistungen;10002;10002;101;1;0;0;0
+11035;Lohn,Gehalt,Rente:VL-Leistungen;;10002;10002;101;1;0;0;0
+11036;Fahrzeuge:PKW-Kosten:Benzin;Benzin,Kraftstoffe;11104;10021;107;0;0;180;1190226
+11037;Lohn,Gehalt,Rente:Zulagen;;10002;10002;101;1;0;0;0
+11038;Lohn,Gehalt,Rente:Zulagen:Sonst. Zahlg.;;11037;10002;101;1;0;1;100740
+11039;Steuererst.:ESt;ESt-Erstattung;10004;10004;105;1;0;17;-5056208
+11040;Steuererst.:Kirchensteuer;Kirchensteuer-Erstattung;10004;10004;105;1;0;0;0
+11041;Fahrzeuge:PKW-Kosten:Sonstiges;;11104;10021;107;0;0;66;322475
+11042;Fahrzeuge:PKW-Kosten:Steuern;;11104;10021;107;0;0;21;501600
+11043;Fahrzeuge:PKW-Kosten:Versicherung;;11104;10021;107;0;0;30;815647
+11044;Fahrzeuge:PKW-Kosten:Wartung;;11104;10021;107;0;0;74;849786
+11045;Freizeit:Bücher;Romane etc.;10022;10022;108;0;0;66;94616
+11046;Freizeit:Magazine;;10022;10022;108;0;0;99;481661
+11047;Freizeit:Modellbahn;;10022;10022;108;0;0;2;3760
+11048;Freizeit:Musik;CDs,Platten,Kassetten;10022;10022;108;0;0;5;34873
+11049;Freizeit:Reise;Reisekosten;10022;10022;108;0;0;185;3958435
+11050;Freizeit:Reise:Bar;Bargeld Urlaub;11049;10022;108;0;0;12;426190
+11051;Freizeit:Reise:Flug;Flugkosten;11049;10022;108;0;0;0;0
+11052;Freizeit:Reise:Hotelkosten;Hotelkosten;11049;10022;108;0;0;74;1188074
+11053;Freizeit:Reise:Zugkosten;Zugkosten;11049;10022;108;0;0;9;46650
+11054;Freizeit:Restaurant;Restaurant,Essen;10022;10022;108;0;0;283;1199308
+11055;Freizeit:Sport;Sport;10022;10022;108;0;0;293;424914
+11056;Freizeit:Theater;Theater;10022;10022;108;0;0;4;25136
+11061;Freizeit:Zeitung;;10022;10022;108;0;0;67;315661
+11062;Krankheitskost.:Arzt;Arztrechnungen;10026;10026;113;0;0;221;5038132
+11063;Krankheitskost.:Erstattung;;10026;10026;113;1;0;68;-5502875
+11064;Krankheitskost.:Krankenhaus;Krankenhaus;10026;10026;113;0;0;6;129873
+11065;Krankheitskost.:Medikamente;Arzneien und Medikamente;10026;10026;113;0;0;95;1061306
+11066;And. Einkommen:Miete Steinbach;;10024;10024;115;1;0;131;-13656110
+11067;And. Einkommen:Miete Steinbach:Steuerersparnis;;10024;10024;115;1;0;5;-527056
+11068;Immobilien:Whg Steinbach;;10024;10024;111;0;0;1;8490
+11069;Immobilien:Whg Steinbach:Nebenkosten;;11068;10024;111;0;0;283;1152157
+11070;Immobilien:Whg Steinbach:Steuerersparnis;;11068;10024;105;0;0;1;-84391
+11071;Fahrzeuge:PKW-Kosten:Parkplatz;;11104;10021;107;0;0;156;1173027
+11072;Lohn,Gehalt,Rente:Zulagen:BVV-Anteil;;11037;10002;101;1;0;121;-3676416
+11073;Immobilien:Whg Steinbach:Gewinn;;11068;10024;111;0;0;1;-4941736
+11075;Immobilien:Whg Steinbach:Div. Ausgaben;;11068;10024;111;0;0;2;91446
+11076;Freizeit:Hund;;10022;10022;108;0;0;199;1097032
+11077;Freizeit:Segeln;;10022;10022;108;0;0;102;4634994
+11078;Fahrzeuge:PKW-Kosten:Reisekostenerstattung;;11104;10021;107;0;0;9;-166700
+11079;Fahrzeuge:PKW-Kosten:Firmenwagen;;11104;10021;107;0;0;24;1221484
+11080;Immobilien:Whg Steinbach:Zinszahlung;;11068;10024;111;0;0;132;4834718
+11081;Immobilien:Whg Steinbach:Grundsteuer;;11068;10024;105;0;0;47;204696
+11082;Immobilien:Whg Steinbach:Versicherungen;;11068;10024;111;0;0;2;12158
+11083;Immobilien:Whg. Oberursel;;10024;10024;111;0;0;2;231894
+11084;Immobilien:Whg. Oberursel:Möbel;;11083;10024;111;0;0;5;113019
+11085;Immobilien:Whg Steinbach:Anschaffung;;11068;10024;111;0;0;1;6900
+11086;Immobilien:Whg. Oberursel:Diverses;;11083;10024;111;0;0;7;-718879
+11087;Immobilien:Whg Steinbach:Reparaturen;;11068;10024;111;0;0;5;231428
+11088;Freizeit:Segeln:Bar;;11077;10022;108;0;0;14;433565
+11089;Freizeit:Segeln:Lebensmittel;;11077;10022;108;0;0;12;87126
+11090;Immobilien:Whg. Oberursel:Reparaturen;;11083;10024;111;0;0;3;-87897
+11091;Immobilien:Whg. Oberursel:Wohngeld;;11083;10024;111;0;0;57;1046215
+11092;And. Einkommen:Miete Oberursel;;10024;10024;115;1;0;54;-1242432
+11093;Immobilien:Whg. Oberursel:Zinsen;;11083;10024;111;0;0;62;673763
+11094;Immobilien:Whg. Oberursel:Grundsteuer;;11083;10024;105;0;0;6;95539
+11095;Immobilien:Whg. Oberursel:Versicherungen;;11083;10024;111;0;0;2;28448
+11096;And. Einkommen:Miete Kelkheim;;10024;10024;115;1;0;11;-2000000
+11097;And. Einkommen:Payback;;10001;10001;115;1;0;4;-3888
+11098;Freizeit:Segeln:Hotelkosten;;11077;10022;108;0;0;8;53050
+11099;And. Einkommen:LV-Einkuenfte (gesch);;10001;10001;115;1;0;9;-984235
+11100;Immobilien:Whg. Oberursel:Abschreibung;;11083;10024;111;0;0;9;4200093
+11101;Immobilien:Whg Steinbach:Abschreibung;;11068;10024;111;0;0;33;6648600
+11102;Immobilien:Whg. Oberursel:Anschaffung;;11083;10024;111;0;0;2;6646794
+11103;Fahrzeuge:PKW-Kosten:Abschreibung;;11104;10021;107;0;0;57;6250211
+11104;Fahrzeuge:PKW-Kosten;;10021;10021;107;0;0;0;0
+11105;Nebenk. Wohnung:Rundfunkgeb.;Rundfunkgebühren;10030;10030;114;0;0;83;429724
+11108;Nebenk. Wohnung:NK Vorauszahlung;Vorauszahlung der Nebenkosten;10030;10030;114;0;0;217;2989090

@@ -21,23 +21,21 @@ import com.gerwalex.mymonma.ComposeActivity
 import com.gerwalex.mymonma.ext.getActivity
 import com.maltaisn.calcdialog.CalcDialog
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.NumberFormat
+import kotlin.math.pow
 
 
 @Composable
 fun AmountView(
-    value: BigDecimal,
+    value: Long,
     modifier: Modifier = Modifier,
     style: TextStyle? = null,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance() }
-    val myValue = value.setScale(
-        currency.maximumFractionDigits,
-        RoundingMode.HALF_UP
-    )
+    val digits = remember { BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble())) }
+    val myValue = BigDecimal(value).divide(digits)
     Text(
         modifier = modifier,
         text = currency.format(myValue),
@@ -50,14 +48,16 @@ fun AmountView(
 
 @Composable
 fun AmountEditView(
-    value: BigDecimal,
+    value: Long,
     modifier: Modifier = Modifier,
     style: TextStyle? = null,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
-    onChanged: (BigDecimal) -> Unit
+    onChanged: (Long) -> Unit
 ) {
-    var myValue by remember(value) { mutableStateOf(value) }
+    val currency = remember { NumberFormat.getCurrencyInstance() }
+    val digits = remember { BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble())) }
+    var myValue by remember { mutableStateOf(value) }
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     Box(
@@ -66,15 +66,15 @@ fun AmountEditView(
                 CalcDialog().apply {
                     settings.also { settings ->
                         settings.numberFormat = NumberFormat.getCurrencyInstance()
-                        settings.initialValue = myValue
+                        settings.initialValue = BigDecimal(myValue).divide(digits)
                     }
                     fm.setFragmentResultListener(
                         ComposeActivity.CalcResult,
                         lifecycleOwner
                     ) { _, result ->
-                        result.getString(ComposeActivity.CalcResult)?.let { value ->
-                            myValue = BigDecimal(value)
-                            onChanged(myValue)
+                        result.getLong(ComposeActivity.CalcResult).let { value ->
+                            myValue = value
+                            onChanged(value)
                         }
 
                     }
@@ -96,5 +96,5 @@ fun AmountEditView(
 @Preview
 @Composable
 fun AmountViewPreview() {
-    AmountView(BigDecimal(-12345678.90))
+    AmountView(1234567890L)
 }

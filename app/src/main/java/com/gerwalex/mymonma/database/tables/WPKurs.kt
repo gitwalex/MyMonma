@@ -16,7 +16,6 @@ import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.database.ObservableTableRowNew
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
-import java.math.BigDecimal
 import java.sql.Date
 
 @Entity(
@@ -36,7 +35,7 @@ data class WPKurs(
     var btag: Date = Date(System.currentTimeMillis()),
     @ColumnInfo(index = true)
     var wpid: Long = 0,
-    var kurs: BigDecimal = BigDecimal.ZERO,
+    var kurs: Long = 0,
     @Ignore
     var wpname: String? = "New",
 ) : ObservableTableRowNew() {
@@ -48,7 +47,7 @@ data class WPKurs(
         id = getAsLong("id")
         wpid = getAsLong("wpid")
         btag = getAsDate("btag")!!
-        kurs = getAsBigDecimal("kurs")
+        kurs = getAsLong("kurs")
         wpname = getAsString("wpname")
     }
 
@@ -66,7 +65,7 @@ fun WPKursRow(wpkurs: WPKurs, modifier: Modifier = Modifier) {
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun WPKursRow() {
-    val wpkurs = WPKurs(kurs = BigDecimal("120.5"))
+    val wpkurs = WPKurs(kurs = 12051)
     AppTheme {
         Surface {
             WPKursRow(wpkurs)

@@ -26,7 +26,6 @@ import com.gerwalex.mymonma.enums.Kontotyp
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.math.BigDecimal
 import java.sql.Date
 
 @Entity(
@@ -44,33 +43,19 @@ data class Account(
     var id: Long? = null,
     @ColumnInfo(index = true)
     var catid: Long = 0,
-    var name: String = "Unknown",
     var inhaber: String? = null,
     var currency: String? = null,
     var iban: String? = null,// IBAN, Kartnenummer, Kontonummer
     var blz: String? = null,
     var bezeichnung: String? = null, //Verwendungszweck
 
-    var creditlimit: BigDecimal? = BigDecimal.ZERO,
+    var creditlimit: Long? = 0,
     var verrechnungskonto: Long? = null,
     var kontotyp: Kontotyp = Kontotyp.Giro,
     var openDate: Date? = Date(System.currentTimeMillis()),
     var bankname: String? = null,
     var bic: String? = null,
-    var openamount: BigDecimal = BigDecimal.ZERO,
-    @Ignore
-    var ausgeblendet: Boolean = false,
-    @Ignore
-
-    var cnt: Int = 0,
-    @Ignore
-
-    val supercatid: Long = 0,
-    @Ignore
-
-    val isObercat: Boolean = false,
-    @Ignore
-    val isVerrechnungskontoNeeded: Boolean = false,
+    var openamount: Long = 0,
 ) : ObservableTableRowNew() {
 
 
@@ -79,29 +64,22 @@ data class Account(
         fillContent(c)
         id = getAsLong("id")
         catid = getAsLong("catid")
-        name = getAsString("name")!!
         inhaber = getAsString("inhaber")
         currency = getAsString("currency")
         iban = getAsString("iban")
         bic = getAsString("bic")
         blz = getAsString("blz")
         bezeichnung = getAsString("subnumber")
-        creditlimit = getAsBigDecimalOrNull("creditlimit")
+        creditlimit = getAsLongOrNull("creditlimit")
         verrechnungskonto = getAsLongOrNull("verrechnungskonto")
         openDate = getAsDate("openDate")
-        openamount = getAsBigDecimal("openamount")
+        openamount = getAsLong("openamount")
         bankname = getAsString("bankname")
-        saldo = getAsBigDecimalOrNull("saldo")
-        cnt = getAsInt("cnt")
     }
-
-    @Ignore
-    var saldo: BigDecimal? = BigDecimal.ZERO
-
 }
 
 @Composable
-fun AutoCompleteAccountView(filter: String, selected: (Account) -> Unit) {
+fun AutoCompleteAccountView(filter: String, selected: (Cat) -> Unit) {
     var account by remember { mutableStateOf(filter) }
     val cursor = MutableLiveData<Cursor>()
     val data by cursor.observeAsState()
@@ -110,7 +88,7 @@ fun AutoCompleteAccountView(filter: String, selected: (Account) -> Unit) {
         withContext(Dispatchers.IO) {
             val c = DB.dao.getAccountlist(account)
             if (c.moveToFirst()) {
-                selected(Account(c))
+                selected(Cat(c))
             }
             count = c.count
             cursor.postValue(c)
@@ -129,18 +107,18 @@ fun AutoCompleteAccountView(filter: String, selected: (Account) -> Unit) {
         onItemClick = { position ->
             data?.let { c ->
                 if (c.moveToPosition(position)) {
-                    val acc = Account(c)
-                    account = acc.name
+                    val cat = Cat(c)
+                    account = cat.name
                     count = 0
-                    selected(acc)
+                    selected(cat)
                 }
             }
         },
     ) { position ->
         data?.let { c ->
             if (c.moveToPosition(position)) {
-                val acc = Account(c)
-                Text(acc.name, fontSize = 14.sp)
+                val cat = Cat(c)
+                Text(cat.name, fontSize = 14.sp)
             }
         }
     }

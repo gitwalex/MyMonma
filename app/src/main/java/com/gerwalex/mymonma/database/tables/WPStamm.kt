@@ -27,7 +27,6 @@ import com.gerwalex.mymonma.enums.WPTyp
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.math.BigDecimal
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -45,13 +44,12 @@ data class WPStamm(
     var id: Long? = null,
     @ColumnInfo(index = true)
     var partnerid: Long = 0,
-    var name: String = "Unknown",
     var wpkenn: String? = "",
     var isin: String? = "",
     var wptyp: WPTyp = WPTyp.Aktie,
     var risiko: Int = 2,
     var beobachten: Boolean = true,
-    var estEarning: BigDecimal = BigDecimal.ZERO,
+    var estEarning: Long = 0,
 ) : ObservableTableRowNew() {
 
     @Ignore
@@ -59,18 +57,17 @@ data class WPStamm(
         fillContent(c)
         id = getAsLong("id")
         partnerid = getAsLong("partnerid")
-        name = getAsString("name")!!
         wpkenn = getAsString("wpkenn")
         isin = getAsString("isin")
         wptyp = MyConverter.convertWPTyp(getAsString("wptyp")!!)
         risiko = getAsInt("risiko")
         beobachten = getAsBoolean("beobachten")
-        estEarning = getAsBigDecimal("estEarning")
+        estEarning = getAsLong("estEarning")
     }
 }
 
 @Composable
-fun AutoCompleteWPStammView(filter: String, selected: (WPStamm) -> Unit) {
+fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
     var wpstammname by remember { mutableStateOf(filter) }
     val cursor = MutableLiveData<Cursor>()
     val data by cursor.observeAsState()
@@ -78,12 +75,12 @@ fun AutoCompleteWPStammView(filter: String, selected: (WPStamm) -> Unit) {
         withContext(Dispatchers.IO) {
             val c = DB.dao.getWPStammlist(wpstammname)
             if (c.moveToFirst()) {
-                val first = WPStamm(c)
+                val first = Partnerstamm(c)
                 if (first.name == wpstammname) {
                     // Der erste Eintrag passt vollständig - nehmen
                     selected(first)
                 } else {
-                    selected(WPStamm(name = wpstammname))
+                    selected(Partnerstamm(name = wpstammname))
                 }
             }
             cursor.postValue(c)
@@ -104,7 +101,7 @@ fun AutoCompleteWPStammView(filter: String, selected: (WPStamm) -> Unit) {
         onItemClick = { position ->
             data?.let { c ->
                 if (c.moveToPosition(position)) {
-                    val wpstamm = WPStamm(c)
+                    val wpstamm = Partnerstamm(c)
                     wpstammname = wpstamm.name
                     selected(wpstamm)
                 }
@@ -113,7 +110,7 @@ fun AutoCompleteWPStammView(filter: String, selected: (WPStamm) -> Unit) {
     ) { position ->
         data?.let { c ->
             if (c.moveToPosition(position)) {
-                val wpstamm = WPStamm(c)
+                val wpstamm = Partnerstamm(c)
                 Text(wpstamm.name, fontSize = 14.sp)
             }
         }

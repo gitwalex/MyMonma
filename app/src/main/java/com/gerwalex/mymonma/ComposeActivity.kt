@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.gerwalex.mymonma.ui.AppTheme
-import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.MyNavHost
+import com.gerwalex.mymonma.ui.screens.Destination
 import com.maltaisn.calcdialog.CalcDialog
 import java.math.BigDecimal
+import java.text.NumberFormat
+import kotlin.math.pow
 
 class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
 
@@ -42,17 +44,25 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
     }
 
     fun navigateTo(destination: Destination) {
+        destination.navigate(navController)
 
     }
 
     override fun onValueEntered(requestCode: Int, value: BigDecimal?) {
-        val result = Bundle().apply {
-            putString(CalcResult, value.toString())
+        if (requestCode == CalcResultRequest) {
+            val currency = NumberFormat.getCurrencyInstance()
+            val digits = BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble()))
+            val result = Bundle().apply {
+                putLong(CalcResult, value?.multiply(digits)?.toLong() ?: 0L)
+            }
+            supportFragmentManager.setFragmentResult(CalcResult, result)
         }
-        supportFragmentManager.setFragmentResult(CalcResult, result)
     }
 
     companion object {
+        const val CalcResultRequest = 1
         const val CalcResult = "CalcResult"
+        const val AcoountId = "AcoountId"
+
     }
 }
