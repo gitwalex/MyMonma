@@ -19,9 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
-import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.content.DatePickerView
@@ -35,19 +33,13 @@ fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
 
     val cashTrxView by viewModel.cashTrx.collectAsState()
     cashTrxView.id?.let {
-        val trx by dao.getCashTrx(it).collectAsState(initial = CashTrx())
-        EditCashTrxScreen(cashTrxView = cashTrxView, trx = trx, navigateTo = navigateTo)
-    } ?: run {
-        val trx = CashTrx(accountid = viewModel.account.value?.id!!)
-        EditCashTrxScreen(trx = trx, navigateTo = navigateTo)
-
+        EditCashTrxScreen(trx = cashTrxView, navigateTo = navigateTo)
     }
 }
 
 @Composable
 fun EditCashTrxScreen(
-    trx: CashTrx,
-    cashTrxView: CashTrxView? = null, // null bei neuen Umsaetzen
+    trx: CashTrxView,
     navigateTo: (Destination) -> Unit
 ) {
     Scaffold(
@@ -75,7 +67,7 @@ fun EditCashTrxScreen(
                 AmountEditView(value = trx.amount) {}
             }
             Row {
-                AutoCompletePartnerView(filter = cashTrxView?.partnername ?: "") {
+                AutoCompletePartnerView(filter = trx.partnername) {
 
                 }
             }
@@ -92,11 +84,10 @@ fun EditCashTrxScreen(
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun EditCashTrxPreview() {
-    val cashTrxView = CashTrxView()
-    val trx = CashTrx()
+    val trx = CashTrxView()
     AppTheme {
         Surface {
-            EditCashTrxScreen(trx = trx, cashTrxView = cashTrxView) {
+            EditCashTrxScreen(trx = trx) {
 
             }
         }

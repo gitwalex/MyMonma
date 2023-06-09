@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class Dao(val db: DB) {
     @Query("Select * from Partnerstamm")
-    abstract fun getPartnerstammdaten(): Cursor
+    abstract fun getPartnerstammdaten(): Flow<List<Partnerstamm>>
 
     @Query("Select * from Partnerstamm where name like '%'||:filter ||'%' order by name")
     abstract fun getPartnerlist(filter: String): Cursor
@@ -48,8 +48,8 @@ abstract class Dao(val db: DB) {
     abstract fun getWPStammlist(filter: String): Cursor
 
     @Query(
-        "select a.id, btag, p.name as partnername, acc.name as accountname, c.name as catname," +
-                "amount, memo, transferid, " +
+        "select a.*, " +
+                "p.name as partnername, acc.name as accountname, c.name as catname, " +
                 "0 as imported, 0 as saldo " +
                 "from cashtrx a " +
                 "left join Partnerstamm p on p.id = partnerid " +

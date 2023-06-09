@@ -1,6 +1,5 @@
 package com.gerwalex.mymonma.ui.screens
 
-import android.database.Cursor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.ObservableTableRowNew
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.ui.Color
 import com.gerwalex.mymonma.ui.content.AmountView
@@ -40,36 +38,25 @@ import java.text.DateFormat
 
 data class CashTrxView(
     var id: Long? = null,
-    var btag: Date = Date(System.currentTimeMillis()),
-    var accountname: String = "Unknown",
-    var catname: String = "Unknown",
-    var partnername: String = "Unknown",
+    val btag: Date = Date(System.currentTimeMillis()),
+    var accountid: Long = -1,
+    var catid: Long = 0,
+    var partnerid: Long = 0,
     var amount: Long = 0,
     var memo: String? = null,
     var transferid: Long? = null,
+    var accountname: String = "",
+    var partnername: String = "",
+    var catname: String = "",
     var imported: Boolean = false,
-    var saldo: Long = 0,
-) : ObservableTableRowNew() {
-    constructor(c: Cursor) : this(null) {
-        fillContent(c)
-        id = getAsLongOrNull("_id")
-        btag = getAsDate("btag")!!
-        accountname = getAsString("accountname")!!
-        partnername = getAsString("partnername")!!
-        catname = getAsString("catname")!!
-        amount = getAsLong("amount")
-        memo = getAsString("memo")
-        transferid = getAsLongOrNull("transferid")
-        imported = getAsBooleanOrNull("imported") ?: false
-        saldo = getAsLongOrNull("saldo") ?: 0
-    }
-}
+    var saldo: Long? = 0,
+)
 
 @Composable
 fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val account by viewModel.account.observeAsState()
     account?.let { acc ->
-        val list by DB.dao.getCashTrxList(acc.id!!).collectAsState(initial = ArrayList())
+        val list by DB.dao.getCashTrxList(acc.id!!).collectAsState(initial = emptyList())
         Scaffold(
             topBar = {
                 TopToolBar(acc.name) {
@@ -137,7 +124,7 @@ fun CashTrxViewItem(trx: CashTrxView, navigateTo: (Destination) -> Unit) {
                     style = MaterialTheme.typography.labelSmall
                 )
                 AmountView(
-                    value = trx.saldo,
+                    value = trx.saldo ?: 0,
                     style = MaterialTheme.typography.labelSmall
                 )
             }
@@ -150,13 +137,15 @@ fun CashTrxViewItem(trx: CashTrxView, navigateTo: (Destination) -> Unit) {
 @Composable
 fun CashTrxItemPreview() {
     val cashtrans = CashTrxView(
-        accountname = "My Account",
         amount = -123456L,
-        catname = "Kategorie",
-        partnername = "CashTrx Partner",
         memo = "Buchungstext oder VWZ",
+    ).apply {
+        accountname = "My Account"
+        catname = "Kategorie"
+        partnername = "CashTrx Partner"
         saldo = 12345678L
-    )
+
+    }
     CashTrxViewItem(trx = cashtrans) {}
 }
 

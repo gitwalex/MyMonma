@@ -49,6 +49,20 @@ data class CashTrx(
     var memo: String? = null,
     var transferid: Long? = null
 ) : ObservableTableRowNew() {
+    @Ignore
+    var accountname: String? = null
+
+    @Ignore
+    var partnername: String? = null
+
+    @Ignore
+    var catname: String? = null
+
+    @Ignore
+    var imported: Boolean = false
+
+    @Ignore
+    var saldo: Long? = 0
 
     @Ignore
     constructor(c: Cursor) : this() {
