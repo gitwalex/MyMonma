@@ -3,8 +3,10 @@ package com.gerwalex.mymonma.database.room
 import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Query
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
-import com.gerwalex.mymonma.database.views.CashTrxView
+import com.gerwalex.mymonma.database.tables.Partnerstamm
+import com.gerwalex.mymonma.ui.screens.CashTrxView
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -57,4 +59,10 @@ abstract class Dao(val db: DB) {
                 "order by btag desc, a.id "
     )
     abstract fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>>
+
+    @Query("select * from CashTrx where id = :id")
+    abstract fun getCashTrx(id: Long): Flow<CashTrx>
+
+    @Query("select * from Partnerstamm where id = :partnerid ")
+    abstract fun getPartnerstamm(partnerid: Long): Flow<Partnerstamm>
 }

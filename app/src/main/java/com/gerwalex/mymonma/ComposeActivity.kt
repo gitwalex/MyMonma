@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.gerwalex.mymonma.ui.AppTheme
+import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.MyNavHost
-import com.gerwalex.mymonma.ui.screens.Destination
 import com.maltaisn.calcdialog.CalcDialog
 import java.math.BigDecimal
 import java.text.NumberFormat

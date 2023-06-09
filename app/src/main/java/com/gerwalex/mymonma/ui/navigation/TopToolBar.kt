@@ -1,57 +1,55 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.gerwalex.mymonma.ui.navigation
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.DrawerValue
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.rememberDrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.ui.AppTheme
-import com.gerwalex.mymonma.ui.screens.Destination
-import com.gerwalex.mymonma.ui.screens.Home
-import com.gerwalex.mymonma.ui.screens.Up
 
 
 @Composable
 fun TopToolBar(
-    current: Destination,
-    navigateTo: (Destination) -> Unit
+    title: String,
+    imageVector: ImageVector = Icons.Default.ArrowBack,
+    @StringRes
+    description: Int = R.string.back,
+    actions: @Composable (RowScope.() -> Unit) = {},
+    navigateTo: (Destination) -> Unit,
 ) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val imageVector =
-        if (current == Home && drawerState.isClosed)
-            Icons.Default.Menu else Icons.Default.ArrowBack
+    val myTopAppBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        navigationIconContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        actionIconContentColor = MaterialTheme.colorScheme.onSecondaryContainer
+
+    )
 
     TopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = current.title),
-            )
-        },
-        elevation = 1.dp,
+        title = { Text(text = title) },
+        actions = actions,
+        colors = myTopAppBarColors,
         navigationIcon = {
-            Icon(
-                modifier = Modifier
-                    .clickable { navigateTo(Up) }
-                    .padding(8.dp),
-                imageVector = imageVector,
-                contentDescription =
-                if (current == Home)
-                    stringResource(id = androidx.compose.ui.R.string.navigation_menu)
-                else stringResource(id = R.string.back)
-            )
+            IconButton(onClick = { navigateTo(Up) }) {
+                Icon(
+                    imageVector = imageVector,
+                    contentDescription = stringResource(id = description)
+                )
+            }
         })
 }
 
@@ -61,7 +59,7 @@ fun TopToolBar(
 fun Preview() {
     AppTheme {
         Surface {
-            TopToolBar(current = Home) {}
+            TopToolBar(title = stringResource(id = Home.title)) {}
         }
     }
 }

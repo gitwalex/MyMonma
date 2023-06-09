@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +21,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.ObservableTableRowNew
-import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -42,13 +43,19 @@ data class Partnerstamm(
 }
 
 @Composable
+fun AutoCompletePartnerView(partnerid: Long, selected: (Partnerstamm) -> Unit) {
+    val partner by dao.getPartnerstamm(partnerid).collectAsState(initial = Partnerstamm())
+    AutoCompletePartnerView(filter = partner.name, selected = selected)
+}
+
+@Composable
 fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
     var partnername by remember { mutableStateOf(filter) }
     val cursor = MutableLiveData<Cursor>()
     val data by cursor.observeAsState()
     LaunchedEffect(partnername) {
         withContext(Dispatchers.IO) {
-            val c = DB.dao.getPartnerlist(partnername)
+            val c = dao.getPartnerlist(partnername)
             if (c.moveToFirst()) {
                 val firstPartner = Partnerstamm(c)
                 if (firstPartner.name == partnername) {

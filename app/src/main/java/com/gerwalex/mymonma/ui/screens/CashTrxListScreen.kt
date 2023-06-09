@@ -1,7 +1,10 @@
-package com.gerwalex.mymonma.database.views
+@file:OptIn(ExperimentalMaterial3Api::class)
+
+package com.gerwalex.mymonma.ui.screens
 
 import android.database.Cursor
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +14,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,7 +34,10 @@ import com.gerwalex.mymonma.database.ObservableTableRowNew
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.ui.Color
 import com.gerwalex.mymonma.ui.content.AmountView
-import com.gerwalex.mymonma.ui.screens.Destination
+import com.gerwalex.mymonma.ui.navigation.Destination
+import com.gerwalex.mymonma.ui.navigation.EditCashTrx
+import com.gerwalex.mymonma.ui.navigation.TopToolBar
+import com.gerwalex.mymonma.ui.navigation.Up
 import java.sql.Date
 import java.text.DateFormat
 
@@ -63,25 +71,38 @@ data class CashTrxView(
 @Composable
 fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val account by viewModel.account.observeAsState()
-    account?.id?.let { id ->
-        val list by DB.dao.getCashTrxList(id).collectAsState(initial = ArrayList())
-        LazyColumn {
-            items(list, key = { it.id!! }) {
-                CashTrxViewItem(trx = it)
+    account?.let { acc ->
+        val list by DB.dao.getCashTrxList(acc.id!!).collectAsState(initial = ArrayList())
+        Scaffold(
+            topBar = {
+                TopToolBar(acc.name) {
+                    navigateTo(Up)
+                }
+            }) {
+
+
+            LazyColumn(modifier = Modifier.padding(it)) {
+                items(list, key = { it.id!! }) { trx ->
+                    CashTrxViewItem(trx = trx) {
+                        viewModel.cashTrx.value = trx
+                        navigateTo(it)
+
+                    }
+                }
             }
+
         }
 
     }
-
-
 }
 
 @Composable
-fun CashTrxViewItem(trx: CashTrxView) {
+fun CashTrxViewItem(trx: CashTrxView, navigateTo: (Destination) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable { navigateTo(EditCashTrx) }
     ) {
         Column(
             modifier = Modifier
@@ -139,7 +160,7 @@ fun CashTrxItemPreview() {
         memo = "Buchungstext oder VWZ",
         saldo = 12345678L
     )
-    CashTrxViewItem(trx = cashtrans)
+    CashTrxViewItem(trx = cashtrans) {}
 }
 
 

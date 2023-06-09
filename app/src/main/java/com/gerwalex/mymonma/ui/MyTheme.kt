@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 object Color {
+    val appBarColor = Color(0xFF000000)
     val cashTrx = Color(0x0Fffff00)
     val importedCashTrx = Color(0x0F0fff00)
 
@@ -91,7 +92,6 @@ fun AppTheme(
     } else {
         MyTheme.DarkColors
     }
-
     MaterialTheme(
         colorScheme = colors,
         content = content,

@@ -1,4 +1,4 @@
-package com.gerwalex.mymonma.ui.screens
+package com.gerwalex.mymonma.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -49,4 +49,15 @@ object CashTrxList : Destination() {
 
 }
 
+object EditCashTrx : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "EditCashTrx"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
 

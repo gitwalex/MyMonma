@@ -5,10 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gerwalex.mymonma.MonMaViewModel
-import com.gerwalex.mymonma.database.views.CashTrxList
 import com.gerwalex.mymonma.ui.screens.CashTrxList
-import com.gerwalex.mymonma.ui.screens.Destination
-import com.gerwalex.mymonma.ui.screens.Home
+import com.gerwalex.mymonma.ui.screens.EditCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.HomeScreen
 
 @Composable
@@ -23,6 +21,9 @@ fun MyNavHost(
         }
         composable(CashTrxList.name) {
             CashTrxList(viewModel, navigateTo)
+        }
+        composable(EditCashTrx.name) {
+            EditCashTrxScreen(viewModel, navigateTo)
         }
     }
 }

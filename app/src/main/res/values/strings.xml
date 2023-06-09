@@ -50,4 +50,5 @@
     <string name="umbuchung">Umbuchung</string>
     <string name="wpstamm">Stammdaten</string>
     <string name="back">zurück</string>
+    <string name="umsatzBearbeiten">Umsatz bearbeiten</string>
 </resources>
