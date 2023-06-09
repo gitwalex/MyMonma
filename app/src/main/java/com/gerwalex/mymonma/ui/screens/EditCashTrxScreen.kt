@@ -3,7 +3,7 @@ package com.gerwalex.mymonma.ui.screens
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -23,6 +23,8 @@ import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.ui.AppTheme
+import com.gerwalex.mymonma.ui.content.AmountEditView
+import com.gerwalex.mymonma.ui.content.DatePickerView
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
@@ -64,13 +66,20 @@ fun EditCashTrxScreen(
             }
         },
     ) {
-        Box(modifier = Modifier.padding(it))
+        Column(modifier = Modifier.padding(it))
         {
+            Row {
+                DatePickerView(date = trx.btag) {
+
+                }
+                AmountEditView(value = trx.amount) {}
+            }
             Row {
                 AutoCompletePartnerView(filter = cashTrxView?.partnername ?: "") {
 
                 }
             }
+
             Log.d("EditCashTrxScreen", "EditCashTrxScreen: $trx")
 
         }
