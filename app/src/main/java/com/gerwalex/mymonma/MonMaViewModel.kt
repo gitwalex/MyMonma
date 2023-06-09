@@ -15,6 +15,6 @@ class MonMaViewModel(application: Application) : AndroidViewModel(application) {
     val navigateTo = MutableStateFlow<Destination>(Home)
     val accountlist = dao.getAccountlist()
     val account = MutableLiveData<Cat>()
-    val cashTrx = MutableLiveData<CashTrxView>()
+    val cashTrx = MutableStateFlow<CashTrxView>(CashTrxView())
 
 }
