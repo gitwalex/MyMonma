@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,8 +53,7 @@ data class CashTrxView(
 
 @Composable
 fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val account by viewModel.account.observeAsState()
-    account?.let { acc ->
+    viewModel.account?.let { acc ->
         val list by DB.dao.getCashTrxList(acc.id!!).collectAsState(initial = emptyList())
         Scaffold(
             topBar = {
@@ -66,10 +64,10 @@ fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
 
 
             LazyColumn(modifier = Modifier.padding(it)) {
-                items(list, key = { it.id!! }) { trx ->
-                    CashTrxViewItem(trx = trx) {
-                        viewModel.cashTrx.value = trx
-                        navigateTo(it)
+                items(list, key = { item -> item.id!! }) { trx ->
+                    CashTrxViewItem(trx = trx) { destination ->
+                        viewModel.cashTrxId = trx.id
+                        navigateTo(destination)
 
                     }
                 }

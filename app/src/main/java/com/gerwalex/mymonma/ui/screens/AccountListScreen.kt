@@ -48,7 +48,7 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                     key = { cat -> cat.id!! })
                 {
                     AccountListItem(it) {
-                        viewModel.account.value = it
+                        viewModel.account = it
                         navigateTo(com.gerwalex.mymonma.ui.navigation.CashTrxList)
                     }
 

@@ -3,7 +3,6 @@ package com.gerwalex.mymonma.database.room
 import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Query
-import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.ui.screens.CashTrxView
@@ -15,7 +14,7 @@ abstract class Dao(val db: DB) {
     abstract fun getPartnerstammdaten(): Flow<List<Partnerstamm>>
 
     @Query("Select * from Partnerstamm where name like '%'||:filter ||'%' order by name")
-    abstract fun getPartnerlist(filter: String): Cursor
+    abstract fun getPartnerlist(filter: String): Flow<List<Partnerstamm>>
 
     @Query(
         "Select * from Cat " +//
@@ -56,12 +55,24 @@ abstract class Dao(val db: DB) {
                 "left join Cat acc on   acc.id = accountid " +
                 "left join Cat c on c.id = catid " +
                 "where accountid = :accountid " +
+                "and (transferid is null " + // keine Splittbuchungen
+                "or c.catclassid = 2) " + // alle Gegenbuchungen
                 "order by btag desc, a.id "
     )
     abstract fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>>
 
-    @Query("select * from CashTrx where id = :id")
-    abstract fun getCashTrx(id: Long): Flow<CashTrx>
+    @Query(
+        "select a.*, " +
+                "p.name as partnername, acc.name as accountname, c.name as catname, " +
+                "0 as imported, 0 as saldo " +
+                "from CashTrx a " +
+                "left join Partnerstamm p on p.id = partnerid " +
+                "left join Cat acc on   acc.id = accountid " +
+                "left join Cat c on c.id = catid " +
+                "where a.id = :id or a.transferid = :id " +
+                "order by a.id"
+    )
+    abstract fun getCashTrx(id: Long): Flow<List<CashTrxView>>
 
     @Query("select * from Partnerstamm where id = :partnerid ")
     abstract fun getPartnerstamm(partnerid: Long): Flow<Partnerstamm>

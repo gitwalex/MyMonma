@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
+import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
@@ -29,69 +30,87 @@ import com.gerwalex.mymonma.ui.navigation.Up
 
 
 @Composable
-fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun AddCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+    viewModel.account?.id?.let { accountid ->
+        ArrayList<CashTrxView>().apply {
+            add(CashTrxView(accountid = accountid))
+            EditCashTrxScreen(list = this, navigateTo = navigateTo)
+        }
 
-    val cashTrxView by viewModel.cashTrx.collectAsState()
-    cashTrxView.id?.let {
-        EditCashTrxScreen(trx = cashTrxView, navigateTo = navigateTo)
+    }
+}
+
+@Composable
+fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+    viewModel.cashTrxId?.let {
+        val list by dao.getCashTrx(it).collectAsState(emptyList())
+        if (list.isNotEmpty()) {
+            EditCashTrxScreen(list = list, navigateTo = navigateTo)
+        }
+
     }
 }
 
 @Composable
 fun EditCashTrxScreen(
-    trx: CashTrxView,
+    list: List<CashTrxView>,
     navigateTo: (Destination) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopToolBar(
-                stringResource(id = R.string.umsatzBearbeiten),
-                actions = {
-                    IconButton(onClick = {
-                        Log.d("EditCashTrxScreen", "EditCashTrxScreen: ")
-                    }) {
-                        Icons.Filled.Save
+    if (list.isNotEmpty()) {
+        val trx = list[0]
+        Scaffold(
+            topBar = {
+                TopToolBar(
+                    stringResource(id = R.string.umsatzBearbeiten),
+                    actions = {
+                        IconButton(onClick = {
+                            Log.d("EditCashTrxScreen", "EditCashTrxScreen: ")
+                        }) {
+                            Icons.Filled.Save
+                        }
+                    }
+                ) {
+                    navigateTo(Up)
+                }
+            },
+        ) {
+            Column(modifier = Modifier.padding(it))
+            {
+                Row {
+                    DatePickerView(date = trx.btag) {
+
+                    }
+                    AmountEditView(value = trx.amount) {}
+                }
+                Row {
+                    AutoCompletePartnerView(filter = trx.partnername) {
+
                     }
                 }
-            ) {
-                navigateTo(Up)
-            }
-        },
-    ) {
-        Column(modifier = Modifier.padding(it))
-        {
-            Row {
-                DatePickerView(date = trx.btag) {
 
-                }
-                AmountEditView(value = trx.amount) {}
-            }
-            Row {
-                AutoCompletePartnerView(filter = trx.partnername) {
+                Log.d("EditCashTrxScreen", "EditCashTrxScreen: $trx")
 
-                }
             }
-
-            Log.d("EditCashTrxScreen", "EditCashTrxScreen: $trx")
 
         }
 
     }
-
 }
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun EditCashTrxPreview() {
-    val trx = CashTrxView()
-    AppTheme {
-        Surface {
-            EditCashTrxScreen(trx = trx) {
+    ArrayList<CashTrxView>().apply {
+        add(CashTrxView())
+        AppTheme {
+            Surface {
+                EditCashTrxScreen(list = this) {
 
+                }
             }
-        }
 
+        }
     }
 }
 

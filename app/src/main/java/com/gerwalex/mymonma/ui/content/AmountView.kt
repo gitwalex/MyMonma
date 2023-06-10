@@ -67,6 +67,7 @@ fun AmountEditView(
                     settings.also { settings ->
                         settings.numberFormat = NumberFormat.getCurrencyInstance()
                         settings.initialValue = BigDecimal(myValue).divide(digits)
+                        settings.requestCode = ComposeActivity.CalcResultRequest
                     }
                     fm.setFragmentResultListener(
                         ComposeActivity.CalcResult,

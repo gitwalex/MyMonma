@@ -60,12 +60,27 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
         try {
             db.beginTransaction()
             createStammdaten(db)
+            executeImportStatements(db)
             db.setTransactionSuccessful()
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
             db.endTransaction()
         }
+    }
+
+    private fun executeImportStatements(db: SupportSQLiteDatabase) {
+        // Entfernen brackets bei catname
+        db.execSQL("UPDATE Type_Cat SET name=REPLACE(name,'[', '')")
+        db.execSQL("UPDATE Type_Cat SET name=REPLACE(name,']', '')")
+        // Einfügen gegenbuchungen
+        db.execSQL(
+            "insert into CashTrans (btag, partnerid,accountid,  catid, " +
+                    "amount, memo, transferid)" +
+                    "select btag, partnerid,catid, accountid, -amount, memo, _id" +
+                    "from CashTrans where catid between 1 and 99"
+        )
+
     }
 
     override fun onOpen(db: SupportSQLiteDatabase) {
