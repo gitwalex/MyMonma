@@ -1,6 +1,5 @@
 package com.gerwalex.mymonma.database.tables
 
-import android.database.Cursor
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -91,8 +89,7 @@ data class Cat(
 @Composable
 fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
     var catname by remember { mutableStateOf(filter) }
-    val cursor = MutableLiveData<Cursor>()
-    val data by dao.getCatlist(filter).collectAsState(initial = emptyList())
+    val data by dao.getCatlist(catname).collectAsState(initial = emptyList())
     var error by remember { mutableStateOf("") }
     if (data.isEmpty()) {
         error = stringResource(id = R.string.errorListEmpty)

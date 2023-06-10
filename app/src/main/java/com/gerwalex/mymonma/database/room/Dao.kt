@@ -64,7 +64,7 @@ abstract class Dao(val db: DB) {
     @Query(
         "select a.*, " +
                 "p.name as partnername, acc.name as accountname, c.name as catname, " +
-                "0 as imported, 0 as saldo " +
+                "c.catclassid, 0 as imported, 0 as saldo " +
                 "from cashtrx a " +
                 "left join Partnerstamm p on p.id = partnerid " +
                 "left join Cat acc on   acc.id = accountid " +
@@ -76,15 +76,23 @@ abstract class Dao(val db: DB) {
     )
     abstract fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>>
 
+    /**
+     * Liest eine CashTrx.
+     * Selection wie folgt:
+     * Trx.id = id, Trx.transferid = id, ohne Gegenbuchungen.
+     * Bevor die Trx-Liste (neu) gespeichert wird, wird die alte Liste aus der DB entfernt und
+     * komplett (mit Aufbau der Gegenbuchungen) neu eingefügt.
+     */
     @Query(
         "select a.*, " +
                 "p.name as partnername, acc.name as accountname, c.name as catname, " +
-                "0 as imported, 0 as saldo " +
+                "c.catclassid, 0 as imported, 0 as saldo " +
                 "from CashTrx a " +
                 "left join Partnerstamm p on p.id = partnerid " +
                 "left join Cat acc on   acc.id = accountid " +
                 "left join Cat c on c.id = catid " +
                 "where a.id = :id or a.transferid = :id " +
+                "and c.catclassid != 2 " +
                 "order by a.id"
     )
     abstract fun getCashTrx(id: Long): Flow<List<CashTrxView>>
@@ -96,32 +104,31 @@ abstract class Dao(val db: DB) {
     abstract suspend fun delete(trx: CashTrx)
 
     @Insert
-    protected abstract suspend fun insert(list: List<CashTrx>)
-
-    @Insert
     protected abstract suspend fun insert(trx: CashTrx): Long
 
+    /**
+     * Einfügen/Update einer CashTrx.
+     * Zuerst entfernen der gesamten ursprünglichen Buchung.
+     * Danach Einfügen der einzelnen Sätze, die Transferid ab dem zweiten Satz entspricht
+     * der id des ersten Satzes.
+     * Gegenbuchungen werden jewils mit aufgebaut und sind schon beim Lesen aus der DB nicht mitgekommen.
+     */
+
     @Transaction
-    open suspend fun insertCashTrx(list: List<CashTrx>) {
+    open suspend fun insertCashTrxView(list: List<CashTrxView>) {
         if (list.isNotEmpty()) {
-            delete(list[0]) // Alle weg w/referientieller Integrietaet
+            val main = list[0]
+            delete(main.getCashTrx()) // Alle weg w/referientieller Integritaet
             list.forEachIndexed { index, item ->
                 if (index != 0) {
                     item.transferid = list[0].id
                 }
-                item.id = insert(item)
+                item.id = insert(item.getCashTrx())
+                if (item.catclassid == 2L) { // Die catclassid ist die catclass der Cat.
+                    insert(item.getGegenbuchung())
+                }
             }
         }
-
-    }
-
-    @Transaction
-    open suspend fun insertCashTrxView(list: List<CashTrxView>) {
-        val trx = ArrayList<CashTrx>()
-        list.forEach {
-            trx.add(CashTrx(it))
-        }
-        insertCashTrx(trx)
 
     }
 

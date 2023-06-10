@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.ui.Color
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.navigation.Destination
@@ -39,17 +40,49 @@ data class CashTrxView(
     var id: Long? = null,
     var btag: Date = Date(System.currentTimeMillis()),
     var accountid: Long = -1,
-    var catid: Long = 0,
-    var partnerid: Long = 0,
+    var catid: Long = -1,
+    var partnerid: Long = -1,
     var amount: Long = 0,
     var memo: String? = null,
     var transferid: Long? = null,
     var accountname: String = "",
     var partnername: String = "",
     var catname: String = "",
+    var catclassid: Long = -1,
     var imported: Boolean = false,
     var saldo: Long? = 0,
-)
+) {
+    fun getCashTrx(): CashTrx {
+        return CashTrx(
+            id = id,
+            btag = btag,
+            accountid = accountid,
+            catid = catid,
+            partnerid = partnerid,
+            amount = amount,
+            memo = memo,
+            transferid = transferid,
+        )
+    }
+
+    /**
+     * Erstellt eine Gegenbuchung zur Buchung.
+     * Übernahme aller Daten 1:1, Tausch accountid <-> catid,
+     * transferid entspricht id des Umsatzes, id ist null
+     */
+    fun getGegenbuchung(): CashTrx {
+        return CashTrx(
+            btag = btag,
+            catid = accountid,
+            accountid = catid,
+            partnerid = partnerid,
+            amount = -amount,
+            memo = memo,
+            transferid = id,
+        )
+    }
+
+}
 
 @Composable
 fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {

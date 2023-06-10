@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,7 +32,6 @@ import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompleteCatView
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
-import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.content.DatePickerView
@@ -131,6 +131,10 @@ fun EditCashTrxScreen(
                         trx.catid = cat.id ?: -1L
                     }
                 }
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = stringResource(id = R.string.splitten))
+
+                }
 
             }
 
@@ -140,7 +144,24 @@ fun EditCashTrxScreen(
 }
 
 @Composable
-fun SplitLine(trx: CashTrx) {
+fun SplitLine(trx: CashTrxView, onAmountChanged: (Long) -> Unit) {
+    Row(modifier = Modifier) {
+
+        if (LocalInspectionMode.current) {
+            QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
+        } else {
+            AutoCompleteCatView(filter = trx.catname) { cat ->
+                trx.catid = cat.id ?: -1L
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            AmountEditView(value = trx.amount) {
+                trx.amount = it
+                onAmountChanged(it)
+            }
+
+        }
+
+    }
 
 }
 

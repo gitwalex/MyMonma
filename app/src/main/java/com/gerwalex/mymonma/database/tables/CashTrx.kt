@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.gerwalex.mymonma.ui.screens.CashTrxView
 import java.sql.Date
 
 @Entity(
@@ -20,6 +19,13 @@ import java.sql.Date
         parentColumns = ["id"],
         childColumns = ["catid"],
         onDelete = ForeignKey.RESTRICT,
+        onUpdate = ForeignKey.CASCADE,
+        deferred = true
+    ), ForeignKey(
+        entity = CashTrx::class,
+        parentColumns = ["id"],
+        childColumns = ["transferid"],
+        onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE,
         deferred = true
     ), ForeignKey(
@@ -45,16 +51,7 @@ data class CashTrx(
     var partnerid: Long = 0,
     var amount: Long = 0,
     var memo: String? = null,
+    @ColumnInfo(index = true)
     var transferid: Long? = null
-) {
-    constructor(cashTrxView: CashTrxView) : this(cashTrxView.id) {
-        btag = cashTrxView.btag
-        accountid = cashTrxView.accountid
-        catid = cashTrxView.catid
-        partnerid = cashTrxView.partnerid
-        amount = cashTrxView.amount
-        memo = cashTrxView.memo
-        transferid = cashTrxView.transferid
-    }
-}
+)
 
