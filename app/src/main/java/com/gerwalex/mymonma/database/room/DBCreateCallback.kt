@@ -71,14 +71,14 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
 
     private fun executeImportStatements(db: SupportSQLiteDatabase) {
         // Entfernen brackets bei catname
-        db.execSQL("UPDATE Type_Cat SET name=REPLACE(name,'[', '')")
-        db.execSQL("UPDATE Type_Cat SET name=REPLACE(name,']', '')")
+        db.execSQL("UPDATE Cat SET name=REPLACE(name,'[', '')")
+        db.execSQL("UPDATE Cat SET name=REPLACE(name,']', '')")
         // Einfügen gegenbuchungen
         db.execSQL(
-            "insert into CashTrans (btag, partnerid,accountid,  catid, " +
+            "insert into CashTrx (btag, partnerid,accountid,  catid, " +
                     "amount, memo, transferid)" +
-                    "select btag, partnerid,catid, accountid, -amount, memo, _id" +
-                    "from CashTrans where catid between 1 and 99"
+                    "select btag, partnerid,catid, accountid, -amount, memo, id " +
+                    "from CashTrx where catid between 1 and 99"
         )
 
     }

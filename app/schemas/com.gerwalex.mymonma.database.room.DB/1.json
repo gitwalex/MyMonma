@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "85d4cba113fcbe134646a1dbd43404ab",
+    "identityHash": "cafd6c328bfe4937a54b9b5139011e9c",
     "entities": [
       {
         "tableName": "Account",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `catid` INTEGER NOT NULL, `inhaber` TEXT, `currency` TEXT, `iban` TEXT, `blz` TEXT, `bezeichnung` TEXT, `creditlimit` INTEGER, `verrechnungskonto` INTEGER, `kontotyp` TEXT NOT NULL, `openDate` TEXT, `bankname` TEXT, `bic` TEXT, `openamount` INTEGER NOT NULL, FOREIGN KEY(`catid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `catid` INTEGER NOT NULL, `inhaber` TEXT, `currency` TEXT, `iban` TEXT, `blz` TEXT, `bezeichnung` TEXT, `creditlimit` INTEGER, `verrechnungskonto` INTEGER, `kontotyp` TEXT NOT NULL, `openDate` TEXT, `bankname` TEXT, `bic` TEXT, FOREIGN KEY(`catid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
         "fields": [
           {
             "fieldPath": "id",
@@ -85,12 +85,6 @@
             "columnName": "bic",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "openamount",
-            "columnName": "openamount",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -605,7 +599,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85d4cba113fcbe134646a1dbd43404ab')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cafd6c328bfe4937a54b9b5139011e9c')"
     ]
   }
 }

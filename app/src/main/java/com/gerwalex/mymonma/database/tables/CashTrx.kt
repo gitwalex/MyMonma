@@ -1,12 +1,10 @@
 package com.gerwalex.mymonma.database.tables
 
-import android.database.Cursor
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.gerwalex.mymonma.database.ObservableTableRowNew
 import java.sql.Date
 
 @Entity(
@@ -48,7 +46,7 @@ data class CashTrx(
     var amount: Long = 0,
     var memo: String? = null,
     var transferid: Long? = null
-) : ObservableTableRowNew() {
+) {
     @Ignore
     var accountname: String? = null
 
@@ -64,16 +62,5 @@ data class CashTrx(
     @Ignore
     var saldo: Long? = 0
 
-    @Ignore
-    constructor(c: Cursor) : this() {
-        fillContent(c)
-        id = getAsLong("id")
-        accountid = getAsLong("accountid")
-        catid = getAsLong("catid")
-        partnerid = getAsLong("partnerid")
-        amount = getAsLong("amount")
-        memo = getAsString("memo")
-        transferid = getAsLong("transferid")
-    }
 }
 

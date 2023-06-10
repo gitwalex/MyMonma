@@ -1,6 +1,5 @@
 package com.gerwalex.mymonma.database.tables
 
-import android.database.Cursor
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,10 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.ObservableTableRowNew
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 
@@ -27,23 +24,15 @@ data class Partnerstamm(
     @ColumnInfo(name = "id")
     var id: Long? = null,
     var name: String = "Unknown"
-) : ObservableTableRowNew() {
-
-    @Ignore
-    constructor(c: Cursor) : this(null) {
-        fillContent(c)
-        id = getAsLong("id")
-        name = getAsString("name")!!
-    }
-}
+)
 
 
 @Composable
 fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
     var partnername by remember { mutableStateOf(filter) }
     val data by dao.getPartnerlist(partnername).collectAsState(initial = emptyList())
-    var selectedItem = if (data.isNotEmpty())
-        data[0] else Partnerstamm()
+    if (data.isNotEmpty())
+        selected(data[0]) else Partnerstamm()
 
 
     AutoCompleteTextView(
@@ -56,12 +45,8 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
         count = data.size,
         onClearClick = { partnername = "" },
         onDoneActionClick = { },
-        onFocusChanged = { hasFocus ->
-            if (!hasFocus)
-                selected(selectedItem)
-        },
         onItemClick = { position ->
-            selectedItem = data[position]
+            val selectedItem = data[position]
             partnername = selectedItem.name
             selected(selectedItem)
         },

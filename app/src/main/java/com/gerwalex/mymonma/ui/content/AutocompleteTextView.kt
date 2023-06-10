@@ -31,6 +31,7 @@ fun AutoCompleteTextView(
     queryLabel: String,
     count: Int,
     modifier: Modifier = Modifier,
+    error: String? = null,
     onQueryChanged: (query: String) -> Unit = {},
     onDoneActionClick: () -> Unit = {},
     onClearClick: () -> Unit = {},
@@ -46,6 +47,7 @@ fun AutoCompleteTextView(
         QuerySearch(
             query = query,
             label = queryLabel,
+            error = error,
             onQueryChanged = onQueryChanged,
             onDoneActionClick = {
                 view.clearFocus()

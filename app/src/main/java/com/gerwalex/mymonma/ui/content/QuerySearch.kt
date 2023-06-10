@@ -28,6 +28,7 @@ fun QuerySearch(
     modifier: Modifier = Modifier,
     query: String,
     label: String,
+    error: String? = null,
     onDoneActionClick: () -> Unit = {},
     onClearClick: () -> Unit = {},
     onQueryChanged: (String) -> Unit,
@@ -56,6 +57,7 @@ fun QuerySearch(
                 }
                 onFocusChanged(focusState.isFocused)
             },
+
         value = query,
         onValueChange = {
             Log.d("QuerySearch", "QuerySearch: $it")
@@ -63,6 +65,16 @@ fun QuerySearch(
             onQueryChanged(it)
         },
         label = { Text(text = label) },
+        isError = error == null,
+        supportingText = {
+            error?.let {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = error,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
         textStyle = MaterialTheme.typography.labelSmall,
         singleLine = true,
         trailingIcon = {

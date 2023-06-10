@@ -1,32 +1,24 @@
 package com.gerwalex.mymonma.database.tables
 
-import android.database.Cursor
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.ObservableTableRowNew
-import com.gerwalex.mymonma.database.room.DB
-import com.gerwalex.mymonma.database.room.MyConverter
+import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.enums.WPTyp
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -50,42 +42,12 @@ data class WPStamm(
     var risiko: Int = 2,
     var beobachten: Boolean = true,
     var estEarning: Long = 0,
-) : ObservableTableRowNew() {
-
-    @Ignore
-    constructor(c: Cursor) : this(null) {
-        fillContent(c)
-        id = getAsLong("id")
-        partnerid = getAsLong("partnerid")
-        wpkenn = getAsString("wpkenn")
-        isin = getAsString("isin")
-        wptyp = MyConverter.convertWPTyp(getAsString("wptyp")!!)
-        risiko = getAsInt("risiko")
-        beobachten = getAsBoolean("beobachten")
-        estEarning = getAsLong("estEarning")
-    }
-}
+)
 
 @Composable
 fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
     var wpstammname by remember { mutableStateOf(filter) }
-    val cursor = MutableLiveData<Cursor>()
-    val data by cursor.observeAsState()
-    LaunchedEffect(wpstammname) {
-        withContext(Dispatchers.IO) {
-            val c = DB.dao.getWPStammlist(wpstammname)
-            if (c.moveToFirst()) {
-                val first = Partnerstamm(c)
-                if (first.name == wpstammname) {
-                    // Der erste Eintrag passt vollständig - nehmen
-                    selected(first)
-                } else {
-                    selected(Partnerstamm(name = wpstammname))
-                }
-            }
-            cursor.postValue(c)
-        }
-    }
+    val data by dao.getWPStammlist(wpstammname).collectAsState(initial = emptyList())
 
 
     AutoCompleteTextView(
@@ -95,24 +57,17 @@ fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
         onQueryChanged = {
             wpstammname = it
         },
-        count = data?.count ?: 0,
+        count = data.size,
         onClearClick = { wpstammname = "" },
         onDoneActionClick = { },
         onItemClick = { position ->
-            data?.let { c ->
-                if (c.moveToPosition(position)) {
-                    val wpstamm = Partnerstamm(c)
-                    wpstammname = wpstamm.name
-                    selected(wpstamm)
-                }
-            }
+            val wpstamm = data[position]
+            wpstammname = wpstamm.name
+            selected(wpstamm)
+
         },
     ) { position ->
-        data?.let { c ->
-            if (c.moveToPosition(position)) {
-                val wpstamm = Partnerstamm(c)
-                Text(wpstamm.name, fontSize = 14.sp)
-            }
-        }
+        val wpstamm = data[position]
+        Text(wpstamm.name, fontSize = 14.sp)
     }
 }

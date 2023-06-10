@@ -1,9 +1,9 @@
 package com.gerwalex.mymonma.database.room
 
-import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Query
 import com.gerwalex.mymonma.database.tables.Cat
+import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.ui.screens.CashTrxView
 import kotlinx.coroutines.flow.Flow
@@ -21,13 +21,24 @@ abstract class Dao(val db: DB) {
                 "where name like '%'|| :filter||'%' and not ausgeblendet and supercatid != 1002 " +  //
                 "order by cnt desc, name"
     )
-    abstract fun getCatlist(filter: String): Cursor
+    abstract fun getCatlist(filter: String): Flow<List<Cat>>
 
     @Query("Select * from CatClass where name like '%'||:filter ||'%' order by name")
-    abstract fun getCatClasslist(filter: String): Cursor
+    abstract fun getCatClasslist(filter: String): Flow<List<CatClass>>
 
     @Query("Select * from Cat where name like '%'||:filter ||'%' and catclassid = 2 order by name")
-    abstract fun getAccountlist(filter: String): Cursor
+    abstract fun getAccountlist(filter: String): Flow<List<Cat>>
+
+    /**
+     * Ermittlung Saldo zu CashKonto!
+     */
+    @Query(
+        "select sum(amount) " +
+                "from CashTrx b " +
+                "where accountid = :accountid " +
+                "and (transferid is null or (SELECT catclassid from Cat where id = b.catid) =2)"
+    )
+    abstract fun getSaldo(accountid: Long): Long
 
     @Query(
         "select * from Cat where catclassid = 2"
@@ -44,7 +55,7 @@ abstract class Dao(val db: DB) {
                 "and exists (select id from wpstamm where partnerid = a.id ) " +
                 "order by name"
     )
-    abstract fun getWPStammlist(filter: String): Cursor
+    abstract fun getWPStammlist(filter: String): Flow<List<Partnerstamm>>
 
     @Query(
         "select a.*, " +

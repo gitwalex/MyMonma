@@ -2,7 +2,6 @@ package com.gerwalex.mymonma.database.tables
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.database.Cursor
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.gerwalex.mymonma.database.ObservableTableRowNew
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
 import java.sql.Date
@@ -38,20 +36,7 @@ data class WPKurs(
     var kurs: Long = 0,
     @Ignore
     var wpname: String? = "New",
-) : ObservableTableRowNew() {
-
-
-    @Ignore
-    constructor(c: Cursor) : this(id = null) {
-        fillContent(c)
-        id = getAsLong("id")
-        wpid = getAsLong("wpid")
-        btag = getAsDate("btag")!!
-        kurs = getAsLong("kurs")
-        wpname = getAsString("wpname")
-    }
-
-}
+)
 
 @Composable
 fun WPKursRow(wpkurs: WPKurs, modifier: Modifier = Modifier) {

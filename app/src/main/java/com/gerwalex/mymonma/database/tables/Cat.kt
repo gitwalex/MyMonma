@@ -4,9 +4,8 @@ import android.database.Cursor
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -17,14 +16,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.ObservableTableRowNew
-import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -74,22 +69,7 @@ data class Cat(
      * Antahl der CashTrx zu dieser catid
      */
     var cnt: Long = 0,
-) : ObservableTableRowNew() {
-
-    @Ignore
-    constructor(c: Cursor) : this(null) {
-        fillContent(c)
-        id = getAsLong("id")
-        name = getAsString("name")!!
-        description = getAsString("description")
-        obercatid = getAsLong("obercatid")
-        supercatid = getAsLong("supercatid")
-        catclassid = getAsLong("catclassid")
-        incomecat = getAsBooleanOrNull("incomecat")
-        ausgeblendet = getAsBoolean("ausgeblendet")
-        saldo = getAsLong("saldo")
-        cnt = getAsLong("cnt")
-    }
+) {
 
     companion object {
 
@@ -109,15 +89,14 @@ data class Cat(
 fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
     var catname by remember { mutableStateOf(filter) }
     val cursor = MutableLiveData<Cursor>()
-    val data by cursor.observeAsState()
-    LaunchedEffect(catname) {
-        withContext(Dispatchers.IO) {
-            val c = DB.dao.getCatlist(catname)
-            if (c.moveToFirst()) {
-                selected(Cat(c))
-            }
-            cursor.postValue(c)
-        }
+    val data by dao.getCatlist(filter).collectAsState(initial = emptyList())
+    var error by remember { mutableStateOf("") }
+    if (data.isEmpty()) {
+        error = stringResource(id = R.string.errorListEmpty)
+        selected(Cat())
+    } else {
+        selected(data[0])
+        error = ""
     }
 
 
@@ -126,24 +105,17 @@ fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
         query = catname,
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = { catname = it },
-        count = data?.count ?: 0,
+        count = data.size,
         onClearClick = { catname = "" },
         onDoneActionClick = { },
         onItemClick = { position ->
-            data?.let { c ->
-                if (c.moveToPosition(position)) {
-                    val cat = Cat(c)
-                    catname = cat.name
-                    selected(cat)
-                }
-            }
+            val cat = data[position]
+            catname = cat.name
+            selected(cat)
         },
     ) { position ->
-        data?.let { c ->
-            if (c.moveToPosition(position)) {
-                val cat = Cat(c)
-                Text(cat.name, fontSize = 14.sp)
-            }
-        }
+        val cat = data[position]
+        val text = if (cat.catclassid == 2L) "[${cat.name}]" else cat.name
+        Text(text, fontSize = 14.sp)
     }
 }
