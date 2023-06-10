@@ -3,8 +3,8 @@ package com.gerwalex.mymonma.database.tables
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.gerwalex.mymonma.ui.screens.CashTrxView
 import java.sql.Date
 
 @Entity(
@@ -36,7 +36,7 @@ data class CashTrx(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
-    val btag: Date = Date(System.currentTimeMillis()),
+    var btag: Date = Date(System.currentTimeMillis()),
     @ColumnInfo(index = true)
     var accountid: Long = -1,
     @ColumnInfo(index = true)
@@ -47,20 +47,14 @@ data class CashTrx(
     var memo: String? = null,
     var transferid: Long? = null
 ) {
-    @Ignore
-    var accountname: String? = null
-
-    @Ignore
-    var partnername: String? = null
-
-    @Ignore
-    var catname: String? = null
-
-    @Ignore
-    var imported: Boolean = false
-
-    @Ignore
-    var saldo: Long? = 0
-
+    constructor(cashTrxView: CashTrxView) : this(cashTrxView.id) {
+        btag = cashTrxView.btag
+        accountid = cashTrxView.accountid
+        catid = cashTrxView.catid
+        partnerid = cashTrxView.partnerid
+        amount = cashTrxView.amount
+        memo = cashTrxView.memo
+        transferid = cashTrxView.transferid
+    }
 }
 

@@ -1,7 +1,11 @@
 package com.gerwalex.mymonma.database.room
 
 import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
@@ -87,4 +91,38 @@ abstract class Dao(val db: DB) {
 
     @Query("select * from Partnerstamm where id = :partnerid ")
     abstract fun getPartnerstamm(partnerid: Long): Flow<Partnerstamm>
+
+    @Delete
+    abstract suspend fun delete(trx: CashTrx)
+
+    @Insert
+    protected abstract suspend fun insert(list: List<CashTrx>)
+
+    @Insert
+    protected abstract suspend fun insert(trx: CashTrx): Long
+
+    @Transaction
+    open suspend fun insertCashTrx(list: List<CashTrx>) {
+        if (list.isNotEmpty()) {
+            delete(list[0]) // Alle weg w/referientieller Integrietaet
+            list.forEachIndexed { index, item ->
+                if (index != 0) {
+                    item.transferid = list[0].id
+                }
+                item.id = insert(item)
+            }
+        }
+
+    }
+
+    @Transaction
+    open suspend fun insertCashTrxView(list: List<CashTrxView>) {
+        val trx = ArrayList<CashTrx>()
+        list.forEach {
+            trx.add(CashTrx(it))
+        }
+        insertCashTrx(trx)
+
+    }
+
 }

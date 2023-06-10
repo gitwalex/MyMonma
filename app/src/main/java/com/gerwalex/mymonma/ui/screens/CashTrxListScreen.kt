@@ -37,7 +37,7 @@ import java.text.DateFormat
 
 data class CashTrxView(
     var id: Long? = null,
-    val btag: Date = Date(System.currentTimeMillis()),
+    var btag: Date = Date(System.currentTimeMillis()),
     var accountid: Long = -1,
     var catid: Long = 0,
     var partnerid: Long = 0,
@@ -119,11 +119,10 @@ fun CashTrxViewItem(trx: CashTrxView, navigateTo: (Destination) -> Unit) {
                 Text(
                     modifier = Modifier.weight(1f),
                     text = stringResource(id = R.string.saldo),
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 AmountView(
                     value = trx.saldo ?: 0,
-                    style = MaterialTheme.typography.labelSmall
                 )
             }
 

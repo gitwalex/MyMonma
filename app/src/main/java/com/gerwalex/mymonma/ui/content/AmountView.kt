@@ -2,8 +2,8 @@ package com.gerwalex.mymonma.ui.content
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +29,7 @@ import kotlin.math.pow
 fun AmountView(
     value: Long,
     modifier: Modifier = Modifier,
-    style: TextStyle? = null,
+    style: TextStyle = MaterialTheme.typography.bodyLarge,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
 ) {
@@ -39,7 +39,7 @@ fun AmountView(
     Text(
         modifier = modifier,
         text = currency.format(myValue),
-        style = style ?: LocalTextStyle.current,
+        style = style,
         fontWeight = fontWeight,
         color = if (colorMode && myValue < BigDecimal(0)) Color.Red else Color.Black,
         textAlign = TextAlign.End,
@@ -50,7 +50,6 @@ fun AmountView(
 fun AmountEditView(
     value: Long,
     modifier: Modifier = Modifier,
-    style: TextStyle? = null,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
     onChanged: (Long) -> Unit
@@ -86,7 +85,6 @@ fun AmountEditView(
         AmountView(
             value = myValue,
             modifier = modifier,
-            style = style,
             fontWeight = fontWeight,
             colorMode = colorMode
         )

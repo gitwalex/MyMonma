@@ -34,7 +34,6 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
     if (data.isNotEmpty())
         selected(data[0]) else Partnerstamm()
 
-
     AutoCompleteTextView(
         modifier = Modifier.fillMaxWidth(),
         query = partnername,

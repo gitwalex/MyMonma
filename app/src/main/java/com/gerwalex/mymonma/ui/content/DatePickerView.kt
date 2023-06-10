@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Popup
 import com.gerwalex.mymonma.R
 import java.sql.Date
@@ -32,6 +34,7 @@ fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) 
     var myDate by remember { mutableStateOf(date) }
     Column(modifier) {
         Text(text = dateformatter.format(myDate),
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.clickable {
                 showDatePicker = true
             }
@@ -58,7 +61,13 @@ fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) 
 
                             }
                         }) {
-                            Text(text = stringResource(id = R.string.ok))
+                            Text(
+                                text = stringResource(id = R.string.ok),
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.End,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
 
                         }
                     }

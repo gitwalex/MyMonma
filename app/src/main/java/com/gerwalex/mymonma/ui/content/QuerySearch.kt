@@ -75,8 +75,8 @@ fun QuerySearch(
                 )
             }
         },
-        textStyle = MaterialTheme.typography.labelSmall,
         singleLine = true,
+        textStyle = MaterialTheme.typography.bodyLarge,
         trailingIcon = {
             if (showClearButton) {
                 IconButton(onClick = { onClearClick() }) {

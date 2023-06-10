@@ -40,7 +40,7 @@ fun TopToolBar(
     )
 
     TopAppBar(
-        title = { Text(text = title) },
+        title = { Text(text = title, style = MaterialTheme.typography.titleLarge) },
         actions = actions,
         colors = myTopAppBarColors,
         navigationIcon = {

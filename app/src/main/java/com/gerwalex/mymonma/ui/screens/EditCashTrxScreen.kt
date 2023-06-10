@@ -2,31 +2,44 @@ package com.gerwalex.mymonma.ui.screens
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.tables.AutoCompleteCatView
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.content.DatePickerView
+import com.gerwalex.mymonma.ui.content.QuerySearch
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -56,17 +69,24 @@ fun EditCashTrxScreen(
     list: List<CashTrxView>,
     navigateTo: (Destination) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     if (list.isNotEmpty()) {
         val trx = list[0]
+        var amount by remember { mutableStateOf(trx.amount) }
         Scaffold(
             topBar = {
                 TopToolBar(
                     stringResource(id = R.string.umsatzBearbeiten),
                     actions = {
                         IconButton(onClick = {
-                            Log.d("EditCashTrxScreen", "EditCashTrxScreen: ")
+                            scope.launch { dao.insertCashTrxView(list) }
+                            navigateTo(Up)
                         }) {
-                            Icons.Filled.Save
+                            Icon(
+                                imageVector = Icons.Filled.Save,
+                                contentDescription = stringResource(id = R.string.save)
+                            )
+
                         }
                     }
                 ) {
@@ -76,25 +96,52 @@ fun EditCashTrxScreen(
         ) {
             Column(modifier = Modifier.padding(it))
             {
-                Row {
-                    DatePickerView(date = trx.btag) {
+                Row(
+                    modifier = Modifier,
+                ) {
 
+                    DatePickerView(date = trx.btag) { date ->
+                        trx.btag = date
                     }
-                    AmountEditView(value = trx.amount) {}
-                }
-                Row {
-                    AutoCompletePartnerView(filter = trx.partnername) {
-
+                    Spacer(modifier = Modifier.weight(1f))
+                    AmountEditView(value = trx.amount) {
+                        trx.amount = it
                     }
                 }
+                if (LocalInspectionMode.current) {
+                    QuerySearch(query = "Partner", label = "label", onQueryChanged = {})
+                } else {
+                    AutoCompletePartnerView(filter = trx.partnername) { partner ->
+                        trx.partnername = partner.name
+                        trx.partnerid = partner.id ?: -1
+                    }
+                }
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = trx.memo ?: "",
+                    minLines = 3,
+                    onValueChange = { text -> trx.memo = text },
+                    label = { Text(text = stringResource(id = R.string.memo)) },
+                )
 
-                Log.d("EditCashTrxScreen", "EditCashTrxScreen: $trx")
+                if (LocalInspectionMode.current) {
+                    QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
+                } else {
+                    AutoCompleteCatView(filter = trx.catname) { cat ->
+                        trx.catid = cat.id ?: -1L
+                    }
+                }
 
             }
 
         }
 
     }
+}
+
+@Composable
+fun SplitLine(trx: CashTrx) {
+
 }
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)

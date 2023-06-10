@@ -85,6 +85,9 @@ data class Cat(
     }
 }
 
+/**
+ * Wenn keien Kategorie ausgewählt wurde ist die cat.id == null,
+ */
 @Composable
 fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
     var catname by remember { mutableStateOf(filter) }
