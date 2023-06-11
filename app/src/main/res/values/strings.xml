@@ -56,4 +56,5 @@
     <string name="save">Speichern</string>
     <string name="memo">Memo</string>
     <string name="splitten">Splitten</string>
+    <string name="splittbuchung">Splitbuchung</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.gerwalex.mymonma.ui.content
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,7 +28,7 @@ fun AutoCompleteTextView(
     queryLabel: String,
     count: Int,
     modifier: Modifier = Modifier,
-    showDropdown: Boolean = false,
+    showDropdown: Boolean = true,
     error: String? = null,
     onQueryChanged: (query: String) -> Unit = {},
     onDismissRequest: () -> Unit = {},
@@ -57,7 +58,8 @@ fun AutoCompleteTextView(
             }
 
         )
-        if (showDropdown) {
+        if (count > 1 && showDropdown) {
+            Log.d("AutocompleteTextView", "count=$count, dropdown=$showDropdown, query=$query ")
             Box {
                 Popup(
                     properties = PopupProperties(dismissOnClickOutside = true),

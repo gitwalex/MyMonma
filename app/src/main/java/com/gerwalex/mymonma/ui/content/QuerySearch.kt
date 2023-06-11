@@ -47,7 +47,6 @@ fun QuerySearch(
 
     OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth()
             .onFocusChanged { focusState ->
                 if (focusState.isFocused) {
                     showClearButton = true

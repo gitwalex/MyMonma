@@ -41,7 +41,7 @@ fun AmountView(
         text = currency.format(myValue),
         style = style,
         fontWeight = fontWeight,
-        color = if (colorMode && myValue < BigDecimal(0)) Color.Red else Color.Black,
+        color = if (colorMode && myValue < BigDecimal(0)) Color.Red else MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.End,
     )
 }

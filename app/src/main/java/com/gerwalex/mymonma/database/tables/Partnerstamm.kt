@@ -1,5 +1,6 @@
 package com.gerwalex.mymonma.database.tables
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,11 +31,19 @@ data class Partnerstamm(
 @Composable
 fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
     var partnername by remember { mutableStateOf(filter) }
-    val data by dao.getPartnerlist(partnername).collectAsState(initial = emptyList())
     var showDropdown by remember { mutableStateOf(false) }
-    if (data.isNotEmpty())
-        selected(data[0]) else Partnerstamm()
+    val data by dao.getPartnerlist(partnername).collectAsState(initial = emptyList()).apply {
+        when (value.size) {
+            0 -> {
+                selected(Partnerstamm(name = partnername))
+            }
 
+            else -> {
+                selected(value[0])
+            }
+        }
+
+    }
     AutoCompleteTextView(
         modifier = Modifier.fillMaxWidth(),
         query = partnername,
@@ -42,7 +51,6 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
         onQueryChanged = {
             partnername = it
         },
-        showDropdown = showDropdown,
         count = data.size,
         onClearClick = { partnername = "" },
         onDismissRequest = { },
@@ -50,14 +58,16 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
             val selectedItem = data[position]
             partnername = selectedItem.name
             selected(selectedItem)
-            showDropdown = false
         },
         onFocusChanged = {
-            showDropdown = true
+            showDropdown = it
         }
     ) { position ->
-        val partner = data[position]
-        Text(partner.name, fontSize = 14.sp)
+        if (position < data.size) {
+            Log.d("Partnerstamm", "AutoCompletePartnerView: position=$position, size=${data.size}")
+            val partner = data[position]
+            Text(partner.name, fontSize = 14.sp)
+        }
     }
 }
 

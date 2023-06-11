@@ -1,7 +1,6 @@
 package com.gerwalex.mymonma.database.tables
 
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -88,31 +87,45 @@ data class Cat(
  * Wenn keien Kategorie ausgewählt wurde ist die cat.id == null,
  */
 @Composable
-fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
+fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected: (Cat) -> Unit) {
     var catname by remember { mutableStateOf(filter) }
-    val data by dao.getCatlist(catname).collectAsState(initial = emptyList())
     var isError by remember { mutableStateOf(false) }
-    var showDropdown by remember { mutableStateOf(false) }
-    if (data.isEmpty()) {
-        isError = true
-        selected(Cat())
-    } else {
-        isError = false
-        if (catname.isEmpty())
-            selected(Cat()) else selected(data[0])
+    var showDropdown by remember { mutableStateOf(true) }
+    val data by dao.getCatlist(catname).collectAsState(initial = emptyList()).apply {
+        when (value.size) {
+            0 -> {
+                isError = true
+                selected(Cat())
+            }
+
+            1 -> {
+                isError = false
+                selected(value[0])
+            }
+
+            else -> {
+                isError = false
+                if (catname.isEmpty())
+                    selected(Cat()) else selected(value[0])
+            }
+        }
+
     }
 
 
     AutoCompleteTextView(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         query = catname,
         error = if (isError) stringResource(id = R.string.errorListEmpty) else "",
-        showDropdown = showDropdown,
         queryLabel = stringResource(id = R.string.categorie),
-        onQueryChanged = { catname = it },
+        onQueryChanged = {
+            catname = it
+            showDropdown = true
+        },
+        showDropdown = showDropdown,
         count = data.size,
         onClearClick = { catname = "" },
-        onDismissRequest = { showDropdown = false },
+        onDismissRequest = { },
         onItemClick = { position ->
             val cat = data[position]
             catname = cat.name
