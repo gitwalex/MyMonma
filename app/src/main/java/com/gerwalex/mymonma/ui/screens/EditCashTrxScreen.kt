@@ -2,6 +2,7 @@ package com.gerwalex.mymonma.ui.screens
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -93,8 +94,8 @@ fun EditCashTrxScreen(
                     navigateTo(Up)
                 }
             },
-        ) {
-            Column(modifier = Modifier.padding(it))
+        ) { padding ->
+            Column(modifier = Modifier.padding(padding))
             {
                 Row(
                     modifier = Modifier,
@@ -113,7 +114,7 @@ fun EditCashTrxScreen(
                 } else {
                     AutoCompletePartnerView(filter = trx.partnername) { partner ->
                         trx.partnername = partner.name
-                        trx.partnerid = partner.id ?: -1
+                        trx.partnerid = partner.id ?: 0
                     }
                 }
                 OutlinedTextField(
@@ -129,6 +130,7 @@ fun EditCashTrxScreen(
                 } else {
                     AutoCompleteCatView(filter = trx.catname) { cat ->
                         trx.catid = cat.id ?: -1L
+                        Log.d("EditCashTrxScreen", "selected=$cat ")
                     }
                 }
                 TextButton(onClick = { /*TODO*/ }) {

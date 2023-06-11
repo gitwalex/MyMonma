@@ -1,5 +1,6 @@
 package com.gerwalex.mymonma.database.tables
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -90,29 +91,47 @@ data class Cat(
 fun AutoCompleteCatView(filter: String, selected: (Cat) -> Unit) {
     var catname by remember { mutableStateOf(filter) }
     val data by dao.getCatlist(catname).collectAsState(initial = emptyList())
-    var error by remember { mutableStateOf("") }
+    var isError by remember { mutableStateOf(false) }
+    var showDropdown by remember { mutableStateOf(false) }
     if (data.isEmpty()) {
-        error = stringResource(id = R.string.errorListEmpty)
+        isError = true
         selected(Cat())
     } else {
-        selected(data[0])
-        error = ""
+        isError = false
+        if (catname.isEmpty())
+            selected(Cat()) else selected(data[0])
     }
 
 
     AutoCompleteTextView(
         modifier = Modifier.fillMaxWidth(),
         query = catname,
+        error = if (isError) stringResource(id = R.string.errorListEmpty) else "",
+        showDropdown = showDropdown,
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = { catname = it },
         count = data.size,
         onClearClick = { catname = "" },
-        onDoneActionClick = { },
+        onDismissRequest = { showDropdown = false },
         onItemClick = { position ->
             val cat = data[position]
             catname = cat.name
+            showDropdown = false
             selected(cat)
         },
+        onFocusChanged = { isFocused ->
+            showDropdown = isFocused
+            Log.d("AutoCompleteCatView", "Focus=$isFocused")
+            if (!isFocused) {
+                if (data.isNotEmpty()) {
+                    catname = data[0].name
+                    selected(data[0])
+                } else {
+                    isError = true
+                    selected(Cat())
+                }
+            }
+        }
     ) { position ->
         val cat = data[position]
         val text = if (cat.catclassid == 2L) "[${cat.name}]" else cat.name

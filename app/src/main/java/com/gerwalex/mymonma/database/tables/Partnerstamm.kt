@@ -31,6 +31,7 @@ data class Partnerstamm(
 fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
     var partnername by remember { mutableStateOf(filter) }
     val data by dao.getPartnerlist(partnername).collectAsState(initial = emptyList())
+    var showDropdown by remember { mutableStateOf(false) }
     if (data.isNotEmpty())
         selected(data[0]) else Partnerstamm()
 
@@ -41,14 +42,19 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
         onQueryChanged = {
             partnername = it
         },
+        showDropdown = showDropdown,
         count = data.size,
         onClearClick = { partnername = "" },
-        onDoneActionClick = { },
+        onDismissRequest = { },
         onItemClick = { position ->
             val selectedItem = data[position]
             partnername = selectedItem.name
             selected(selectedItem)
+            showDropdown = false
         },
+        onFocusChanged = {
+            showDropdown = true
+        }
     ) { position ->
         val partner = data[position]
         Text(partner.name, fontSize = 14.sp)

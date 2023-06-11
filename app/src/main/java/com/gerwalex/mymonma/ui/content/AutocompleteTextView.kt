@@ -14,10 +14,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
@@ -31,9 +27,10 @@ fun AutoCompleteTextView(
     queryLabel: String,
     count: Int,
     modifier: Modifier = Modifier,
+    showDropdown: Boolean = false,
     error: String? = null,
     onQueryChanged: (query: String) -> Unit = {},
-    onDoneActionClick: () -> Unit = {},
+    onDismissRequest: () -> Unit = {},
     onClearClick: () -> Unit = {},
     onItemClick: (position: Int) -> Unit = {},
     onFocusChanged: (isFocused: Boolean) -> Unit = {},
@@ -41,7 +38,6 @@ fun AutoCompleteTextView(
 ) {
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
-    var showPopUp by remember { mutableStateOf(false) }
     Column(modifier) {
 
         QuerySearch(
@@ -51,23 +47,21 @@ fun AutoCompleteTextView(
             onQueryChanged = onQueryChanged,
             onDoneActionClick = {
                 view.clearFocus()
-                onDoneActionClick()
-                showPopUp = false
+                onDismissRequest()
             },
             onClearClick = {
                 onClearClick()
             },
-            onFocusChanged = { isFocused ->
-                showPopUp = isFocused
-                onFocusChanged(isFocused)
+            onFocusChanged = { focused ->
+                onFocusChanged(focused)
             }
 
         )
-        if (showPopUp) {
+        if (showDropdown) {
             Box {
                 Popup(
                     properties = PopupProperties(dismissOnClickOutside = true),
-                    onDismissRequest = { showPopUp = false }
+                    onDismissRequest = { onDismissRequest() }
                 ) {
                     LazyColumn(
                         modifier = modifier

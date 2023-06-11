@@ -73,7 +73,7 @@ fun AutoCompleteAccountView(filter: String, selected: (Cat) -> Unit) {
         onQueryChanged = { account = it },
         count = count,
         onClearClick = { account = "" },
-        onDoneActionClick = { },
+        onDismissRequest = { },
         onItemClick = { position ->
             val cat = data[position]
             account = cat.name

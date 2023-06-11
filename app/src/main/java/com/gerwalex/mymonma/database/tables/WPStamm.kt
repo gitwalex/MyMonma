@@ -59,7 +59,7 @@ fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
         },
         count = data.size,
         onClearClick = { wpstammname = "" },
-        onDoneActionClick = { },
+        onDismissRequest = { },
         onItemClick = { position ->
             val wpstamm = data[position]
             wpstammname = wpstamm.name

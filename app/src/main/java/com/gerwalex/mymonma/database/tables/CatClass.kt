@@ -41,7 +41,7 @@ fun AutoCompleteCatClassView(filter: String, selected: (CatClass) -> Unit) {
         onQueryChanged = { catclassname = it },
         count = count,
         onClearClick = { catclassname = "" },
-        onDoneActionClick = { },
+        onDismissRequest = { },
         onItemClick = { position ->
             val catClass = data[position]
             catclassname = catClass.name
