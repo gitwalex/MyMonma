@@ -82,8 +82,7 @@ fun AutoCompleteTextView(
                                     .clickable {
                                         view.clearFocus()
                                         onItemClick(position)
-                                    }
-                            ) {
+                                    }) {
                                 itemContent(position)
                             }
                         }

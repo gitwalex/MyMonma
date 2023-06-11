@@ -47,7 +47,7 @@ data class Cat(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
-    var name: String = "Neu",
+    var name: String = "",
     var description: String? = null,
 
     @ColumnInfo(index = true)
@@ -146,8 +146,10 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
             }
         }
     ) { position ->
-        val cat = data[position]
-        val text = if (cat.catclassid == 2L) "[${cat.name}]" else cat.name
-        Text(text, fontSize = 14.sp)
+        if (position < data.size) {
+            val cat = data[position]
+            val text = if (cat.catclassid == 2L) "[${cat.name}]" else cat.name
+            Text(text, fontSize = 14.sp)
+        }
     }
 }

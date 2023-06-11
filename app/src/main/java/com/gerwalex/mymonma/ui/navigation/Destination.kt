@@ -61,3 +61,15 @@ object EditCashTrx : Destination() {
 
 }
 
+object AddCashTrx : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "AddCashTrx"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+

@@ -42,6 +42,8 @@ import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompleteCatView
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
+import com.gerwalex.mymonma.database.tables.Cat.Companion.SPLITBUCHUNGCATID
+import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.content.DatePickerView
@@ -92,14 +94,17 @@ fun EditCashTrxScreen(
                     stringResource(id = R.string.umsatzBearbeiten),
                     actions = {
                         IconButton(onClick = {
-                            scope.launch { dao.insertCashTrxView(list) }
+                            val listToUpdate = ArrayList<CashTrxView>().apply {
+                                add(trx)
+                                addAll(splitlist)
+                            }
+                            scope.launch { dao.insertCashTrxView(listToUpdate) }
                             navigateTo(Up)
                         }) {
                             Icon(
                                 imageVector = Icons.Filled.Save,
                                 contentDescription = stringResource(id = R.string.save)
                             )
-
                         }
                     }
                 ) {
@@ -112,8 +117,9 @@ fun EditCashTrxScreen(
                 Row(
                     modifier = Modifier,
                 ) {
-
-                    DatePickerView(date = trx.btag) { date ->
+                    DatePickerView(
+                        date = trx.btag,
+                    ) { date ->
                         trx.btag = date
                     }
                     Spacer(modifier = Modifier.weight(1f))
@@ -136,20 +142,33 @@ fun EditCashTrxScreen(
                     onValueChange = { text -> trx.memo = text },
                     label = { Text(text = stringResource(id = R.string.memo)) },
                 )
-
-                if (LocalInspectionMode.current) {
-                    QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
-                } else {
-                    AutoCompleteCatView(filter = trx.catname) { cat ->
-                        trx.catid = cat.id ?: -1L
-                        Log.d("EditCashTrxScreen", "selected=$cat ")
-                    }
-                }
                 if (splitlist.isEmpty()) {
-                    TextButton(onClick = { splitlist.add(CashTrxView()) }) {
+                    if (LocalInspectionMode.current) {
+                        QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
+                    } else {
+                        AutoCompleteCatView(filter = trx.catname) { cat ->
+                            trx.catid = cat.id ?: -1L
+                            trx.catname = cat.name
+                            trx.catclassid = cat.catclassid
+                            Log.d("EditCashTrxScreen", "selected=$cat ")
+                        }
+                    }
+                    TextButton(onClick = {
+                        splitlist.add(trx.copy(id = null))
+                        trx.catid = SPLITBUCHUNGCATID
+                    }) {
                         Text(text = stringResource(id = R.string.splitten))
                     }
                 } else {
+                    Divider()
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(text = stringResource(id = R.string.splittbuchung))
+                        Spacer(modifier = Modifier.weight(1f))
+                        IconButton(onClick = { splitlist.add(trx.copy(id = null)) }) {
+                            Icon(imageVector = Icons.Default.Add, "")
+                        }
+
+                    }
                     Splitlist(splitlist = splitlist, onAmountChanged = {})
                 }
 
@@ -164,18 +183,15 @@ fun EditCashTrxScreen(
 @Composable
 fun Splitlist(splitlist: MutableList<CashTrxView>, onAmountChanged: (Long) -> Unit) {
     Column {
-        Divider()
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.splittbuchung))
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { splitlist.add(CashTrxView()) }) {
-                Icon(imageVector = Icons.Default.Add, "")
-            }
-
-        }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             items(splitlist) {
-                SplitLine(trx = it, onAmountChanged = onAmountChanged)
+                SplitLine(trx = it, onAmountChanged = {
+                    var amount = 0L
+                    splitlist.forEach { trx ->
+                        amount += trx.amount
+                    }
+                    onAmountChanged(amount)
+                })
             }
         }
 

@@ -9,7 +9,7 @@ import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
-import com.gerwalex.mymonma.ui.screens.CashTrxView
+import com.gerwalex.mymonma.database.views.CashTrxView
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -92,7 +92,6 @@ abstract class Dao(val db: DB) {
                 "left join Cat acc on   acc.id = accountid " +
                 "left join Cat c on c.id = catid " +
                 "where a.id = :id or a.transferid = :id " +
-                "and c.catclassid != 2 " +
                 "order by a.id"
     )
     abstract fun getCashTrx(id: Long): Flow<List<CashTrxView>>
@@ -106,6 +105,9 @@ abstract class Dao(val db: DB) {
     @Insert
     protected abstract suspend fun insert(trx: CashTrx): Long
 
+    @Insert
+    abstract fun insert(partner: Partnerstamm): Long
+
     /**
      * Einfügen/Update einer CashTrx.
      * Zuerst entfernen der gesamten ursprünglichen Buchung.
@@ -118,14 +120,19 @@ abstract class Dao(val db: DB) {
     open suspend fun insertCashTrxView(list: List<CashTrxView>) {
         if (list.isNotEmpty()) {
             val main = list[0]
-            delete(main.getCashTrx()) // Alle weg w/referientieller Integritaet
+            delete(main.cashtrx) // Alle weg w/referientieller Integritaet
+            if (main.partnerid == 0L && main.partnername.isNotEmpty()) {// neuer Partner!!
+                Partnerstamm(name = main.partnername).apply {
+                    id = insert(this)
+                }
+            }
             list.forEachIndexed { index, item ->
                 if (index != 0) {
-                    item.transferid = list[0].id
+                    item.transferid = main.id
                 }
-                item.id = insert(item.getCashTrx())
+                item.id = insert(item.cashtrx)
                 if (item.catclassid == 2L) { // Die catclassid ist die catclass der Cat.
-                    insert(item.getGegenbuchung())
+                    insert(item.gegenbuchung)
                 }
             }
         }
