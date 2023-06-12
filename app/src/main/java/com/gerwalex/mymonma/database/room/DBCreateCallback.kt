@@ -33,16 +33,36 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
             var `in`: InputStream
             db.beginTransaction()
             val am = context.resources.assets
+            `in` = am.open("init_partnerstamm.csv")
+            loadCSVFile(`in`, db, "partnerstamm")
+            `in` = am.open("init_catclass.csv")
+            loadCSVFile(`in`, db, "catclass")
+            `in` = am.open("init_cat.csv")
+            loadCSVFile(`in`, db, "cat")
+            `in` = am.open("init_wpstamm.csv")
+            loadCSVFile(`in`, db, "WPStamm")
+            db.setTransactionSuccessful()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            db.endTransaction()
+        }
+    }
+
+    private fun loadImportDaten(db: SupportSQLiteDatabase) {
+        try {
+            Log.d("gerwalex", "Lade csv-daten")
+            var `in`: InputStream
+            db.beginTransaction()
+            val am = context.resources.assets
             `in` = am.open("partnerstamm.csv")
             loadCSVFile(`in`, db, "partnerstamm")
-            `in` = am.open("catclass.csv")
-            loadCSVFile(`in`, db, "catclass")
             `in` = am.open("cat.csv")
             loadCSVFile(`in`, db, "cat")
-            `in` = am.open("account.csv")
-            loadCSVFile(`in`, db, "account")
             `in` = am.open("wpstamm.csv")
             loadCSVFile(`in`, db, "WPStamm")
+            `in` = am.open("account.csv")
+            loadCSVFile(`in`, db, "account")
             `in` = am.open("wpkurs.csv")
             loadCSVFile(`in`, db, "WPKurs")
             `in` = am.open("cashtrx.csv")
@@ -60,6 +80,7 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
         try {
             db.beginTransaction()
             createStammdaten(db)
+            loadImportDaten(db)
             executeImportStatements(db)
             db.setTransactionSuccessful()
         } catch (e: Exception) {
@@ -67,6 +88,8 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
         } finally {
             db.endTransaction()
         }
+        db.execSQL("analyze")
+
     }
 
     private fun executeImportStatements(db: SupportSQLiteDatabase) {
@@ -76,9 +99,9 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
         // Einfügen gegenbuchungen
         db.execSQL(
             "insert into CashTrx (btag, partnerid,accountid,  catid, " +
-                    "amount, memo, transferid)" +
-                    "select btag, partnerid,catid, accountid, -amount, memo, id " +
-                    "from CashTrx where catid between 1 and 99"
+                    "amount, memo, transferid, isUmbuchung)" +
+                    "select btag, partnerid,catid, accountid, -amount, memo, id, 1 " +
+                    "from CashTrx where catid between 1 and 99 "
         )
 
     }

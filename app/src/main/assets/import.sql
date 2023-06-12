@@ -1,6 +1,6 @@
 Cat:
 select _id as id, name, description, obercatid, supercatid, catclassid,
- incomecat, ausgeblendet, cnt from Type_Cat
+ incomecat, ausgeblendet, cnt from Type_Cat where catclassid = 2
 
 Account:
 select _id as id, _id as cat, name,inhaber,currency, iban, blz, bezeichnung,
@@ -10,7 +10,12 @@ from Account
 WPStamm:
 select _id as id, _id as partnerid, wpname as name, wpkenn, isin, wptyp, risiko, isBeobachten as beobachten,
 ertragestimated as estEarning
-from WPStammdaten
+from WPStammdaten where _id > 0
+
+Partner:
+select _id as id, name
+from Partner where _id > 1
+
 
 WPKurs:
 select _id as id, btag, wpid, kurs

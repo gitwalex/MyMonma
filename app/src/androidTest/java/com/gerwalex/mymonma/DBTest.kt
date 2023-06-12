@@ -45,8 +45,9 @@ class DBTest {
         val trx = TestData.createSimpleCashTrx(2)
         CoroutineScope(Dispatchers.IO).launch {
             dao.insertCashTrxView(ArrayList<CashTrxView>().apply { add(trx) })
-            assert(trx.id != null)
             val inserted = dao.getCashTrx(trx.id!!).first()
+            dao.delete(trx.getCashtrx())
+            assert(trx.id != null)
             assert(inserted.size == 1)
             with(inserted.first()) {
                 assert(trx.partnerid == partnerid)
@@ -65,6 +66,7 @@ class DBTest {
                 Log.d("DBTest", "inserted: $it ")
             }
             val inserted = dao.getCashTrx(list[0].id!!).flowOn(Dispatchers.IO).first()
+            dao.delete(list[0].getCashtrx())
             inserted.forEach {
                 Log.d("DBTest", "inserted: $it ")
             }

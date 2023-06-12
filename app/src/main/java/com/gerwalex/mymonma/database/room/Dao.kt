@@ -37,9 +37,9 @@ abstract class Dao(val db: DB) {
      */
     @Query(
         "select sum(amount) " +
-                "from CashTrx b " +
-                "where accountid = :accountid " +
-                "and (transferid is null or (SELECT catclassid from Cat where id = b.catid) =2)"
+                "from CashTrx a " +
+                "where (transferid is null or isUmbuchung )" +
+                "and  accountid = :accountid"
     )
     abstract fun getSaldo(accountid: Long): Long
 
@@ -107,6 +107,16 @@ abstract class Dao(val db: DB) {
     @Insert
     abstract fun insert(partner: Partnerstamm): Long
 
+    @Query(
+        "update cat set saldo = (" +
+                "select sum(amount) " +
+                "from CashTrx a " +
+                "where (transferid is null or isUmbuchung) " +
+                "and accountid = :accountid) " +
+                "where id = :accountid and supercatid != 1002" // ohne Depots
+    )
+    abstract fun updateCashSaldo(accountid: Long)
+
     /**
      * Einfügen/Update einer CashTrx.
      * Zuerst entfernen der gesamten ursprünglichen Buchung.
@@ -124,15 +134,23 @@ abstract class Dao(val db: DB) {
                     id = insert(this)
                 }
             }
+            val accounts = HashSet<Long>()
             list.forEachIndexed { index, item ->
                 if (index != 0) {
                     item.transferid = main.id
                 }
+                accounts.add(item.accountid)
                 item.id = insert(item.getCashtrx())
                 if (item.catclassid == 2L) { // Die catclassid ist die catclass der Cat.
                     insert(item.getGegenbuchung())
+                    accounts.add(item.catid)
+                }
+                // CashSalden aktualisieren
+                accounts.forEach {
+                    updateCashSaldo(it)
                 }
             }
+
         }
 
     }

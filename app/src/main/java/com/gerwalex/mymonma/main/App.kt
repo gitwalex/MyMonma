@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.gerwalex.mymonma.BuildConfig
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.workers.MaintenanceWorker
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -19,6 +20,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         DB.createInstance(this)
+        MaintenanceWorker.enqueueMaintenanceWorker(this)
         CaocConfig.Builder.create()
             .backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM)
             .enabled(BuildConfig.DEBUG)

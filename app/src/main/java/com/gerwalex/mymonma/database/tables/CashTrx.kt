@@ -52,6 +52,7 @@ data class CashTrx(
     var amount: Long = 0,
     var memo: String? = null,
     @ColumnInfo(index = true)
-    var transferid: Long? = null
+    var transferid: Long? = null,
+    var isUmbuchung: Boolean? = false,
 )
 

@@ -48,6 +48,7 @@ data class CashTrxView(
             amount = -amount,
             memo = memo,
             transferid = id,
+            isUmbuchung = true,
         )
     }
 }
