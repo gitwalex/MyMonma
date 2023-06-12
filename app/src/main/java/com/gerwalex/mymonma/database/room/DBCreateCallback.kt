@@ -67,6 +67,8 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
             loadCSVFile(`in`, db, "WPKurs")
             `in` = am.open("cashtrx.csv")
             loadCSVFile(`in`, db, "CashTrx")
+            `in` = am.open("trxregelm.csv")
+            loadCSVFile(`in`, db, "TrxRegelm")
             db.setTransactionSuccessful()
         } catch (e: IOException) {
             e.printStackTrace()

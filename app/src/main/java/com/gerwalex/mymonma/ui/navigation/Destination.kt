@@ -73,3 +73,28 @@ object AddCashTrx : Destination() {
 
 }
 
+object Settings : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "Settings"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+object TRxRegelm : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "TRxRegelm"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+

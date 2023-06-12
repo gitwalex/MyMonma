@@ -3,8 +3,6 @@ package com.gerwalex.mymonma.ui.screens
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -143,7 +141,7 @@ fun EditCashTrxScreen(
                 modifier = Modifier
                     .padding(padding)
                     .padding(8.dp)
-                    .scrollable(scrollState, Orientation.Vertical)
+
             )
             {
                 Row(
@@ -218,6 +216,7 @@ fun EditCashTrxScreen(
                                 trx.copy(
                                     id = null,
                                     catid = 0,
+                                    amount = 0,
                                     catname = ""
                                 )
                             )

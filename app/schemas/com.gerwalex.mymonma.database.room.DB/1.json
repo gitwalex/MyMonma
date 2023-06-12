@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f1dd2133e7111fff711aba166cc4a300",
+    "identityHash": "f8d1c799692f621bd0263a36edc5f8bf",
     "entities": [
       {
         "tableName": "Account",
@@ -443,6 +443,180 @@
         "foreignKeys": []
       },
       {
+        "tableName": "TrxRegelm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, `cnt` INTEGER NOT NULL, `intervallid` INTEGER NOT NULL, `last` TEXT, `isUltimo` INTEGER NOT NULL, FOREIGN KEY(`transferid`) REFERENCES `TrxRegelm`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnerid",
+            "columnName": "partnerid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memo",
+            "columnName": "memo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transferid",
+            "columnName": "transferid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isUmbuchung",
+            "columnName": "isUmbuchung",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cnt",
+            "columnName": "cnt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervallid",
+            "columnName": "intervallid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "last",
+            "columnName": "last",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isUltimo",
+            "columnName": "isUltimo",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_TrxRegelm_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          },
+          {
+            "name": "index_TrxRegelm_catid",
+            "unique": false,
+            "columnNames": [
+              "catid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_catid` ON `${TABLE_NAME}` (`catid`)"
+          },
+          {
+            "name": "index_TrxRegelm_partnerid",
+            "unique": false,
+            "columnNames": [
+              "partnerid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_partnerid` ON `${TABLE_NAME}` (`partnerid`)"
+          },
+          {
+            "name": "index_TrxRegelm_transferid",
+            "unique": false,
+            "columnNames": [
+              "transferid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_transferid` ON `${TABLE_NAME}` (`transferid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "TrxRegelm",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "transferid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Account",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Partnerstamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "partnerid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
         "tableName": "Partnerstamm",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)",
         "fields": [
@@ -625,7 +799,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f1dd2133e7111fff711aba166cc4a300')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f8d1c799692f621bd0263a36edc5f8bf')"
     ]
   }
 }

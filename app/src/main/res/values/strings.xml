@@ -63,4 +63,14 @@
     <string name="differenz">Differenz</string>
     <string name="errorDifferenz">Differenz wischen Summe Splitbuchungen und Gesamtsumme</string>
     <string name="removeErrors">Bitte erst Probleme bereinigen</string>
+    <string name="intervall_monat">monatlich</string>
+    <string name="intervall_einmalig">einmalig</string>
+    <string name="intervall_alle2monate">alle 2 Monate</string>
+    <string name="intervall_halbjaehrlich">halbjährlich</string>
+    <string name="intervall_quartal">quartal</string>
+    <string name="intervall_jahr">jährlich</string>
+    <string name="intervall_woechentlich">wöchentlich</string>
+    <string name="contact_mail">info@gerwalex.com</string>
+    <string name="settings">Einstellungen</string>
+    <string name="trxRegelm">Daueraufträge</string>
 </resources>

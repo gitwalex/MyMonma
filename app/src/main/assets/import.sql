@@ -26,3 +26,7 @@ Cashtrx:
 UPDATE CashTrans SET memo=REPLACE(memo,Char(10), ' ')
 select _id as id, btag, accountid, catid ,partnerid, amount , memo, transferid from CashTrans
 
+TrxRegelm:
+- LF weg :
+UPDATE TrxRegelm SET memo=REPLACE(memo,Char(10), ' ')
+select _id as id, btag, accountid, catid, partnerid, memo, amount, transferid, count as cnt, intervallid, last , isUltimo from TrxRegelm

@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,7 +55,7 @@ fun <T> AutoCompleteTextView(
         }
 
     )
-    if (list.size > 1 && showDropdown) {
+    if (showDropdown && list.size > 1) {
         Log.d("AutocompleteTextView", "count=${list.size} dropdown=$showDropdown, query=$query ")
         Box(
             modifier = Modifier.border(1.dp, MaterialTheme.colorScheme.onSurface)
@@ -76,7 +75,6 @@ fun <T> AutoCompleteTextView(
                         Box(
                             Modifier
                                 .padding(8.dp)
-                                .fillMaxWidth()
                                 .clickable {
                                     view.clearFocus()
                                     onItemClick(it)
