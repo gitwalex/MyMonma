@@ -1,6 +1,5 @@
 package com.gerwalex.mymonma.database.tables
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,24 +49,21 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
         queryLabel = stringResource(id = R.string.partnername),
         onQueryChanged = {
             partnername = it
+            showDropdown = true
         },
-        count = data.size,
+        list = data,
         onClearClick = { partnername = "" },
         onDismissRequest = { },
-        onItemClick = { position ->
-            val selectedItem = data[position]
-            partnername = selectedItem.name
-            selected(selectedItem)
+        onItemClick = { partner ->
+            partnername = partner.name
+            selected(partner)
+            showDropdown = false
         },
         onFocusChanged = {
             showDropdown = it
         }
-    ) { position ->
-        if (position < data.size) {
-            Log.d("Partnerstamm", "AutoCompletePartnerView: position=$position, size=${data.size}")
-            val partner = data[position]
-            Text(partner.name, fontSize = 14.sp)
-        }
+    ) { partner ->
+        Text(partner.name, fontSize = 14.sp)
     }
 }
 

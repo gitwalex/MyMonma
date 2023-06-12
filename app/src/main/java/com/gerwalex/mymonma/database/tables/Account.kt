@@ -51,37 +51,51 @@ data class Account(
 
 @Composable
 fun AutoCompleteAccountView(filter: String, selected: (Cat) -> Unit) {
-    var account by remember { mutableStateOf(filter) }
-    val data by DB.dao.getAccountlist(account).collectAsState(emptyList())
-    var count by remember { mutableStateOf(0) }
-    var error by remember { mutableStateOf("") }
+    var accountname by remember { mutableStateOf(filter) }
+    var showDropdown by remember { mutableStateOf(true) }
+    val data by DB.dao.getAccountlist(accountname).collectAsState(emptyList())
+    var error by remember { mutableStateOf(false) }
     if (data.isEmpty()) {
-        error = stringResource(id = R.string.errorListEmpty)
+        error = true
         selected(Cat())
     } else {
         selected(data[0])
-        error = ""
+        error = false
     }
 
 
 
     AutoCompleteTextView(
         modifier = Modifier.fillMaxWidth(),
-        query = account,
-        error = error,
+        query = accountname,
+        error = if (error) stringResource(id = R.string.errorListEmpty) else "",
         queryLabel = stringResource(id = R.string.categorie),
-        onQueryChanged = { account = it },
-        count = count,
-        onClearClick = { account = "" },
+        onQueryChanged = {
+            accountname = it
+            showDropdown = true
+        },
+        list = data,
+        onClearClick = { accountname = "" },
         onDismissRequest = { },
-        onItemClick = { position ->
-            val cat = data[position]
-            account = cat.name
-            count = 0
-            selected(cat)
+        onItemClick = { acc ->
+            accountname = acc.name
+            showDropdown = false
+            selected(acc)
 
         },
-    ) { position ->
-        Text(data[position].name, fontSize = 14.sp)
+        onFocusChanged = { isFocused ->
+            showDropdown = isFocused
+            if (!isFocused) {
+                if (data.isNotEmpty()) {
+                    accountname = data[0].name
+                    selected(data[0])
+                } else {
+                    error = true
+                    selected(Cat())
+                }
+            }
+        }
+    ) { acc ->
+        Text(acc.name, fontSize = 14.sp)
     }
 }

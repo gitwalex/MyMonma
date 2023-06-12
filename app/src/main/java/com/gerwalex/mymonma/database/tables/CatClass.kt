@@ -30,8 +30,8 @@ data class CatClass(
 @Composable
 fun AutoCompleteCatClassView(filter: String, selected: (CatClass) -> Unit) {
     var catclassname by remember { mutableStateOf(filter) }
+    var showDropdown by remember { mutableStateOf(true) }
     val data by dao.getCatClasslist(catclassname).collectAsState(initial = emptyList())
-    var count by remember { mutableStateOf(0) }
 
 
     AutoCompleteTextView(
@@ -39,17 +39,19 @@ fun AutoCompleteCatClassView(filter: String, selected: (CatClass) -> Unit) {
         query = catclassname,
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = { catclassname = it },
-        count = count,
+        list = data,
         onClearClick = { catclassname = "" },
         onDismissRequest = { },
-        onItemClick = { position ->
-            val catClass = data[position]
+        onItemClick = { catClass ->
             catclassname = catClass.name
-            count = 0
             selected(catClass)
+            showDropdown = false
         },
-    ) { position ->
-        val catClass = data[position]
+        onFocusChanged = { hasFocus ->
+            showDropdown = hasFocus
+        }
+
+    ) { catClass ->
         Text(catClass.name, fontSize = 14.sp)
     }
 }

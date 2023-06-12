@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -57,9 +56,11 @@ fun <T> AutoCompleteTextView(
         }
 
     )
-    if (showDropdown) {
+    if (list.size > 1 && showDropdown) {
         Log.d("AutocompleteTextView", "count=${list.size} dropdown=$showDropdown, query=$query ")
-        Box {
+        Box(
+            modifier = Modifier.border(1.dp, MaterialTheme.colorScheme.onSurface)
+        ) {
             Popup(
                 properties = PopupProperties(dismissOnClickOutside = true),
                 onDismissRequest = { onDismissRequest() }
@@ -90,74 +91,3 @@ fun <T> AutoCompleteTextView(
     }
 }
 
-@Composable
-fun AutoCompleteTextView(
-    query: String,
-    queryLabel: String,
-    count: Int,
-    modifier: Modifier = Modifier,
-    showDropdown: Boolean = true,
-    error: String? = null,
-    onQueryChanged: (query: String) -> Unit = {},
-    onDismissRequest: () -> Unit = {},
-    onClearClick: () -> Unit = {},
-    onItemClick: (position: Int) -> Unit = {},
-    onFocusChanged: (isFocused: Boolean) -> Unit = {},
-    itemContent: @Composable (position: Int) -> Unit = {}
-) {
-    val view = LocalView.current
-    val lazyListState = rememberLazyListState()
-    Column(modifier) {
-
-        QuerySearch(
-            query = query,
-            label = queryLabel,
-            error = error,
-            onQueryChanged = onQueryChanged,
-            onDoneActionClick = {
-                view.clearFocus()
-                onDismissRequest()
-            },
-            onClearClick = {
-                onClearClick()
-            },
-            onFocusChanged = { focused ->
-                onFocusChanged(focused)
-            }
-
-        )
-        if (count > 1 && showDropdown) {
-            Log.d("AutocompleteTextView", "count=$count, dropdown=$showDropdown, query=$query ")
-            Box {
-                Popup(
-                    properties = PopupProperties(dismissOnClickOutside = true),
-                    onDismissRequest = { onDismissRequest() }
-                ) {
-                    LazyColumn(
-                        modifier = modifier
-                            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.surface))
-                            .heightIn(max = TextFieldDefaults.MinHeight * 6)
-                            .background(MaterialTheme.colorScheme.surface),
-                        state = lazyListState,
-                    ) {
-                        items(
-                            count = count
-                        ) { position ->
-                            Box(
-                                Modifier
-                                    .padding(8.dp)
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        view.clearFocus()
-                                        onItemClick(position)
-                                    }) {
-                                itemContent(position)
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-    }
-}

@@ -47,6 +47,7 @@ data class WPStamm(
 @Composable
 fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
     var wpstammname by remember { mutableStateOf(filter) }
+    var showDropdown by remember { mutableStateOf(true) }
     val data by dao.getWPStammlist(wpstammname).collectAsState(initial = emptyList())
 
 
@@ -57,17 +58,18 @@ fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
         onQueryChanged = {
             wpstammname = it
         },
-        count = data.size,
+        list = data,
         onClearClick = { wpstammname = "" },
         onDismissRequest = { },
-        onItemClick = { position ->
-            val wpstamm = data[position]
+        onItemClick = { wpstamm ->
             wpstammname = wpstamm.name
             selected(wpstamm)
-
+            showDropdown = false
         },
-    ) { position ->
-        val wpstamm = data[position]
+        onFocusChanged = { hasFocus ->
+            showDropdown = hasFocus
+        }
+    ) { wpstamm ->
         Text(wpstamm.name, fontSize = 14.sp)
     }
 }

@@ -91,7 +91,7 @@ fun EditCashTrxScreen(
         Scaffold(
             topBar = {
                 TopToolBar(
-                    stringResource(id = R.string.umsatzBearbeiten),
+                    stringResource(trx.id?.let { R.string.umsatzBearbeiten } ?: R.string.umsatzNeu),
                     actions = {
                         IconButton(onClick = {
                             val listToUpdate = ArrayList<CashTrxView>().apply {
