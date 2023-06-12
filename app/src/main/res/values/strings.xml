@@ -58,4 +58,9 @@
     <string name="splitten">Splitten</string>
     <string name="splittbuchung">Splitbuchung</string>
     <string name="umsatzNeu">Neuer Umsatz</string>
+    <string name="summe">Summe</string>
+    <string name="calculate">berechnen</string>
+    <string name="differenz">Differenz</string>
+    <string name="errorDifferenz">Differenz wischen Summe Splitbuchungen und Gesamtsumme</string>
+    <string name="removeErrors">Bitte erst Probleme bereinigen</string>
 </resources>
