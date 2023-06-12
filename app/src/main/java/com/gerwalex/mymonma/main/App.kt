@@ -4,6 +4,8 @@ import android.app.Application
 import android.os.Build
 import android.preference.PreferenceManager
 import androidx.annotation.RequiresApi
+import cat.ereza.customactivityoncrash.config.CaocConfig
+import com.gerwalex.mymonma.BuildConfig
 import com.gerwalex.mymonma.database.room.DB
 import kotlinx.coroutines.*
 import java.util.*
@@ -17,6 +19,14 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         DB.createInstance(this)
+        CaocConfig.Builder.create()
+            .backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM)
+            .enabled(BuildConfig.DEBUG)
+            .showErrorDetails(true)
+            .trackActivities(true)
+            .logErrorOnRestart(true)
+            .apply()
+
     }
 
 

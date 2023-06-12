@@ -147,9 +147,15 @@ fun EditCashTrxScreen(
                         QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
                     } else {
                         AutoCompleteCatView(filter = trx.catname) { cat ->
-                            trx.catid = cat.id ?: -1L
-                            trx.catname = cat.name
-                            trx.catclassid = cat.catclassid
+                            trx.catid = cat.id?.let {
+                                trx.catname = cat.name
+                                trx.catclassid = cat.catclassid
+                                it
+                            } ?: let {
+                                trx.catname = ""
+                                trx.catclassid = 1
+                                0L
+                            }
                             Log.d("EditCashTrxScreen", "selected=$cat ")
                         }
                     }

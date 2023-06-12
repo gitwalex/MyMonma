@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
@@ -21,6 +22,73 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 
+@Composable
+fun <T> AutoCompleteTextView(
+    query: String,
+    queryLabel: String,
+    list: List<T>,
+    modifier: Modifier = Modifier,
+    showDropdown: Boolean = true,
+    error: String? = null,
+    onQueryChanged: (query: String) -> Unit = {},
+    onDismissRequest: () -> Unit = {},
+    onClearClick: () -> Unit = {},
+    onItemClick: (T) -> Unit = {},
+    onFocusChanged: (isFocused: Boolean) -> Unit = {},
+    itemContent: @Composable (T) -> Unit = {},
+) {
+    val view = LocalView.current
+    val lazyListState = rememberLazyListState()
+
+    QuerySearch(
+        query = query,
+        label = queryLabel,
+        error = error,
+        onQueryChanged = onQueryChanged,
+        onDoneActionClick = {
+            view.clearFocus()
+            onDismissRequest()
+        },
+        onClearClick = {
+            onClearClick()
+        },
+        onFocusChanged = { focused ->
+            onFocusChanged(focused)
+        }
+
+    )
+    if (showDropdown) {
+        Log.d("AutocompleteTextView", "count=${list.size} dropdown=$showDropdown, query=$query ")
+        Box {
+            Popup(
+                properties = PopupProperties(dismissOnClickOutside = true),
+                onDismissRequest = { onDismissRequest() }
+            ) {
+                LazyColumn(
+                    modifier = modifier
+                        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.surface))
+                        .heightIn(max = TextFieldDefaults.MinHeight * 6)
+                        .background(MaterialTheme.colorScheme.surface),
+                    state = lazyListState,
+                ) {
+                    items(list) {
+                        Box(
+                            Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth()
+                                .clickable {
+                                    view.clearFocus()
+                                    onItemClick(it)
+                                }) {
+                            itemContent(it)
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
 
 @Composable
 fun AutoCompleteTextView(

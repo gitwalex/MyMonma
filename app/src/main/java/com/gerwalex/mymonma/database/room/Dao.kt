@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Transaction
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.CatClass
@@ -116,11 +115,10 @@ abstract class Dao(val db: DB) {
      * Gegenbuchungen werden jewils mit aufgebaut und sind schon beim Lesen aus der DB nicht mitgekommen.
      */
 
-    @Transaction
     open suspend fun insertCashTrxView(list: List<CashTrxView>) {
         if (list.isNotEmpty()) {
             val main = list[0]
-            delete(main.cashtrx) // Alle weg w/referientieller Integritaet
+            delete(main.getCashtrx()) // Alle weg w/referientieller Integritaet
             if (main.partnerid == 0L && main.partnername.isNotEmpty()) {// neuer Partner!!
                 Partnerstamm(name = main.partnername).apply {
                     id = insert(this)
@@ -130,9 +128,9 @@ abstract class Dao(val db: DB) {
                 if (index != 0) {
                     item.transferid = main.id
                 }
-                item.id = insert(item.cashtrx)
+                item.id = insert(item.getCashtrx())
                 if (item.catclassid == 2L) { // Die catclassid ist die catclass der Cat.
-                    insert(item.gegenbuchung)
+                    insert(item.getGegenbuchung())
                 }
             }
         }

@@ -11,6 +11,7 @@ import com.gerwalex.mymonma.database.views.CashTrxView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -41,7 +42,7 @@ class DBTest {
     @Test
     @Throws(Exception::class)
     fun writeCashTrxAndReadInList() {
-        val trx = TestData.createSimpleCashTrx()
+        val trx = TestData.createSimpleCashTrx(2)
         CoroutineScope(Dispatchers.IO).launch {
             dao.insertCashTrxView(ArrayList<CashTrxView>().apply { add(trx) })
             assert(trx.id != null)
@@ -57,13 +58,18 @@ class DBTest {
     @Test
     @Throws(Exception::class)
     fun writeSplittedCashTrxAndReadInList() {
-        val list = TestData.createSplittCashTrx()
+        val list = TestData.createSplittCashTrx(2)
         runBlocking {
             dao.insertCashTrxView(list)
             list.forEach {
                 Log.d("DBTest", "inserted: $it ")
             }
-            val inserted = dao.getCashTrx(list[0].id!!)
+            val inserted = dao.getCashTrx(list[0].id!!).flowOn(Dispatchers.IO).first()
+            inserted.forEach {
+                Log.d("DBTest", "inserted: $it ")
+            }
+            assert(inserted.size == list.size)
         }
     }
 }
+

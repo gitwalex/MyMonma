@@ -5,9 +5,9 @@ import com.gerwalex.mymonma.database.views.CashTrxView
 
 object TestData {
 
-    fun createSimpleCashTrx(): CashTrxView {
+    fun createSimpleCashTrx(acountid: Long): CashTrxView {
         return CashTrxView(
-            accountid = 2,
+            accountid = acountid,
             catid = 10009,
             partnerid = 0,
             partnername = "eine neuer Partner",
@@ -18,30 +18,25 @@ object TestData {
             )
     }
 
-    fun createSplittCashTrx(): List<CashTrxView> {
+    fun createSplittCashTrx(acountid: Long): List<CashTrxView> {
         val main = CashTrxView(
-            accountid = 2,
+            accountid = acountid,
             catid = Cat.SPLITBUCHUNGCATID,
             partnerid = 0,
-            partnername = "eine weiterer neuer Partner",
+            partnername = "ein weiterer neuer Partner",
             amount = 10000L,
             memo = "my Memo",
         )
-        val line1 = CashTrxView(
-            accountid = 2,
+        val line1 = main.copy(
             catid = 11,
-            partnerid = 0,
-            partnername = "eine weiterer neuer Partner",
+            memo = "Umbuchung",
             amount = 30000L,
-            memo = "umbuchung",
+            catclassid = 2
         )
-        val line2 = CashTrxView(
-            accountid = 2,
+        val line2 = main.copy(
             catid = 10009,
-            partnerid = 0,
-            partnername = "eine weiterer neuer Partner",
+            memo = "bar",
             amount = 70000L,
-            memo = "umbuchung",
         )
         return listOf(main, line1, line2)
 

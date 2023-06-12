@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -111,23 +110,17 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
         }
 
     }
+    AutoCompleteTextView(query = catname, list = data,
 
-
-    AutoCompleteTextView(
-        modifier = modifier,
-        query = catname,
-        error = if (isError) stringResource(id = R.string.errorListEmpty) else "",
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = {
             catname = it
             showDropdown = true
         },
         showDropdown = showDropdown,
-        count = data.size,
         onClearClick = { catname = "" },
         onDismissRequest = { },
-        onItemClick = { position ->
-            val cat = data[position]
+        onItemClick = { cat ->
             catname = cat.name
             showDropdown = false
             selected(cat)
@@ -145,11 +138,8 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
                 }
             }
         }
-    ) { position ->
-        if (position < data.size) {
-            val cat = data[position]
-            val text = if (cat.catclassid == 2L) "[${cat.name}]" else cat.name
-            Text(text, fontSize = 14.sp)
-        }
+    ) {
+        Text(text = if (it.catclassid == 2L) "[${it.name}]" else it.name)
+
     }
 }
