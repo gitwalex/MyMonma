@@ -1,6 +1,7 @@
 package com.gerwalex.mymonma
 
 import com.gerwalex.mymonma.database.tables.Cat
+import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.database.views.CashTrxView
 
 object TestData {
@@ -31,7 +32,7 @@ object TestData {
             catid = 11,
             memo = "Umbuchung",
             amount = 30000L,
-            catclassid = 2
+            catclassid = KONTOCLASS
         )
         val line2 = main.copy(
             catid = 10009,

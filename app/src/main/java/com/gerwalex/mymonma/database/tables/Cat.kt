@@ -16,6 +16,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 
 @Entity(
@@ -140,7 +141,7 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
             }
         }
     ) {
-        Text(text = if (it.catclassid == 2L) "[${it.name}]" else it.name)
+        Text(text = if (it.catclassid == KONTOCLASS) "[${it.name}]" else it.name)
 
     }
 }

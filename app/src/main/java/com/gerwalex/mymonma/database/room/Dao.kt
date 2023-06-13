@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
+import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.views.CashTrxView
@@ -44,7 +45,7 @@ abstract class Dao(val db: DB) {
     @Query("Select * from CatClass where name like '%'||:filter ||'%' order by name")
     abstract fun getCatClasslist(filter: String): Flow<List<CatClass>>
 
-    @Query("Select * from Cat where name like '%'||:filter ||'%' and catclassid = 2 order by name")
+    @Query("Select * from Cat where name like '%'||:filter ||'%' and catclassid = " + KONTOCLASS + " order by name")
     abstract fun getAccountlist(filter: String): Flow<List<Cat>>
 
     /**
@@ -59,7 +60,7 @@ abstract class Dao(val db: DB) {
     abstract fun getSaldo(accountid: Long): Long
 
     @Query(
-        "select * from Cat where catclassid = 2"
+        "select * from Cat where catclassid = " + KONTOCLASS
 //        "select * " +
 //                ",(select total(amount) from cashtrx where  transferid is null and a.id = accountid) " +
 //                " - (select total(amount) from cashtrx where catid = a.id) as saldo " +
@@ -85,7 +86,7 @@ abstract class Dao(val db: DB) {
                 "left join Cat c on c.id = catid " +
                 "where accountid = :accountid " +
                 "and (transferid is null " + // keine Splittbuchungen
-                "or c.catclassid = 2) " + // alle Gegenbuchungen
+                "or c.catclassid = " + KONTOCLASS + ") " + // alle Gegenbuchungen
                 "order by btag desc, a.id "
     )
     abstract fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>>
@@ -156,7 +157,7 @@ abstract class Dao(val db: DB) {
                 }
                 accounts.add(item.accountid)
                 item.id = insert(item.toCashTrx())
-                if (item.catclassid == 2L) { // Die catclassid ist die catclass der Cat.
+                if (item.catclassid == KONTOCLASS) { // Die catclassid ist die catclass der Cat.
                     insert(item.toGegenbuchung())
                     accounts.add(item.catid)
                 }
