@@ -13,14 +13,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.ui.AppTheme
 
@@ -46,13 +44,6 @@ fun gradientColors(): List<Color> {
     )
 }
 
-@Composable
-fun DrawerNavigation(
-    viewModel: MonMaViewModel,
-    navigateTo: (Destination) -> Unit
-) {
-    DrawerNavigation(navigateTo)
-}
 
 @Composable
 fun DrawerNavigation(
@@ -111,10 +102,7 @@ fun DrawerNavigation(
 //                )
 //
 //            }
-            Divider(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                color = MaterialTheme.colors.onPrimary
-            )
+            Divider()
         }
         items(navigationItemsList.size) {
             NavigationListItem(item = navigationItemsList[it]) {
@@ -125,8 +113,6 @@ fun DrawerNavigation(
 
         item {
             Divider(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                color = MaterialTheme.colors.onPrimary
             )
             Text(
                 modifier = Modifier

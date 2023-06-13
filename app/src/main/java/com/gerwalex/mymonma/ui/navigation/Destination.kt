@@ -74,11 +74,17 @@ object AddCashTrx : Destination() {
 }
 
 object Settings : Destination() {
-    override val title: Int
-        get() = TODO("Not yet implemented")
+    override val title: Int = R.string.settings
     override val name: String = "Settings"
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
 
+}
 
+object AccountList : Destination() {
+    override val title: Int = R.string.accountlist
+    override val name: String = "AccountList"
     override fun navigate(navController: NavController) {
         navController.navigate(name)
     }

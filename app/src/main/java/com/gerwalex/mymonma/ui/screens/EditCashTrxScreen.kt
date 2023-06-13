@@ -12,17 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -95,9 +95,9 @@ fun EditCashTrxScreen(
         if (LocalInspectionMode.current) {
             differenz = 123456 // Erzwingen Anzeige
         }
-        val scaffoldState = rememberScaffoldState()
-        val scrollState = rememberScrollState()
+        val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             topBar = {
                 TopToolBar(
                     stringResource(trx.id?.let { R.string.umsatzBearbeiten } ?: R.string.umsatzNeu),
@@ -118,7 +118,7 @@ fun EditCashTrxScreen(
                                     error = error || isNotEmpty()
                                 }
                                 if (error) {
-                                    scaffoldState.snackbarHostState.showSnackbar(errorMsg)
+                                    snackbarHostState.showSnackbar(errorMsg)
                                 } else {
                                     dao.insertCashTrxView(listToUpdate)
                                     navigateTo(Up)

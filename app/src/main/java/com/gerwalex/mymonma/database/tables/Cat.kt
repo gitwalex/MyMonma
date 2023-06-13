@@ -100,6 +100,7 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
             1 -> {
                 isError = false
                 selected(value[0])
+                showDropdown = false
             }
 
             else -> {

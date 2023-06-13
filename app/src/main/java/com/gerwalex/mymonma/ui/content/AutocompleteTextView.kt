@@ -55,7 +55,7 @@ fun <T> AutoCompleteTextView(
         }
 
     )
-    if (showDropdown && list.size > 1) {
+    if (showDropdown) {
         Log.d("AutocompleteTextView", "count=${list.size} dropdown=$showDropdown, query=$query ")
         Box(
             modifier = Modifier.border(1.dp, MaterialTheme.colorScheme.onSurface)
