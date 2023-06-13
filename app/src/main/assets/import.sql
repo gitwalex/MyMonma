@@ -1,4 +1,4 @@
-Cat:
+Cat: (nur accounts)
 select _id as id, name, description, obercatid, supercatid, catclassid,
  incomecat, ausgeblendet, cnt from Type_Cat where catclassid = 2
 

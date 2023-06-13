@@ -26,50 +26,56 @@ import java.sql.Date
 import java.text.DateFormat
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {
+fun DateView(date: Date, modifier: Modifier = Modifier) {
     val dateformatter = remember { DateFormat.getDateInstance(DateFormat.DEFAULT) }
     var showDatePicker by remember { mutableStateOf(false) }
-    var myDate by remember { mutableStateOf(date) }
     Column(modifier) {
-        Text(text = dateformatter.format(myDate),
+        Text(text = dateformatter.format(date),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.clickable {
                 showDatePicker = true
             }
         )
-        Box {
-            if (showDatePicker) {
-                val datePickerState = rememberDatePickerState(initialSelectedDateMillis = date.time)
-                Popup {
-                    Column {
-                        DatePicker(
-                            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
-                            state = datePickerState,
-                            dateValidator = {
-                                Log.d("DatePickerView", "DatePickerView:  ${Date(it)}")
-                                true
-                            })
-                        TextButton(onClick = {
-                            datePickerState.selectedDateMillis?.let {
-                                val selectedDate = Date(it)
-                                onChanged(selectedDate)
-                                myDate = selectedDate
-                                showDatePicker = false
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    var myDate by remember { mutableStateOf(date) }
+    DateView(date = myDate, modifier = modifier)
+    Box {
+        if (showDatePicker) {
+            val datePickerState = rememberDatePickerState(initialSelectedDateMillis = date.time)
+            Popup {
+                Column {
+                    DatePicker(
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                        state = datePickerState,
+                        dateValidator = {
+                            Log.d("DatePickerView", "DatePickerView:  ${Date(it)}")
+                            true
+                        })
+                    TextButton(onClick = {
+                        datePickerState.selectedDateMillis?.let {
+                            val selectedDate = Date(it)
+                            onChanged(selectedDate)
+                            myDate = selectedDate
+                            showDatePicker = false
 
-                            }
-                        }) {
-                            Text(
-                                text = stringResource(id = R.string.ok),
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                textAlign = TextAlign.End,
-                                style = MaterialTheme.typography.bodyLarge
-                            )
 
                         }
+                    }) {
+                        Text(
+                            text = stringResource(id = R.string.ok),
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.End,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+
                     }
                 }
             }

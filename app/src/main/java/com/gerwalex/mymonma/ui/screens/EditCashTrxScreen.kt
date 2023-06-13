@@ -3,22 +3,14 @@ package com.gerwalex.mymonma.ui.screens
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -34,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -49,83 +40,84 @@ import com.gerwalex.mymonma.database.tables.Cat.Companion.SPLITBUCHUNGCATID
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
-import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.DatePickerView
 import com.gerwalex.mymonma.ui.content.QuerySearch
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
+import com.gerwalex.mymonma.ui.subscreens.Splitlist
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun AddCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+    val scope = rememberCoroutineScope()
     viewModel.account?.id?.let { accountid ->
-        ArrayList<CashTrxView>().apply {
+        val list = ArrayList<CashTrxView>().apply {
             add(CashTrxView(accountid = accountid))
-            EditCashTrxScreen(list = this, navigateTo = navigateTo)
         }
+        EditCashTrxScreen(list = list) { save ->
+            scope.launch {
+                if (save) {
+                    dao.insertCashTrxView(list)
+                }
+                navigateTo(Up)
 
+            }
+        }
     }
 }
+
 
 @Composable
 fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+    val scope = rememberCoroutineScope()
     viewModel.cashTrxId?.let {
         val list by dao.getCashTrx(it).collectAsState(emptyList())
         if (list.isNotEmpty()) {
-            EditCashTrxScreen(list = list, navigateTo = navigateTo)
-        }
+            EditCashTrxScreen(list = list) { save ->
+                scope.launch {
+                    if (save) {
+                        dao.insertCashTrxView(list)
+                    }
+                    navigateTo(Up)
 
+                }
+            }
+
+        }
     }
 }
 
+/**
+ * @param list: CashTrx als liste
+ * @param onFinished: true: Speichern erwünscht (keine Fehler mehr), false -> backPressed
+ *
+ */
 @Composable
 fun EditCashTrxScreen(
     list: List<CashTrxView>,
-    navigateTo: (Destination) -> Unit
+    onFinished: (save: Boolean) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
+    var error by remember { mutableStateOf(false) }
     if (list.isNotEmpty()) {
         val trx = list[0]
         val splitlist = remember(key1 = list) { mutableStateListOf<CashTrxView>() }
         splitlist.addAll(list.filter { it.transferid != null })
         // Differenz zwischen Splitbuchungen und trx.amount
-        var differenz by remember { mutableStateOf(0L) }
-        if (LocalInspectionMode.current) {
-            differenz = 123456 // Erzwingen Anzeige
-        }
         val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             topBar = {
                 TopToolBar(
-                    stringResource(trx.id?.let { R.string.umsatzBearbeiten } ?: R.string.umsatzNeu),
+                    stringResource(trx.id?.let { R.string.umsatzBearbeiten }
+                        ?: R.string.umsatzNeu),
                     actions = {
-                        val errorMsg = stringResource(id = R.string.removeErrors)
-                        IconButton(onClick = {
-                            var error = false
-                            scope.launch {
-                                if (differenz != 0L) {
-                                    error = true
-                                }
-
-                                val listToUpdate = ArrayList<CashTrxView>().apply {
-                                    add(trx)
-                                    addAll(splitlist)
-                                }
-                                listToUpdate.filter { it.catid > 0 }.apply {
-                                    error = error || isNotEmpty()
-                                }
-                                if (error) {
-                                    snackbarHostState.showSnackbar(errorMsg)
-                                } else {
-                                    dao.insertCashTrxView(listToUpdate)
-                                    navigateTo(Up)
-                                }
-
-                            }
-                        }) {
+                        IconButton(
+                            enabled = !error,
+                            onClick = {
+                                onFinished(true)
+                            }) {
                             Icon(
                                 imageVector = Icons.Filled.Save,
                                 contentDescription = stringResource(id = R.string.save)
@@ -133,7 +125,7 @@ fun EditCashTrxScreen(
                         }
                     }
                 ) {
-                    navigateTo(Up)
+                    onFinished(false)
                 }
             },
         ) { padding ->
@@ -174,7 +166,10 @@ fun EditCashTrxScreen(
                 )
                 if (splitlist.isEmpty()) {
                     if (LocalInspectionMode.current) {
-                        QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
+                        QuerySearch(
+                            query = "Kategorie",
+                            label = "kategorie",
+                            onQueryChanged = {})
                     } else {
                         AutoCompleteCatView(filter = trx.catname) { cat ->
                             trx.catid = cat.id?.let {
@@ -196,164 +191,16 @@ fun EditCashTrxScreen(
                         Text(text = stringResource(id = R.string.splitten))
                     }
                 } else {
-                    if (differenz != 0L) {
-                        DifferenzView(differenz) {
-                            trx.amount -= differenz
-                        }
+                    Splitlist(trx, splitlist = splitlist) {
+                        error = it
                     }
-                    Divider(modifier = Modifier.padding(8.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.splittbuchung),
-                            style = MaterialTheme.typography.headlineSmall
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        IconButton(onClick = {
-                            splitlist.add(
-                                trx.copy(
-                                    id = null,
-                                    catid = 0,
-                                    amount = 0,
-                                    catname = ""
-                                )
-                            )
-                        }) {
-                            Icon(imageVector = Icons.Default.Add, "")
-                        }
-
-                    }
-                    Splitlist(splitlist = splitlist, onAmountChanged = { splitsumme ->
-                        differenz = trx.amount - splitsumme
-                    })
                 }
-
             }
 
 
         }
 
     }
-}
-
-@Composable
-fun DifferenzView(differenz: Long, onClick: () -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        TextButton(onClick = { onClick() }) {
-            Text(text = stringResource(id = R.string.calculate))
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Column {
-            Text(
-                text = stringResource(id = R.string.differenz),
-                style = MaterialTheme.typography.labelSmall
-            )
-            AmountView(value = differenz)
-        }
-    }
-}
-
-@Composable
-fun Splitlist(splitlist: MutableList<CashTrxView>, onAmountChanged: (Long) -> Unit) {
-    var splitsumme by remember { mutableStateOf(0L) }
-    Column {
-        Row {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = stringResource(id = R.string.summe),
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
-        Row {
-            Spacer(modifier = Modifier.weight(1f))
-            AmountView(value = splitsumme)
-        }
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            items(splitlist) {
-                SplitLine(trx = it, onAmountChanged = {
-                    var amount = 0L
-                    splitlist.forEach { trx ->
-                        amount += trx.amount
-                    }
-                    splitsumme = amount
-                    onAmountChanged(amount)
-                })
-            }
-        }
-
-    }
-
-}
-
-@Composable
-fun SplitLine(trx: CashTrxView, onAmountChanged: (Long) -> Unit) {
-    Row(
-        modifier = Modifier.wrapContentHeight(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-
-        if (LocalInspectionMode.current) {
-            QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
-        } else {
-            AutoCompleteCatView(filter = trx.catname) { cat ->
-                trx.catid = cat.id ?: -1L
-            }
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        AmountEditView(value = trx.amount) {
-            trx.amount = it
-            onAmountChanged(it)
-        }
-
-    }
-
-}
-
-@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
-@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun SplitListPreview() {
-    val list = ArrayList<CashTrxView>().apply {
-        add(CashTrxView())
-        add(CashTrxView(transferid = 1))
-        add(CashTrxView(transferid = 1))
-        add(CashTrxView(transferid = 1))
-
-    }
-    AppTheme {
-        Surface {
-            Splitlist(list, onAmountChanged = {})
-        }
-
-    }
-
-}
-
-@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
-@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun DifferenzColumnPreview() {
-    AppTheme {
-        Surface {
-            DifferenzView(differenz = 123456L) {
-            }
-        }
-    }
-}
-
-@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
-@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun SplitlinePreview() {
-    AppTheme {
-        Surface {
-            SplitLine(trx = CashTrxView(), onAmountChanged = {})
-        }
-
-    }
-
 }
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)

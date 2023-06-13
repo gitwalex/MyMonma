@@ -9,10 +9,25 @@ import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.views.CashTrxView
+import com.gerwalex.mymonma.database.views.TrxRegelmView
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class Dao(val db: DB) {
+    @Query(
+        "Select a.*, " +
+                "p.name as partnername, " +
+                "acc.name as accountname, " +
+                "c.name as catname " +
+                "from TrxRegelm a " +
+                "left join Partnerstamm p on p.id = partnerid " +
+                "left join Cat acc on   acc.id = accountid " +
+                "left join Cat c on c.id = catid " +
+                "where transferid is null " + // keine Splittbuchungen
+                "order by btag"
+    )
+    abstract fun getRegelmTrxList(): Flow<List<TrxRegelmView>>
+
     @Query("Select * from Partnerstamm")
     abstract fun getPartnerstammdaten(): Flow<List<Partnerstamm>>
 
@@ -128,7 +143,7 @@ abstract class Dao(val db: DB) {
     open suspend fun insertCashTrxView(list: List<CashTrxView>) {
         if (list.isNotEmpty()) {
             val main = list[0]
-            delete(main.getCashtrx()) // Alle weg w/referientieller Integritaet
+            delete(main.toCashTrx()) // Alle weg w/referientieller Integritaet
             if (main.partnerid == 0L && main.partnername.isNotEmpty()) {// neuer Partner!!
                 Partnerstamm(name = main.partnername).apply {
                     id = insert(this)
@@ -140,9 +155,9 @@ abstract class Dao(val db: DB) {
                     item.transferid = main.id
                 }
                 accounts.add(item.accountid)
-                item.id = insert(item.getCashtrx())
+                item.id = insert(item.toCashTrx())
                 if (item.catclassid == 2L) { // Die catclassid ist die catclass der Cat.
-                    insert(item.getGegenbuchung())
+                    insert(item.toGegenbuchung())
                     accounts.add(item.catid)
                 }
                 // CashSalden aktualisieren

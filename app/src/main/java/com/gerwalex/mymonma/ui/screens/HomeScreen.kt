@@ -50,8 +50,9 @@ fun HomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
                     }
                 },
                 content = {
-                    Box(modifier = Modifier.padding(it))
-                    AccountListScreen(viewModel, navigateTo)
+                    Box(modifier = Modifier.padding(it)) {
+                        AccountListScreen(viewModel, navigateTo)
+                    }
                 },
             )
         }

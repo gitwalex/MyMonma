@@ -6,9 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
+import com.gerwalex.mymonma.ui.screens.AddRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.CashTrxList
 import com.gerwalex.mymonma.ui.screens.EditCashTrxScreen
+import com.gerwalex.mymonma.ui.screens.EditRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.HomeScreen
+import com.gerwalex.mymonma.ui.screens.RegelmTrxList
 
 @Composable
 fun MyNavHost(
@@ -23,12 +26,22 @@ fun MyNavHost(
         composable(CashTrxList.name) {
             CashTrxList(viewModel, navigateTo)
         }
+        composable(RegelmTrxList.name) {
+            RegelmTrxList(viewModel, navigateTo)
+        }
         composable(AddCashTrx.name) {
             AddCashTrxScreen(viewModel, navigateTo)
         }
         composable(EditCashTrx.name) {
             EditCashTrxScreen(viewModel, navigateTo)
         }
+        composable(AddRegelmTrx.name) {
+            AddRegelmTrxScreen(viewModel, navigateTo)
+        }
+        composable(EditRegelmTrx.name) {
+            EditRegelmTrxScreen(viewModel, navigateTo)
+        }
+
     }
 }
 

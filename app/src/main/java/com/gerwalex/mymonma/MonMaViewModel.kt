@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class MonMaViewModel(application: Application) : AndroidViewModel(application) {
 
+    var regelmTrxId: Long? = null
     val navigateTo = MutableStateFlow<Destination>(Home)
     val accountlist = dao.getAccountlist()
     var account: Cat? = null

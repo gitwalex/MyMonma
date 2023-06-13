@@ -193,7 +193,7 @@ private fun prepareNavigationItems(): List<NavigationDrawerItem> {
         NavigationDrawerItem(
             imageVector = Icons.Filled.List,
             label = stringResource(id = R.string.trxRegelm),
-            destination = TRxRegelm,
+            destination = RegelmTrxList,
         )
     )
 

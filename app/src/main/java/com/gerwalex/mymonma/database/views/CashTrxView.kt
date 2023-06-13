@@ -1,6 +1,7 @@
 package com.gerwalex.mymonma.database.views
 
 import com.gerwalex.mymonma.database.tables.CashTrx
+import com.gerwalex.mymonma.database.tables.TrxRegelm
 import java.sql.Date
 
 data class CashTrxView(
@@ -19,7 +20,7 @@ data class CashTrxView(
     var imported: Boolean = false,
     var saldo: Long? = 0,
 ) {
-    fun getCashtrx(): CashTrx {
+    fun toCashTrx(): CashTrx {
         return CashTrx(
             id = id,
             btag = btag,
@@ -33,13 +34,12 @@ data class CashTrxView(
             )
     }
 
-
     /**
      * Gegenbuchung zur Buchung.
      * Übernahme aller Daten 1:1, Tausch accountid <-> catid,
      * transferid entspricht id des Umsatzes, id ist null
      */
-    fun getGegenbuchung(): CashTrx {
+    fun toGegenbuchung(): CashTrx {
         return CashTrx(
             btag = btag,
             catid = accountid,
@@ -50,5 +50,11 @@ data class CashTrxView(
             transferid = id,
             isUmbuchung = true,
         )
+    }
+
+    companion object {
+        fun fromRegelmTrx(trx: TrxRegelm) {
+
+        }
     }
 }

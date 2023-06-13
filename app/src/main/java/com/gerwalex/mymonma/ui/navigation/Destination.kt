@@ -91,10 +91,33 @@ object AccountList : Destination() {
 
 }
 
-object TRxRegelm : Destination() {
+object RegelmTrxList : Destination() {
+    override val title: Int = R.string.trxRegelm
+    override val name: String = "RegelmTrxList"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+object AddRegelmTrx : Destination() {
     override val title: Int
         get() = TODO("Not yet implemented")
-    override val name: String = "TRxRegelm"
+    override val name: String = "AddRegelmTrx"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+object EditRegelmTrx : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "EditRegelmTrx"
 
 
     override fun navigate(navController: NavController) {

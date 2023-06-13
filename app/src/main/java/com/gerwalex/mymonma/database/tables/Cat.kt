@@ -130,7 +130,7 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
             showDropdown = isFocused
             Log.d("AutoCompleteCatView", "Focus=$isFocused")
             if (!isFocused) {
-                if (data.isNotEmpty()) {
+                if (data.isNotEmpty() && catname.isNotEmpty()) {
                     catname = data[0].name
                     selected(data[0])
                 } else {
