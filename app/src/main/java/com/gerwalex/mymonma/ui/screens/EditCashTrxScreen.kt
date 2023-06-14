@@ -99,9 +99,10 @@ fun EditCashTrxScreen(
     list: List<CashTrxView>,
     onFinished: (save: Boolean) -> Unit
 ) {
-    var error by remember { mutableStateOf(false) }
+    var spliterror by remember { mutableStateOf(false) }
     if (list.isNotEmpty()) {
         val trx = list[0]
+        var gesamtsumme by remember { mutableStateOf(trx.amount) }
         val splitlist = remember(key1 = list) { mutableStateListOf<CashTrxView>() }
         splitlist.addAll(list.filter { it.transferid != null })
         // Differenz zwischen Splitbuchungen und trx.amount
@@ -114,7 +115,7 @@ fun EditCashTrxScreen(
                         ?: R.string.umsatzNeu),
                     actions = {
                         IconButton(
-                            enabled = !error,
+                            enabled = !spliterror,
                             onClick = {
                                 onFinished(true)
                             }) {
@@ -192,7 +193,8 @@ fun EditCashTrxScreen(
                     }
                 } else {
                     Splitlist(trx, splitlist = splitlist) {
-                        error = it
+                        spliterror = it
+                        gesamtsumme = trx.amount
                     }
                 }
             }

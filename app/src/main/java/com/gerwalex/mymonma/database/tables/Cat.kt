@@ -112,7 +112,8 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
         }
 
     }
-    AutoCompleteTextView(query = catname, list = data,
+    AutoCompleteTextView(
+        query = catname, list = data,
 
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = {
@@ -121,7 +122,7 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
         },
         showDropdown = showDropdown,
         onClearClick = { catname = "" },
-        onDismissRequest = { },
+        onDismissRequest = { showDropdown = false },
         onItemClick = { cat ->
             catname = cat.name
             showDropdown = false

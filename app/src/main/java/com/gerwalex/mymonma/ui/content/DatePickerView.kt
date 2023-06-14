@@ -27,14 +27,13 @@ import java.text.DateFormat
 
 
 @Composable
-fun DateView(date: Date, modifier: Modifier = Modifier) {
+fun DateView(date: Date, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val dateformatter = remember { DateFormat.getDateInstance(DateFormat.DEFAULT) }
-    var showDatePicker by remember { mutableStateOf(false) }
     Column(modifier) {
         Text(text = dateformatter.format(date),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.clickable {
-                showDatePicker = true
+                onClick()
             }
         )
     }
@@ -45,7 +44,9 @@ fun DateView(date: Date, modifier: Modifier = Modifier) {
 fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {
     var showDatePicker by remember { mutableStateOf(false) }
     var myDate by remember { mutableStateOf(date) }
-    DateView(date = myDate, modifier = modifier)
+    DateView(date = myDate, modifier = modifier, onClick = {
+        showDatePicker = true
+    })
     Box {
         if (showDatePicker) {
             val datePickerState = rememberDatePickerState(initialSelectedDateMillis = date.time)

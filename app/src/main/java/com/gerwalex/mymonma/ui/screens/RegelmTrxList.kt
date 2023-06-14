@@ -82,7 +82,7 @@ fun RegelmTrxListItem(trx: TrxRegelmView, selected: (TrxRegelmView) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Row {
-                DateView(date = trx.btag)
+                DateView(date = trx.btag, onClick = {})
                 Text(
                     text = trx.partnername ?: "",
                     modifier = Modifier.weight(1f),

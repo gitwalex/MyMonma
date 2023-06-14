@@ -27,6 +27,7 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             navController = rememberNavController()
             AppTheme {

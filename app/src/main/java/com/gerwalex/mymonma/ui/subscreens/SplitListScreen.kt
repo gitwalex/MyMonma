@@ -47,7 +47,7 @@ fun Splitlist(
     isError: (Boolean) -> Unit,
 ) {
     var splitsumme by remember { mutableStateOf(0L) }
-    var differenz by remember { mutableStateOf(0L) }
+    var differenz by remember(splitsumme) { mutableStateOf(main.amount - splitsumme) }
     if (LocalInspectionMode.current) {
         differenz = 123456 // Erzwingen Anzeige
     }
@@ -68,10 +68,11 @@ fun Splitlist(
                     main.copy(
                         id = null,
                         catid = 0,
-                        amount = 0,
+                        amount = differenz,
                         catname = ""
                     )
                 )
+                differenz = 0L
             }) {
                 Icon(imageVector = Icons.Default.Add, "")
             }
