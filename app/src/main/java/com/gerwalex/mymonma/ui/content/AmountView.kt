@@ -1,8 +1,11 @@
 package com.gerwalex.mymonma.ui.content
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.ComposeActivity
 import com.gerwalex.mymonma.ext.getActivity
+import com.gerwalex.mymonma.ui.AppTheme
 import com.maltaisn.calcdialog.CalcDialog
 import java.math.BigDecimal
 import java.text.NumberFormat
@@ -56,7 +60,8 @@ fun AmountEditView(
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance() }
     val digits = remember { BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble())) }
-    var myValue by remember { mutableStateOf(value) }
+    var myValue by remember { mutableStateOf(0L) }
+    myValue = value
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     Box(
@@ -92,8 +97,13 @@ fun AmountEditView(
     }
 }
 
-@Preview
+@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun AmountViewPreview() {
-    AmountView(1234567890L)
+    AppTheme {
+        Surface {
+            AmountView(1234567890L)
+        }
+    }
 }

@@ -13,29 +13,29 @@ import java.sql.Date
         childColumns = ["accountid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    ), ForeignKey(
+
+        ), ForeignKey(
         entity = Cat::class,
         parentColumns = ["id"],
         childColumns = ["catid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    ), ForeignKey(
+
+        ), ForeignKey(
         entity = CashTrx::class,
         parentColumns = ["id"],
         childColumns = ["transferid"],
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    ), ForeignKey(
+
+        ), ForeignKey(
         entity = Partnerstamm::class,
         parentColumns = ["id"],
         childColumns = ["partnerid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    )]
+
+        )]
 )
 
 data class CashTrx(

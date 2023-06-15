@@ -24,7 +24,11 @@ data class Partnerstamm(
     @ColumnInfo(name = "id")
     var id: Long? = null,
     var name: String = "Unknown"
-)
+) {
+    companion object {
+        const val Undefined = -1L
+    }
+}
 
 
 @Composable

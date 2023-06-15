@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.tables.AutoCompleteCatView
+import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
@@ -125,8 +126,8 @@ fun SplitLine(trx: CashTrxView, onChanged: () -> Unit) {
                 QuerySearch(query = "Kategorie", label = "kategorie", onQueryChanged = {})
             } else {
                 AutoCompleteCatView(filter = trx.catname) { cat ->
-                    trx.catid = cat.id ?: -1L
-                    onChanged()
+                    trx.catname = cat.name
+                    trx.catid = cat.id ?: Cat.NOCATID
                 }
             }
             Spacer(modifier = Modifier.weight(1f))

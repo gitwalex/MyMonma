@@ -23,13 +23,13 @@ import java.sql.Date
 
 @Entity(
     foreignKeys = [ForeignKey(
-        entity = CatClass::class,
+        entity = Cat::class,
         parentColumns = ["id"],
         childColumns = ["catid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    )]
+
+        )]
 )
 data class Account(
     @PrimaryKey(autoGenerate = true)

@@ -1,5 +1,6 @@
 package com.gerwalex.mymonma.database.room
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -9,6 +10,7 @@ import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
+import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import kotlinx.coroutines.flow.Flow
@@ -57,7 +59,7 @@ abstract class Dao(val db: DB) {
                 "where (transferid is null or isUmbuchung )" +
                 "and  accountid = :accountid"
     )
-    abstract fun getSaldo(accountid: Long): Long
+    abstract suspend fun getSaldo(accountid: Long): Long
 
     @Query(
         "select * from Cat where catclassid = " + KONTOCLASS
@@ -121,7 +123,7 @@ abstract class Dao(val db: DB) {
     protected abstract suspend fun insert(trx: CashTrx): Long
 
     @Insert
-    abstract fun insert(partner: Partnerstamm): Long
+    abstract suspend fun insert(partner: Partnerstamm): Long
 
     @Query(
         "update cat set saldo = (" +
@@ -131,7 +133,7 @@ abstract class Dao(val db: DB) {
                 "and accountid = :accountid) " +
                 "where id = :accountid and supercatid != 1002" // ohne Depots
     )
-    abstract fun updateCashSaldo(accountid: Long)
+    abstract suspend fun updateCashSaldo(accountid: Long)
 
     /**
      * Einfügen/Update einer CashTrx.
@@ -145,7 +147,7 @@ abstract class Dao(val db: DB) {
         if (list.isNotEmpty()) {
             val main = list[0]
             delete(main.toCashTrx()) // Alle weg w/referientieller Integritaet
-            if (main.partnerid == 0L && main.partnername.isNotEmpty()) {// neuer Partner!!
+            if (main.partnerid == Undefined && main.partnername.isNotEmpty()) {// neuer Partner!!
                 Partnerstamm(name = main.partnername).apply {
                     id = insert(this)
                 }
@@ -161,17 +163,19 @@ abstract class Dao(val db: DB) {
                     insert(item.toGegenbuchung())
                     accounts.add(item.catid)
                 }
-                // CashSalden aktualisieren
-                accounts.forEach {
-                    updateCashSaldo(it)
-                }
+                Log.d("Dao", "insertCashTrxView: [$index]:$item")
             }
+            // CashSalden aktualisieren
+            accounts.forEach {
+                updateCashSaldo(it)
+            }
+
 
         }
 
     }
 
     @Query("select * from cat where id = :accountid and catclassid = $KONTOCLASS")
-    abstract fun getAccountData(accountid: Long): Cat
+    abstract fun getAccountData(accountid: Long): Flow<Cat>
 
 }

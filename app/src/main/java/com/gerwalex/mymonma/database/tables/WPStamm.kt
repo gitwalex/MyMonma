@@ -27,8 +27,8 @@ import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
         childColumns = ["partnerid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    )]
+
+        )]
 )
 data class WPStamm(
 

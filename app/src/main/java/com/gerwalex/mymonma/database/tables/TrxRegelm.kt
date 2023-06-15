@@ -14,8 +14,8 @@ import java.sql.Date
         childColumns = ["transferid"],
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    ), ForeignKey(
+
+        ), ForeignKey(
         entity = Account::class,
         parentColumns = ["id"],
         childColumns = ["accountid"],

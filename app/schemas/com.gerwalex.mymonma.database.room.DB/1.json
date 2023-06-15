@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f8d1c799692f621bd0263a36edc5f8bf",
+    "identityHash": "7e2269784ecf0a3111c37afe3cf8f286",
     "entities": [
       {
         "tableName": "Account",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `catid` INTEGER NOT NULL, `inhaber` TEXT, `currency` TEXT, `iban` TEXT, `blz` TEXT, `bezeichnung` TEXT, `creditlimit` INTEGER, `verrechnungskonto` INTEGER, `kontotyp` TEXT NOT NULL, `openDate` TEXT, `bankname` TEXT, `bic` TEXT, FOREIGN KEY(`catid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `catid` INTEGER NOT NULL, `inhaber` TEXT, `currency` TEXT, `iban` TEXT, `blz` TEXT, `bezeichnung` TEXT, `creditlimit` INTEGER, `verrechnungskonto` INTEGER, `kontotyp` TEXT NOT NULL, `openDate` TEXT, `bankname` TEXT, `bic` TEXT, FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -106,7 +106,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "CatClass",
+            "table": "Cat",
             "onDelete": "RESTRICT",
             "onUpdate": "CASCADE",
             "columns": [
@@ -120,7 +120,7 @@
       },
       {
         "tableName": "CashTrx",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`transferid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`transferid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -270,7 +270,7 @@
       },
       {
         "tableName": "Cat",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `obercatid` INTEGER NOT NULL, `supercatid` INTEGER NOT NULL, `catclassid` INTEGER NOT NULL, `incomecat` INTEGER, `ausgeblendet` INTEGER NOT NULL, `saldo` INTEGER NOT NULL, `cnt` INTEGER NOT NULL, FOREIGN KEY(`catclassid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`obercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`supercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `obercatid` INTEGER NOT NULL, `supercatid` INTEGER NOT NULL, `catclassid` INTEGER NOT NULL, `incomecat` INTEGER, `ausgeblendet` INTEGER NOT NULL, `saldo` INTEGER NOT NULL, `cnt` INTEGER NOT NULL, FOREIGN KEY(`catclassid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -379,28 +379,6 @@
             "referencedColumns": [
               "id"
             ]
-          },
-          {
-            "table": "Cat",
-            "onDelete": "RESTRICT",
-            "onUpdate": "CASCADE",
-            "columns": [
-              "obercatid"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          },
-          {
-            "table": "Cat",
-            "onDelete": "RESTRICT",
-            "onUpdate": "CASCADE",
-            "columns": [
-              "supercatid"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
           }
         ]
       },
@@ -444,7 +422,7 @@
       },
       {
         "tableName": "TrxRegelm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, `cnt` INTEGER NOT NULL, `intervallid` INTEGER NOT NULL, `last` TEXT, `isUltimo` INTEGER NOT NULL, FOREIGN KEY(`transferid`) REFERENCES `TrxRegelm`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, `cnt` INTEGER NOT NULL, `intervallid` INTEGER NOT NULL, `last` TEXT, `isUltimo` INTEGER NOT NULL, FOREIGN KEY(`transferid`) REFERENCES `TrxRegelm`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -644,7 +622,7 @@
       },
       {
         "tableName": "WPStamm",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `partnerid` INTEGER NOT NULL, `wpkenn` TEXT, `isin` TEXT, `wptyp` TEXT NOT NULL, `risiko` INTEGER NOT NULL, `beobachten` INTEGER NOT NULL, `estEarning` INTEGER NOT NULL, FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `partnerid` INTEGER NOT NULL, `wpkenn` TEXT, `isin` TEXT, `wptyp` TEXT NOT NULL, `risiko` INTEGER NOT NULL, `beobachten` INTEGER NOT NULL, `estEarning` INTEGER NOT NULL, FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -728,7 +706,7 @@
       },
       {
         "tableName": "WPKurs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `wpid` INTEGER NOT NULL, `kurs` INTEGER NOT NULL, FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `wpid` INTEGER NOT NULL, `kurs` INTEGER NOT NULL, FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -799,7 +777,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f8d1c799692f621bd0263a36edc5f8bf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7e2269784ecf0a3111c37afe3cf8f286')"
     ]
   }
 }

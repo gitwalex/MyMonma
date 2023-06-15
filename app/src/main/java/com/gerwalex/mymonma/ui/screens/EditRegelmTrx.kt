@@ -21,8 +21,8 @@ fun AddRegelmTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> U
     }
     EditCashTrxScreen(list = list) { save ->
         scope.launch {
-            if (save) {
-                DB.dao.insertCashTrxView(list)
+            save?.let {
+                TODO()
             }
             navigateTo(Up)
 
@@ -39,8 +39,8 @@ fun EditRegelmTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> 
         if (list.isNotEmpty()) {
             EditCashTrxScreen(list = list) { save ->
                 scope.launch {
-                    if (save) {
-                        DB.dao.insertCashTrxView(list)
+                    save?.let {
+                        TODO()
                     }
                     navigateTo(Up)
 

@@ -2,6 +2,7 @@ package com.gerwalex.mymonma.ui.screens
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Save
@@ -43,9 +45,10 @@ import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompleteCatView
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
-import com.gerwalex.mymonma.database.tables.Cat
+import com.gerwalex.mymonma.database.tables.Cat.Companion.NOCATID
 import com.gerwalex.mymonma.database.tables.Cat.Companion.SPLITBUCHUNGCATID
 import com.gerwalex.mymonma.database.tables.CatClass
+import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
@@ -69,8 +72,8 @@ fun AddCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
     }
     EditCashTrxScreen(list = list) { save ->
         scope.launch {
-            if (save) {
-                dao.insertCashTrxView(list)
+            save?.let {
+                dao.insertCashTrxView(save)
             }
             navigateTo(Up)
         }
@@ -86,8 +89,8 @@ fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
     if (list.isNotEmpty()) {
         EditCashTrxScreen(list = list) { save ->
             scope.launch {
-                if (save) {
-                    dao.insertCashTrxView(list)
+                save?.let {
+                    dao.insertCashTrxView(save)
                 }
                 navigateTo(Up)
 
@@ -105,18 +108,22 @@ fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
 @Composable
 fun EditCashTrxScreen(
     list: List<CashTrxView>,
-    onFinished: (save: Boolean) -> Unit
+    onFinished: (save: List<CashTrxView>?) -> Unit
 ) {
     if (list.isNotEmpty()) {
         val trx = list[0]
+        val lazyColumnState = rememberLazyListState()
+        val scope = rememberCoroutineScope()
         var gesamtsumme by remember { mutableStateOf(trx.amount) }
         val splitlist = remember(key1 = list) { mutableStateListOf<CashTrxView>() }
-        var splitsumme by remember { mutableStateOf(0L) }
-        var differenz by remember(splitsumme) { mutableStateOf(trx.amount - splitsumme) }
-        if (LocalInspectionMode.current) {
-            differenz = 123456 // Erzwingen Anzeige
+        var splitsumme by remember { mutableStateOf(trx.amount) }
+        val differenz by remember(
+            splitsumme,
+            gesamtsumme
+        ) { mutableStateOf(gesamtsumme - splitsumme) }
+        splitlist.apply {
+            addAll(list.filter { it.transferid != null })
         }
-        splitlist.addAll(list.filter { it.transferid != null })
         // Differenz zwischen Splitbuchungen und trx.amount
         val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
@@ -129,7 +136,11 @@ fun EditCashTrxScreen(
                         IconButton(
                             enabled = differenz == 0L,
                             onClick = {
-                                onFinished(true)
+                                ArrayList<CashTrxView>().apply {
+                                    add(trx)
+                                    addAll(splitlist)
+                                    onFinished(this)
+                                }
                             }) {
                             Icon(
                                 imageVector = Icons.Filled.Save,
@@ -138,7 +149,7 @@ fun EditCashTrxScreen(
                         }
                     }
                 ) {
-                    onFinished(false)
+                    onFinished(null)
                 }
             },
         ) { padding ->
@@ -158,8 +169,12 @@ fun EditCashTrxScreen(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     AmountEditView(value = gesamtsumme) {
-                        trx.amount = it
                         gesamtsumme = it
+                        trx.amount = gesamtsumme
+                        if (splitlist.size == 0) {
+                            splitsumme = gesamtsumme // Trx ist nicht gesplitted ->
+
+                        }
                     }
                 }
                 if (LocalInspectionMode.current) {
@@ -167,11 +182,10 @@ fun EditCashTrxScreen(
                 } else {
                     AutoCompletePartnerView(filter = trx.partnername) { partner ->
                         trx.partnername = partner.name
-                        trx.partnerid = partner.id ?: 0
+                        trx.partnerid = partner.id ?: Undefined
                     }
                 }
-
-                LazyColumn {
+                LazyColumn(state = lazyColumnState) {
                     item {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
@@ -198,7 +212,7 @@ fun EditCashTrxScreen(
                                     } ?: let {
                                         trx.catname = ""
                                         trx.catclassid = CatClass.InternalCatClass
-                                        Cat.NOCATID
+                                        NOCATID
                                     }
                                 }
                             }
@@ -227,43 +241,49 @@ fun EditCashTrxScreen(
                                         splitlist.add(
                                             trx.copy(
                                                 id = null,
-                                                catid = 0,
+                                                catid = NOCATID,
                                                 amount = differenz,
                                                 catname = ""
                                             )
                                         )
-                                        differenz = 0L
+                                        splitsumme += differenz
+                                        scope.launch {
+                                            lazyColumnState.animateScrollToItem(splitlist.size - 1)
+                                        }
                                     }) {
                                         Icon(imageVector = Icons.Default.Add, "")
                                     }
 
                                 }
+                            }
+                        }
+                        items(splitlist) {
+                            SplitLine(trx = it, onChanged = {
+                                splitsumme = calculateSplitsumme(splitlist)
+                            })
+                        }
+                        item {
+                            Column {
                                 if (differenz != 0L) {
-                                    DifferenzView(differenz) {
-                                        trx.amount -= differenz
-                                    }
+                                    DifferenzView(differenz, onClick = {
+                                        gesamtsumme = splitsumme
+                                        trx.amount = gesamtsumme
+                                    })
                                 }
-                                Row {
+                                // Summenzeile
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
                                     Spacer(modifier = Modifier.weight(1f))
                                     Text(
                                         text = stringResource(id = R.string.summe),
                                         style = MaterialTheme.typography.labelSmall
                                     )
-                                }
-                                Row {
-                                    Spacer(modifier = Modifier.weight(1f))
                                     AmountView(value = splitsumme)
+
                                 }
                             }
-                        }
-                        items(splitlist) {
-                            SplitLine(trx = it, onChanged = {
-                                var amount = 0L
-                                splitlist.forEach { trx ->
-                                    amount += trx.amount
-                                }
-                                splitsumme = amount
-                            })
                         }
                     }
 
@@ -271,6 +291,14 @@ fun EditCashTrxScreen(
             }
         }
     }
+}
+
+fun calculateSplitsumme(splitlist: List<CashTrxView>): Long {
+    var amount = 0L
+    splitlist.forEach { trx ->
+        amount += trx.amount
+    }
+    return amount
 }
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)

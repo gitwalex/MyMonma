@@ -23,8 +23,8 @@ import java.sql.Date
         childColumns = ["wpid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
-    )]
+
+        )]
 )
 data class WPKurs(
     @PrimaryKey(autoGenerate = true)

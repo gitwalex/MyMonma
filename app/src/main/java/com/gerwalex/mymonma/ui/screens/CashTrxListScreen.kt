@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.ui.Color
 import com.gerwalex.mymonma.ui.content.AmountView
@@ -46,7 +49,7 @@ import java.text.DateFormat
 fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val accountid = rememberSaveable { viewModel.accountid }
     val list by dao.getCashTrxList(accountid).collectAsState(initial = emptyList())
-    val account = dao.getAccountData(accountid)
+    val account by dao.getAccountData(accountid).collectAsState(initial = Cat())
     Scaffold(
         topBar = {
             TopToolBar(
@@ -60,13 +63,20 @@ fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
             }
         }) {
 
+        Column(modifier = Modifier.padding(it)) {
 
-        LazyColumn(modifier = Modifier.padding(it)) {
-            items(list, key = { item -> item.id!! }) { trx ->
-                CashTrxViewItem(trx = trx) { destination ->
-                    viewModel.cashTrxId = trx.id!!
-                    navigateTo(destination)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = stringResource(id = R.string.saldo), fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.weight(1f))
+                AmountView(value = account.saldo, fontWeight = FontWeight.Bold)
+            }
+            LazyColumn {
+                items(list, key = { item -> item.id!! }) { trx ->
+                    CashTrxViewItem(trx = trx) { destination ->
+                        viewModel.cashTrxId = trx.id!!
+                        navigateTo(destination)
 
+                    }
                 }
             }
         }

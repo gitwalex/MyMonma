@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,6 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun <T> AutoCompleteTextView(
     query: String,
@@ -116,6 +114,7 @@ class WindowCenterOffsetPositionProvider : PopupPositionProvider {
 //        }
 //        Log.d("AutocompleteTextView", "offset:$offset")
 //        return offset
+
         return IntOffset(
             (windowSize.width - popupContentSize.width) / 2,
             (windowSize.height - popupContentSize.height) / 2
