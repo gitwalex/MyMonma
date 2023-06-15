@@ -171,4 +171,7 @@ abstract class Dao(val db: DB) {
 
     }
 
+    @Query("select * from cat where id = :accountid and catclassid = $KONTOCLASS")
+    abstract fun getAccountData(accountid: Long): Cat
+
 }

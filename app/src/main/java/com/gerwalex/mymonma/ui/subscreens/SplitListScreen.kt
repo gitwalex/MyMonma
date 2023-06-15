@@ -44,7 +44,6 @@ import com.gerwalex.mymonma.ui.content.QuerySearch
 fun Splitlist(
     main: CashTrxView,
     splitlist: MutableList<CashTrxView>,
-    isError: (Boolean) -> Unit,
 ) {
     var splitsumme by remember { mutableStateOf(0L) }
     var differenz by remember(splitsumme) { mutableStateOf(main.amount - splitsumme) }
@@ -104,8 +103,6 @@ fun Splitlist(
                         error = error || trx.catid == -1L
                     }
                     splitsumme = amount
-                    differenz = main.amount - splitsumme
-                    isError(error || differenz != 0L)
                 })
             }
         }
@@ -173,7 +170,7 @@ fun SplitListPreview() {
     AppTheme {
         val trx = CashTrxView()
         Surface {
-            Splitlist(main = trx, splitlist = list) {}
+            Splitlist(main = trx, splitlist = list)
         }
     }
 

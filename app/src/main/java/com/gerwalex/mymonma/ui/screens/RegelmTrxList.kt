@@ -61,7 +61,7 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
             LazyColumn(Modifier.padding(it)) {
                 items(list) { item ->
                     RegelmTrxListItem(trx = item) { trx ->
-                        viewModel.regelmTrxId = trx.id
+                        viewModel.regelmTrxId = trx.id!!
                         navigateTo(EditRegelmTrx)
                     }
                 }

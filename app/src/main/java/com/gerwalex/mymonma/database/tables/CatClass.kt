@@ -25,8 +25,11 @@ data class CatClass(
     var name: String = "Unknown",
     var description: String? = "",
     var intern: Boolean = false,
-)
-
+) {
+    companion object {
+        const val InternalCatClass = 1L
+    }
+}
 @Composable
 fun AutoCompleteCatClassView(filter: String, selected: (CatClass) -> Unit) {
     var catclassname by remember { mutableStateOf(filter) }

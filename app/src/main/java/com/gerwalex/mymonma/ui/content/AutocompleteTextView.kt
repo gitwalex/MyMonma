@@ -1,6 +1,5 @@
 package com.gerwalex.mymonma.ui.content
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
-import java.lang.Integer.max
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -103,20 +101,24 @@ class WindowCenterOffsetPositionProvider : PopupPositionProvider {
         layoutDirection: LayoutDirection,
         popupContentSize: IntSize
     ): IntOffset {
-        Log.d(
-            "AutocompleteTextView",
-            "calculatePosition: anchor=$anchorBounds, window=$windowSize," +
-                    "layoutDirection=$layoutDirection, popupSize=$popupContentSize"
+//        Log.d(
+//            "AutocompleteTextView",
+//            "calculatePosition: anchor=$anchorBounds, window=$windowSize," +
+//                    "layoutDirection=$layoutDirection, popupSize=$popupContentSize"
+//        )
+//        val offset: IntOffset
+//        if (anchorBounds.bottom + popupContentSize.height > windowSize.height) {
+//            offset =
+//                IntOffset(anchorBounds.left, max(anchorBounds.top - popupContentSize.height, 0))
+//        } else {
+//            offset = IntOffset(anchorBounds.left, anchorBounds.bottom)
+//
+//        }
+//        Log.d("AutocompleteTextView", "offset:$offset")
+//        return offset
+        return IntOffset(
+            (windowSize.width - popupContentSize.width) / 2,
+            (windowSize.height - popupContentSize.height) / 2
         )
-        val offset: IntOffset
-        if (anchorBounds.bottom + popupContentSize.height > windowSize.height) {
-            offset =
-                IntOffset(anchorBounds.left, max(anchorBounds.top - popupContentSize.height, 0))
-        } else {
-            offset = IntOffset(anchorBounds.left, anchorBounds.bottom)
-
-        }
-        Log.d("AutocompleteTextView", "offset:$offset")
-        return offset
     }
 }

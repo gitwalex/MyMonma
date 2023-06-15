@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.ui.Color
 import com.gerwalex.mymonma.ui.content.AmountView
@@ -43,35 +44,35 @@ import java.text.DateFormat
 
 @Composable
 fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    viewModel.account?.let { acc ->
-        val list by DB.dao.getCashTrxList(acc.id!!).collectAsState(initial = emptyList())
-        Scaffold(
-            topBar = {
-                TopToolBar(
-                    acc.name,
-                    actions = {
-                        IconButton(onClick = { navigateTo(AddCashTrx) }) {
-                            Icon(imageVector = Icons.Default.Add, "")
-                        }
-                    }) {
-                    navigateTo(Up)
-                }
-            }) {
-
-
-            LazyColumn(modifier = Modifier.padding(it)) {
-                items(list, key = { item -> item.id!! }) { trx ->
-                    CashTrxViewItem(trx = trx) { destination ->
-                        viewModel.cashTrxId = trx.id
-                        navigateTo(destination)
-
+    val accountid = rememberSaveable { viewModel.accountid }
+    val list by dao.getCashTrxList(accountid).collectAsState(initial = emptyList())
+    val account = dao.getAccountData(accountid)
+    Scaffold(
+        topBar = {
+            TopToolBar(
+                account.name,
+                actions = {
+                    IconButton(onClick = { navigateTo(AddCashTrx) }) {
+                        Icon(imageVector = Icons.Default.Add, "")
                     }
+                }) {
+                navigateTo(Up)
+            }
+        }) {
+
+
+        LazyColumn(modifier = Modifier.padding(it)) {
+            items(list, key = { item -> item.id!! }) { trx ->
+                CashTrxViewItem(trx = trx) { destination ->
+                    viewModel.cashTrxId = trx.id!!
+                    navigateTo(destination)
+
                 }
             }
-
         }
 
     }
+
 }
 
 @Composable
