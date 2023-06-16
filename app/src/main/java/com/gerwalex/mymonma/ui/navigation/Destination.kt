@@ -37,6 +37,41 @@ object Up : Destination() {
 
 }
 
+object ImportData : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "ImportData"
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+object InProgress : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String
+        get() = "InProgress"
+
+    override fun navigate(navController: NavController) {
+        TODO("Not yet implemented")
+    }
+
+}
+
+object NotInProgress : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String
+        get() = "NotInProgress"
+
+    override fun navigate(navController: NavController) {
+        TODO("Not yet implemented")
+    }
+
+}
+
 object CashTrxList : Destination() {
     override val title: Int
         get() = TODO("Not yet implemented")

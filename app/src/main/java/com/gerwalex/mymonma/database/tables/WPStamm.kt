@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
@@ -42,7 +43,23 @@ data class WPStamm(
     var risiko: Int = 2,
     var beobachten: Boolean = true,
     var estEarning: Long = 0,
-)
+) {
+    @Ignore
+    var wpname: String? = null
+
+    constructor(wpkenn: String, wpname: String) : this(wpkenn = wpkenn) {
+        this.wpname = wpname
+    }
+
+    suspend fun insert(): WPStamm {
+        id = dao.insert(this)
+        return this
+    }
+
+    suspend fun update() {
+        dao.update(this)
+    }
+}
 
 @Composable
 fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {

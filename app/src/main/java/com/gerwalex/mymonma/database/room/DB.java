@@ -17,10 +17,11 @@ import com.gerwalex.mymonma.database.tables.Partnerstamm;
 import com.gerwalex.mymonma.database.tables.TrxRegelm;
 import com.gerwalex.mymonma.database.tables.WPKurs;
 import com.gerwalex.mymonma.database.tables.WPStamm;
+import com.gerwalex.mymonma.database.tables.WPTrx;
 
 
 @Database(entities = {Account.class, CashTrx.class, Cat.class, CatClass.class,
-        TrxRegelm.class, Partnerstamm.class, WPStamm.class, WPKurs.class},
+        TrxRegelm.class, Partnerstamm.class, WPStamm.class, WPKurs.class, WPTrx.class},
         //
         version = 1,
         //

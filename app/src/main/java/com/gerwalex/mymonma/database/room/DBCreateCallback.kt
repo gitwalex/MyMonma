@@ -1,15 +1,10 @@
 package com.gerwalex.mymonma.database.room
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
 
 internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
 
@@ -28,62 +23,26 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
      * @param db database
      */
     private fun createStammdaten(db: SupportSQLiteDatabase) {
-        try {
-            Log.d("gerwalex", "Lade csv-daten")
-            var `in`: InputStream
-            db.beginTransaction()
-            val am = context.resources.assets
-            `in` = am.open("init_partnerstamm.csv")
-            loadCSVFile(`in`, db, "partnerstamm")
-            `in` = am.open("init_catclass.csv")
-            loadCSVFile(`in`, db, "catclass")
-            `in` = am.open("init_cat.csv")
-            loadCSVFile(`in`, db, "cat")
-            `in` = am.open("init_wpstamm.csv")
-            loadCSVFile(`in`, db, "WPStamm")
-            db.setTransactionSuccessful()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            db.endTransaction()
-        }
+        Log.d("gerwalex", "Lade csv-daten")
+        var `in`: InputStream
+        val am = context.resources.assets
+        `in` = am.open("init_partnerstamm.csv")
+        FileUtils.loadCSVFile(`in`, db, "partnerstamm")
+        `in` = am.open("init_catclass.csv")
+        FileUtils.loadCSVFile(`in`, db, "catclass")
+        `in` = am.open("init_cat.csv")
+        FileUtils.loadCSVFile(`in`, db, "cat")
+        `in` = am.open("init_wpstamm.csv")
+        FileUtils.loadCSVFile(`in`, db, "WPStamm")
+        db.setTransactionSuccessful()
     }
 
-    private fun loadImportDaten(db: SupportSQLiteDatabase) {
-        try {
-            Log.d("gerwalex", "Lade csv-daten")
-            var `in`: InputStream
-            db.beginTransaction()
-            val am = context.resources.assets
-            `in` = am.open("partnerstamm.csv")
-            loadCSVFile(`in`, db, "partnerstamm")
-            `in` = am.open("cat.csv")
-            loadCSVFile(`in`, db, "cat")
-            `in` = am.open("wpstamm.csv")
-            loadCSVFile(`in`, db, "WPStamm")
-            `in` = am.open("account.csv")
-            loadCSVFile(`in`, db, "account")
-            `in` = am.open("wpkurs.csv")
-            loadCSVFile(`in`, db, "WPKurs")
-            `in` = am.open("cashtrx.csv")
-            loadCSVFile(`in`, db, "CashTrx")
-            `in` = am.open("trxregelm.csv")
-            loadCSVFile(`in`, db, "TrxRegelm")
-            db.setTransactionSuccessful()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            db.endTransaction()
-        }
-    }
 
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
         try {
             db.beginTransaction()
             createStammdaten(db)
-            loadImportDaten(db)
-            executeImportStatements(db)
             db.setTransactionSuccessful()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -94,19 +53,6 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
 
     }
 
-    private fun executeImportStatements(db: SupportSQLiteDatabase) {
-        // Entfernen brackets bei catname
-        db.execSQL("UPDATE Cat SET name=REPLACE(name,'[', '')")
-        db.execSQL("UPDATE Cat SET name=REPLACE(name,']', '')")
-        // Einfügen gegenbuchungen
-        db.execSQL(
-            "insert into CashTrx (btag, partnerid,accountid,  catid, " +
-                    "amount, memo, transferid, isUmbuchung)" +
-                    "select btag, partnerid,catid, accountid, -amount, memo, id, 1 " +
-                    "from CashTrx where catid between 1 and 99 "
-        )
-
-    }
 
     override fun onOpen(db: SupportSQLiteDatabase) {
     }
@@ -118,40 +64,5 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
      * @param tablename Tabellenname
      * @param database  database
      */
-    fun loadCSVFile(`in`: InputStream, database: SupportSQLiteDatabase, tablename: String) {
-        val cv = ContentValues()
-        try {
-            Log.d("gerwalex", "Lade Tabelle $tablename")
-            val buffer = BufferedReader(InputStreamReader(`in`))
-            val colnames = buffer.readLine().split(";".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()
-            var line: String?
-            while (buffer.readLine().also { line = it } != null) {
-                line?.let { current ->
-                    val csvcolumns: Array<String?> =
-                        current.split(";".toRegex()).dropLastWhile { it.isEmpty() }
-                            .toTypedArray()
-                    for (i in csvcolumns.indices) {
-                        csvcolumns[i]?.let {
-                            if (it.isNotEmpty()) {
-                                cv.put(colnames[i], it)
-                            }
-                        }
-                    }
-                }
-                database.insert(tablename, SQLiteDatabase.CONFLICT_NONE, cv)
-                cv.clear()
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            Log.d("gerwalex", "Werte: $cv")
-        } finally {
-            try {
-                `in`.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-    }
 
 }

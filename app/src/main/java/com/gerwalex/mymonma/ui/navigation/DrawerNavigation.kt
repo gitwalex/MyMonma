@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ImportExport
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
@@ -194,6 +195,13 @@ private fun prepareNavigationItems(): List<NavigationDrawerItem> {
             imageVector = Icons.Filled.List,
             label = stringResource(id = R.string.trxRegelm),
             destination = RegelmTrxList,
+        )
+    )
+    itemsList.add(
+        NavigationDrawerItem(
+            imageVector = Icons.Filled.ImportExport,
+            label = stringResource(id = R.string.importData),
+            destination = ImportData,
         )
     )
 

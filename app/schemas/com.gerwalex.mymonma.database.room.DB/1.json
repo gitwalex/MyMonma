@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7e2269784ecf0a3111c37afe3cf8f286",
+    "identityHash": "82dda846ae17cdf43e87abbdd402c1eb",
     "entities": [
       {
         "tableName": "Account",
@@ -772,12 +772,191 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "WPTrx",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `wpid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `paketid` INTEGER, `kurs` INTEGER NOT NULL, `menge` INTEGER, `ertrag` INTEGER, `einstand` INTEGER, `zinszahl` INTEGER, `haltedauer` INTEGER, FOREIGN KEY(`id`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`paketid`) REFERENCES `WPTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wpid",
+            "columnName": "wpid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paketid",
+            "columnName": "paketid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "kurs",
+            "columnName": "kurs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "menge",
+            "columnName": "menge",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ertrag",
+            "columnName": "ertrag",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "einstand",
+            "columnName": "einstand",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zinszahl",
+            "columnName": "zinszahl",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "haltedauer",
+            "columnName": "haltedauer",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_WPTrx_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          },
+          {
+            "name": "index_WPTrx_wpid",
+            "unique": false,
+            "columnNames": [
+              "wpid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_wpid` ON `${TABLE_NAME}` (`wpid`)"
+          },
+          {
+            "name": "index_WPTrx_catid",
+            "unique": false,
+            "columnNames": [
+              "catid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_catid` ON `${TABLE_NAME}` (`catid`)"
+          },
+          {
+            "name": "index_WPTrx_paketid",
+            "unique": false,
+            "columnNames": [
+              "paketid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_paketid` ON `${TABLE_NAME}` (`paketid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "CashTrx",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "WPTrx",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "paketid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Account",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "WPStamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "wpid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7e2269784ecf0a3111c37afe3cf8f286')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '82dda846ae17cdf43e87abbdd402c1eb')"
     ]
   }
 }

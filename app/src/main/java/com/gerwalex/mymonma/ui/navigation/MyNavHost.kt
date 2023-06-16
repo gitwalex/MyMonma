@@ -11,6 +11,7 @@ import com.gerwalex.mymonma.ui.screens.CashTrxList
 import com.gerwalex.mymonma.ui.screens.EditCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.EditRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.HomeScreen
+import com.gerwalex.mymonma.ui.screens.ImportScreen
 import com.gerwalex.mymonma.ui.screens.RegelmTrxList
 
 @Composable
@@ -22,6 +23,9 @@ fun MyNavHost(
     NavHost(navController = navController, startDestination = Home.name) {
         composable(Home.name) {
             HomeScreen(viewModel = viewModel, navigateTo)
+        }
+        composable(ImportData.name) {
+            ImportScreen(navigateTo)
         }
         composable(CashTrxList.name) {
             CashTrxList(viewModel, navigateTo)

@@ -17,6 +17,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField("String", "Finanztreff_Base_Url", "\"https://finanztreff.de\"")
+
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

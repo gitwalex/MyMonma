@@ -5,12 +5,15 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
+import com.gerwalex.mymonma.database.tables.WPKurs
+import com.gerwalex.mymonma.database.tables.WPStamm
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import kotlinx.coroutines.flow.Flow
@@ -178,4 +181,22 @@ abstract class Dao(val db: DB) {
     @Query("select * from cat where id = :accountid and catclassid = $KONTOCLASS")
     abstract fun getAccountData(accountid: Long): Flow<Cat>
 
+    @Query("Select * from WPStamm where wpkenn = :wpkenn")
+    abstract fun getWPStammdaten(wpkenn: String): Flow<WPStamm?>
+
+    @Insert
+    abstract suspend fun insert(wpstamm: WPStamm): Long
+
+    @Update
+    abstract suspend fun update(wpstamm: WPStamm)
+
+    suspend fun insertKurs(kursList: MutableList<WPKurs>) {
+        kursList.forEach {
+            insert(it)
+        }
+
+    }
+
+    @Insert
+    abstract suspend fun insert(wpkurs: WPKurs)
 }
