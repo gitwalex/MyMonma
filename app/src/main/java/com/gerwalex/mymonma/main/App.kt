@@ -1,11 +1,16 @@
 package com.gerwalex.mymonma.main
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.gerwalex.mymonma.BuildConfig
+import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.ext.preferences
 import com.gerwalex.mymonma.ext.set
@@ -28,6 +33,9 @@ class App : Application() {
 
         DB.createInstance(this)
         MaintenanceWorker.enqueueMaintenanceWorker(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
         preferences.set("user", "alexwinkler")
         preferences.set("pw", "38303830")
     }
@@ -35,10 +43,29 @@ class App : Application() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        // Create the Low Importance Notification channel
+        // Create the High Importance Notification channel
+        val audioAttributes: AudioAttributes =
+            AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(
+                    AudioAttributes.USAGE_NOTIFICATION
+                ).build()
+        val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val name = getString(R.string.high_importance_channel_name)
+        val channelID = NotificationChannelID
+        NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH).run {
+            description = getString(R.string.high_importance_channel_description)
+            enableVibration(true)
+            setSound(sound, audioAttributes)
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(this)
+        }
+
     }
 
     companion object {
-        val NotificationChannelID = "MonMa Next Generation"
+        val NotificationChannelID = "MyMonMa Channel"
         val linefeed = System.getProperty("line.separator")
         private val backupDirName = "backup"
         private val downloadDirName = "download"

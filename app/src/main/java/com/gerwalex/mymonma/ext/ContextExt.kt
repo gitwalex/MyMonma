@@ -2,6 +2,7 @@ package com.gerwalex.mymonma.ext
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.ContextWrapper
@@ -10,9 +11,9 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.gerwalex.mymonma.ComposeActivity
@@ -36,8 +37,15 @@ fun Context.hasPermissions(vararg permissions: String) = permissions.all { permi
 }
 
 @SuppressLint("MissingPermission")
-fun Context.createNotification(title: String, text: String?) {
+fun Context.createNotification(
+    @IntegerRes id: Int,
+    title: String,
+    text: String?,
+    messages: String? = null
+) {
     if (hasPermissions((Manifest.permission.POST_NOTIFICATIONS))) {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_UPDATE_CURRENT or Intent.FLAG_RECEIVER_FOREGROUND or PendingIntent.FLAG_IMMUTABLE
         } else {
@@ -53,13 +61,18 @@ fun Context.createNotification(title: String, text: String?) {
             .setAutoCancel(true)
             .setContentTitle(title)
             .setContentText(text)
+
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.mipmap.euro_symbol)
-
-        NotificationManagerCompat
-            .from(this)
-            .notify(R.id.notifiy_exec_Import, builder.build())
+        messages?.let {
+            builder.setStyle(
+                NotificationCompat
+                    .BigTextStyle()
+                    .bigText(messages)
+            )
+        }
+        notificationManager.notify(id, builder.build())
 
     } else {
         Log.d("ContextExt", "createNotification: Permission missing")

@@ -81,7 +81,7 @@ class FinanztreffOnline(private val context: Context) {
                         percent
                     ))
                     val title = context.getString(R.string.event_download_kurse)
-                    context.createNotification(title, msg)
+                    context.createNotification(msgId, title, msg)
                     messageList.addAll(messages)
                 }
             }
@@ -126,6 +126,7 @@ class FinanztreffOnline(private val context: Context) {
 
     companion object {
 
+        val msgId = R.id.notifiy_exec_Import
         const val prefix = "portfolio_Master_"
     }
 

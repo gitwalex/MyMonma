@@ -2,4 +2,5 @@
 <resources>
     <item name="notification_request" type="id" />
     <item name="notifiy_exec_Import" type="id" />
+    <item name="notifiy_exec_regelmBuchung" type="id" />
 </resources>

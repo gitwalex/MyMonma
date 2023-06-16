@@ -22,6 +22,14 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
         .openHelper
 
 
+    override suspend fun doWork(): Result {
+        RegelmTrxWorker(context).doWork()
+        val database = sqLiteOpenHelper.writableDatabase
+        database.execSQL("analyze")
+        database.execSQL("vacuum")
+        return Result.success()
+    }
+
     companion object {
 
         private val tag: String = MaintenanceWorker::class.java.name
@@ -39,13 +47,6 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
         fun cancel(context: Context) {
             WorkManager.getInstance(context).cancelAllWorkByTag(tag)
         }
-    }
-
-    override suspend fun doWork(): Result {
-        val database = sqLiteOpenHelper.writableDatabase
-        database.execSQL("analyze")
-        database.execSQL("vacuum")
-        return Result.success()
     }
 
 }

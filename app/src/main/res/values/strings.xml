@@ -78,4 +78,8 @@
     <string name="eventWPKursDownload">Marktwert %1$s, Veränderung %2$s (%3$.2f%%)</string>
     <string name="event_download_kurse">Aktualisierung Wertpapierkurse</string>
     <string name="errorKursDownload">Fehler beim Download</string>
+    <string name="event_dauerauftrag">Dauerauftrag</string>
+    <string name="execute_regelTrx_anzahl">%1$d regelmäßige Buchungen durchgeführt</string>
+    <string name="high_importance_channel_name">MonMa Notifications</string>
+    <string name="high_importance_channel_description">Importinfo, Daueraufträget etc.</string>
 </resources>

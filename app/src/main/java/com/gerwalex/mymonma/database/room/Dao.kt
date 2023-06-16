@@ -18,6 +18,7 @@ import com.gerwalex.mymonma.database.tables.WPStamm
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import kotlinx.coroutines.flow.Flow
+import java.sql.Date
 
 @Dao
 abstract class Dao(val db: DB) {
@@ -195,6 +196,19 @@ abstract class Dao(val db: DB) {
         return _insert(wpstamm)
     }
 
+    @Query(
+        "SELECT a.* ," +
+                "p.name as partnername, acc.name as accountname, c.name as catname, " +
+                "c.catclassid, 0 as imported, 0 as saldo " +
+                "from TrxRegelm a " +
+                "left join Partnerstamm p on p.id = partnerid " +
+                "left join Cat acc on   acc.id = accountid " +
+                "left join Cat c on c.id = catid " +
+                "where btag  < :btag AND  transferID IS NULL "
+    )
+    abstract fun getNextRegelmTrx(btag: Date): Flow<List<TrxRegelmView>>
+
+
     @Update
     abstract suspend fun update(wpstamm: WPStamm)
 
@@ -210,4 +224,7 @@ abstract class Dao(val db: DB) {
 
     @Insert
     abstract suspend fun insert(wpkurs: WPKurs)
+    suspend fun execute(trxRegelmId: Long) {
+
+    }
 }
