@@ -1,9 +1,11 @@
 package com.gerwalex.mymonma
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
@@ -29,13 +31,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.gerwalex.mymonma.ext.registerActivityForResult
+import com.gerwalex.mymonma.ext.registerforPermissionRequest
 import com.gerwalex.mymonma.main.App
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.navigation.Destination
+import com.gerwalex.mymonma.ui.navigation.DownloadKurse
 import com.gerwalex.mymonma.ui.navigation.InProgress
 import com.gerwalex.mymonma.ui.navigation.MyNavHost
 import com.gerwalex.mymonma.ui.navigation.NotInProgress
 import com.gerwalex.mymonma.workers.FileImportWorker
+import com.gerwalex.mymonma.workers.KursDownloadWorker
 import com.maltaisn.calcdialog.CalcDialog
 import java.io.FileOutputStream
 import java.io.IOException
@@ -49,9 +54,15 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
     private var inProgress: Boolean = false
     private lateinit var navController: NavHostController
     private val viewModel by viewModels<MonMaViewModel>()
-
+    private val notificationPermissionLauncher = registerforPermissionRequest()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher.launchSinglePermission(
+                Manifest.permission.POST_NOTIFICATIONS
+            ) {
+            }
+        }
 //        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             navController = rememberNavController()
@@ -84,7 +95,11 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
     }
 
     fun navigateTo(destination: Destination) {
-        destination.navigate(navController)
+        when (destination) {
+            DownloadKurse -> KursDownloadWorker.submit(this)
+            else -> destination.navigate(navController)
+        }
+
 
     }
 

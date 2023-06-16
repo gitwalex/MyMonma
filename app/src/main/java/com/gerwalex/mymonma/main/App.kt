@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.gerwalex.mymonma.BuildConfig
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.ext.preferences
+import com.gerwalex.mymonma.ext.set
 import com.gerwalex.mymonma.workers.MaintenanceWorker
 import kotlinx.coroutines.*
 import java.io.File
@@ -26,6 +28,8 @@ class App : Application() {
 
         DB.createInstance(this)
         MaintenanceWorker.enqueueMaintenanceWorker(this)
+        preferences.set("user", "alexwinkler")
+        preferences.set("pw", "38303830")
     }
 
 

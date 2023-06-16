@@ -25,6 +25,11 @@ data class Partnerstamm(
     var id: Long? = null,
     var name: String = "Unknown"
 ) {
+    suspend fun update() {
+        dao.update(this)
+
+    }
+
     companion object {
         const val Undefined = -1L
     }

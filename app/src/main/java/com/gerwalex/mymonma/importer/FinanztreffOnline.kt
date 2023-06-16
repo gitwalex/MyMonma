@@ -1,19 +1,30 @@
-package com.gerwalex.monmang.importer
+package com.gerwalex.mymonma.importer
 
 import android.content.Context
 import android.text.format.DateUtils
 import android.util.Log
+import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.room.DB.wpdao
+import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm
+import com.gerwalex.mymonma.ext.createNotification
 import com.gerwalex.mymonma.main.App
+import com.google.gson.JsonArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.HeaderMap
+import retrofit2.http.POST
+import retrofit2.http.Query
 import java.io.*
 import java.sql.Date
 import java.util.*
+
 
 class FinanztreffOnline(private val context: Context) {
 
@@ -42,7 +53,7 @@ class FinanztreffOnline(private val context: Context) {
                             getWPStammId(wpname = split[0], wpkenn = split[2])?.let { wpid ->
                                 try {
                                     val btag = getBtag(split[9])
-                                    val amount = getAmount(split[11])
+                                    val amount = MyConverter.convertCurrencyToLong(split[11])
                                     val kurs = WPKurs(btag = btag, wpid = wpid, kurs = amount)
                                     kursList.add(kurs)
                                 } catch (e: NumberFormatException) {
@@ -59,18 +70,18 @@ class FinanztreffOnline(private val context: Context) {
                 if (kursList.size > 0) {
                     dao.insertKurs(kursList)
                     val yesterday = Date(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS)
-//                    val oldValue = dao.getWPMarktwert(yesterday)
-//                    val newValue = dao.getWPMarktwert()
-//                    val diff = newValue - oldValue
-//                    val percent = if (newValue == 0L) 0f else (diff.toFloat() / newValue) * 100
-//                    val msg = (context.getString(
-//                        R.string.eventWPKursDownload,
-//                        MyConverter.convertCurrency(newValue.toFloat()),
-//                        MyConverter.convertCurrency(diff.toFloat()),
-//                        percent
-//                    ))
-//                    val title = context.getString(R.string.event_download_kurse)
-//                    context.createNotification(title, msg)
+                    val oldValue = wpdao.getWPMarktwert(yesterday)
+                    val newValue = wpdao.getWPMarktwert()
+                    val diff = newValue - oldValue
+                    val percent = if (newValue == 0L) 0f else (diff.toFloat() / newValue) * 100
+                    val msg = (context.getString(
+                        R.string.eventWPKursDownload,
+                        MyConverter.convertToCurrency(newValue),
+                        MyConverter.convertToCurrency(diff),
+                        percent
+                    ))
+                    val title = context.getString(R.string.event_download_kurse)
+                    context.createNotification(title, msg)
                     messageList.addAll(messages)
                 }
             }
@@ -78,13 +89,6 @@ class FinanztreffOnline(private val context: Context) {
         return files?.size ?: 0
     }
 
-    private fun getAmount(s: String): Long {
-        val `val` = s.replace(".", "")
-        val value = `val`
-            .replace(",", ".")
-            .toDouble()
-        return value /* Buchung.currencyUnits)*/.toLong()
-    }
 
     private fun getBtag(s: String): Date {
         val cal = GregorianCalendar.getInstance(Locale.getDefault())
@@ -127,22 +131,41 @@ class FinanztreffOnline(private val context: Context) {
 
     private suspend fun getWPStammId(wpname: String, wpkenn: String): Long? {
         if (wpname.isNotEmpty()) {
-            val wpstamm =
-                dao.getWPStammdaten(wpkenn).first()?.let {
+            return wpdao.getPartner(wpkenn).first()?.let {
+                if (wpname != it.name) {
                     val msg =
-                        "WPStamm geändert WKN: $wpkenn Name alt: ${it.wpname}, name neu: $wpname"
-                    it.wpname = wpname
+                        "WPStamm geändert WKN: $wpkenn Name alt: ${it.name}, name neu: $wpname"
+                    it.name = wpname
                     it.update()
                     messages.add(msg)
                     Log.d("gerwalex", msg)
-
-                } ?: let {
-                    WPStamm(wpname, wpkenn).apply {
-                        insert()
-                    }
                 }
-            //return wpstamm.i        }
+                it.id
+            } ?: let {
+                WPStamm(wpname, wpkenn).apply {
+                    insert()
+                }.id
+            }
         }
         return null
     }
+
+}
+
+interface FinanztreffApi {
+
+    @POST("/anmeldung.htn?")
+    suspend fun getUserLogin(
+        @Query("lg") user: String,
+        @Query("pw") pw: String,
+        @Query("savelg") savelg: String = "1",
+        @Query("sektion") section: String = "login",
+        @Query("Anmelden") anmelden: String = "go",
+    )
+
+
+    @GET("/depot_portfolio.htn?sektion=masterportfolio&mpId=507&ansicht=ascii")
+    suspend fun requestKurse(
+        @HeaderMap headers: Map<String, String>,
+    ): Call<JsonArray>
 }

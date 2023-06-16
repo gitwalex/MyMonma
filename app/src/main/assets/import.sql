@@ -30,3 +30,6 @@ TrxRegelm:
 - LF weg :
 UPDATE TrxRegelm SET memo=REPLACE(memo,Char(10), ' ')
 select _id as id, btag, accountid, catid, partnerid, memo, amount, transferid, count as cnt, intervallid, last , isUltimo from TrxRegelm
+
+WPTrx:
+select _id as id, accountid, btag, catid, einstand, ertrag, cast (haltedauer as int) as haltedauer, kurs, menge, paketid, wpid, zinszahl from WPTrx

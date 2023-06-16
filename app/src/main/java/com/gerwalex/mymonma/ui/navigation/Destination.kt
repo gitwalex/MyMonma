@@ -48,6 +48,17 @@ object ImportData : Destination() {
 
 }
 
+object DownloadKurse : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "DownloadKurse"
+
+    override fun navigate(navController: NavController) {
+        TODO("Not yet implemented")
+    }
+
+}
+
 object InProgress : Destination() {
     override val title: Int
         get() = TODO("Not yet implemented")

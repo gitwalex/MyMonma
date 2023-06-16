@@ -17,7 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField("String", "Finanztreff_Base_Url", "\"https://finanztreff.de\"")
+        buildConfigField("String", "Finanztreff_Base_Url", "\"https://alt.finanztreff.de\"")
 
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -98,7 +98,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-// Worker
+    // Worker
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     // Room
@@ -145,7 +145,8 @@ dependencies {
     implementation 'com.github.gitwalex:calcdialoglib:2.2.1'
     // Skydoves Spinner
     implementation "com.github.skydoves:orchestra-spinner:1.2.0"
-
+    // Preferences
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     // SplashScreen
 //    implementation 'androidx.core:core-splashscreen:1.1.0-alpha01'

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
@@ -185,10 +186,20 @@ abstract class Dao(val db: DB) {
     abstract fun getWPStammdaten(wpkenn: String): Flow<WPStamm?>
 
     @Insert
-    abstract suspend fun insert(wpstamm: WPStamm): Long
+    protected abstract suspend fun _insert(wpstamm: WPStamm): Long
+
+    @Transaction
+    open suspend fun insert(wpstamm: WPStamm): Long {
+        val partner = Partnerstamm(name = wpstamm.wpname!!)
+        wpstamm.partnerid = insert(partner)
+        return _insert(wpstamm)
+    }
 
     @Update
     abstract suspend fun update(wpstamm: WPStamm)
+
+    @Update
+    abstract suspend fun update(partner: Partnerstamm)
 
     suspend fun insertKurs(kursList: MutableList<WPKurs>) {
         kursList.forEach {

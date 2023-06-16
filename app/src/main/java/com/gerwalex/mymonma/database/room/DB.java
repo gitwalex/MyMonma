@@ -30,6 +30,7 @@ import com.gerwalex.mymonma.database.tables.WPTrx;
 public abstract class DB extends RoomDatabase {
     public static String DBNAME;
     public static Dao dao;
+    public static WPDao wpdao;
     /**
      * Instance der RoomDatabase
      */
@@ -48,6 +49,7 @@ public abstract class DB extends RoomDatabase {
                             //
                             .build();
                     dao = INSTANCE.getDao();
+                    wpdao = INSTANCE.getWPDao();
                 }
             }
         }
@@ -65,4 +67,6 @@ public abstract class DB extends RoomDatabase {
     }
 
     public abstract Dao getDao();
+
+    public abstract WPDao getWPDao();
 }

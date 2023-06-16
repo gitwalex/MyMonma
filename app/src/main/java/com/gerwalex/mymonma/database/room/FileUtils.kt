@@ -7,11 +7,13 @@ import android.graphics.Bitmap.CompressFormat
 import android.util.Log
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.io.BufferedReader
+import java.io.BufferedWriter
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.io.OutputStreamWriter
 import java.util.*
 
 /**
@@ -52,6 +54,30 @@ object FileUtils {
                 e.printStackTrace()
             }
         }
+    }
+
+    /**
+     * Schribt eine Liste mit Strings in ein file
+     *
+     * @return true, wenn erfolgreich
+     */
+    fun writeFile(file: File, content: List<String?>): Boolean {
+        try {
+            val out = FileOutputStream(file)
+            val bw = BufferedWriter(OutputStreamWriter(out))
+            for (s in content) {
+                s?.let {
+                    bw.write(s)
+                    bw.newLine()
+                }
+            }
+            bw.flush()
+            bw.close()
+            return true
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return false
     }
 
     @JvmStatic

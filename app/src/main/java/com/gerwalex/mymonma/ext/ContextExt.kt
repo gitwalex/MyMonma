@@ -6,12 +6,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import com.gerwalex.mymonma.ComposeActivity
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.main.App
@@ -21,6 +24,9 @@ fun Context.getActivity(): AppCompatActivity? = when (this) {
     is ContextWrapper -> baseContext.getActivity()
     else -> null
 }
+
+val Context.preferences: SharedPreferences
+    get() = PreferenceManager.getDefaultSharedPreferences(this)
 
 /**
  * Check for Permission
@@ -55,5 +61,7 @@ fun Context.createNotification(title: String, text: String?) {
             .from(this)
             .notify(R.id.notifiy_exec_Import, builder.build())
 
+    } else {
+        Log.d("ContextExt", "createNotification: Permission missing")
     }
 }

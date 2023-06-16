@@ -27,6 +27,8 @@ import com.gerwalex.mymonma.database.room.FileUtils
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.Home
+import com.gerwalex.mymonma.ui.navigation.InProgress
+import com.gerwalex.mymonma.ui.navigation.NotInProgress
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,12 +46,14 @@ fun ImportScreen(navigateTo: (Destination) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
+            navigateTo(InProgress)
             finished = false
             scope.launch {
                 finished = executeImport(context) { status ->
                     statusList.add(status)
                 }
             }
+            navigateTo(NotInProgress)
         }) {
             Text(text = "Import")
         }

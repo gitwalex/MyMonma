@@ -75,4 +75,7 @@
     <string name="trxRegelm">Daueraufträge</string>
     <string name="accountlist">Kontoliste</string>
     <string name="importData">Import</string>
+    <string name="eventWPKursDownload">Marktwert %1$s, Veränderung %2$s (%3$.2f%%)</string>
+    <string name="event_download_kurse">Aktualisierung Wertpapierkurse</string>
+    <string name="errorKursDownload">Fehler beim Download</string>
 </resources>
