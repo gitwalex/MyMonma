@@ -2,13 +2,24 @@ package com.gerwalex.mymonma.enums
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -171,22 +182,27 @@ enum class WPTrxArt {
 
     };
 
-    /**
-     * Sucht eine WPTrxArt zu einer catid.
-     * @throws IllegalArgumentException, wenn keine WPTrxArt gefunden
-     */
-    fun find(catid: Long): WPTrxArt {
-        for (typ in values()) {
-            if (typ.catid == catid) {
-                return typ
-            }
-        }
-        throw IllegalArgumentException("keine WPTrxArt zu catid gefunden - catid: $catid")
-    }
 
     abstract val catid: Long
     abstract val bezeichnung: Int
-    open val selectable: Boolean = false
+    open val selectable: Boolean = true
+
+    companion object {
+        /**
+         * Sucht eine WPTrxArt zu einer catid.
+         * @throws IllegalArgumentException, wenn keine WPTrxArt gefunden
+         */
+        fun find(catid: Long): WPTrxArt {
+            for (typ in values()) {
+                if (typ.catid == catid) {
+                    return typ
+                }
+            }
+            throw IllegalArgumentException("keine WPTrxArt zu catid gefunden - catid: $catid")
+        }
+
+
+    }
 }
 
 @Composable
@@ -224,6 +240,36 @@ fun WPTrxArtSpinner(onItemSelected: (WPTrxArt) -> Unit) {
     )
 }
 
+@Composable
+fun WPTrxArtMenu(
+    selected: (WPTrxArt) -> Unit
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    Box(contentAlignment = Alignment.Center) {
+        IconButton(onClick = {
+            isExpanded = !isExpanded
+        }) {
+            Icon(
+                Icons.Default.MoreVert, "",
+                tint = MaterialTheme.colorScheme.onTertiary
+            )
+        }
+        DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+            WPTrxArt.values()
+                .filter { it.selectable }
+                .forEachIndexed { index, s ->
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(id = s.bezeichnung)) },
+                        onClick = {
+                            selected(WPTrxArt.values()[index])
+                            isExpanded = false
+                        })
+                }
+
+        }
+    }
+}
+
 @Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -231,6 +277,19 @@ fun WPTrxArtSpinnerPreview() {
     AppTheme {
         Surface {
             WPTrxArtSpinner(onItemSelected = {})
+
+        }
+    }
+
+}
+
+@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun WPTrxArtMenuPreview() {
+    AppTheme {
+        Surface {
+            WPTrxArtMenu(selected = {})
 
         }
     }

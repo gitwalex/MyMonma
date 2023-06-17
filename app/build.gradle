@@ -149,6 +149,10 @@ dependencies {
 
     // Skydoves Spinner
     implementation "com.github.skydoves:orchestra-spinner:1.2.0"
+
+    // Lib für Charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
 

@@ -169,6 +169,16 @@ object EditRegelmTrx : Destination() {
     override fun navigate(navController: NavController) {
         navController.navigate(name)
     }
+}
+
+object WPBestandList : Destination() {
+    override val title = R.string.wpbestandlist
+    override val name: String = "WPBestandList"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
 
 }
 

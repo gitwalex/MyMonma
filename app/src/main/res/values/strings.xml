@@ -82,4 +82,12 @@
     <string name="execute_regelTrx_anzahl">%1$d regelmäßige Buchungen durchgeführt</string>
     <string name="high_importance_channel_name">MonMa Notifications</string>
     <string name="high_importance_channel_description">Importinfo, Daueraufträget etc.</string>
+    <string name="marktwert">Marktwert</string>
+    <string name="buchgewinn">Buchgewinn</string>
+    <string name="einstand">Einstand</string>
+    <string name="bestand">Bestand</string>
+    <string name="ertraege">Erträge</string>
+    <string name="wpbestandlist">Wertpapierbestand</string>
+    <string name="kurs">Kurs</string>
+    <string name="kursdatum">Kursdatum</string>
 </resources>

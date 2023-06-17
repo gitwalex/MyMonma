@@ -13,6 +13,7 @@ import com.gerwalex.mymonma.ui.screens.EditRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.HomeScreen
 import com.gerwalex.mymonma.ui.screens.ImportScreen
 import com.gerwalex.mymonma.ui.screens.RegelmTrxList
+import com.gerwalex.mymonma.ui.screens.WPBestandList
 
 @Composable
 fun MyNavHost(
@@ -44,6 +45,9 @@ fun MyNavHost(
         }
         composable(EditRegelmTrx.name) {
             EditRegelmTrxScreen(viewModel, navigateTo)
+        }
+        composable(WPBestandList.name) {
+            WPBestandList(viewModel, navigateTo)
         }
 
     }

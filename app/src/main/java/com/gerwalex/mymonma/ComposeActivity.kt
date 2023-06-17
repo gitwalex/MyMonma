@@ -30,6 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.ext.registerActivityForResult
 import com.gerwalex.mymonma.ext.registerforPermissionRequest
 import com.gerwalex.mymonma.main.App
@@ -104,13 +105,23 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
     }
 
     override fun onValueEntered(requestCode: Int, value: BigDecimal?) {
-        if (requestCode == CalcResultRequest) {
-            val currency = NumberFormat.getCurrencyInstance()
-            val digits = BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble()))
-            val result = Bundle().apply {
-                putLong(CalcResult, value?.multiply(digits)?.toLong() ?: 0L)
+        when (requestCode) {
+            CalcAmountResultRequest -> {
+                val currency = NumberFormat.getCurrencyInstance()
+                val digits = BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble()))
+                val result = Bundle().apply {
+                    putLong(CalcAmountResult, value?.multiply(digits)?.toLong() ?: 0L)
+                }
+                supportFragmentManager.setFragmentResult(CalcAmountResult, result)
             }
-            supportFragmentManager.setFragmentResult(CalcResult, result)
+
+            CalcMengeResultRequest -> {
+                val result = Bundle().apply {
+                    putLong(CalcMengeResult, value?.multiply(BigDecimal(NACHKOMMA))?.toLong() ?: 0L)
+                }
+                supportFragmentManager.setFragmentResult(CalcMengeResult, result)
+            }
+
         }
     }
 
@@ -187,8 +198,10 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
 
 
     companion object {
-        const val CalcResultRequest = 1
-        const val CalcResult = "CalcResult"
+        const val CalcAmountResultRequest = 1
+        const val CalcAmountResult = "CalcAmountResult"
+        const val CalcMengeResultRequest = 2
+        const val CalcMengeResult = "CalcMengeResult"
         const val AcoountId = "AcoountId"
 
     }
