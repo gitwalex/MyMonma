@@ -23,7 +23,7 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
 
 
     override suspend fun doWork(): Result {
-        RegelmTrxWorker(context).doWork()
+        RegelmTrxWorker.doWork(context)
         val database = sqLiteOpenHelper.writableDatabase
         database.execSQL("analyze")
         database.execSQL("vacuum")

@@ -61,7 +61,9 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
                             Icon(imageVector = Icons.Default.Add, "")
                         }
                         IconButton(onClick = {
-                            scope.launch { RegelmTrxWorker(context).doWork() }
+                            scope.launch {
+                                RegelmTrxWorker.doWork(context)
+                            }
                         }) {
                             Icon(imageVector = Icons.Default.Work, "")
                         }

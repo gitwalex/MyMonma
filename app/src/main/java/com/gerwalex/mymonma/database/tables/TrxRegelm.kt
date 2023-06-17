@@ -3,7 +3,6 @@ package com.gerwalex.mymonma.database.tables
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.sql.Date
 
@@ -55,12 +54,6 @@ data class TrxRegelm(
     var intervallid: Int = 0, //monatlich
     var last: Date? = null,
     var isUltimo: Boolean = false,
-
-    @Ignore
-    var accountname: String? = null,
-
-    @Ignore
-    var catname: String? = null,
 
 
     )

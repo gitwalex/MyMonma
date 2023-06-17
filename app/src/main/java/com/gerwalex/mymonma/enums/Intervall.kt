@@ -19,53 +19,82 @@ import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.ui.AppTheme
 import com.skydoves.orchestra.spinner.Spinner
 import com.skydoves.orchestra.spinner.SpinnerProperties
+import java.sql.Date
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 enum class Intervall {
     Monatlich {
 
         override val intervallNameTextResID = R.string.intervall_monat
-        override val ausfuehrung = "0|0|1|0"
+        override fun getNextBtag(btag: Date): Date {
+            val cal = GregorianCalendar.getInstance()
+            cal.time = btag
+            cal.add(Calendar.MONTH, 1)
+            return Date(cal.time.time)
+        }
     },
     Einmalig {
 
         override val intervallNameTextResID = R.string.intervall_einmalig
-        override val ausfuehrung = "0|0|0|0"
+        override fun getNextBtag(btag: Date): Nothing {
+            throw IllegalArgumentException("Für einen einmalige Auftrag gibt es kein Folgedatum")
+        }
     },
     Zweimonatlich {
 
         override val intervallNameTextResID = R.string.intervall_alle2monate
-        override val ausfuehrung = "0|0|2|0"
+        override fun getNextBtag(btag: Date): Date {
+            val cal = GregorianCalendar.getInstance()
+            cal.time = btag
+            cal.add(Calendar.MONTH, 2)
+            return Date(cal.time.time)
+        }
     },
     Halbjaehrlich {
 
         override val intervallNameTextResID = R.string.intervall_halbjaehrlich
-        override val ausfuehrung = "0|0|6|0"
+        override fun getNextBtag(btag: Date): Date {
+            val cal = GregorianCalendar.getInstance()
+            cal.time = btag
+            cal.add(Calendar.MONTH, 6)
+            return Date(cal.time.time)
+        }
     },
     vierteljaehrlich {
 
         override val intervallNameTextResID = R.string.intervall_quartal
-        override val ausfuehrung = "0|0|3|0"
+        override fun getNextBtag(btag: Date): Date {
+            val cal = GregorianCalendar.getInstance()
+            cal.time = btag
+            cal.add(Calendar.MONTH, 3)
+            return Date(cal.time.time)
+        }
     },
     Jaehrlich {
 
         override val intervallNameTextResID = R.string.intervall_jahr
-        override val ausfuehrung = "0|0|0|1"
+        override fun getNextBtag(btag: Date): Date {
+            val cal = GregorianCalendar.getInstance()
+            cal.time = btag
+            cal.add(Calendar.YEAR, 1)
+            return Date(cal.time.time)
+        }
     },
     Woechentlich {
-
         override val intervallNameTextResID = R.string.intervall_woechentlich
-        override val ausfuehrung = "1|0|0|0"
+        override fun getNextBtag(btag: Date): Date {
+            val cal = GregorianCalendar.getInstance()
+            cal.time = btag
+            cal.add(Calendar.DAY_OF_WEEK, 7)
+            return Date(cal.time.time)
+        }
     };
 
 
     abstract val intervallNameTextResID: Int
 
-    /**
-     * Intervall der Ausfuehrung: Aufbau a|b|c|d mit Anzahl a=Tage, b=Wochen,
-     * c=Monate,d=Jahre. null: Einmalig. Beispiel 0|1|2|1 = naechste Ausführung
-     * in 0 Tagen + 1 Woche + 2 Monate + 1 Jahr
-     */
-    abstract val ausfuehrung: String
+    abstract fun getNextBtag(btag: Date): Date
 }
 
 @Composable

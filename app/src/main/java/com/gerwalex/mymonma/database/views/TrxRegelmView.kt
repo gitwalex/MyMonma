@@ -1,6 +1,7 @@
 package com.gerwalex.mymonma.database.views
 
 import androidx.room.ColumnInfo
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.enums.Intervall
 import java.sql.Date
@@ -33,6 +34,31 @@ data class TrxRegelmView(
 
 
     ) {
-    val intervallname: Int
-        get() = Intervall.values()[intervallid].intervallNameTextResID
+    @Ignore
+    val intervall: Intervall = Intervall.values()[intervallid]
+
+    @Ignore
+    val intervallname = intervall.intervallNameTextResID
+
+    fun toCashTrx(): CashTrxView {
+        return CashTrxView(
+            id = id,
+            btag = btag,
+            accountid = accountid,
+            catid = catid,
+            partnerid = partnerid,
+            amount = amount,
+            memo = memo,
+            transferid = transferid,
+        )
+    }
+
+
+    /**
+     * Liefert den nächsten Ausführungstermin
+     */
+    fun nextBtag(): Date {
+        return intervall.getNextBtag(btag)
+    }
+
 }

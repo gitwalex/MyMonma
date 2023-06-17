@@ -17,6 +17,7 @@ import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
+import com.gerwalex.mymonma.enums.Intervall
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -121,14 +122,6 @@ abstract class Dao(val db: DB) {
     @Query("select * from Partnerstamm where id = :partnerid ")
     abstract fun getPartnerstamm(partnerid: Long): Flow<Partnerstamm>
 
-    @Delete
-    abstract suspend fun delete(trx: CashTrx)
-
-    @Insert
-    protected abstract suspend fun insert(trx: CashTrx): Long
-
-    @Insert
-    abstract suspend fun insert(partner: Partnerstamm): Long
 
     @Query(
         "update cat set saldo = (" +
@@ -148,6 +141,7 @@ abstract class Dao(val db: DB) {
      * Gegenbuchungen werden jewils mit aufgebaut und sind schon beim Lesen aus der DB nicht mitgekommen.
      */
 
+    @Transaction
     open suspend fun insertCashTrxView(list: List<CashTrxView>) {
         if (list.isNotEmpty()) {
             val main = list[0]
@@ -186,8 +180,6 @@ abstract class Dao(val db: DB) {
     @Query("Select * from WPStamm where wpkenn = :wpkenn")
     abstract fun getWPStammdaten(wpkenn: String): Flow<WPStamm?>
 
-    @Insert
-    protected abstract suspend fun _insert(wpstamm: WPStamm): Long
 
     @Transaction
     open suspend fun insert(wpstamm: WPStamm): Long {
@@ -196,24 +188,60 @@ abstract class Dao(val db: DB) {
         return _insert(wpstamm)
     }
 
+    /**
+     * Liefert alle bis Btag fälligen Daueraufträge
+     */
     @Query(
         "SELECT a.* ," +
-                "p.name as partnername, acc.name as accountname, c.name as catname, " +
-                "c.catclassid, 0 as imported, 0 as saldo " +
+                "p.name as partnername, acc.name as accountname, c.name as catname " +
                 "from TrxRegelm a " +
                 "left join Partnerstamm p on p.id = partnerid " +
                 "left join Cat acc on   acc.id = accountid " +
                 "left join Cat c on c.id = catid " +
                 "where btag  < :btag AND  transferID IS NULL "
     )
-    abstract fun getNextRegelmTrx(btag: Date): Flow<List<TrxRegelmView>>
+    abstract suspend fun getNextRegelmTrx(btag: Date): List<TrxRegelmView>
 
+    @Query(
+        "SELECT a.* ," +
+                "p.name as partnername, acc.name as accountname, c.name as catname " +
+                "from TrxRegelm a " +
+                "left join Partnerstamm p on p.id = partnerid " +
+                "left join Cat acc on   acc.id = accountid " +
+                "left join Cat c on c.id = catid " +
+                "where a.id = :id or a.transferid = :id " +
+                "order by a.id"
+    )
+    abstract suspend fun getTrxRegelm(id: Long): List<TrxRegelmView>
 
-    @Update
-    abstract suspend fun update(wpstamm: WPStamm)
+    //    @Transaction
+    open suspend fun execute(trx: TrxRegelmView) {
+        trx.id?.let { id ->
+            DB.dao.getTrxRegelm(id).also { item ->
+                val cashTrx = ArrayList<CashTrxView>()
+                item.forEach {
+                    cashTrx.add(it.toCashTrx())
+                }
+                DB.dao.insertCashTrxView(cashTrx)
+                when (trx.intervall) {
+                    Intervall.Einmalig -> {
+                        delete(id)
+                    }
 
-    @Update
-    abstract suspend fun update(partner: Partnerstamm)
+                    else -> {
+                        trx.btag = trx.nextBtag()
+                        updateNextBtag(id, trx.btag)
+                    }
+                }
+            }
+        }
+    }
+
+    @Query(
+        "Update TrxRegelm set btag = :btag " +
+                "where id = :trxRegelmId or transferid = :trxRegelmId"
+    )
+    protected abstract suspend fun updateNextBtag(trxRegelmId: Long, btag: Date)
 
     suspend fun insertKurs(kursList: MutableList<WPKurs>) {
         kursList.forEach {
@@ -224,7 +252,26 @@ abstract class Dao(val db: DB) {
 
     @Insert
     abstract suspend fun insert(wpkurs: WPKurs)
-    suspend fun execute(trxRegelmId: Long) {
 
-    }
+    @Insert
+    protected abstract suspend fun insert(trx: CashTrx): Long
+
+    @Insert
+    abstract suspend fun insert(partner: Partnerstamm): Long
+
+    @Insert
+    protected abstract suspend fun _insert(wpstamm: WPStamm): Long
+
+    @Update
+    abstract suspend fun update(wpstamm: WPStamm)
+
+    @Update
+    abstract suspend fun update(partner: Partnerstamm)
+
+    @Delete
+    abstract suspend fun delete(trx: CashTrx)
+
+    @Query("Delete from TrxRegelm where id = :trxRegelmId or transferid = :trxRegelmId ")
+    abstract suspend fun delete(trxRegelmId: Long)
+
 }

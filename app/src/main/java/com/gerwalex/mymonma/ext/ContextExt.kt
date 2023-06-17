@@ -11,7 +11,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
-import androidx.annotation.IntegerRes
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -38,7 +38,7 @@ fun Context.hasPermissions(vararg permissions: String) = permissions.all { permi
 
 @SuppressLint("MissingPermission")
 fun Context.createNotification(
-    @IntegerRes id: Int,
+    @IdRes id: Int,
     title: String,
     text: String?,
     messages: String? = null
