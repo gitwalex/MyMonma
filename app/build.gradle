@@ -130,11 +130,14 @@ dependencies {
     runtimeOnly "androidx.compose.ui:ui-tooling:$compose_ui_version"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
     implementation "androidx.navigation:navigation-compose:$nav_version" // Navigation
+
     // Glance (Widgets)
 //    implementation "androidx.glance:glance-appwidget:1.0.0-beta01"
-// Accompanist (https://google.github.io/accompanist/permissions/)
+
+    // Accompanist (https://google.github.io/accompanist/permissions/)
     implementation 'com.google.accompanist:accompanist-permissions:0.30.1'
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
+
     // Material30
     def material3_version = "1.1.0"
     implementation "androidx.compose.material3:material3:$material3_version"
@@ -143,6 +146,7 @@ dependencies {
 
     // calulator
     implementation 'com.github.gitwalex:calcdialoglib:2.2.1'
+
     // Skydoves Spinner
     implementation "com.github.skydoves:orchestra-spinner:1.2.0"
     // Preferences
