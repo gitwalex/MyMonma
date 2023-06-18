@@ -91,4 +91,8 @@
     <string name="kurs">Kurs</string>
     <string name="kursdatum">Kursdatum</string>
     <string name="pakete">Pakete</string>
+    <string name="bestandAktuell">Bestand:</string>
+    <string name="ausmBetrag">Ausmachender Betrag</string>
+    <string name="jeAnteil">je Anteil</string>
+    <string name="imporCashTrx">Import Umsätze</string>
 </resources>

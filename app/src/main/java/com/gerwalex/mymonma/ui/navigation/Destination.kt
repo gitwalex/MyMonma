@@ -48,6 +48,17 @@ object ImportData : Destination() {
 
 }
 
+object ImportCashTrx : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "ImportCashTrx"
+    override fun navigate(navController: NavController) {
+        TODO("Not yet implemented")
+    }
+
+
+}
+
 object DownloadKurse : Destination() {
     override val title: Int
         get() = TODO("Not yet implemented")
@@ -175,6 +186,16 @@ object WPBestandList : Destination() {
     override val title = R.string.wpbestandlist
     override val name: String = "WPBestandList"
 
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+object Einnahmen : Destination() {
+    override val title = R.string.dividende
+    override val name = "Dividende"
 
     override fun navigate(navController: NavController) {
         navController.navigate(name)

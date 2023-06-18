@@ -96,7 +96,7 @@ open class TrxImporter(private val context: Context) {
         }
     }
 
-    suspend fun executeImport(messages: MutableList<String>) {
+    suspend fun executeImport() {
         var numFiles = 0
         dao.getImportAccounts().collect { list ->
             list.forEach { acc ->

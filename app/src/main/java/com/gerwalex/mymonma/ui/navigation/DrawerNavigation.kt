@@ -207,6 +207,13 @@ private fun prepareNavigationItems(): List<NavigationDrawerItem> {
     )
     itemsList.add(
         NavigationDrawerItem(
+            imageVector = Icons.Filled.ImportExport,
+            label = stringResource(id = R.string.imporCashTrx),
+            destination = ImportCashTrx,
+        )
+    )
+    itemsList.add(
+        NavigationDrawerItem(
             imageVector = Icons.Filled.Download,
             label = stringResource(id = R.string.event_download_kurse),
             destination = DownloadKurse,

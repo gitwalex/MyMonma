@@ -14,6 +14,7 @@ import com.gerwalex.mymonma.ui.screens.HomeScreen
 import com.gerwalex.mymonma.ui.screens.ImportScreen
 import com.gerwalex.mymonma.ui.screens.RegelmTrxList
 import com.gerwalex.mymonma.ui.screens.WPBestandList
+import com.gerwalex.mymonma.wptrx.EinnahmenScreen
 
 @Composable
 fun MyNavHost(
@@ -48,6 +49,9 @@ fun MyNavHost(
         }
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)
+        }
+        composable(Einnahmen.name) {
+            EinnahmenScreen(viewModel, navigateTo)
         }
 
     }

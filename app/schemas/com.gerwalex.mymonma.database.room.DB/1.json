@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f33e2030fcb201a9e5fb7c07b5ee92e8",
+    "identityHash": "8ba22bfa648e0e65cd809fae86ee93e6",
     "entities": [
       {
         "tableName": "Account",
@@ -1071,7 +1071,7 @@
       },
       {
         "tableName": "WPTrx",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `wpid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `paketid` INTEGER, `kurs` INTEGER NOT NULL, `menge` INTEGER, `ertrag` INTEGER, `einstand` INTEGER, `zinszahl` INTEGER, `haltedauer` INTEGER, FOREIGN KEY(`id`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`paketid`) REFERENCES `WPTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `wpid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `paketid` INTEGER, `kurs` INTEGER NOT NULL, `menge` INTEGER, `ertrag` INTEGER NOT NULL, `einstand` INTEGER, `zinszahl` INTEGER, `haltedauer` INTEGER, FOREIGN KEY(`id`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`paketid`) REFERENCES `WPTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -1125,7 +1125,7 @@
             "fieldPath": "ertrag",
             "columnName": "ertrag",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "einstand",
@@ -1252,7 +1252,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f33e2030fcb201a9e5fb7c07b5ee92e8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8ba22bfa648e0e65cd809fae86ee93e6')"
     ]
   }
 }

@@ -14,7 +14,9 @@ import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.database.room.DB.wpdao
 import com.gerwalex.mymonma.database.views.WPStammItem
 import com.gerwalex.mymonma.database.views.WPStammView
+import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.ui.navigation.Destination
+import com.gerwalex.mymonma.ui.navigation.Einnahmen
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import java.sql.Date
@@ -25,13 +27,27 @@ fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
     val list by wpdao.getWPBestandListe(Date(System.currentTimeMillis()))
         .collectAsState(initial = emptyList())
     if (list.isNotEmpty()) {
-        WPBestandList(list = list, navigateTo = navigateTo)
+        WPBestandList(list = list, navigateTo = navigateTo) { wp, trxArt ->
+            viewModel.wpstamm = wp
+            when (trxArt) {
+                WPTrxArt.Income -> {
+                    navigateTo(Einnahmen)
+                }
+
+                else -> {}
+            }
+
+        }
     }
 
 }
 
 @Composable
-fun WPBestandList(list: List<WPStammView>, navigateTo: (Destination) -> Unit) {
+fun WPBestandList(
+    list: List<WPStammView>,
+    navigateTo: (Destination) -> Unit,
+    action: (wp: WPStammView?, trx: WPTrxArt?) -> Unit
+) {
 
     Scaffold(topBar = {
         TopToolBar(title = "WPBestandList", navigateTo = {
@@ -43,7 +59,10 @@ fun WPBestandList(list: List<WPStammView>, navigateTo: (Destination) -> Unit) {
             columns = GridCells.Adaptive(minSize = 250.dp)
         ) {
             items(list, key = { item -> item.id!! }) { item ->
-                WPStammItem(item = item)
+                WPStammItem(item = item) { wptrx ->
+                    action(item, wptrx)
+
+                }
             }
         }
 

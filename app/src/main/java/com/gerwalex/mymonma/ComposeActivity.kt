@@ -37,6 +37,7 @@ import com.gerwalex.mymonma.main.App
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.DownloadKurse
+import com.gerwalex.mymonma.ui.navigation.ImportCashTrx
 import com.gerwalex.mymonma.ui.navigation.InProgress
 import com.gerwalex.mymonma.ui.navigation.MyNavHost
 import com.gerwalex.mymonma.ui.navigation.NotInProgress
@@ -98,10 +99,9 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
     fun navigateTo(destination: Destination) {
         when (destination) {
             DownloadKurse -> KursDownloadWorker.submit(this)
+            ImportCashTrx -> performFileSearch()
             else -> destination.navigate(navController)
         }
-
-
     }
 
     override fun onValueEntered(requestCode: Int, value: BigDecimal?) {

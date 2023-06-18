@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
+import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.enums.WPTrxArtMenu
 import com.gerwalex.mymonma.enums.WPTyp
 import com.gerwalex.mymonma.ui.AppTheme
@@ -58,7 +59,7 @@ data class WPStammView(
 )
 
 @Composable
-fun WPStammItem(item: WPStammView) {
+fun WPStammItem(item: WPStammView, action: (WPTrxArt) -> Unit) {
     Card(modifier = Modifier.padding(4.dp)) {
         Column(
             modifier = Modifier
@@ -76,7 +77,9 @@ fun WPStammItem(item: WPStammView) {
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onTertiary
                 )
-                WPTrxArtMenu(selected = {})
+                WPTrxArtMenu(selected = { trxArt ->
+                    action(trxArt)
+                })
             }
             Row(
                 modifier = Modifier
@@ -160,7 +163,7 @@ fun WPStammItemPreview() {
     )
     AppTheme {
         Surface {
-            WPStammItem(item)
+            WPStammItem(item) {}
 
         }
 

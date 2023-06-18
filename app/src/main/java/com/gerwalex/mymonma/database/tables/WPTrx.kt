@@ -54,7 +54,7 @@ data class WPTrx(
     var paketid: Long? = null,
     var kurs: Long = 0L,
     var menge: Long? = null,
-    var ertrag: Long? = null,
+    var ertrag: Long = 0,
     var einstand: Long? = null,
     var zinszahl: Long? = null,
     var haltedauer: Long? = null,
