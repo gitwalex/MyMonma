@@ -1,12 +1,13 @@
 package com.gerwalex.mymonma.ui.views
 
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.gerwalex.mymonma.database.room.DB.wpdao
@@ -24,33 +25,45 @@ import com.github.mikephil.charting.data.LineDataSet
 @Composable
 fun KursLineChart(wpStamm: WPStammView) {
     val kurse by wpdao.getWPKurse(wpStamm.id!!).collectAsState(initial = emptyList())
-    val entries = remember(kurse) {
-        ArrayList<Entry>().apply {
-            kurse.forEach { kurs ->
-                val x = kurs.btag
-                    .time
-                    .toFloat() / DateUtils.DAY_IN_MILLIS
-                val y = kurs.kurs.toFloat()
-                add(Entry(x, y))
-            }
-        }
-    }
-
-
+    val context = LocalContext.current
 
 
 
     Box {
-        AndroidView(update = { view ->
-            LineDataSet(entries, wpStamm.wpkenn).apply {
-                setDrawCircles(false)
-                setDrawValues(false)
-                color = android.R.color.holo_blue_dark
-                axisDependency = YAxis.AxisDependency.LEFT
-                values = entries
-                view.data = LineData(this)
-            }
+        AndroidView(
+            update = { view ->
+                val entries = ArrayList<Entry>().apply {
+                    kurse.forEach { kurs ->
+                        val x = kurs.btag
+                            .time
+                            .toFloat() / DateUtils.DAY_IN_MILLIS
+                        val y = kurs.kurs.toFloat()
+                        add(Entry(x, y))
+                    }
+                }
+                if (entries.size > 0) {
 
+                    Log.d("KursLineChart", "update ${wpStamm.name}, entries:${entries.size}")
+                    val set = LineDataSet(entries, wpStamm.wpkenn).apply {
+                        setDrawCircles(false)
+                        setDrawValues(false)
+                        axisDependency = YAxis.AxisDependency.LEFT
+                        val leftYAxisColor =
+                            ContextCompat.getColor(context, android.R.color.holo_blue_dark)
+                        color = leftYAxisColor
+                        values = entries
+                    }
+                    view.apply {
+                        data = LineData(set)
+                        if (xChartMax - xChartMin > 365) {
+                            setVisibleXRangeMaximum(365f)
+                        }
+                        animateX(500, Easing.EaseInOutQuad)
+                        resetViewPortOffsets()
+                        moveViewToX(xChartMax)
+                        invalidate()
+                    }
+                }
         },
 
             factory = {
@@ -75,22 +88,6 @@ fun KursLineChart(wpStamm: WPStammView) {
                     axisLeft.valueFormatter =
                         if (wpStamm.wptyp !== WPTyp.Index) MyConverter.currencyFormatter
                         else MyConverter.indexFormatter
-                    val ds = LineDataSet(entries, wpStamm.wpkenn).apply {
-                        setDrawCircles(false)
-                        setDrawValues(false)
-                        axisDependency = YAxis.AxisDependency.LEFT
-                        color = leftYAxisColor
-                        values = entries
-
-                    }
-                    data = LineData(ds)
-
-                    if (xChartMax - xChartMin > 365) {
-                        setVisibleXRangeMaximum(365f)
-                    }
-                    animateX(500, Easing.EaseInOutQuad)
-                    moveViewToX(xChartMax)
-
 
                 }
             })
