@@ -3,11 +3,11 @@ package com.gerwalex.mymonma.database.views
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,8 +66,9 @@ fun WPStammItem(item: WPStammView) {
         ) {
             Row(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.tertiary),
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -74,50 +76,62 @@ fun WPStammItem(item: WPStammView) {
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onTertiary
                 )
-                Spacer(modifier = Modifier.weight(1f))
                 WPTrxArtMenu(selected = {})
             }
             Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = stringResource(id = R.string.marktwert), fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.weight(1f))
                 AmountView(value = item.bestand / NACHKOMMA * item.lastkurs)
             }
             Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = stringResource(id = R.string.einstand))
-                Spacer(modifier = Modifier.weight(1f))
                 AmountView(value = item.einstand)
             }
             Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = stringResource(id = R.string.buchgewinn))
-                Spacer(modifier = Modifier.weight(1f))
                 AmountView(value = (item.bestand / NACHKOMMA * item.lastkurs) - item.einstand)
             }
             Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = stringResource(id = R.string.kurs))
-                Spacer(modifier = Modifier.weight(1f))
                 AmountView(value = item.lastkurs)
             }
             Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = stringResource(id = R.string.bestand))
-                Spacer(modifier = Modifier.weight(1f))
                 MengeView(value = item.bestand)
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
+                    .padding(2.dp)
+                    .border(1.dp, MaterialTheme.colorScheme.onSurface)
             ) {
-                KursLineChart(wpStamm = item)
+                if (!LocalInspectionMode.current)
+                    KursLineChart(wpStamm = item)
 
             }
 
@@ -129,12 +143,18 @@ fun WPStammItem(item: WPStammView) {
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Small Width",
+    uiMode = UI_MODE_NIGHT_NO,
+    device = "spec:height=1280dp,width=250dp,dpi=480"
+)
+
 @Composable
 fun WPStammItemPreview() {
     val item = WPStammView(
         name = "WPName",
-        bestand = 1000 * NACHKOMMA,
-        lastkurs = 1234,
+        bestand = 10000 * NACHKOMMA,
+        lastkurs = 12346,
         einstand = 987654
 
     )

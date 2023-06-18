@@ -11,6 +11,7 @@ import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.database.tables.CatClass
+import com.gerwalex.mymonma.database.tables.ImportAccount
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.database.tables.WPKurs
@@ -254,7 +255,7 @@ abstract class Dao(val db: DB) {
     abstract suspend fun insert(wpkurs: WPKurs)
 
     @Insert
-    protected abstract suspend fun insert(trx: CashTrx): Long
+    abstract suspend fun insert(trx: CashTrx): Long
 
     @Insert
     abstract suspend fun insert(partner: Partnerstamm): Long
@@ -268,10 +269,16 @@ abstract class Dao(val db: DB) {
     @Update
     abstract suspend fun update(partner: Partnerstamm)
 
+    @Update
+    abstract suspend fun update(cashTrx: CashTrx)
+
     @Delete
     abstract suspend fun delete(trx: CashTrx)
 
     @Query("Delete from TrxRegelm where id = :trxRegelmId or transferid = :trxRegelmId ")
     abstract suspend fun delete(trxRegelmId: Long)
+
+    @Query("Select * from ImportAccount")
+    abstract fun getImportAccounts(): Flow<List<ImportAccount>>
 
 }

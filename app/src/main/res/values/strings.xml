@@ -90,4 +90,5 @@
     <string name="wpbestandlist">Wertpapierbestand</string>
     <string name="kurs">Kurs</string>
     <string name="kursdatum">Kursdatum</string>
+    <string name="pakete">Pakete</string>
 </resources>

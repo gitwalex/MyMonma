@@ -20,6 +20,7 @@ data class CashTrxView(
     var imported: Boolean = false,
     var saldo: Long? = 0,
     var isUmbuchung: Boolean = false,
+    var importTrxID: Long? = null,
 ) {
     fun toCashTrx(): CashTrx {
         return CashTrx(

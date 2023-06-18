@@ -40,7 +40,7 @@ fun WPBestandList(list: List<WPStammView>, navigateTo: (Destination) -> Unit) {
     }) {
         LazyVerticalGrid(
             modifier = Modifier.padding(it),
-            columns = GridCells.Adaptive(minSize = 400.dp)
+            columns = GridCells.Adaptive(minSize = 250.dp)
         ) {
             items(list, key = { item -> item.id!! }) { item ->
                 WPStammItem(item = item)

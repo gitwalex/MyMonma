@@ -58,20 +58,23 @@ enum class WPTrxArt {
         override val catid = 2050L
         override val bezeichnung = R.string.verkauf
     },
-    WPSplitt {
-        override val catid = 2090L
-        override val bezeichnung = R.string.wpsplitt
-    },
     Income {
         override val catid = 0L
         override val bezeichnung = R.string.einnahmen
-        override val selectable = false
     },
     Stammdaten {
         override val catid = 0L
         override val bezeichnung = R.string.stammdaten
-        override val selectable = false
 
+    },
+    Pakete {
+        override val catid = 0L
+        override val bezeichnung = R.string.pakete
+
+    },
+    WPSplitt {
+        override val catid = 2090L
+        override val bezeichnung = R.string.wpsplitt
     },
     Spin_Off {
         override val catid = 2091L
@@ -81,41 +84,49 @@ enum class WPTrxArt {
     Stueckzins {
         override val catid = 2101L
         override val bezeichnung = R.string.stueckzins
+        override val selectable = false
 
     },
     Thesaurierung {
         override val catid = 2103L
         override val bezeichnung = R.string.thesaurierung
+        override val selectable = false
 
     },
     SonstEinnahmen {
         override val catid = 2104L
         override val bezeichnung = R.string.sonstEinnahmen
+        override val selectable = false
 
     },
     DivIn {
         override val catid = 2105L
         override val bezeichnung = R.string.dividende
+        override val selectable = false
 
     },
     DivAus {
         override val catid = 2106L
         override val bezeichnung = R.string.divAus
+        override val selectable = false
 
     },
     ZinsEin {
         override val catid = 2107L
         override val bezeichnung = R.string.zinsEin
+        override val selectable = false
 
     },
     Ausschuettung {
         override val catid = 2108L
         override val bezeichnung = R.string.ausschuettung
+        override val selectable = false
 
     },
     Einnahmen {
         override val catid = 2111L
         override val bezeichnung = R.string.einnahmen
+        override val selectable = false
 
     },
 

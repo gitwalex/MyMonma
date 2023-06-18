@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.gerwalex.monmang.database.tables.ImportTrx
 import java.sql.Date
 
 @Entity(
@@ -54,5 +55,14 @@ data class CashTrx(
     @ColumnInfo(index = true)
     var transferid: Long? = null,
     var isUmbuchung: Boolean? = false,
-)
+    val importTrxID: Long? = null
+) {
+    constructor(importTrx: ImportTrx) : this(accountid = importTrx.accountid) {
+        btag = importTrx.btag
+        amount = importTrx.amount
+        memo = importTrx.memo
+
+    }
+
+}
 

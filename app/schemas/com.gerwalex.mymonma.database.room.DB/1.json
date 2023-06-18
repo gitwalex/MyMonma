@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "82dda846ae17cdf43e87abbdd402c1eb",
+    "identityHash": "f33e2030fcb201a9e5fb7c07b5ee92e8",
     "entities": [
       {
         "tableName": "Account",
@@ -120,7 +120,7 @@
       },
       {
         "tableName": "CashTrx",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`transferid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, `importTrxID` INTEGER, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`transferid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -173,6 +173,12 @@
           {
             "fieldPath": "isUmbuchung",
             "columnName": "isUmbuchung",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "importTrxID",
+            "columnName": "importTrxID",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -419,6 +425,296 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "ImportAccount",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `typ` INTEGER NOT NULL, `verrechnungskonto` INTEGER NOT NULL, `fileprefix` TEXT NOT NULL, `classname` TEXT NOT NULL, FOREIGN KEY(`verrechnungskonto`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "typ",
+            "columnName": "typ",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verrechnungskonto",
+            "columnName": "verrechnungskonto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileprefix",
+            "columnName": "fileprefix",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classname",
+            "columnName": "classname",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ImportAccount_verrechnungskonto",
+            "unique": false,
+            "columnNames": [
+              "verrechnungskonto"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ImportAccount_verrechnungskonto` ON `${TABLE_NAME}` (`verrechnungskonto`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Account",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "verrechnungskonto"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ImportNewTrx",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `partnername` TEXT, `amount` INTEGER NOT NULL, `bonus` INTEGER NOT NULL, `memo` TEXT, `vormerkung` INTEGER NOT NULL, `bankverbindung` TEXT, FOREIGN KEY(`accountid`) REFERENCES `ImportAccount`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnername",
+            "columnName": "partnername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bonus",
+            "columnName": "bonus",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memo",
+            "columnName": "memo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "vormerkung",
+            "columnName": "vormerkung",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankverbindung",
+            "columnName": "bankverbindung",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ImportNewTrx_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ImportNewTrx_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ImportAccount",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ImportTrx",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `partnername` TEXT, `amount` INTEGER NOT NULL, `bonus` INTEGER NOT NULL, `memo` TEXT, `newTrx` INTEGER NOT NULL, `vormerkung` INTEGER NOT NULL, `umsatzid` INTEGER, `bankverbindung` TEXT, FOREIGN KEY(`accountid`) REFERENCES `ImportAccount`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`umsatzid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnername",
+            "columnName": "partnername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bonus",
+            "columnName": "bonus",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memo",
+            "columnName": "memo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newTrx",
+            "columnName": "newTrx",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vormerkung",
+            "columnName": "vormerkung",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "umsatzid",
+            "columnName": "umsatzid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bankverbindung",
+            "columnName": "bankverbindung",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ImportTrx_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ImportTrx_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          },
+          {
+            "name": "index_ImportTrx_umsatzid",
+            "unique": false,
+            "columnNames": [
+              "umsatzid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ImportTrx_umsatzid` ON `${TABLE_NAME}` (`umsatzid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ImportAccount",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "CashTrx",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "umsatzid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "TrxRegelm",
@@ -956,7 +1252,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '82dda846ae17cdf43e87abbdd402c1eb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f33e2030fcb201a9e5fb7c07b5ee92e8')"
     ]
   }
 }
