@@ -57,10 +57,14 @@ open class TrxImporter(private val context: Context) {
 
     private suspend fun checkNewCashTrans(newTrxs: List<ImportNewTrx>) {
         importdao.insertNewImportTrx(newTrxs)
-        importdao.getUnExistentImportTrx().collect { resultlist ->
+        importdao.getUnExistentImportTrx().also { resultlist ->
             val importTrxlist = ArrayList<ImportTrx>()
             resultlist.forEach { trx ->
-                importTrxlist.add(trx.getImportTrx())
+                trx.cnt.let {
+                    for (i in 0..it) {
+                        importTrxlist.add(trx.getImportTrx())
+                    }
+                }
             }
             importdao.insert(importTrxlist)
         }
@@ -121,7 +125,7 @@ open class TrxImporter(private val context: Context) {
         acc: ImportAccount,
         files: Array<File>
     ): Int {
-        val clazzname = "com.gerwalex.monmang.importer." + acc.classname
+        val clazzname = "com.gerwalex.mymonma.importer." + acc.classname
         val importClass = clazzname.instantiate(ImportClass::class.java)
         for (file in files) {
             val dest = File(App.getAppImportDir(context), file.name)
@@ -133,20 +137,22 @@ open class TrxImporter(private val context: Context) {
         return files.size
     }
 
-    interface ImportClass {
-
-        /**
-         * Wird vom TrxImporter aufgerufen und erwartet eine Liste der eingelesenen Trx. Die Liste
-         * muss auafsteigend sortiert sein - die neuesten Umsätze kommen zuletzt.
-         */
-        @Throws(IOException::class)
-        fun readCashTrx(account: ImportAccount, file: File): List<ImportNewTrx>
-    }
-
     data class PartnerCatid(
         val partnerid: Long,
         val catid: Long,
         val accountid: Long,
         val cnt: Int
     )
+
 }
+
+interface ImportClass {
+
+    /**
+     * Wird vom TrxImporter aufgerufen und erwartet eine Liste der eingelesenen Trx. Die Liste
+     * muss auafsteigend sortiert sein - die neuesten Umsätze kommen zuletzt.
+     */
+    @Throws(IOException::class)
+    fun readCashTrx(account: ImportAccount, file: File): List<ImportNewTrx>
+}
+

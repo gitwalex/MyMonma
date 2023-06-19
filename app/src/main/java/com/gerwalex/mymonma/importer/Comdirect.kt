@@ -10,7 +10,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Comdirect : TrxImporter.ImportClass {
+class Comdirect : ImportClass {
 
     private val df: DateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 

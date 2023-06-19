@@ -7,6 +7,8 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -22,9 +24,14 @@ object FileExt {
      */
     @Throws(IOException::class)
     fun File.copy(dest: File?) {
+        FileInputStream(this).copy(FileOutputStream(dest))
+    }
+
+    @Throws(IOException::class)
+    fun FileInputStream.copy(dest: FileOutputStream) {
         try {
-            FileInputStream(this).channel.use { inChannel ->
-                FileOutputStream(dest).channel.use { outChannel ->
+            this.channel.use { inChannel ->
+                dest.channel.use { outChannel ->
                     inChannel.transferTo(
                         0,
                         inChannel.size(),
@@ -35,6 +42,18 @@ object FileExt {
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         }
+    }
+
+    @Throws(IOException::class)
+    fun InputStream.copy(dest: OutputStream) {
+        val buffer = ByteArray(1024)
+        var length: Int
+        while (this.read(buffer).also { length = it } > 0) {
+            dest.write(buffer, 0, length)
+        }
+        dest.flush()
+        dest.close()
+        close()
     }
 
     /**

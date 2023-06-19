@@ -79,14 +79,13 @@ class App : Application() {
         }
 
         fun getAppDownloadDir(context: Context): File {
-            val fileDir = context.getExternalFilesDir(null)
-            val downloadDir = File(fileDir, downloadDirName)
+            val downloadDir = File(context.filesDir, downloadDirName)
             downloadDir.mkdirs()
             return downloadDir
         }
 
         fun getAppImportDir(context: Context): File {
-            val fileDir = context.getExternalFilesDir(null)
+            val fileDir = context.getExternalFilesDir(importDirName)
             val importDir = File(fileDir, importDirName)
             importDir.mkdirs()
             return importDir

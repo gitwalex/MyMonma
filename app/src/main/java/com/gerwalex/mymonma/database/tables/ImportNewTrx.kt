@@ -3,6 +3,7 @@ package com.gerwalex.monmang.database.tables
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.database.tables.ImportAccount
 import java.sql.Date
@@ -33,6 +34,8 @@ data class ImportNewTrx(
     var vormerkung: Boolean = false,
     var bankverbindung: String? = null,
 ) {
+    @Ignore
+    var cnt: Long = 0L
     fun getImportTrx(): ImportTrx {
         return ImportTrx(
             btag = btag,

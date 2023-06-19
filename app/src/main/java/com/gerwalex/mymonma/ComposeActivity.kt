@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
+import com.gerwalex.mymonma.ext.FileExt.copy
 import com.gerwalex.mymonma.ext.registerActivityForResult
 import com.gerwalex.mymonma.ext.registerforPermissionRequest
 import com.gerwalex.mymonma.main.App
@@ -139,20 +140,7 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
                                         getFileDisplayName(this@ComposeActivity, data)
                                 val selectedFileOutPutStream: OutputStream =
                                     FileOutputStream(filePath)
-                                val buffer = ByteArray(1024)
-                                var length: Int
-                                while (selectedFile
-                                        .read(buffer)
-                                        .also { length = it } > 0
-                                ) {
-                                    selectedFileOutPutStream.write(
-                                        buffer,
-                                        0,
-                                        length
-                                    )
-                                }
-                                selectedFileOutPutStream.flush()
-                                selectedFileOutPutStream.close()
+                                selectedFile.copy(selectedFileOutPutStream)
                                 val request = OneTimeWorkRequest
                                     .Builder(FileImportWorker::class.java)
                                     .build()

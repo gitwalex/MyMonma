@@ -52,11 +52,14 @@ abstract class ImportDao(val db: DB) {
      * ersten Spalte (== cnt) ist die Anzahl der Trx, die noch nicht in ImportTRx vorhanden sind.
      */
     @Query(
-        "select * " +  //
-                "from ImportNewTrx a "
-
+        "select count(*) -(select count(*) from ImportTrx b " +
+                "where a.accountid = b.accountid and a.btag = b.btag " +
+                "and a.amount = b. amount and a.partnername = b.partnername) " +  //
+                "as cnt , * " +  //
+                "from ImportNewTrx a " +  //
+                "group by accountid, btag, amount, partnername having cnt > 0"
     )
-    abstract fun getUnExistentImportTrx(): Flow<List<ImportNewTrx>>
+    abstract fun getUnExistentImportTrx(): List<ImportNewTrx>
 
     /**
      * Liste aller ImportTransaktionen, die (noch) nicht einem echten CashUmsatz zugeordnet sind
