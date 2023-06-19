@@ -52,7 +52,6 @@ data class TrxRegelmView(
 
     fun toCashTrx(): CashTrxView {
         return CashTrxView(
-            id = id,
             btag = btag,
             accountid = accountid,
             catid = catid,

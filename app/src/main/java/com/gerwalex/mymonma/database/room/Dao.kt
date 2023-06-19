@@ -24,6 +24,7 @@ import java.sql.Date
 
 @Dao
 abstract class Dao(val db: DB) {
+
     @Query(
         "Select a.*, " +
                 "p.name as partnername, " +

@@ -17,7 +17,7 @@ import java.sql.Date
 data class CashTrxView(
     var id: Long? = null,
     var btag: Date = Date(System.currentTimeMillis()),
-    var accountid: Long = -1,
+    var accountid: Long = 0,
     var catid: Long = -1,
     var partnerid: Long = 0,
     var amount: Long = 0,

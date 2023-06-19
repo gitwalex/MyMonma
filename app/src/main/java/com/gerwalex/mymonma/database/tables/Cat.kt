@@ -69,6 +69,7 @@ data class Cat(
 
     companion object {
 
+        const val AbgeltSteuerCatid: Long = 10040L
         const val CASHKONTOCATID = 1001L
         const val CATID = "CATID"
         const val DEPOTCATID = 1002L

@@ -7,6 +7,7 @@ import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm
 import com.gerwalex.mymonma.database.views.WPStammView
+import com.gerwalex.mymonma.wptrx.AccountBestand
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
@@ -129,5 +130,20 @@ abstract class WPDao(val db: DB) {
     )
 
     abstract suspend fun getWPStamm(wpid: Long): WPStamm
+
+    /**
+     * Ermittelt die Bestände eines WP zu einem Konto. Es werden nur konto mit Bestand berücksichtigt.
+     */
+    @Query(
+        "select a.id, name, verrechnungskonto, sum(menge) as bestand " +
+                "from cat a " +
+                "left outer join wptrx b on (a.id = b.accountid) " +
+                "left outer join Account c on (a.id = c.catid) " +
+                "where wpid = :wpid " +
+                "and paketid is null " +
+                "group by accountid having bestand > 0"
+    )
+    abstract fun getAccountBestand(wpid: Long): Flow<List<AccountBestand>>
+
 
 }

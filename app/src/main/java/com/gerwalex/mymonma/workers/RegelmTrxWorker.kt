@@ -19,22 +19,24 @@ object RegelmTrxWorker {
         val anzahlTage = context.preferences.getInt(PreferenceKey.AnzahlTage, 3)
         val date = Date(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS * anzahlTage)
         dao.getNextRegelmTrx(date).also { list ->
-            val title = context.getString(R.string.event_dauerauftrag)
-            val text = context.getString(
-                R.string.execute_regelTrx_anzahl,
-                list.size
-            )
-            val messages = StringBuilder()
-            list.forEach { trx ->
-                messages
-                    .append(trx.partnername)
-                    .append(": ")
-                    .append(MyConverter.convertToCurrency(trx.amount))
-                    .append(App.linefeed)
-                dao.execute(trx)
+            if (list.isNotEmpty()) {
+                val title = context.getString(R.string.event_dauerauftrag)
+                val text = context.getString(
+                    R.string.execute_regelTrx_anzahl,
+                    list.size
+                )
+                val messages = StringBuilder()
+                list.forEach { trx ->
+                    messages
+                        .append(trx.partnername)
+                        .append(": ")
+                        .append(MyConverter.convertToCurrency(trx.amount))
+                        .append(App.linefeed)
+                    dao.execute(trx)
 
+                }
+                context.createNotification(msgId, title, text, messages.toString())
             }
-            context.createNotification(msgId, title, text, messages.toString())
         }
     }
 

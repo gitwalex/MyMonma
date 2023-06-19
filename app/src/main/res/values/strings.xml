@@ -95,4 +95,5 @@
     <string name="ausmBetrag">Ausmachender Betrag</string>
     <string name="jeAnteil">je Anteil</string>
     <string name="imporCashTrx">Import Umsätze</string>
+    <string name="gesamtbestand">Gesamtbestand</string>
 </resources>
