@@ -21,6 +21,10 @@ import com.gerwalex.mymonma.database.tables.TrxRegelm;
 import com.gerwalex.mymonma.database.tables.WPKurs;
 import com.gerwalex.mymonma.database.tables.WPStamm;
 import com.gerwalex.mymonma.database.tables.WPTrx;
+import com.gerwalex.mymonma.database.views.AccountView;
+import com.gerwalex.mymonma.database.views.CashTrxView;
+import com.gerwalex.mymonma.database.views.TrxRegelmView;
+import com.gerwalex.mymonma.database.views.WPStammView;
 
 
 @Database(entities = {Account.class, CashTrx.class, Cat.class, CatClass.class, ImportAccount.class,
@@ -29,7 +33,7 @@ import com.gerwalex.mymonma.database.tables.WPTrx;
         //
         version = 1,
         //
-        views = {})
+        views = {AccountView.class, CashTrxView.class, TrxRegelmView.class, WPStammView.class})
 @TypeConverters({MonMaConverter.class, MyConverter.class})
 public abstract class DB extends RoomDatabase {
     public static String DBNAME;

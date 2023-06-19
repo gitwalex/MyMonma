@@ -35,7 +35,6 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
         private val tag: String = MaintenanceWorker::class.java.name
         fun enqueueMaintenanceWorker(context: Context): Operation {
             val maintenanceWork = PeriodicWorkRequestBuilder<MaintenanceWorker>(24, TimeUnit.HOURS)
-                .setInitialDelay(24, TimeUnit.HOURS)
                 .build()
             return WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 tag,

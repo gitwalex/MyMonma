@@ -74,10 +74,10 @@ abstract class WPDao(val db: DB) {
                 ",(SELECT kurs from WPKurs d where a.id = d.wpid and btag <= :btag " +
                 "group by wpid having max(btag)) as lastkurs  " +  //
                 ",(SELECT btag from WPKurs d  where a.id = d.wpid and btag <= :btag " +
-                "group by wpid having max(btag)) as lastbtag  " +  //
+                "group by wpid having max(btag)) as lastbtag  " +
                 "from WPStamm a  " +  //
                 "join Partnerstamm p on (p.id = a.partnerid) " +  //
-                "left outer join WPTrx b on (b.wpid = a.id) " +  //
+                "left outer join WPTrx b on (b.wpid = a.id) " +
                 "where paketid is null  " +  //
                 "and btag <= :btag " +  //
                 "group by wpid having bestand > 0 " +  //

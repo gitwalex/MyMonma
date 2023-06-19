@@ -141,6 +141,7 @@ fun CashTrxViewItem(trx: CashTrxView, navigateTo: (Destination) -> Unit) {
 @Composable
 fun CashTrxItemPreview() {
     val cashtrans = CashTrxView(
+        id = 0,
         amount = -123456L,
         memo = "Buchungstext oder VWZ",
     ).apply {

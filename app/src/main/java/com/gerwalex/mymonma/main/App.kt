@@ -72,8 +72,7 @@ class App : Application() {
         private val importDirName = "import"
 
         fun getAppBackupDir(context: Context): File {
-            val fileDir = context.getExternalFilesDir(null)
-            val backupDir = File(fileDir, backupDirName)
+            val backupDir = File(context.filesDir, backupDirName)
             backupDir.mkdirs()
             return backupDir
         }
@@ -85,8 +84,7 @@ class App : Application() {
         }
 
         fun getAppImportDir(context: Context): File {
-            val fileDir = context.getExternalFilesDir(importDirName)
-            val importDir = File(fileDir, importDirName)
+            val importDir = File(context.filesDir, importDirName)
             importDir.mkdirs()
             return importDir
         }

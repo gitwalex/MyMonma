@@ -16,6 +16,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -23,19 +28,51 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
+import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
+import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.enums.WPTrxArtMenu
 import com.gerwalex.mymonma.enums.WPTyp
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
+import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import com.gerwalex.mymonma.ui.content.MengeView
 import com.gerwalex.mymonma.ui.views.KursLineChart
 import java.sql.Date
 
+@DatabaseView(
+    "select a.*, name, total(menge) as bestand, total(einstand) as einstand " +
+            ",(select total(einstand) from wptrx where wpid = a.id " +
+            "and catid between 2001 and 2049) as gesamteinkaufpreis " +
+            ",(select count(einstand) from wptrx where wpid = a.id " +
+            "and catid between 2001 and 2049) as anzahlkauf " +
+            ",(select total(amount) from CashTrx c where a.id = c.partnerid  " +
+            "and catid between 2101 and 2199) as income " +
+            ",(select min(btag) from wptrx where wpid = a.id) as firstums " +
+            ",(select max(btag) from wptrx where wpid = a.id) as lastums " +
+            ",(select total(amount) from CashTrx  c where a.id = c.partnerid " +  //
+            "and catid between 2001 and 2049) as gesamtkauf  " +  //
+            ",(select total(amount) from CashTrx c where a.id = c.partnerid " +
+            "and catid in(2201)) as kursverlust " +
+            ",(select total(amount) from CashTrx c where a.id = c.partnerid " +
+            "and catid in(2200)) as kursgewinn " +  //
+            ",(SELECT kurs from WPKurs d where a.id = d.wpid  " +
+            "group by wpid having max(btag)) as lastkurs  " +  //
+            ",(SELECT btag from WPKurs d  where a.id = d.wpid  " +
+            "group by wpid having max(btag)) as lastbtag " +
+            "from WPStamm a  " +  //
+            "join Partnerstamm p on (p.id = a.partnerid) " +  //
+            "left outer join WPTrx b on (b.wpid = a.id) " +
+            "where paketid is null  " +  //
+            "group by accountid, wpid having bestand > 0 " +  //
+            "order by name"
+)
 data class WPStammView(
-    val id: Long? = null,
+    val id: Long,
     val name: String = "",
     val partnerid: Long = 0,
     val wpkenn: String = "",
@@ -55,8 +92,38 @@ data class WPStammView(
     val kursgewinn: Long = 0,
     val income: Long = 0,
     val lastkurs: Long = 0,
-    val lastbtag: Date? = Date(System.currentTimeMillis())
+    val lastbtag: Date? = Date(System.currentTimeMillis()),
 )
+
+@Composable
+fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
+    var wpstammname by remember { mutableStateOf(filter) }
+    var showDropdown by remember { mutableStateOf(true) }
+    val data by DB.dao.getWPStammlist(wpstammname).collectAsState(initial = emptyList())
+
+
+    AutoCompleteTextView(
+        modifier = Modifier.fillMaxWidth(),
+        query = wpstammname,
+        queryLabel = stringResource(id = R.string.wpstamm),
+        onQueryChanged = {
+            wpstammname = it
+        },
+        list = data,
+        onClearClick = { wpstammname = "" },
+        onDismissRequest = { },
+        onItemClick = { wpstamm ->
+            wpstammname = wpstamm.name
+            selected(wpstamm)
+            showDropdown = false
+        },
+        onFocusChanged = { hasFocus ->
+            showDropdown = hasFocus
+        }
+    ) { wpstamm ->
+        Text(wpstamm.name, fontSize = 14.sp)
+    }
+}
 
 @Composable
 fun WPStammItem(item: WPStammView, action: (WPTrxArt) -> Unit) {
@@ -155,6 +222,7 @@ fun WPStammItem(item: WPStammView, action: (WPTrxArt) -> Unit) {
 @Composable
 fun WPStammItemPreview() {
     val item = WPStammView(
+        id = 0,
         name = "WPName",
         bestand = 10000 * NACHKOMMA,
         lastkurs = 12346,

@@ -1,11 +1,21 @@
 package com.gerwalex.mymonma.database.views
 
 import androidx.room.ColumnInfo
+import androidx.room.DatabaseView
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.enums.Intervall
 import java.sql.Date
 
+@DatabaseView(
+    "SELECT a.* ," +
+            "p.name as partnername, acc.name as accountname, c.name as catname " +
+            "from TrxRegelm a " +
+            "left join Partnerstamm p on p.id = partnerid " +
+            "left join Cat acc on   acc.id = accountid " +
+            "left join Cat c on c.id = catid "
+
+)
 data class TrxRegelmView(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,

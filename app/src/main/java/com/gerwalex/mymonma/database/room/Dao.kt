@@ -108,13 +108,7 @@ abstract class Dao(val db: DB) {
      * komplett (mit Aufbau der Gegenbuchungen) neu eingefügt.
      */
     @Query(
-        "select a.*, " +
-                "p.name as partnername, acc.name as accountname, c.name as catname, " +
-                "c.catclassid, 0 as imported, 0 as saldo " +
-                "from CashTrx a " +
-                "left join Partnerstamm p on p.id = partnerid " +
-                "left join Cat acc on   acc.id = accountid " +
-                "left join Cat c on c.id = catid " +
+        "select * from CashTrxView a " +
                 "where a.id = :id or a.transferid = :id " +
                 "order by a.id"
     )
