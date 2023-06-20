@@ -64,11 +64,15 @@ data class CashTrx(
     @Ignore
     var catclassid: Long? = null
 
-    constructor(importTrx: ImportTrx) : this(accountid = importTrx.accountid) {
-        btag = importTrx.btag
-        amount = importTrx.amount
-        memo = importTrx.memo
+    companion object {
+        fun fromImportTrx(importTrx: ImportTrx, verrechnungskonto: Long): CashTrx {
+            return CashTrx(accountid = verrechnungskonto).apply {
+                btag = importTrx.btag
+                amount = importTrx.amount
+                memo = importTrx.memo
+            }
 
+        }
     }
 
     /**

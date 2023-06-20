@@ -11,7 +11,6 @@ import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.ImportAccount
 import com.gerwalex.mymonma.importer.TrxImporter
-import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 @Dao
@@ -68,7 +67,7 @@ abstract class ImportDao(val db: DB) {
         "SELECT * FROM IMPORTTRX  where  umsatzid is null and amount != 0 " +  //
                 "order by accountid, btag, id desc"
     )
-    abstract fun getOpenImportTrx(): Flow<List<ImportTrx>>
+    abstract suspend fun getOpenImportTrx(): List<ImportTrx>
 
     @Update
     abstract suspend fun update(trx: ImportTrx)
@@ -83,11 +82,11 @@ abstract class ImportDao(val db: DB) {
      */
     @Transaction
     open suspend fun update(list: List<ImportTrx>) {
-        for (importTrx in list) {
+        list.forEach { importTrx ->
             val cashTrx = importTrx.cashTrans
             cashTrx?.let {
                 if (cashTrx.id == null)
-                    dao.insert(cashTrx) else dao.update(cashTrx)
+                    cashTrx.id = dao.insert(cashTrx) else dao.update(cashTrx)
 
                 importTrx.umsatzid = cashTrx.id
                 update(importTrx)
@@ -113,12 +112,12 @@ abstract class ImportDao(val db: DB) {
                 "where a.btag between :von and :bis " +  //
                 "and a.accountid = :accountid and a.amount = :amount "
     )
-    abstract fun getCashTrx(
+    abstract suspend fun getCashTrx(
         accountid: Long,
         von: Date,
         bis: Date,
         amount: Long
-    ): Flow<List<CashTrx>>
+    ): List<CashTrx>
 
     /**
      * Ermittelt eine partnerid aus Cashtrans, die zu einem bereits importierten Umsatz mit dem

@@ -23,37 +23,36 @@ open class TrxImporter(private val context: Context) {
         bis: Date,
         newTrx: ImportTrx
     ) {
-        importdao.getCashTrx(verrechnungskonto, von, bis, newTrx.amount).collect { list ->
-            list.forEach { cashTrans ->
-                if (cashTrans.importTrxID != newTrx.id) {
-                    newTrx.cashTrans = cashTrans
-                    cashTrans.btag = newTrx.btag
-                }
-                if (newTrx.cashTrans == null) {
-                    // Bisher kein Treffer - neue Trx
-                    // erzeugen und ggfs. partnerid und catid aus
-                    // einer Cashtrans eines  bereits importierten
-                    // Umsatz mit gleichen Partnernamen übernehmen.
-                    val cashTrx = CashTrx(newTrx)
-                    newTrx.partnername?.let {
-                        importdao.getPartnerWithCatid(it)?.also { partner ->
-                            val cid = partner.catid
-                            if (cid == verrechnungskonto) {
-                                // Bei einer Umbuchung auf gleichem Konto accountid aus c
-                                // uebernehmen
-                                cashTrans.catid = partner.accountid
-                            } else {
-                                // ... sonst catid
-                                cashTrans.catid = cid
-                            }
-                            cashTrans.partnerid = partner.partnerid
-                        }
+        importdao.getCashTrx(verrechnungskonto, von, bis, newTrx.amount).onEach { cashTrx ->
+            if (cashTrx.importTrxID != newTrx.id) {
+                newTrx.cashTrans = cashTrx
+                cashTrx.btag = newTrx.btag
+            }
+        }
+        if (newTrx.cashTrans == null) {
+            // Bisher kein Treffer - neue Trx
+            // erzeugen und ggfs. partnerid und catid aus
+            // einer Cashtrans eines  bereits importierten
+            // Umsatz mit gleichen Partnernamen übernehmen.
+            val newCashTrx = CashTrx.fromImportTrx(newTrx, verrechnungskonto)
+            newTrx.partnername?.let {
+                importdao.getPartnerWithCatid(it)?.also { partner ->
+                    val cid = partner.catid
+                    if (cid == verrechnungskonto) {
+                        // Bei einer Umbuchung auf gleichem Konto accountid aus c
+                        // uebernehmen
+                        newCashTrx.catid = partner.accountid
+                    } else {
+                        // ... sonst catid
+                        newCashTrx.catid = cid
                     }
-                    newTrx.cashTrans = cashTrans
+                    newCashTrx.partnerid = partner.partnerid
                 }
+                newTrx.cashTrans = newCashTrx
             }
         }
     }
+
 
     private suspend fun checkNewCashTrans(newTrxs: List<ImportNewTrx>) {
         importdao.insertNewImportTrx(newTrxs)
@@ -76,7 +75,7 @@ open class TrxImporter(private val context: Context) {
      */
     private suspend fun checkOpenImportedTrx() {
         val newTrxList = ArrayList<ImportTrx>()
-        importdao.getOpenImportTrx().collect { list ->
+        importdao.getOpenImportTrx().also { list ->
             var accountidold = -1L
             var verrechnungskonto: Long? = null
             list.forEach { newTrx ->

@@ -12,7 +12,6 @@ import androidx.room.PrimaryKey
         childColumns = ["verrechnungskonto"],
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE,
-        deferred = true
     )]
 )
 data class ImportAccount(
