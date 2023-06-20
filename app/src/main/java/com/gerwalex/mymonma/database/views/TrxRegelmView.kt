@@ -8,12 +8,14 @@ import com.gerwalex.mymonma.enums.Intervall
 import java.sql.Date
 
 @DatabaseView(
-    "SELECT a.* ," +
-            "p.name as partnername, acc.name as accountname, c.name as catname " +
-            "from TrxRegelm a " +
-            "left join Partnerstamm p on p.id = partnerid " +
-            "left join Cat acc on   acc.id = accountid " +
-            "left join Cat c on c.id = catid "
+    """    
+        SELECT a.* ,
+        p.name as partnername, acc.name as accountname, c.name as catname 
+        from TrxRegelm a 
+        left join Partnerstamm p on p.id = partnerid    
+        left join Cat acc on   acc.id = accountid 
+        left join Cat c on c.id = catid
+"""
 
 )
 data class TrxRegelmView(

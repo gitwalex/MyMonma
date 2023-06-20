@@ -20,9 +20,11 @@ import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import java.sql.Date
 
 @DatabaseView(
-    "select name, supercatid, ausgeblendet, saldo , description, b.* " +
-            "from cat a  " +
-            "join Account b on (a.id = b.catid)"
+    """
+        select name, supercatid, ausgeblendet, saldo , description, b.* 
+        from cat a  
+        join Account b on (a.id = b.catid)
+    """
 )
 data class AccountView(
     var id: Long,

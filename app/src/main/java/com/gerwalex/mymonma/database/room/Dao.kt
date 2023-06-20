@@ -26,16 +26,11 @@ import java.sql.Date
 abstract class Dao(val db: DB) {
 
     @Query(
-        "Select a.*, " +
-                "p.name as partnername, " +
-                "acc.name as accountname, " +
-                "c.name as catname " +
-                "from TrxRegelm a " +
-                "left join Partnerstamm p on p.id = partnerid " +
-                "left join Cat acc on   acc.id = accountid " +
-                "left join Cat c on c.id = catid " +
-                "where transferid is null " + // keine Splittbuchungen
-                "order by btag"
+        """
+        Select * from TrxRegelmView 
+        where transferid is null 
+        order by btag
+        """
     )
     abstract fun getRegelmTrxList(): Flow<List<TrxRegelmView>>
 
@@ -70,7 +65,9 @@ abstract class Dao(val db: DB) {
     abstract suspend fun getSaldo(accountid: Long): Long
 
     @Query(
-        "select * from Cat where catclassid = " + KONTOCLASS
+        """
+        select * from Cat where catclassid = $KONTOCLASS
+        """
 //        "select * " +
 //                ",(select total(amount) from cashtrx where  transferid is null and a.id = accountid) " +
 //                " - (select total(amount) from cashtrx where catid = a.id) as saldo " +
@@ -87,17 +84,13 @@ abstract class Dao(val db: DB) {
     abstract fun getWPStammlist(filter: String): Flow<List<Partnerstamm>>
 
     @Query(
-        "select a.*, " +
-                "p.name as partnername, acc.name as accountname, c.name as catname, " +
-                "c.catclassid, 0 as imported, 0 as saldo " +
-                "from cashtrx a " +
-                "left join Partnerstamm p on p.id = partnerid " +
-                "left join Cat acc on   acc.id = accountid " +
-                "left join Cat c on c.id = catid " +
-                "where accountid = :accountid " +
-                "and (transferid is null " + // keine Splittbuchungen
-                "or c.catclassid = " + KONTOCLASS + ") " + // alle Gegenbuchungen
-                "order by btag desc, a.id "
+        """ 
+        select * from Cashtrxview
+        where accountid = :accountid 
+        and (transferid is null 
+        or catclassid = $KONTOCLASS )  
+        order by btag desc, id
+        """
     )
     abstract fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>>
 
@@ -199,14 +192,16 @@ abstract class Dao(val db: DB) {
     abstract suspend fun getNextRegelmTrx(btag: Date): List<TrxRegelmView>
 
     @Query(
-        "SELECT a.* ," +
-                "p.name as partnername, acc.name as accountname, c.name as catname " +
-                "from TrxRegelm a " +
-                "left join Partnerstamm p on p.id = partnerid " +
-                "left join Cat acc on   acc.id = accountid " +
-                "left join Cat c on c.id = catid " +
-                "where a.id = :id or a.transferid = :id " +
-                "order by a.id"
+        """
+        SELECT a.* , 
+        p.name as partnername, acc.name as accountname, c.name as catname 
+        from TrxRegelm a 
+        left join Partnerstamm p on p.id = partnerid 
+        left join Cat acc on   acc.id = accountid 
+        left join Cat c on c.id = catid 
+        where a.id = :id or a.transferid = :id 
+        order by a.id
+    """
     )
     abstract suspend fun getTrxRegelm(id: Long): List<TrxRegelmView>
 

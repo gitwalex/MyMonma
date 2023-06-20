@@ -6,13 +6,15 @@ import com.gerwalex.mymonma.database.tables.TrxRegelm
 import java.sql.Date
 
 @DatabaseView(
-    "select a.*, " +
-            "p.name as partnername, acc.name as accountname, c.name as catname, " +
-            "c.catclassid, 0 as imported, 0 as saldo " +
-            "from CashTrx a " +
-            "left join Partnerstamm p on p.id = partnerid " +
-            "left join Cat acc on   acc.id = accountid " +
-            "left join Cat c on c.id = catid "
+    """
+        select a.*, 
+        p.name as partnername, acc.name as accountname, c.name as catname, 
+        c.catclassid, 0 as imported, 0 as saldo
+        from CashTrx a 
+        left join Partnerstamm p on p.id = partnerid 
+        left join Cat acc on   acc.id = accountid 
+        left join Cat c on c.id = catid     
+"""
 )
 data class CashTrxView(
     var id: Long? = null,

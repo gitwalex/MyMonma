@@ -2,6 +2,7 @@ package com.gerwalex.mymonma.database.views
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -42,35 +43,39 @@ import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import com.gerwalex.mymonma.ui.content.MengeView
 import com.gerwalex.mymonma.ui.views.KursLineChart
+import kotlinx.android.parcel.Parcelize
 import java.sql.Date
 
 @DatabaseView(
-    "select a.*, name, total(menge) as bestand, total(einstand) as einstand " +
-            ",(select total(einstand) from wptrx where wpid = a.id " +
-            "and catid between 2001 and 2049) as gesamteinkaufpreis " +
-            ",(select count(einstand) from wptrx where wpid = a.id " +
-            "and catid between 2001 and 2049) as anzahlkauf " +
-            ",(select total(amount) from CashTrx c where a.id = c.partnerid  " +
-            "and catid between 2101 and 2199) as income " +
-            ",(select min(btag) from wptrx where wpid = a.id) as firstums " +
-            ",(select max(btag) from wptrx where wpid = a.id) as lastums " +
-            ",(select total(amount) from CashTrx  c where a.id = c.partnerid " +  //
-            "and catid between 2001 and 2049) as gesamtkauf  " +  //
-            ",(select total(amount) from CashTrx c where a.id = c.partnerid " +
-            "and catid in(2201)) as kursverlust " +
-            ",(select total(amount) from CashTrx c where a.id = c.partnerid " +
-            "and catid in(2200)) as kursgewinn " +  //
-            ",(SELECT kurs from WPKurs d where a.id = d.wpid  " +
-            "group by wpid having max(btag)) as lastkurs  " +  //
-            ",(SELECT btag from WPKurs d  where a.id = d.wpid  " +
-            "group by wpid having max(btag)) as lastbtag " +
-            "from WPStamm a  " +  //
-            "join Partnerstamm p on (p.id = a.partnerid) " +  //
-            "left outer join WPTrx b on (b.wpid = a.id) " +
-            "where paketid is null  " +  //
-            "group by accountid, wpid having bestand > 0 " +  //
-            "order by name"
+    """
+        select a.*, name, total(menge) as bestand, total(einstand) as einstand  
+        ,(select total(einstand) from wptrx where wpid = a.id  
+        and catid between 2001 and 2049) as gesamteinkaufpreis 
+        ,(select count(einstand) from wptrx where wpid = a.id 
+        and catid between 2001 and 2049) as anzahlkauf 
+        ,(select total(amount) from CashTrx c where a.id = c.partnerid  
+        and catid between 2101 and 2199) as income 
+        ,(select min(btag) from wptrx where wpid = a.id) as firstums 
+        ,(select max(btag) from wptrx where wpid = a.id) as lastums
+        ,(select total(amount) from CashTrx  c where a.id = c.partnerid   
+        and catid between 2001 and 2049) as gesamtkauf  
+        ,(select total(amount) from CashTrx c where a.id = c.partnerid 
+        and catid in(2201)) as kursverlust 
+        ,(select total(amount) from CashTrx c where a.id = c.partnerid 
+        and catid in(2200)) as kursgewinn   
+        ,(SELECT kurs from WPKurs d where a.id = d.wpid  
+        group by wpid having max(btag)) as lastkurs    
+        ,(SELECT btag from WPKurs d  where a.id = d.wpid  
+        group by wpid having max(btag)) as lastbtag 
+        from WPStamm a    
+        join Partnerstamm p on (p.id = a.partnerid)   
+        left outer join WPTrx b on (b.wpid = a.id) 
+        where paketid is null    
+        group by accountid, wpid having bestand > 0   
+        order by name
+"""
 )
+@Parcelize
 data class WPStammView(
     val id: Long,
     val name: String = "",
@@ -93,7 +98,7 @@ data class WPStammView(
     val income: Long = 0,
     val lastkurs: Long = 0,
     val lastbtag: Date? = Date(System.currentTimeMillis()),
-)
+) : Parcelable
 
 @Composable
 fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {

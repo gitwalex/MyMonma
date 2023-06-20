@@ -27,7 +27,7 @@ import java.text.DateFormat
 
 
 @Composable
-fun DateView(date: Date, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun DateView(date: Date, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     val dateformatter = remember { DateFormat.getDateInstance(DateFormat.DEFAULT) }
     Column(modifier) {
         Text(text = dateformatter.format(date),

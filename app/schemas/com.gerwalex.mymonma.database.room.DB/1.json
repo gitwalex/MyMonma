@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a8cd195c31f12de773ac19c7661ed1cd",
+    "identityHash": "51a531ec9c1d44b74ea9db8184b130c2",
     "entities": [
       {
         "tableName": "Account",
@@ -1252,24 +1252,24 @@
     "views": [
       {
         "viewName": "AccountView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select name, supercatid, ausgeblendet, saldo , description, b.* from cat a  join Account b on (a.id = b.catid)"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select name, supercatid, ausgeblendet, saldo , description, b.* \n        from cat a  \n        join Account b on (a.id = b.catid)"
       },
       {
         "viewName": "CashTrxView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, p.name as partnername, acc.name as accountname, c.name as catname, c.catclassid, 0 as imported, 0 as saldo from CashTrx a left join Partnerstamm p on p.id = partnerid left join Cat acc on   acc.id = accountid left join Cat c on c.id = catid"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, \n        p.name as partnername, acc.name as accountname, c.name as catname, \n        c.catclassid, 0 as imported, 0 as saldo\n        from CashTrx a \n        left join Partnerstamm p on p.id = partnerid \n        left join Cat acc on   acc.id = accountid \n        left join Cat c on c.id = catid"
       },
       {
         "viewName": "TrxRegelmView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT a.* ,p.name as partnername, acc.name as accountname, c.name as catname from TrxRegelm a left join Partnerstamm p on p.id = partnerid left join Cat acc on   acc.id = accountid left join Cat c on c.id = catid"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT a.* ,\n        p.name as partnername, acc.name as accountname, c.name as catname \n        from TrxRegelm a \n        left join Partnerstamm p on p.id = partnerid    \n        left join Cat acc on   acc.id = accountid \n        left join Cat c on c.id = catid"
       },
       {
         "viewName": "WPStammView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, name, total(menge) as bestand, total(einstand) as einstand ,(select total(einstand) from wptrx where wpid = a.id and catid between 2001 and 2049) as gesamteinkaufpreis ,(select count(einstand) from wptrx where wpid = a.id and catid between 2001 and 2049) as anzahlkauf ,(select total(amount) from CashTrx c where a.id = c.partnerid  and catid between 2101 and 2199) as income ,(select min(btag) from wptrx where wpid = a.id) as firstums ,(select max(btag) from wptrx where wpid = a.id) as lastums ,(select total(amount) from CashTrx  c where a.id = c.partnerid and catid between 2001 and 2049) as gesamtkauf  ,(select total(amount) from CashTrx c where a.id = c.partnerid and catid in(2201)) as kursverlust ,(select total(amount) from CashTrx c where a.id = c.partnerid and catid in(2200)) as kursgewinn ,(SELECT kurs from WPKurs d where a.id = d.wpid  group by wpid having max(btag)) as lastkurs  ,(SELECT btag from WPKurs d  where a.id = d.wpid  group by wpid having max(btag)) as lastbtag from WPStamm a  join Partnerstamm p on (p.id = a.partnerid) left outer join WPTrx b on (b.wpid = a.id) where paketid is null  group by accountid, wpid having bestand > 0 order by name"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, name, total(menge) as bestand, total(einstand) as einstand  \n        ,(select total(einstand) from wptrx where wpid = a.id  \n        and catid between 2001 and 2049) as gesamteinkaufpreis \n        ,(select count(einstand) from wptrx where wpid = a.id \n        and catid between 2001 and 2049) as anzahlkauf \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid  \n        and catid between 2101 and 2199) as income \n        ,(select min(btag) from wptrx where wpid = a.id) as firstums \n        ,(select max(btag) from wptrx where wpid = a.id) as lastums\n        ,(select total(amount) from CashTrx  c where a.id = c.partnerid   \n        and catid between 2001 and 2049) as gesamtkauf  \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid \n        and catid in(2201)) as kursverlust \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid \n        and catid in(2200)) as kursgewinn   \n        ,(SELECT kurs from WPKurs d where a.id = d.wpid  \n        group by wpid having max(btag)) as lastkurs    \n        ,(SELECT btag from WPKurs d  where a.id = d.wpid  \n        group by wpid having max(btag)) as lastbtag \n        from WPStamm a    \n        join Partnerstamm p on (p.id = a.partnerid)   \n        left outer join WPTrx b on (b.wpid = a.id) \n        where paketid is null    \n        group by accountid, wpid having bestand > 0   \n        order by name"
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8cd195c31f12de773ac19c7661ed1cd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51a531ec9c1d44b74ea9db8184b130c2')"
     ]
   }
 }
