@@ -82,7 +82,7 @@ data class AccountBestand(
             add(
                 main.copy(
                     catid = verrechnungskonto ?: id,
-                    amount = amount + abgeltSteuer,
+                    amount = -(amount + abgeltSteuer),
                     catclassid = Cat.KONTOCLASS
                 )
             )

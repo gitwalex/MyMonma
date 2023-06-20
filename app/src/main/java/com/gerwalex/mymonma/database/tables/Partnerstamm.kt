@@ -31,7 +31,7 @@ data class Partnerstamm(
     }
 
     companion object {
-        const val Undefined = -1L
+        const val Undefined = 0L
     }
 }
 

@@ -3,6 +3,7 @@ package com.gerwalex.mymonma.database.tables
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.gerwalex.monmang.database.tables.ImportTrx
 import java.sql.Date
@@ -57,11 +58,35 @@ data class CashTrx(
     var isUmbuchung: Boolean? = false,
     val importTrxID: Long? = null
 ) {
+    @Ignore
+    var partnername: String? = null
+
+    @Ignore
+    var catclassid: Long? = null
+
     constructor(importTrx: ImportTrx) : this(accountid = importTrx.accountid) {
         btag = importTrx.btag
         amount = importTrx.amount
         memo = importTrx.memo
 
+    }
+
+    /**
+     * Gegenbuchung zur Buchung.
+     * Übernahme aller Daten 1:1, Tausch accountid <-> catid,
+     * transferid entspricht id des Umsatzes, id ist null
+     */
+    fun toGegenbuchung(): CashTrx {
+        return CashTrx(
+            btag = btag,
+            catid = accountid,
+            accountid = catid,
+            partnerid = partnerid,
+            amount = -amount,
+            memo = memo,
+            transferid = id,
+            isUmbuchung = true,
+        )
     }
 
 }

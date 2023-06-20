@@ -163,6 +163,49 @@ abstract class Dao(val db: DB) {
 
     }
 
+    /**
+     * Einfügen/Update einer CashTrx.
+     * Zuerst entfernen der gesamten ursprünglichen Buchung.
+     * Danach Einfügen der einzelnen Sätze, die Transferid ab dem zweiten Satz entspricht
+     * der id des ersten Satzes.
+     * Gegenbuchungen werden jewils mit aufgebaut und sind schon beim Lesen aus der DB nicht mitgekommen.
+     */
+
+    @Transaction
+    open suspend fun insertCashTrx(list: List<CashTrx>) {
+        if (list.isNotEmpty()) {
+            val main = list[0]
+            delete(main) // Alle weg w/referientieller Integritaet
+            if (main.partnerid == Undefined) {
+                main.partnername?.let {// neuer Partner!!
+                    Partnerstamm(name = it).apply {
+                        id = insert(this)
+                    }
+                }
+            }
+            val accounts = HashSet<Long>()
+            list.forEachIndexed { index, item ->
+                if (index != 0) {
+                    item.transferid = main.id
+                }
+                accounts.add(item.accountid)
+                item.id = insert(item)
+                if (item.catclassid == KONTOCLASS) { // Die catclassid ist die catclass der Cat.
+                    insert(item.toGegenbuchung())
+                    accounts.add(item.catid)
+                }
+                Log.d("Dao", "insertCashTrxView: [$index]:$item")
+            }
+            // CashSalden aktualisieren
+            accounts.forEach {
+                updateCashSaldo(it)
+            }
+
+
+        }
+
+    }
+
     @Query("select * from cat where id = :accountid and catclassid = $KONTOCLASS")
     abstract fun getAccountData(accountid: Long): Flow<Cat>
 
@@ -211,7 +254,7 @@ abstract class Dao(val db: DB) {
             DB.dao.getTrxRegelm(id).also { item ->
                 val cashTrx = ArrayList<CashTrxView>()
                 item.forEach {
-                    cashTrx.add(it.toCashTrx())
+                    cashTrx.add(it.toCashTrxView())
                 }
                 DB.dao.insertCashTrxView(cashTrx)
                 when (trx.intervall) {
