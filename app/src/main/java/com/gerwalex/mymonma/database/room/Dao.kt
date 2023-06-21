@@ -133,47 +133,6 @@ abstract class Dao(val db: DB) {
      */
 
     @Transaction
-    open suspend fun insertCashTrxView(list: List<CashTrxView>) {
-        if (list.isNotEmpty()) {
-            val main = list[0]
-            delete(main.toCashTrx()) // Alle weg w/referientieller Integritaet
-            if (main.partnerid == Undefined && main.partnername.isNotEmpty()) {// neuer Partner!!
-                Partnerstamm(name = main.partnername).apply {
-                    id = insert(this)
-                }
-            }
-            val accounts = HashSet<Long>()
-            list.forEachIndexed { index, item ->
-                if (index != 0) {
-                    item.transferid = main.id
-                }
-                accounts.add(item.accountid)
-                item.id = insert(item.toCashTrx())
-                if (item.catclassid == KONTOCLASS) { // Die catclassid ist die catclass der Cat.
-                    insert(item.toGegenbuchung())
-                    accounts.add(item.catid)
-                }
-                Log.d("Dao", "insertCashTrxView: [$index]:$item")
-            }
-            // CashSalden aktualisieren
-            accounts.forEach {
-                updateCashSaldo(it)
-            }
-
-
-        }
-
-    }
-
-    /**
-     * Einfügen/Update einer CashTrx.
-     * Zuerst entfernen der gesamten ursprünglichen Buchung.
-     * Danach Einfügen der einzelnen Sätze, die Transferid ab dem zweiten Satz entspricht
-     * der id des ersten Satzes.
-     * Gegenbuchungen werden jewils mit aufgebaut und sind schon beim Lesen aus der DB nicht mitgekommen.
-     */
-
-    @Transaction
     open suspend fun insertCashTrx(list: List<CashTrx>) {
         if (list.isNotEmpty()) {
             val main = list[0]
@@ -262,11 +221,11 @@ abstract class Dao(val db: DB) {
     open suspend fun execute(trx: TrxRegelmView) {
         trx.id?.let { id ->
             DB.dao.getTrxRegelm(id).also { item ->
-                val cashTrx = ArrayList<CashTrxView>()
+                val cashTrx = ArrayList<CashTrx>()
                 item.forEach {
-                    cashTrx.add(it.toCashTrxView())
+                    cashTrx.add(it.cashTrx)
                 }
-                DB.dao.insertCashTrxView(cashTrx)
+                DB.dao.insertCashTrx(cashTrx)
                 when (trx.intervall) {
                     Intervall.Einmalig -> {
                         delete(id)

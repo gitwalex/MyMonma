@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.AddRegelmTrxScreen
-import com.gerwalex.mymonma.ui.screens.CashTrxList
+import com.gerwalex.mymonma.ui.screens.CashTrxListScreen
 import com.gerwalex.mymonma.ui.screens.EditCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.EditRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.HomeScreen
@@ -30,7 +30,7 @@ fun MyNavHost(
             ImportScreen(navigateTo)
         }
         composable(CashTrxList.name) {
-            CashTrxList(viewModel, navigateTo)
+            CashTrxListScreen(viewModel, navigateTo)
         }
         composable(RegelmTrxList.name) {
             RegelmTrxList(viewModel, navigateTo)

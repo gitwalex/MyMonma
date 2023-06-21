@@ -20,6 +20,7 @@ import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
+import com.gerwalex.mymonma.ui.navigation.CashTrxList
 import com.gerwalex.mymonma.ui.navigation.Destination
 
 @Composable
@@ -40,7 +41,7 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                 {
                     AccountListItem(it) {
                         viewModel.accountid = it.id!!
-                        navigateTo(com.gerwalex.mymonma.ui.navigation.CashTrxList)
+                        navigateTo(CashTrxList)
                     }
 
                 }

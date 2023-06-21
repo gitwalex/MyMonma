@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.room.Ignore
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
-import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.ui.AppTheme
@@ -63,8 +63,8 @@ data class AccountBestand(
     var kurs: Long = 0
 
     suspend fun insertIncome(btag: Date, wp: WPStammView, trxArt: WPTrxArt) {
-        val trxList = ArrayList<CashTrxView>()
-        val main = CashTrxView(
+        val trxList = ArrayList<CashTrx>()
+        val main = CashTrx(
             accountid = id,
             btag = btag,
             amount = amount,
@@ -81,12 +81,12 @@ data class AccountBestand(
             )
             add(
                 main.copy(
-                    catid = verrechnungskonto ?: id,
-                    amount = -(amount + abgeltSteuer),
-                    catclassid = Cat.KONTOCLASS
+                    accountid = verrechnungskonto ?: id,
+                    catid = id,
+                    amount = amount + abgeltSteuer,
                 )
             )
-            DB.dao.insertCashTrxView(trxList)
+            DB.dao.insertCashTrx(trxList)
 
         }
     }

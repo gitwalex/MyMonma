@@ -44,6 +44,7 @@ import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompleteCatView
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat.Companion.NOCATID
 import com.gerwalex.mymonma.database.tables.Cat.Companion.SPLITBUCHUNGCATID
 import com.gerwalex.mymonma.database.tables.CatClass
@@ -73,7 +74,7 @@ fun AddCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
     EditCashTrxScreen(list = list) { save ->
         scope.launch {
             save?.let {
-                dao.insertCashTrxView(save)
+                dao.insertCashTrx(save)
             }
             navigateTo(Up)
         }
@@ -90,7 +91,7 @@ fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
         EditCashTrxScreen(list = list) { save ->
             scope.launch {
                 save?.let {
-                    dao.insertCashTrxView(save)
+                    dao.insertCashTrx(save)
                 }
                 navigateTo(Up)
 
@@ -108,7 +109,7 @@ fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
 @Composable
 fun EditCashTrxScreen(
     list: List<CashTrxView>,
-    onFinished: (save: List<CashTrxView>?) -> Unit
+    onFinished: (save: List<CashTrx>?) -> Unit
 ) {
     if (list.isNotEmpty()) {
         val trx = list[0]
@@ -136,9 +137,11 @@ fun EditCashTrxScreen(
                         IconButton(
                             enabled = differenz == 0L,
                             onClick = {
-                                ArrayList<CashTrxView>().apply {
-                                    add(trx)
-                                    addAll(splitlist)
+                                ArrayList<CashTrx>().apply {
+                                    add(trx.toCashTrx())
+                                    splitlist.forEach {
+                                        add(it.cashTrx)
+                                    }
                                     onFinished(this)
                                 }
                             }) {

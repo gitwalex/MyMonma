@@ -53,29 +53,19 @@ data class TrxRegelmView(
     @Ignore
     val intervallname = intervall.intervallNameTextResID
 
-    fun toCashTrxView(): CashTrxView {
-        return CashTrxView(
-            btag = btag,
-            accountid = accountid,
-            catid = catid,
-            partnerid = partnerid,
-            amount = amount,
-            memo = memo,
-            transferid = transferid,
-        )
-    }
 
-    fun toCashTrx(): CashTrx {
-        return CashTrx(
-            btag = btag,
-            accountid = accountid,
-            catid = catid,
-            partnerid = partnerid,
-            amount = amount,
-            memo = memo,
-            transferid = transferid,
-        )
-    }
+    val cashTrx: CashTrx
+        get() {
+            return CashTrx(
+                btag = btag,
+                accountid = accountid,
+                catid = catid,
+                partnerid = partnerid,
+                amount = amount,
+                memo = memo,
+                transferid = transferid,
+            )
+        }
 
 
     /**

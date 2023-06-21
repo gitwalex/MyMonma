@@ -46,7 +46,7 @@ import java.text.DateFormat
 
 
 @Composable
-fun CashTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun CashTrxListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val accountid = rememberSaveable { viewModel.accountid }
     val list by dao.getCashTrxList(accountid).collectAsState(initial = emptyList())
     val account by dao.getAccountData(accountid).collectAsState(initial = Cat())

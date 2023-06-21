@@ -34,6 +34,20 @@ data class CashTrxView(
     var isUmbuchung: Boolean = false,
     var importTrxID: Long? = null,
 ) {
+    val cashTrx: CashTrx
+        get() {
+            return CashTrx(
+                id = id,
+                btag = btag,
+                accountid = accountid,
+                catid = catid,
+                partnerid = partnerid,
+                amount = amount,
+                memo = memo,
+                transferid = transferid,
+            )
+        }
+
     fun toCashTrx(): CashTrx {
         return CashTrx(
             id = id,
