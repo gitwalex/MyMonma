@@ -41,9 +41,13 @@ abstract class Dao(val db: DB) {
     abstract fun getPartnerlist(filter: String): Flow<List<Partnerstamm>>
 
     @Query(
-        "Select * from Cat " +//
-                "where name like '%'|| :filter||'%' and not ausgeblendet and supercatid != 1002 " +  //
-                "order by cnt desc, name"
+        """
+        Select * from Cat 
+        where name like '%'|| :filter||'%' 
+        and not ausgeblendet 
+        and (id > 10001 or supercatid = ${Cat.CASHKONTOCATID}) 
+        order by cnt desc, name
+        """
     )
     abstract fun getCatlist(filter: String): Flow<List<Cat>>
 

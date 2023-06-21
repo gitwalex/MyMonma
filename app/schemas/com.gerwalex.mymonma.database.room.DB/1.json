@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fb144b611ce433e65557c2b866483a06",
+    "identityHash": "786371df56238c2125b2c1b77c6ae6cb",
     "entities": [
       {
         "tableName": "Account",
@@ -1250,7 +1250,7 @@
       },
       {
         "viewName": "CashTrxView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, \n        p.name as partnername, acc.name as accountname, c.name as catname, \n        c.catclassid, 0 as imported, 0 as saldo\n        from CashTrx a \n        left join Partnerstamm p on p.id = partnerid \n        left join Cat acc on   acc.id = accountid \n        left join Cat c on c.id = catid"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*\n        ,(select name from Partnerstamm  p where p.id = a.accountid) as partnername\n        ,(select name from Cat c where c.id = a.accountid) as accountname \n\t\t,c.name as catname, c.catclassid\n\t\t,t.id as importTrxId\n        from CashTrx a \n        left join Cat c on c.id = catid\n        left outer join ImportTrx t on a.id = t.umsatzid"
       },
       {
         "viewName": "TrxRegelmView",
@@ -1263,7 +1263,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb144b611ce433e65557c2b866483a06')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '786371df56238c2125b2c1b77c6ae6cb')"
     ]
   }
 }

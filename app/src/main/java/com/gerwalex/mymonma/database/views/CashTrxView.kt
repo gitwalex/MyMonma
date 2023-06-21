@@ -1,19 +1,38 @@
 package com.gerwalex.mymonma.database.views
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.database.tables.CashTrx
-import com.gerwalex.mymonma.database.tables.TrxRegelm
+import com.gerwalex.mymonma.ui.AppTheme
+import com.gerwalex.mymonma.ui.Color
+import com.gerwalex.mymonma.ui.content.AmountView
 import java.sql.Date
+import java.text.DateFormat
 
 @DatabaseView(
-    """
-        select a.*, 
-        p.name as partnername, acc.name as accountname, c.name as catname, 
-        c.catclassid, 0 as imported, 0 as saldo
+    """ 
+        select a.*
+        ,(select name from Partnerstamm  p where p.id = a.partnerid) as partnername
+        ,(select name from Cat c where c.id = a.accountid) as accountname 
+		,c.name as catname, c.catclassid
+		,t.id as importTrxId
         from CashTrx a 
-        left join Partnerstamm p on p.id = partnerid 
-        left join Cat acc on   acc.id = accountid 
-        left join Cat c on c.id = catid     
+        left join Cat c on c.id = catid
+        left outer join ImportTrx t on a.id = t.umsatzid 
 """
 )
 data class CashTrxView(
@@ -29,10 +48,9 @@ data class CashTrxView(
     var partnername: String = "",
     var catname: String = "",
     var catclassid: Long = -1,
-    var imported: Boolean = false,
     var saldo: Long? = 0,
     var isUmbuchung: Boolean = false,
-    var importTrxID: Long? = null,
+    var importTrxId: Long? = null,
 ) {
     val cashTrx: CashTrx
         get() {
@@ -47,42 +65,65 @@ data class CashTrxView(
                 transferid = transferid,
             )
         }
+}
 
-    fun toCashTrx(): CashTrx {
-        return CashTrx(
-            id = id,
-            btag = btag,
-            accountid = accountid,
-            catid = catid,
-            partnerid = partnerid,
-            amount = amount,
-            memo = memo,
-            transferid = transferid,
+@Composable
+fun CashTrxViewItem(trx: CashTrxView) {
+    Column(
+        modifier = Modifier
+            .wrapContentHeight()
+            .padding(8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .wrapContentHeight()
+                .background(
+                    trx.importTrxId?.let {
+                        Color.importedCashTrx
+                    } ?: Color.cashTrx
+                )
+        ) {
+            Text(
+                text = DateFormat.getDateInstance().format(trx.btag),
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = trx.partnername,
+                maxLines = 1,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
 
             )
+            AmountView(value = trx.amount, fontWeight = FontWeight.Bold)
+        }
+        Text(text = trx.memo ?: "")
+        Text(text = trx.catname)
+
     }
 
-    /**
-     * Gegenbuchung zur Buchung.
-     * Übernahme aller Daten 1:1, Tausch accountid <-> catid,
-     * transferid entspricht id des Umsatzes, id ist null
-     */
-    fun toGegenbuchung(): CashTrx {
-        return CashTrx(
-            btag = btag,
-            catid = accountid,
-            accountid = catid,
-            partnerid = partnerid,
-            amount = -amount,
-            memo = memo,
-            transferid = id,
-            isUmbuchung = true,
-        )
-    }
+}
 
-    companion object {
-        fun fromRegelmTrx(trx: TrxRegelm) {
+@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun CashTrxItemPreview() {
+    AppTheme {
+        Surface {
+            val cashtrans = CashTrxView(
+                id = 0,
+                amount = -123456L,
+                memo = "Buchungstext oder VWZ",
+            ).apply {
+                accountname = "My Account"
+                catname = "Kategorie"
+                partnername = "CashTrx Partner"
+                saldo = 12345678L
+
+            }
+            CashTrxViewItem(trx = cashtrans)
 
         }
     }
 }
+

@@ -138,7 +138,7 @@ fun EditCashTrxScreen(
                             enabled = differenz == 0L,
                             onClick = {
                                 ArrayList<CashTrx>().apply {
-                                    add(trx.toCashTrx())
+                                    add(trx.cashTrx)
                                     splitlist.forEach {
                                         add(it.cashTrx)
                                     }
