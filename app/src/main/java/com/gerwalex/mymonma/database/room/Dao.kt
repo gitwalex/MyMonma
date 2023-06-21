@@ -190,7 +190,7 @@ abstract class Dao(val db: DB) {
                 }
                 accounts.add(item.accountid)
                 item.id = insert(item)
-                if (item.catclassid == KONTOCLASS) { // Die catclassid ist die catclass der Cat.
+                if (item.isUmbuchung == true) { //
                     insert(item.toGegenbuchung())
                     accounts.add(item.catid)
                 }

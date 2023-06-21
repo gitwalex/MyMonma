@@ -8,6 +8,7 @@ import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.room.DB.importdao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.ImportAccount
+import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.ext.FileExt.copy
 import com.gerwalex.mymonma.ext.instantiate
 import com.gerwalex.mymonma.main.App
@@ -47,6 +48,11 @@ open class TrxImporter(private val context: Context) {
                         newCashTrx.catid = cid
                     }
                     newCashTrx.partnerid = partner.partnerid
+                }
+                if (newCashTrx.partnerid == Undefined) {
+                    // noch kein Partner gefunden...
+                    // mal gucken, ob nicht doch einen gibt, ansonsten Undefined
+                    newCashTrx.partnerid = importdao.getPartnerid(it) ?: Undefined
                 }
                 newTrx.cashTrans = newCashTrx
             }

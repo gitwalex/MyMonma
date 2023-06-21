@@ -135,4 +135,11 @@ abstract class ImportDao(val db: DB) {
     )
     abstract suspend fun getPartnerWithCatid(importpartnername: String): TrxImporter.PartnerCatid?
 
+    @Query(
+        """
+        select id from partnerstamm where name = :partnername
+    """
+    )
+    abstract suspend fun getPartnerid(partnername: String): Long?
+
 }

@@ -80,6 +80,7 @@ private suspend fun executeImport(context: Context, status: (String) -> Unit): B
             db.execSQL("Delete from cashtrx")
             db.execSQL("Delete from trxregelm")
             db.execSQL("Delete from wpstamm where id > 1")
+            db.execSQL("Delete from importtrx")
             db.execSQL("Delete from importaccount")
             db.execSQL("Delete from account")
             db.execSQL("Delete from partnerstamm where id > 1")
@@ -135,10 +136,17 @@ private fun executeImportStatements(db: SupportSQLiteDatabase) {
     db.execSQL("UPDATE Cat SET name=REPLACE(name,']', '')")
     // Einfügen gegenbuchungen
     db.execSQL(
-        "insert into CashTrx (btag, partnerid,accountid,  catid, " +
-                "amount, memo, transferid, isUmbuchung)" +
-                "select btag, partnerid,catid, accountid, -amount, memo, id, 1 " +
-                "from CashTrx where catid between 1 and 99 "
+        """
+        insert into CashTrx (btag, partnerid,accountid,  catid,
+        amount, memo, transferid, isUmbuchung) 
+        select btag, partnerid,catid, accountid, -amount, memo, id, 1 
+        from CashTrx where catid between 1 and 99 
+    """.trimIndent()
+    )
+    db.execSQL(
+        """
+            update cashtrx set isUmbuchung = 0 where isUmbuchung is null
+        """.trimIndent()
     )
 
 }

@@ -70,6 +70,7 @@ data class CashTrx(
                 btag = importTrx.btag
                 amount = importTrx.amount
                 memo = importTrx.memo
+                partnername = importTrx.partnername
             }
 
         }
@@ -89,7 +90,6 @@ data class CashTrx(
             amount = -amount,
             memo = memo,
             transferid = id,
-            isUmbuchung = true,
         )
     }
 
