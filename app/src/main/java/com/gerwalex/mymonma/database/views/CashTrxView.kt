@@ -48,7 +48,6 @@ data class CashTrxView(
     var partnername: String = "",
     var catname: String = "",
     var catclassid: Long = -1,
-    var saldo: Long? = 0,
     var isUmbuchung: Boolean = false,
     var importTrxId: Long? = null,
 ) {
@@ -63,6 +62,7 @@ data class CashTrxView(
                 amount = amount,
                 memo = memo,
                 transferid = transferid,
+                isUmbuchung = isUmbuchung
             )
         }
 }
@@ -118,7 +118,6 @@ fun CashTrxItemPreview() {
                 accountname = "My Account"
                 catname = "Kategorie"
                 partnername = "CashTrx Partner"
-                saldo = 12345678L
 
             }
             CashTrxViewItem(trx = cashtrans)

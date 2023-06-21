@@ -93,8 +93,7 @@ abstract class Dao(val db: DB) {
         """ 
         select * from Cashtrxview
         where accountid = :accountid 
-        and (transferid is null 
-        or catclassid = $KONTOCLASS )  
+        and (transferid is null or isUmbuchung )  
         order by btag desc, id
         """
     )
@@ -260,8 +259,21 @@ abstract class Dao(val db: DB) {
     @Insert
     abstract suspend fun insert(wpkurs: WPKurs)
 
+    suspend fun insert(cashTrx: CashTrx): Long {
+        with(cashTrx) {
+            if (partnerid == Undefined) {
+                partnername?.let {// neuer Partner!!
+                    Partnerstamm(name = it).apply {
+                        partnerid = insert(this)
+                    }
+                }
+            }
+            return _insert(this)
+        }
+    }
+
     @Insert
-    abstract suspend fun insert(trx: CashTrx): Long
+    abstract suspend fun _insert(trx: CashTrx): Long
 
     @Insert
     abstract suspend fun insert(partner: Partnerstamm): Long

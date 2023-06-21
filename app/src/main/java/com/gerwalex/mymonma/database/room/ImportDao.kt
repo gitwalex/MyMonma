@@ -1,5 +1,6 @@
 package com.gerwalex.mymonma.database.room
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,8 +9,8 @@ import androidx.room.Update
 import com.gerwalex.monmang.database.tables.ImportNewTrx
 import com.gerwalex.monmang.database.tables.ImportTrx
 import com.gerwalex.mymonma.database.room.DB.dao
-import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.ImportAccount
+import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.importer.TrxImporter
 import java.sql.Date
 
@@ -70,7 +71,7 @@ abstract class ImportDao(val db: DB) {
     abstract suspend fun getOpenImportTrx(): List<ImportTrx>
 
     @Update
-    abstract suspend fun update(trx: ImportTrx)
+    abstract suspend fun _update(trx: ImportTrx)
 
     @Query("Select * from ImportAccount where id = :accountid")
     abstract suspend fun getImportAccount(accountid: Long): ImportAccount
@@ -81,43 +82,42 @@ abstract class ImportDao(val db: DB) {
      * den Status onlinUnsatz
      */
     @Transaction
-    open suspend fun update(list: List<ImportTrx>) {
-        list.forEach { importTrx ->
-            val cashTrx = importTrx.cashTrans
-            cashTrx?.let {
+    open suspend fun update(importTrx: ImportTrx) {
+        try {
+            importTrx.cashTrans?.let { cashTrx ->
                 if (cashTrx.id == null)
                     cashTrx.id = dao.insert(cashTrx) else dao.update(cashTrx)
 
                 importTrx.umsatzid = cashTrx.id
-                update(importTrx)
+                _update(importTrx)
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.d("ImportDao", "importTrx=$importTrx, cashtrans=${importTrx.cashTrans} ")
         }
     }
 
     /**
      * Liefert Transaktion zu einem Konto mit bestimmtem Betrag, welche zwischen von und bis liegt
-     * und noch nicht alsOnline-Trx markiert ist.
      */
     @Query(
-        "Select a.*, b.id as importTrxID, bonus " +  //
-                "from (" +  //
-                "select id, btag, accountid, partnerid, amount, memo, transferid,  catid " +  //
-                "from CashTrx a " +  //
-                "where accountid = :accountid " +  //
-                "union " +  //
-                "select id, btag, catid, partnerid, -amount, memo, transferid, accountid " +  //
-                "from CashTrx a " +  //
-                "where catid = :accountid ) a " +  //
-                "left outer join ImportTrx b on (b.umsatzid = a.id) " +  //
-                "where a.btag between :von and :bis " +  //
-                "and a.accountid = :accountid and a.amount = :amount "
+        """
+            select a.id, a.btag, a.accountid, partnerid, a.amount, a.memo, transferid,  catid,
+            accountname, a.partnername,catname,catclassid,isUmbuchung,
+            b.id as importTrxId, bonus
+            from CashTrxView a   
+            left outer join ImportTrx b on (b.umsatzid = a.id)   
+            where a.accountid = :accountid   
+            and a.btag between :von and :bis   
+            and a.amount = :amount 
+        """
     )
     abstract suspend fun getCashTrx(
         accountid: Long,
         von: Date,
         bis: Date,
         amount: Long
-    ): List<CashTrx>
+    ): List<CashTrxView>
 
     /**
      * Ermittelt eine partnerid aus Cashtrans, die zu einem bereits importierten Umsatz mit dem

@@ -24,10 +24,10 @@ open class TrxImporter(private val context: Context) {
         bis: Date,
         newTrx: ImportTrx
     ) {
-        importdao.getCashTrx(verrechnungskonto, von, bis, newTrx.amount).onEach { cashTrx ->
-            if (cashTrx.importTrxID != newTrx.id) {
-                newTrx.cashTrans = cashTrx
-                cashTrx.btag = newTrx.btag
+        importdao.getCashTrx(verrechnungskonto, von, bis, newTrx.amount).onEach { cashTrxView ->
+            if (cashTrxView.importTrxId == null) {
+                newTrx.cashTrans = cashTrxView.cashTrx
+                cashTrxView.btag = newTrx.btag
             }
         }
         if (newTrx.cashTrans == null) {
@@ -80,30 +80,64 @@ open class TrxImporter(private val context: Context) {
      * einem CashUmsatz zugewiesen wurden.
      */
     private suspend fun checkOpenImportedTrx() {
-        val newTrxList = ArrayList<ImportTrx>()
         importdao.getOpenImportTrx().also { list ->
             var accountidold = -1L
             var verrechnungskonto: Long? = null
+            val accounts = HashSet<Long>()
             list.forEach { newTrx ->
                 if (newTrx.accountid != accountidold) {
                     val account = importdao.getImportAccount(newTrx.accountid)
                     accountidold = newTrx.accountid
-                    verrechnungskonto = account.verrechnungskonto
+                    verrechnungskonto = account.verrechnungskonto.also {
+                        accounts.add(it)
+                    }
                 }
                 verrechnungskonto?.let { vKto ->
                     if (newTrx.amount != 0L) {
                         val von = Date(newTrx.btag.time - DateUtils.DAY_IN_MILLIS * 3)
                         val bis = Date(newTrx.btag.time + DateUtils.DAY_IN_MILLIS * 3)
-                        checkForCashTransaktion(vKto, von, bis, newTrx)
-                        newTrxList.add(newTrx)
+                        val trxList = importdao.getCashTrx(vKto, von, bis, newTrx.amount)
+                        if (trxList.isNotEmpty() && trxList[0].importTrxId == null) {
+                            newTrx.cashTrans = trxList[0].cashTrx
+                            trxList[0].btag = newTrx.btag
+                        } else {
+                            val newCashTrx = CashTrx.fromImportTrx(newTrx, vKto)
+                            newTrx.partnername?.let {
+                                importdao.getPartnerWithCatid(it)?.also { partner ->
+                                    val cid = partner.catid
+                                    if (cid == verrechnungskonto) {
+                                        // Bei einer Umbuchung auf gleichem Konto accountid aus c
+                                        // uebernehmen
+                                        newCashTrx.catid = partner.accountid
+                                    } else {
+                                        // ... sonst catid
+                                        newCashTrx.catid = cid
+                                    }
+                                    newCashTrx.partnerid = partner.partnerid
+                                }
+                                if (newCashTrx.partnerid == Undefined) {
+                                    // noch kein Partner gefunden...
+                                    // mal gucken, ob nicht doch einen gibt, ansonsten Undefined
+                                    newCashTrx.partnerid =
+                                        importdao.getPartnerid(it) ?: Undefined
+                                }
+                            }
+                            newTrx.cashTrans = newCashTrx
+
+                        }
+                        importdao.update(newTrx)
                     }
                 }
             }
-            importdao.update(newTrxList)
+            accounts.forEach {
+                dao.updateCashSaldo(it)
+
+            }
 
 
         }
     }
+
 
     suspend fun executeImport() {
         var numFiles = 0

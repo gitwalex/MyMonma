@@ -57,13 +57,9 @@ data class CashTrx(
     var transferid: Long? = null,
     var isUmbuchung: Boolean? = false,
     @Ignore
-    val importTrxID: Long? = null,
-    @Ignore
     var partnername: String? = null
 ) {
 
-    @Ignore
-    var catclassid: Long? = null
 
     /**
      * Gegenbuchung zur Buchung.

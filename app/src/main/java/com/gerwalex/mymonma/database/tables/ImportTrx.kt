@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.ImportAccount
@@ -22,7 +23,8 @@ import java.sql.Date
         childColumns = ["umsatzid"],
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE,
-    )]
+    )],
+    indices = [Index(value = ["umsatzid"], unique = true)]
 )
 data class ImportTrx(
 
@@ -41,7 +43,6 @@ data class ImportTrx(
     /**
      * ID des dazugehoerigen Umsatzes
      */
-    @ColumnInfo(index = true)
     var umsatzid: Long? = null,
     var bankverbindung: String? = null,
 
