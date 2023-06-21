@@ -20,8 +20,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.gerwalex.mymonma.ComposeActivity
 import com.gerwalex.mymonma.ext.getActivity
+import com.gerwalex.mymonma.main.ComposeActivity
 import com.gerwalex.mymonma.ui.AppTheme
 import com.maltaisn.calcdialog.CalcDialog
 import java.math.BigDecimal

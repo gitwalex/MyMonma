@@ -56,25 +56,33 @@ data class CashTrx(
     @ColumnInfo(index = true)
     var transferid: Long? = null,
     var isUmbuchung: Boolean? = false,
-    val importTrxID: Long? = null
-) {
+    @Ignore
+    val importTrxID: Long? = null,
     @Ignore
     var partnername: String? = null
+) {
 
     @Ignore
     var catclassid: Long? = null
 
-    companion object {
-        fun fromImportTrx(importTrx: ImportTrx, verrechnungskonto: Long): CashTrx {
-            return CashTrx(accountid = verrechnungskonto).apply {
-                btag = importTrx.btag
-                amount = importTrx.amount
-                memo = importTrx.memo
-                partnername = importTrx.partnername
-            }
-
+    /**
+     * Gegenbuchung zur Buchung.
+     * Übernahme aller Daten 1:1, Tausch accountid <-> catid,
+     * transferid entspricht id des Umsatzes, id ist null
+     */
+    val gegenbuchung: CashTrx
+        get() {
+            return CashTrx(
+                btag = btag,
+                catid = accountid,
+                accountid = catid,
+                partnerid = partnerid,
+                amount = -amount,
+                memo = memo,
+                transferid = id,
+            )
         }
-    }
+
 
     /**
      * Gegenbuchung zur Buchung.
@@ -91,6 +99,19 @@ data class CashTrx(
             memo = memo,
             transferid = id,
         )
+    }
+
+
+    companion object {
+        fun fromImportTrx(importTrx: ImportTrx, verrechnungskonto: Long): CashTrx {
+            return CashTrx(accountid = verrechnungskonto).apply {
+                btag = importTrx.btag
+                amount = importTrx.amount
+                memo = importTrx.memo
+                partnername = importTrx.partnername
+            }
+
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.gerwalex.mymonma
+package com.gerwalex.mymonma.main
 
 import android.Manifest
 import android.content.Context
@@ -34,7 +34,6 @@ import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.ext.FileExt.copy
 import com.gerwalex.mymonma.ext.registerActivityForResult
 import com.gerwalex.mymonma.ext.registerforPermissionRequest
-import com.gerwalex.mymonma.main.App
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.DownloadKurse

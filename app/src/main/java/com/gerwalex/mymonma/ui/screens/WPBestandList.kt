@@ -10,11 +10,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.database.room.DB.wpdao
 import com.gerwalex.mymonma.database.views.WPStammItem
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTrxArt
+import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.Einnahmen
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
@@ -58,7 +58,7 @@ fun WPBestandList(
             modifier = Modifier.padding(it),
             columns = GridCells.Adaptive(minSize = 250.dp)
         ) {
-            items(list, key = { item -> item.id!! }) { item ->
+            items(list, key = { item -> item.id }) { item ->
                 WPStammItem(item = item) { wptrx ->
                     action(item, wptrx)
 

@@ -22,8 +22,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
+import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.DrawerNavigation
 import com.gerwalex.mymonma.ui.navigation.TopToolBar

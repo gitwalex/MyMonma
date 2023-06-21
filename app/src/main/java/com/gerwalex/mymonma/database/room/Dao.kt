@@ -57,10 +57,12 @@ abstract class Dao(val db: DB) {
      * Ermittlung Saldo zu CashKonto!
      */
     @Query(
-        "select sum(amount) " +
-                "from CashTrx a " +
-                "where (transferid is null or isUmbuchung )" +
-                "and  accountid = :accountid"
+        """
+        select sum(amount) 
+        from CashTrx a 
+        where (transferid is null or isUmbuchung )
+        and  accountid = :accountid
+    """
     )
     abstract suspend fun getSaldo(accountid: Long): Long
 
@@ -179,21 +181,27 @@ abstract class Dao(val db: DB) {
             if (main.partnerid == Undefined) {
                 main.partnername?.let {// neuer Partner!!
                     Partnerstamm(name = it).apply {
-                        id = insert(this)
+                        main.partnerid = insert(this)
                     }
                 }
             }
             val accounts = HashSet<Long>()
             list.forEachIndexed { index, item ->
                 if (index != 0) {
-                    item.transferid = main.id
+                    item.partnerid = main.partnerid
                 }
                 accounts.add(item.accountid)
-                item.id = insert(item)
-                if (item.isUmbuchung == true) { //
-                    insert(item.toGegenbuchung())
-                    accounts.add(item.catid)
+                if (item.isUmbuchung == true) { // tricky :-)
+                    item.gegenbuchung.apply {
+                        accounts.add(accountid)
+                        transferid = main.id
+                        id = insert(this)
+                        item.transferid = id
+                    }
+                } else {
+                    item.transferid = main.id
                 }
+                item.id = insert(item)
                 Log.d("Dao", "insertCashTrxView: [$index]:$item")
             }
             // CashSalden aktualisieren
@@ -224,13 +232,15 @@ abstract class Dao(val db: DB) {
      * Liefert alle bis Btag fälligen Daueraufträge
      */
     @Query(
-        "SELECT a.* ," +
-                "p.name as partnername, acc.name as accountname, c.name as catname " +
-                "from TrxRegelm a " +
-                "left join Partnerstamm p on p.id = partnerid " +
-                "left join Cat acc on   acc.id = accountid " +
-                "left join Cat c on c.id = catid " +
-                "where btag  < :btag AND  transferID IS NULL "
+        """
+        SELECT a.* ,
+        p.name as partnername, acc.name as accountname, c.name as catname 
+        from TrxRegelm a 
+        left join Partnerstamm p on p.id = partnerid 
+        left join Cat acc on   acc.id = accountid 
+        left join Cat c on c.id = catid 
+        where btag  < :btag AND  transferID IS NULL
+    """
     )
     abstract suspend fun getNextRegelmTrx(btag: Date): List<TrxRegelmView>
 
@@ -313,5 +323,12 @@ abstract class Dao(val db: DB) {
 
     @Query("Select * from ImportAccount")
     abstract fun getImportAccounts(): Flow<List<ImportAccount>>
+
+    @Query(
+        """
+            select * from Cat where id = :catid
+        """
+    )
+    abstract suspend fun getCat(catid: Long): Cat?
 
 }

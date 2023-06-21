@@ -28,13 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.wpdao
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.enums.WPTyp
+import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.content.AmountView

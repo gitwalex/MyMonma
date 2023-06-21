@@ -38,7 +38,8 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
                 .build()
             return WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 tag,
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+//                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 maintenanceWork
             )
         }

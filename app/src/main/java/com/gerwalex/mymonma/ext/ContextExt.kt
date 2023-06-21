@@ -16,9 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
-import com.gerwalex.mymonma.ComposeActivity
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.main.App
+import com.gerwalex.mymonma.main.ComposeActivity
 
 fun Context.getActivity(): AppCompatActivity? = when (this) {
     is AppCompatActivity -> this

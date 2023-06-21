@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MyMonma"
         tools:targetApi="33">
         <activity
-            android:name=".ComposeActivity"
+            android:name=".main.ComposeActivity"
             android:exported="true"
             android:theme="@style/Theme.MyMonma.NoActionBar"
             android:windowSoftInputMode="adjustResize">

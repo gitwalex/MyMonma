@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "51a531ec9c1d44b74ea9db8184b130c2",
+    "identityHash": "fb144b611ce433e65557c2b866483a06",
     "entities": [
       {
         "tableName": "Account",
@@ -120,7 +120,7 @@
       },
       {
         "tableName": "CashTrx",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, `importTrxID` INTEGER, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`transferid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`transferid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -173,12 +173,6 @@
           {
             "fieldPath": "isUmbuchung",
             "columnName": "isUmbuchung",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "importTrxID",
-            "columnName": "importTrxID",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -428,7 +422,7 @@
       },
       {
         "tableName": "ImportAccount",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `typ` INTEGER NOT NULL, `verrechnungskonto` INTEGER NOT NULL, `fileprefix` TEXT NOT NULL, `classname` TEXT NOT NULL, FOREIGN KEY(`verrechnungskonto`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `typ` INTEGER NOT NULL, `verrechnungskonto` INTEGER NOT NULL, `fileprefix` TEXT NOT NULL, `classname` TEXT NOT NULL, FOREIGN KEY(`verrechnungskonto`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -1269,7 +1263,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51a531ec9c1d44b74ea9db8184b130c2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb144b611ce433e65557c2b866483a06')"
     ]
   }
 }

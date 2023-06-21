@@ -11,4 +11,4 @@ where transferid is null
 group by accountid</sql><sql name="SQL 3">select * from CashTrx where accountid = 16 -- or catid = 16 
 order by btag desc </sql><sql name="SQL 4">insert into CashTrx (btag, partnerid,accountid,  catid, amount, memo, transferid)
 select btag, partnerid,catid, accountid, -amount, memo, id 
-from CashTrx where catid between 1 and 99 and transferid is null</sql><sql name="SQL 6">select * from cat</sql><sql name="SQL 8">select * from wp</sql><current_tab id="5"/></tab_sql></sqlb_project>
+from CashTrx where catid between 1 and 99 and transferid is null</sql><sql name="SQL 6">select * from cat</sql><sql name="SQL 8">update cashtrx set isUmbuchung = 0 where isUmbuchung is null</sql><current_tab id="5"/></tab_sql></sqlb_project>

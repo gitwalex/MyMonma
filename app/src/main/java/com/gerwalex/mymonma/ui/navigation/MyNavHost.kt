@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.gerwalex.mymonma.MonMaViewModel
+import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.AddRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.CashTrxList

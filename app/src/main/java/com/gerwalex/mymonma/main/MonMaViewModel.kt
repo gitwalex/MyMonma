@@ -1,4 +1,4 @@
-package com.gerwalex.mymonma
+package com.gerwalex.mymonma.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

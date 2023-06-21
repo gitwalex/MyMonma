@@ -5,9 +5,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.gerwalex.mymonma.MonMaViewModel
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.views.CashTrxView
+import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.Up
 import kotlinx.coroutines.launch
