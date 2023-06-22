@@ -9,10 +9,6 @@ import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.views.CashTrxView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -43,9 +39,9 @@ class DBTest {
     @Throws(Exception::class)
     fun writeCashTrxAndReadInList() {
         val trx = TestData.createSimpleCashTrx(2)
-        CoroutineScope(Dispatchers.IO).launch {
+        runBlocking {
             dao.insertCashTrx(ArrayList<CashTrx>().apply { add(trx) })
-            val inserted = dao.getCashTrxFlow(trx.id!!).first()
+            val inserted = dao.getCashTrx(trx.id!!)
             dao.delete(trx)
             assert(trx.id != null)
             assert(inserted.size == 1)

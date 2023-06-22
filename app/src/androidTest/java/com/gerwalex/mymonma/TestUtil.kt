@@ -42,21 +42,14 @@ object TestData {
             catid = accountid2,
             memo = "Umbuchung",
             amount = 300_00L,
-            isUmbuchung = false
+            isUmbuchung = false,
+            catclassid = Cat.KONTOCLASS,
         )
         val line2 = main.copy(
             catid = 10009,
             memo = "bar",
             amount = 700_00L,
         )
-        val umbuchung = main.copy(
-            accountid = accountid2,
-            catid = accountid1,
-            memo = "Umbuchung",
-            amount = -300_00L,
-            isUmbuchung = true
-        )
-        line1.gegenbuchung = umbuchung
         return listOf(main, line1, line2)
     }
 }

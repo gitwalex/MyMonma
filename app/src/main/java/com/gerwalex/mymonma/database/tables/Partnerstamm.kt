@@ -58,7 +58,6 @@ fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
         queryLabel = stringResource(id = R.string.partnername),
         onQueryChanged = {
             partnername = it
-            showDropdown = true
         },
         list = data,
         onClearClick = { partnername = "" },

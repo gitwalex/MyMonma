@@ -118,12 +118,12 @@ fun EditCashTrxScreen(
     onFinished: (save: List<CashTrx>?) -> Unit
 ) {
     if (list.isNotEmpty()) {
-        val trx = list[0]
+        val mainTrx = list[0]
         val lazyColumnState = rememberLazyListState()
         val scope = rememberCoroutineScope()
-        var gesamtsumme by remember { mutableStateOf(trx.amount) }
+        var gesamtsumme by remember { mutableStateOf(mainTrx.amount) }
         val splitlist = remember(key1 = list) { mutableStateListOf<CashTrxView>() }
-        var splitsumme by remember { mutableStateOf(trx.amount) }
+        var splitsumme by remember { mutableStateOf(mainTrx.amount) }
         val differenz by remember(
             splitsumme,
             gesamtsumme
@@ -137,17 +137,15 @@ fun EditCashTrxScreen(
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             topBar = {
                 TopToolBar(
-                    stringResource(trx.id?.let { R.string.umsatzBearbeiten }
+                    stringResource(mainTrx.id?.let { R.string.umsatzBearbeiten }
                         ?: R.string.umsatzNeu),
                     actions = {
                         IconButton(
                             enabled = differenz == 0L,
                             onClick = {
                                 ArrayList<CashTrx>().apply {
-                                    add(trx.cashTrx)
-                                    splitlist.forEach {
-                                        add(it.cashTrx)
-                                    }
+                                    add(mainTrx.cashTrx)
+                                    addAll(CashTrxView.toCashTrxList(splitlist))
                                     onFinished(this)
                                 }
                             }) {
@@ -172,14 +170,14 @@ fun EditCashTrxScreen(
                     modifier = Modifier,
                 ) {
                     DatePickerView(
-                        date = trx.btag,
+                        date = mainTrx.btag,
                     ) { date ->
-                        trx.btag = date
+                        mainTrx.btag = date
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     AmountEditView(value = gesamtsumme) {
                         gesamtsumme = it
-                        trx.amount = gesamtsumme
+                        mainTrx.amount = gesamtsumme
                         if (splitlist.size == 0) {
                             splitsumme = gesamtsumme // Trx ist nicht gesplitted ->
 
@@ -190,9 +188,9 @@ fun EditCashTrxScreen(
                     item {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = trx.memo ?: "",
+                            value = mainTrx.memo ?: "",
                             minLines = 3,
-                            onValueChange = { text -> trx.memo = text },
+                            onValueChange = { text -> mainTrx.memo = text },
                             label = { Text(text = stringResource(id = R.string.memo)) },
                         )
                     }
@@ -200,9 +198,9 @@ fun EditCashTrxScreen(
                         if (LocalInspectionMode.current) {
                             QuerySearch(query = "Partner", label = "label", onQueryChanged = {})
                         } else {
-                            AutoCompletePartnerView(filter = trx.partnername) { partner ->
-                                trx.partnername = partner.name
-                                trx.partnerid = partner.id ?: Undefined
+                            AutoCompletePartnerView(filter = mainTrx.partnername) { partner ->
+                                mainTrx.partnername = partner.name
+                                mainTrx.partnerid = partner.id ?: Undefined
                             }
                         }
                     }
@@ -215,22 +213,22 @@ fun EditCashTrxScreen(
                                     label = "kategorie",
                                     onQueryChanged = {})
                             } else {
-                                AutoCompleteCatView(filter = trx.catname) { cat ->
-                                    trx.catid = cat.id?.let {
-                                        trx.catname = cat.name
-                                        trx.catclassid = cat.catclassid
-                                        it
-                                    } ?: let {
-                                        trx.catname = ""
-                                        trx.catclassid = CatClass.InternalCatClass
-                                        NOCATID
+                                AutoCompleteCatView(filter = mainTrx.catname) { cat ->
+                                    cat.id?.let {
+                                        mainTrx.catname = cat.name
+                                        mainTrx.catclassid = cat.catclassid
+                                        mainTrx.catid = it
+                                    } ?: run {
+                                        mainTrx.catname = ""
+                                        mainTrx.catclassid = CatClass.InternalCatClass
+                                        mainTrx.catid = NOCATID
                                     }
                                 }
                             }
                             TextButton(onClick = {
-                                splitlist.add(trx.copy(id = null))
-                                trx.catid = SPLITBUCHUNGCATID
-                                trx.catclassid = CatClass.InternalCatClass
+                                splitlist.add(mainTrx.copy(id = null))
+                                mainTrx.catid = SPLITBUCHUNGCATID
+                                mainTrx.catclassid = CatClass.InternalCatClass
                             }) {
                                 Text(text = stringResource(id = R.string.splitten))
                             }
@@ -250,7 +248,7 @@ fun EditCashTrxScreen(
                                     Spacer(modifier = Modifier.weight(1f))
                                     IconButton(onClick = {
                                         splitlist.add(
-                                            trx.copy(
+                                            mainTrx.copy(
                                                 id = null,
                                                 catid = NOCATID,
                                                 amount = differenz,
@@ -278,7 +276,7 @@ fun EditCashTrxScreen(
                                 if (differenz != 0L) {
                                     DifferenzView(differenz, onClick = {
                                         gesamtsumme = splitsumme
-                                        trx.amount = gesamtsumme
+                                        mainTrx.amount = gesamtsumme
                                     })
                                 }
                                 // Summenzeile
@@ -303,6 +301,7 @@ fun EditCashTrxScreen(
         }
     }
 }
+
 
 fun calculateSplitsumme(splitlist: List<CashTrxView>): Long {
     var amount = 0L

@@ -54,7 +54,7 @@ abstract class Dao(val db: DB) {
     @Query("Select * from CatClass where name like '%'||:filter ||'%' order by name")
     abstract fun getCatClasslist(filter: String): Flow<List<CatClass>>
 
-    @Query("Select * from Cat where name like '%'||:filter ||'%' and catclassid = " + KONTOCLASS + " order by name")
+    @Query("Select * from Cat where name like '%'||:filter ||'%' and catclassid = $KONTOCLASS  order by name")
     abstract fun getAccountlist(filter: String): Flow<List<Cat>>
 
     /**

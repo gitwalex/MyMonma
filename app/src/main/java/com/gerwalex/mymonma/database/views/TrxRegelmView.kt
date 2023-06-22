@@ -11,7 +11,8 @@ import java.sql.Date
 @DatabaseView(
     """    
         SELECT a.* ,
-        p.name as partnername, acc.name as accountname, c.name as catname 
+        p.name as partnername, acc.name as accountname, c.name as catname,
+        c.catclassid
         from TrxRegelm a 
         left join Partnerstamm p on p.id = partnerid    
         left join Cat acc on   acc.id = accountid 
@@ -40,10 +41,11 @@ data class TrxRegelmView(
     var last: Date? = null,
     var isUltimo: Boolean = false,
 
-    var partnername: String? = null,
-    var accountname: String? = null,
+    var partnername: String,
+    var accountname: String,
 
-    var catname: String? = null,
+    var catname: String = "",
+    var catclassid: Long? = null,
 
 
     ) {
@@ -64,9 +66,22 @@ data class TrxRegelmView(
                 amount = amount,
                 memo = memo,
                 transferid = transferid,
+                partnername = partnername,
             )
         }
 
+    val cashTrxView: CashTrxView
+        get() {
+            return CashTrxView(
+                btag = btag,
+                accountid = accountid,
+                catid = catid,
+                partnerid = partnerid,
+                amount = amount,
+                memo = memo,
+                partnername = partnername,
+            )
+        }
 
     /**
      * Liefert den nächsten Ausführungstermin

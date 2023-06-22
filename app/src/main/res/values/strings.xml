@@ -96,4 +96,15 @@
     <string name="jeAnteil">je Anteil</string>
     <string name="imporCashTrx">Import Umsätze</string>
     <string name="gesamtbestand">Gesamtbestand</string>
+    <string name="EigDatum">Eigenes Datum</string>
+    <string name="AktJhr">Aktuelles Jahr</string>
+    <string name="AktMnt">Aktueller Monat</string>
+    <string name="AktQuart">Aktuelles Quartal</string>
+    <string name="BisHeuteJhr">Jahr bis Heute</string>
+    <string name="Heute">Heute</string>
+    <string name="LetzMnt">Letzter Monat</string>
+    <string name="LetztQuart">Letztes Quartal</string>
+    <string name="LztJhr">Letztes Jahr</string>
+    <string name="Ltz12Mnt">Letzte 12 Monate</string>
+    <string name="allData">Alles</string>
 </resources>

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.room.DatabaseView
 import androidx.room.Ignore
 import com.gerwalex.mymonma.database.tables.CashTrx
+import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.Color
 import com.gerwalex.mymonma.ui.content.AmountView
@@ -71,11 +72,31 @@ data class CashTrxView(
             )
         }
 
+    fun createGegenbuchung(): CashTrxView {
+        return CashTrxView(
+            id = null,
+            btag = btag,
+            accountid = catid,
+            catid = accountid,
+            partnerid = partnerid,
+            amount = -amount,
+            memo = memo,
+            partnername = partnername,
+            gegenbuchung = null,
+        )
+    }
+
     companion object {
         fun toCashTrxList(list: List<CashTrxView>): ArrayList<CashTrx> {
             return ArrayList<CashTrx>().apply {
-                list.forEach {
-                    add(it.cashTrx)
+                list.forEach { trx ->
+                    if (trx.catclassid == Cat.KONTOCLASS) {
+                        // Umbuchung!!
+                        trx.gegenbuchung = trx.createGegenbuchung()
+                    } else {
+                        trx.gegenbuchung = null
+                    }
+                    add(trx.cashTrx)
                 }
             }
         }

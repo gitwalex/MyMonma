@@ -17,6 +17,9 @@ import com.gerwalex.mymonma.database.tables.Cat;
 import com.gerwalex.mymonma.database.tables.CatClass;
 import com.gerwalex.mymonma.database.tables.ImportAccount;
 import com.gerwalex.mymonma.database.tables.Partnerstamm;
+import com.gerwalex.mymonma.database.tables.ReportBasisDaten;
+import com.gerwalex.mymonma.database.tables.ReportExcludedCatClasses;
+import com.gerwalex.mymonma.database.tables.ReportExcludedCats;
 import com.gerwalex.mymonma.database.tables.TrxRegelm;
 import com.gerwalex.mymonma.database.tables.WPKurs;
 import com.gerwalex.mymonma.database.tables.WPStamm;
@@ -29,7 +32,9 @@ import com.gerwalex.mymonma.database.views.WPStammView;
 
 @Database(entities = {Account.class, CashTrx.class, Cat.class, CatClass.class, ImportAccount.class,
         ImportNewTrx.class, ImportTrx.class,
-        TrxRegelm.class, Partnerstamm.class, WPStamm.class, WPKurs.class, WPTrx.class},
+        TrxRegelm.class, Partnerstamm.class,
+        ReportBasisDaten.class, ReportExcludedCats.class, ReportExcludedCatClasses.class,
+        WPStamm.class, WPKurs.class, WPTrx.class},
         //
         version = 1,
         //

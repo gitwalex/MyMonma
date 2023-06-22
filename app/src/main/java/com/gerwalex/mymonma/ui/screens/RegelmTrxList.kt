@@ -99,7 +99,7 @@ fun RegelmTrxListItem(trx: TrxRegelmView, selected: (TrxRegelmView) -> Unit) {
             Row {
                 DateView(date = trx.btag, onClick = {})
                 Text(
-                    text = trx.partnername ?: "",
+                    text = trx.partnername,
                     modifier = Modifier.weight(1f),
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
@@ -110,7 +110,7 @@ fun RegelmTrxListItem(trx: TrxRegelmView, selected: (TrxRegelmView) -> Unit) {
                 Text(text = memo, maxLines = 1)
             }
             Row {
-                Text(text = trx.accountname ?: "")
+                Text(text = trx.accountname)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(text = stringResource(id = trx.intervallname))
             }
@@ -125,6 +125,7 @@ fun RegelmTrxListItem(trx: TrxRegelmView, selected: (TrxRegelmView) -> Unit) {
 fun RegelmTrxListItemPreview() {
     AppTheme {
         val trx = TrxRegelmView(
+            partnername = "Ein Partner für RegelmTrx",
             accountname = "account",
             amount = 12345678L,
             memo = "Ein langer Memotext aber nur in einer Zeile"
