@@ -44,6 +44,7 @@ public abstract class DB extends RoomDatabase {
     public static String DBNAME;
     public static Dao dao;
     public static ImportDao importdao;
+    public static ReportDao reportdao;
     public static WPDao wpdao;
     /**
      * Instance der RoomDatabase
@@ -64,6 +65,7 @@ public abstract class DB extends RoomDatabase {
                             .build();
                     dao = INSTANCE.getDao();
                     importdao = INSTANCE.getImportDao();
+                    reportdao = INSTANCE.getReportDao();
                     wpdao = INSTANCE.getWPDao();
                 }
             }
@@ -84,6 +86,8 @@ public abstract class DB extends RoomDatabase {
     public abstract Dao getDao();
 
     public abstract ImportDao getImportDao();
+
+    public abstract ReportDao getReportDao();
 
     public abstract WPDao getWPDao();
 }

@@ -107,4 +107,14 @@
     <string name="LztJhr">Letztes Jahr</string>
     <string name="Ltz12Mnt">Letzte 12 Monate</string>
     <string name="allData">Alles</string>
+    <string name="reportGeldflussDesc">Wofür habe ich Geld ausgegeben oder erhalten?</string>
+    <string name="reportGeldfluss">Geldfluss</string>
+    <string name="reportGeldflussVerglDesc">Vergleiht den geldfluss zweier Zeiträume</string>
+    <string name="reportGeldflussVergl">Geldfluss Vergleich</string>
+    <string name="reportEmpfaengerDesc">Wer hat geld bekommen oder bezahlt?</string>
+    <string name="reportEmpfaenger">Empfänger</string>
+    <string name="zeitraum">Zeitraum</string>
+    <string name="verglZeitraum">Vergleichszeitraum</string>
+    <string name="myReports">Meine Reports</string>
+    <string name="noEntries">Keine Einträge</string>
 </resources>

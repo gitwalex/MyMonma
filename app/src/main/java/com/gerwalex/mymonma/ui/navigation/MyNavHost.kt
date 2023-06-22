@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gerwalex.mymonma.main.MonMaViewModel
+import com.gerwalex.mymonma.ui.report.ReportListScreen
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.AddRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.CashTrxListScreen
@@ -46,6 +47,9 @@ fun MyNavHost(
         }
         composable(EditRegelmTrx.name) {
             EditRegelmTrxScreen(viewModel, navigateTo)
+        }
+        composable(ReportList.name) {
+            ReportListScreen(viewModel, navigateTo)
         }
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)

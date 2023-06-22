@@ -15,6 +15,7 @@ class MonMaViewModel(application: Application) : AndroidViewModel(application) {
     var accountid: Long = 0
     var cashTrxId: Long = 0
     var regelmTrxId: Long = 0
+    var reportId: Long = 0
     var wpstamm: WPStammView? = null
 
 }
