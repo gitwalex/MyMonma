@@ -30,6 +30,7 @@ import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.views.CashTrxViewItem
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.AmountView
+import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.AddCashTrx
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.EditCashTrx
@@ -42,44 +43,47 @@ fun CashTrxListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
     val accountid = rememberSaveable { viewModel.accountid }
     val list by dao.getCashTrxList(accountid).collectAsState(initial = emptyList())
     val account by dao.getAccountData(accountid).collectAsState(initial = Cat())
-    Scaffold(
-        topBar = {
-            TopToolBar(
-                account.name,
-                actions = {
-                    IconButton(onClick = { navigateTo(AddCashTrx) }) {
-                        Icon(imageVector = Icons.Default.Add, "")
-                    }
-                }) {
-                navigateTo(Up)
-            }
-        }) {
+    if (list.isNotEmpty()) {
+        Scaffold(
+            topBar = {
+                TopToolBar(
+                    account.name,
+                    actions = {
+                        IconButton(onClick = { navigateTo(AddCashTrx) }) {
+                            Icon(imageVector = Icons.Default.Add, "")
+                        }
+                    }) {
+                    navigateTo(Up)
+                }
+            }) {
 
-        Column(modifier = Modifier.padding(it)) {
+            Column(modifier = Modifier.padding(it)) {
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(id = R.string.saldo), fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.weight(1f))
-                AmountView(value = account.saldo, fontWeight = FontWeight.Bold)
-            }
-            LazyColumn {
-                items(list, key = { item -> item.id!! }) { trx ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .clickable {
-                                viewModel.cashTrxId = trx.id!!
-                                navigateTo(EditCashTrx)
-                            }
-                    ) {
-                        CashTrxViewItem(trx = trx)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = stringResource(id = R.string.saldo), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.weight(1f))
+                    AmountView(value = account.saldo, fontWeight = FontWeight.Bold)
+                }
+                LazyColumn {
+                    items(list, key = { item -> item.id!! }) { trx ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .clickable {
+                                    viewModel.cashTrxId = trx.id!!
+                                    navigateTo(EditCashTrx)
+                                }
+                        ) {
+                            CashTrxViewItem(trx = trx)
+                        }
                     }
                 }
             }
-
         }
 
+    } else {
+        NoEntriesBox()
     }
 }
 

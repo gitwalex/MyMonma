@@ -193,6 +193,17 @@ object ReportList : Destination() {
 
 }
 
+object GeldflussReport : Destination() {
+    override val title = R.string.myReports
+    override val name: String = "GeldflussReport"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
 object WPBestandList : Destination() {
     override val title = R.string.wpbestandlist
     override val name: String = "WPBestandList"

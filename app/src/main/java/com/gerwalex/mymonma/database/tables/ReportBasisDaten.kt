@@ -33,9 +33,9 @@ data class ReportBasisDaten(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
     var typ: ReportTyp = ReportTyp.Geldfluss,
-    var name: String,
-    var von: Date,
-    var bis: Date,
+    var name: String = "",
+    var von: Date = Date(System.currentTimeMillis()),
+    var bis: Date = Date(System.currentTimeMillis()),
     var verglVon: Date? = null,
     var verglBis: Date? = null,
     var description: String? = null,

@@ -15,6 +15,7 @@ import com.gerwalex.mymonma.database.views.WPStammItem
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.main.MonMaViewModel
+import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.Einnahmen
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
@@ -38,6 +39,8 @@ fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
             }
 
         }
+    } else {
+        NoEntriesBox()
     }
 
 }

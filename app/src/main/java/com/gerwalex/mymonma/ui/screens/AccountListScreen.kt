@@ -20,33 +20,38 @@ import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
+import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.CashTrxList
 import com.gerwalex.mymonma.ui.navigation.Destination
 
 @Composable
 fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val list by viewModel.accountlist.collectAsState(ArrayList())
-    Scaffold(
+    if (list.isNotEmpty()) {
+        Scaffold(
 //        topBar = {
 //            TopToolBar(title = AccountList.name) {
 //                navigateTo(Up)
 //            }
 //        }
-    )
-    {
-        Box(modifier = Modifier.padding(it)) {
-            LazyColumn {
-                items(list,
-                    key = { cat -> cat.id!! })
-                {
-                    AccountListItem(it) {
-                        viewModel.accountid = it.id!!
-                        navigateTo(CashTrxList)
-                    }
+        )
+        {
+            Box(modifier = Modifier.padding(it)) {
+                LazyColumn {
+                    items(list,
+                        key = { cat -> cat.id!! })
+                    {
+                        AccountListItem(it) {
+                            viewModel.accountid = it.id!!
+                            navigateTo(CashTrxList)
+                        }
 
+                    }
                 }
             }
         }
+    } else {
+        NoEntriesBox()
     }
 }
 

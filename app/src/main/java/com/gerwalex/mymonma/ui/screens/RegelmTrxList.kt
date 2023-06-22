@@ -36,6 +36,7 @@ import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.DateView
+import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.AddRegelmTrx
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.EditRegelmTrx
@@ -82,6 +83,8 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
                 }
             }
         }
+    } else {
+        NoEntriesBox()
     }
 }
 
