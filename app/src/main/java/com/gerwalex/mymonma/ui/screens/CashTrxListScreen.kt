@@ -68,7 +68,10 @@ fun CashTrxListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .clickable { navigateTo(EditCashTrx) }
+                            .clickable {
+                                viewModel.cashTrxId = trx.id!!
+                                navigateTo(EditCashTrx)
+                            }
                     ) {
                         CashTrxViewItem(trx = trx)
                     }

@@ -57,8 +57,12 @@ data class CashTrx(
     var transferid: Long? = null,
     var isUmbuchung: Boolean? = false,
     @Ignore
-    var partnername: String? = null
-) {
+    var partnername: String? = null,
+    // Gegenbuchung
+    @Ignore
+    var cashTrx: CashTrx? = null,
+
+    ) {
 
 
     /**

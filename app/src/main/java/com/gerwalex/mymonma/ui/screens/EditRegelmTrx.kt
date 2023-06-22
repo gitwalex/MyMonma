@@ -35,7 +35,7 @@ fun AddRegelmTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> U
 fun EditRegelmTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
     viewModel.cashTrxId.let {
-        val list by DB.dao.getCashTrx(it).collectAsState(emptyList())
+        val list by DB.dao.getCashTrxFlow(it).collectAsState(emptyList())
         if (list.isNotEmpty()) {
             EditCashTrxScreen(list = list) { save ->
                 scope.launch {

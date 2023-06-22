@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.room.DatabaseView
+import androidx.room.Ignore
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.Color
@@ -50,6 +51,8 @@ data class CashTrxView(
     var catclassid: Long = -1,
     var isUmbuchung: Boolean = false,
     var importTrxId: Long? = null,
+    @Ignore
+    var gegenbuchung: CashTrxView? = null
 ) {
     val cashTrx: CashTrx
         get() {
@@ -62,9 +65,21 @@ data class CashTrxView(
                 amount = amount,
                 memo = memo,
                 transferid = transferid,
-                isUmbuchung = isUmbuchung
+                isUmbuchung = isUmbuchung,
+                partnername = partnername,
+                cashTrx = gegenbuchung?.cashTrx,
             )
         }
+
+    companion object {
+        fun toCashTrxList(list: List<CashTrxView>): ArrayList<CashTrx> {
+            return ArrayList<CashTrx>().apply {
+                list.forEach {
+                    add(it.cashTrx)
+                }
+            }
+        }
+    }
 }
 
 @Composable

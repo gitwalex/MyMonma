@@ -111,7 +111,38 @@ abstract class Dao(val db: DB) {
                 "where a.id = :id or a.transferid = :id " +
                 "order by a.id"
     )
-    abstract fun getCashTrx(id: Long): Flow<List<CashTrxView>>
+    abstract fun getCashTrxFlow(id: Long): Flow<List<CashTrxView>>
+
+    /**
+     * Liest eine CashTrx.
+     * Selection wie folgt:
+     * Trx.id = id, Trx.transferid = id, ohne Gegenbuchungen.
+     * Bevor die Trx-Liste (neu) gespeichert wird, wird die alte Liste aus der DB entfernt und
+     * komplett (mit Aufbau der Gegenbuchungen) neu eingefügt.
+     */
+    @Query(
+        "select * from CashTrxView a " +
+                "where a.id = :id or a.transferid = :id " +
+                "order by a.id"
+    )
+    protected abstract suspend fun _getCashTrx(id: Long): List<CashTrxView>
+
+    suspend fun getCashTrx(id: Long): List<CashTrxView> {
+        val list = _getCashTrx(id)
+        val trxList = list.filter { !it.isUmbuchung }.sortedBy { it.id } // Ergebnisliste!!
+        val umbuchungen = list.filter { it.isUmbuchung }
+        trxList.forEach { trx ->
+            // Umbuchung suchen
+            trx.gegenbuchung = umbuchungen.firstOrNull {
+                it.catid == trx.accountid
+                        && it.accountid == trx.catid
+                        && it.amount == -trx.amount
+                        && it.memo == trx.memo
+            }
+        }
+        return trxList
+    }
+
 
     @Query("select * from Partnerstamm where id = :partnerid ")
     abstract fun getPartnerstamm(partnerid: Long): Flow<Partnerstamm>
@@ -127,52 +158,46 @@ abstract class Dao(val db: DB) {
     )
     abstract suspend fun updateCashSaldo(accountid: Long)
 
+    @Query("select * from partnerstamm where name = :partnername")
+    abstract suspend fun getPartnerstamm(partnername: String): Partnerstamm?
+
     /**
      * Einfügen/Update einer CashTrx.
      * Zuerst entfernen der gesamten ursprünglichen Buchung.
      * Danach Einfügen der einzelnen Sätze, die Transferid ab dem zweiten Satz entspricht
      * der id des ersten Satzes.
-     * Gegenbuchungen werden jewils mit aufgebaut und sind schon beim Lesen aus der DB nicht mitgekommen.
      */
 
     @Transaction
-    open suspend fun insertCashTrx(list: List<CashTrx>) {
+    open suspend fun insertCashTrx(list: List<CashTrx>): List<CashTrx> {
         if (list.isNotEmpty()) {
             val main = list[0]
             delete(main) // Alle weg w/referientieller Integritaet
-            if (main.partnerid == Undefined) {
-                main.partnername?.let {// neuer Partner!!
-                    Partnerstamm(name = it).apply {
-                        main.partnerid = insert(this)
-                    }
-                }
+            val accounts = HashSet<Long>().apply {
+                add(main.accountid)
             }
-            val accounts = HashSet<Long>()
             list.forEachIndexed { index, item ->
                 if (index != 0) {
                     item.partnerid = main.partnerid
-                }
-                accounts.add(item.accountid)
-                if (item.isUmbuchung == true) { // tricky :-)
-                    item.gegenbuchung.apply {
-                        accounts.add(accountid)
-                        transferid = main.id
-                        id = insert(this)
-                        item.transferid = id
-                    }
-                } else {
                     item.transferid = main.id
+                    item.accountid = main.accountid
+                    item.btag = main.btag
                 }
                 item.id = insert(item)
+                item.cashTrx?.let { umbuchung ->
+                    umbuchung.transferid = main.id
+                    umbuchung.isUmbuchung = true
+                    umbuchung.id = insert(umbuchung)
+                    accounts.add(umbuchung.accountid)
+                }
                 Log.d("Dao", "insertCashTrxView: [$index]:$item")
             }
             // CashSalden aktualisieren
             accounts.forEach {
                 updateCashSaldo(it)
             }
-
-
         }
+        return list
 
     }
 
@@ -263,9 +288,10 @@ abstract class Dao(val db: DB) {
         with(cashTrx) {
             if (partnerid == Undefined) {
                 partnername?.let {// neuer Partner!!
-                    Partnerstamm(name = it).apply {
-                        partnerid = insert(this)
+                    val partner = getPartnerstamm(it) ?: Partnerstamm(name = it).apply {
+                        id = insert(this)
                     }
+                    partnerid = partner.id!!
                 }
             }
             return _insert(this)

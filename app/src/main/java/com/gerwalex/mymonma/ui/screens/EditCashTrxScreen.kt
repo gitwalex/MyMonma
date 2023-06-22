@@ -26,7 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +50,7 @@ import com.gerwalex.mymonma.database.tables.Cat.Companion.SPLITBUCHUNGCATID
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.database.views.CashTrxView
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
@@ -86,7 +87,12 @@ fun AddCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
 fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
     val trxid = rememberSaveable { viewModel.cashTrxId }
-    val list by dao.getCashTrx(trxid).collectAsState(emptyList())
+    var list by rememberState {
+        listOf<CashTrxView>()
+    }
+    LaunchedEffect(trxid) {
+        list = dao.getCashTrx(trxid)
+    }
     if (list.isNotEmpty()) {
         EditCashTrxScreen(list = list) { save ->
             scope.launch {
@@ -180,14 +186,6 @@ fun EditCashTrxScreen(
                         }
                     }
                 }
-                if (LocalInspectionMode.current) {
-                    QuerySearch(query = "Partner", label = "label", onQueryChanged = {})
-                } else {
-                    AutoCompletePartnerView(filter = trx.partnername) { partner ->
-                        trx.partnername = partner.name
-                        trx.partnerid = partner.id ?: Undefined
-                    }
-                }
                 LazyColumn(state = lazyColumnState) {
                     item {
                         OutlinedTextField(
@@ -197,6 +195,16 @@ fun EditCashTrxScreen(
                             onValueChange = { text -> trx.memo = text },
                             label = { Text(text = stringResource(id = R.string.memo)) },
                         )
+                    }
+                    item {
+                        if (LocalInspectionMode.current) {
+                            QuerySearch(query = "Partner", label = "label", onQueryChanged = {})
+                        } else {
+                            AutoCompletePartnerView(filter = trx.partnername) { partner ->
+                                trx.partnername = partner.name
+                                trx.partnerid = partner.id ?: Undefined
+                            }
+                        }
                     }
 
                     if (splitlist.isEmpty()) {
