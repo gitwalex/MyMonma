@@ -7,7 +7,9 @@ import androidx.navigation.compose.composable
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.report.AddReportData
 import com.gerwalex.mymonma.ui.report.EditReportData
+import com.gerwalex.mymonma.ui.report.EmpfaengerScreen
 import com.gerwalex.mymonma.ui.report.GeldflussScreen
+import com.gerwalex.mymonma.ui.report.GeldflussVerglScreen
 import com.gerwalex.mymonma.ui.report.ReportListScreen
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.AddRegelmTrxScreen
@@ -65,6 +67,12 @@ fun MyNavHost(
         }
         composable(GeldflussReport.name) {
             GeldflussScreen(viewModel, navigateTo)
+        }
+        composable(GeldflussVerglReport.name) {
+            GeldflussVerglScreen(viewModel, navigateTo)
+        }
+        composable(EmpfaengerReport.name) {
+            EmpfaengerScreen(viewModel, navigateTo)
         }
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)

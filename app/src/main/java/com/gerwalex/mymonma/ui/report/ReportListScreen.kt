@@ -22,12 +22,16 @@ import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.database.tables.ReportBasisDatenItem
+import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ext.scaleOnPress
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.AddReport
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.EditReport
+import com.gerwalex.mymonma.ui.navigation.EmpfaengerReport
+import com.gerwalex.mymonma.ui.navigation.GeldflussReport
+import com.gerwalex.mymonma.ui.navigation.GeldflussVerglReport
 import com.gerwalex.mymonma.ui.navigation.ReportList
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
@@ -51,11 +55,10 @@ fun ReportListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
 
         Column(modifier = Modifier.padding(it)) {
             if (list.isNotEmpty()) {
-                ReportListScreen(list) { report ->
+                ReportListScreen(list = list, itemSelected = { report, destination ->
                     viewModel.reportId = report.id!!
-                    navigateTo(EditReport)
-
-                }
+                    navigateTo(destination)
+                })
             } else {
                 NoEntriesBox()
             }
@@ -66,7 +69,7 @@ fun ReportListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
 @Composable
 fun ReportListScreen(
     list: List<ReportBasisDaten>,
-    itemSelected: (ReportBasisDaten) -> Unit
+    itemSelected: (ReportBasisDaten, Destination) -> Unit,
 ) {
     val buttonInteractionSource = remember { MutableInteractionSource() }
     LazyColumn {
@@ -78,11 +81,17 @@ fun ReportListScreen(
                         interactionSource = buttonInteractionSource,
                         indication = null,
                         onClick = {
-                            itemSelected(item)
+                            when (item.typ) {
+                                ReportTyp.Geldfluss -> itemSelected(item, GeldflussReport)
+                                ReportTyp.GeldflussVergl -> itemSelected(item, GeldflussVerglReport)
+                                ReportTyp.Empfaenger -> itemSelected(item, EmpfaengerReport)
+                            }
                         })
                     .scaleOnPress(buttonInteractionSource),
             ) {
-                ReportBasisDatenItem(report = item)
+                ReportBasisDatenItem(report = item) {
+                    itemSelected(item, EditReport)
+                }
             }
         }
     }

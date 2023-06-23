@@ -91,8 +91,8 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """ 
-        select * from Cashtrxview
-        where accountid = :accountid 
+        select * from Cashtrxview a
+        where a.accountid = :accountid 
         and (transferid is null or isUmbuchung )  
         order by btag desc, id
         """
@@ -221,7 +221,8 @@ abstract class Dao(val db: DB) {
     @Query(
         """
         SELECT a.* ,
-        p.name as partnername, acc.name as accountname, c.name as catname 
+        p.name as partnername, acc.name as accountname, 
+        c.name as catname, c.catclassid 
         from TrxRegelm a 
         left join Partnerstamm p on p.id = partnerid 
         left join Cat acc on   acc.id = accountid 
@@ -234,7 +235,8 @@ abstract class Dao(val db: DB) {
     @Query(
         """
         SELECT a.* , 
-        p.name as partnername, acc.name as accountname, c.name as catname 
+        p.name as partnername, acc.name as accountname, 
+        c.name as catname, c.catclassid 
         from TrxRegelm a 
         left join Partnerstamm p on p.id = partnerid 
         left join Cat acc on   acc.id = accountid 

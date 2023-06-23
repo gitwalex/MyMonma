@@ -30,3 +30,4 @@ data class ReportExcludedCatClasses(
     var catclassid: Long,
 
     )
+

@@ -104,7 +104,7 @@ abstract class ImportDao(val db: DB) {
         """
             select a.id, a.btag, a.accountid, partnerid, a.amount, a.memo, transferid,  catid,
             accountname, a.partnername,catname,catclassid,isUmbuchung,
-            b.id as importTrxId, bonus
+            b.id as importTrxId
             from CashTrxView a   
             left outer join ImportTrx b on (b.umsatzid = a.id)   
             where a.accountid = :accountid   

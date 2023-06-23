@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,12 +46,25 @@ data class ReportBasisDaten(
 )
 
 @Composable
-fun ReportBasisDatenItem(report: ReportBasisDaten, modifier: Modifier = Modifier) {
+fun ReportBasisDatenItem(
+    report: ReportBasisDaten,
+    modifier: Modifier = Modifier,
+    onEdit: () -> Unit
+) {
     Box(modifier) {
         Column(modifier = Modifier.padding(4.dp)) {
-            Text(
-                text = report.name, fontWeight = FontWeight.Bold,
-            )
+            Row {
+                Text(
+                    text = report.name, fontWeight = FontWeight.Bold,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                IconButton(onClick = {
+                    onEdit()
+                }) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "")
+                }
+
+            }
             Text(text = stringResource(id = report.typ.textID))
             Divider()
             Text(
@@ -98,7 +115,7 @@ fun ReportBasisDatenItemPreview() {
     )
     AppTheme {
         Surface {
-            ReportBasisDatenItem(report)
+            ReportBasisDatenItem(report) {}
 
         }
 

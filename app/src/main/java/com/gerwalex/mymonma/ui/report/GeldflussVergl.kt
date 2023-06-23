@@ -30,65 +30,61 @@ import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
+import com.gerwalex.mymonma.ui.navigation.Up
 import com.gerwalex.mymonma.ui.subscreens.GeldflussDrawer
-import kotlinx.coroutines.launch
 
 
 @Composable
-fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun GeldflussVerglScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val reportid = rememberSaveable { viewModel.reportId }
     var report by remember { mutableStateOf(ReportBasisDaten()) }
-    LaunchedEffect(key1 = reportid) {
-        reportdao.getReportBasisDaten(reportid)?.apply {
-            report = this
-        }
-
-    }
-    report.id?.let {
+    report.let {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
 
                 ModalDrawerSheet {
                     Spacer(Modifier.height(12.dp))
-                    GeldflussDrawer(reportid = it)
+                    GeldflussDrawer(reportid = it.id!!)
                 }
             }, content = {
 
                 Scaffold(
                     topBar = {
-                        TopToolBar(title = report.name) {
-                            scope.launch {
-                                if (drawerState.isClosed)
-                                    drawerState.open() else drawerState.close()
-                            }
+                        TopToolBar(title = it.name) {
+                            navigateTo(Up)
                         }
                     },
 
                     ) { padding ->
-                    Box(modifier = Modifier.padding(padding)) {
-                        val list by reportdao.getReportGeldflussData(
-                            it,
-                            from = report.von,
-                            to = report.bis
-                        )
-                            .collectAsState(initial = emptyList())
-                        if (list.isNotEmpty()) {
-                            GeldflussDetailScreen(report = report, list = list) {
+                    Box(modifier = Modifier.padding(padding))
+                    val list by reportdao.getReportGeldflussData(
+                        it.id!!,
+                        from = it.von,
+                        to = it.bis
+                    )
+                        .collectAsState(initial = emptyList())
+                    if (list.isNotEmpty()) {
+                        GeldflussVerglDetailScreen(reportBasisDaten = it, list = list) {
 
-                            }
                         }
                     }
+                }
+                LaunchedEffect(key1 = reportid) {
+                    reportdao.getReportBasisDaten(reportid)?.apply {
+                        report = this
+                    }
+
                 }
             })
     }
 }
 
 @Composable
-fun GeldflussDetailScreen(
-    report: ReportBasisDaten,
+fun GeldflussVerglDetailScreen(
+    reportBasisDaten: ReportBasisDaten,
     list: List<GeldflussData>,
     onSelected: (GeldflussData) -> Unit
 
