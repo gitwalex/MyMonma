@@ -45,6 +45,7 @@ import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.content.AmountView
@@ -107,6 +108,7 @@ fun EditTrxRegelmScreen(
 ) {
     if (list.isNotEmpty()) {
         val mainTrx = list[0]
+        var memo by rememberState { mainTrx.memo }
         val lazyColumnState = rememberLazyListState()
         val scope = rememberCoroutineScope()
         var gesamtsumme by remember { mutableStateOf(mainTrx.amount) }
@@ -179,9 +181,12 @@ fun EditTrxRegelmScreen(
                     item {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = mainTrx.memo ?: "",
+                            value = memo ?: "",
                             minLines = 3,
-                            onValueChange = { text -> mainTrx.memo = text },
+                            onValueChange = { text ->
+                                memo = text
+                                mainTrx.memo = text
+                            },
                             label = { Text(text = stringResource(id = R.string.memo)) },
                         )
                     }

@@ -241,7 +241,7 @@ fun WPTrxArtSpinner(onItemSelected: (WPTrxArt) -> Unit) {
             showDivider = true,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            spinnerPadding = 16.dp,
+            spinnerPadding = 4.dp,
             spinnerBackgroundColor = MaterialTheme.colorScheme.onBackground,
         ),
         onSpinnerItemSelected = { index, item ->

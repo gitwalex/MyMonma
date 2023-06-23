@@ -3,25 +3,25 @@ package com.gerwalex.mymonma.enums
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.tables.Cat
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ui.AppTheme
-import com.skydoves.orchestra.spinner.Spinner
-import com.skydoves.orchestra.spinner.SpinnerProperties
 
 enum class Kontotyp {
     Giro {
@@ -112,38 +112,27 @@ enum class Kontotyp {
 }
 
 @Composable
-fun KontotypSpinner(onItemSelected: (Kontotyp) -> Unit) {
-    val list = Kontotyp.values().asList()
-    val texte = ArrayList<String>().apply {
-        list.forEach {
-            add(stringResource(id = it.textID))
+fun KontotypSpinner(typ: Kontotyp, selected: (Kontotyp) -> Unit) {
+    var myTyp by rememberState { typ }
+    var isExpanded by remember { mutableStateOf(false) }
+    Box(contentAlignment = Alignment.Center) {
+        Text(text = stringResource(id = myTyp.textID), modifier = Modifier.clickable {
+            isExpanded = !isExpanded
+        })
+        DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+            ReportTyp.values()
+                .forEachIndexed { index, s ->
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(id = s.textID)) },
+                        onClick = {
+                            myTyp = Kontotyp.values()[index]
+                            selected(myTyp)
+                            isExpanded = false
+                        })
+                }
+
         }
     }
-    val (selectedItem, setSelectedItem)
-            = remember { mutableStateOf(Kontotyp.Giro) }
-    Spinner(
-        text = stringResource(id = selectedItem.textID),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-//            .align(Alignment.CenterHorizontally)
-            .background(MaterialTheme.colorScheme.secondaryContainer),
-        itemList = texte,
-        style = MaterialTheme.typography.bodyMedium,
-        properties = SpinnerProperties(
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            textAlign = TextAlign.Center,
-            showDivider = true,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-            spinnerPadding = 16.dp,
-            spinnerBackgroundColor = MaterialTheme.colorScheme.onBackground,
-        ),
-        onSpinnerItemSelected = { index, item ->
-            setSelectedItem(list[index])
-            onItemSelected(list[index])
-        }
-    )
 }
 
 @Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
@@ -152,7 +141,7 @@ fun KontotypSpinner(onItemSelected: (Kontotyp) -> Unit) {
 fun KontotypSpinnerPreview() {
     AppTheme {
         Surface {
-            KontotypSpinner(onItemSelected = {})
+            KontotypSpinner(Kontotyp.Giro, selected = {})
 
         }
     }

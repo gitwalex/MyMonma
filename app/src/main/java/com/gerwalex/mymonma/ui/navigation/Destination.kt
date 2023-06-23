@@ -193,6 +193,29 @@ object ReportList : Destination() {
 
 }
 
+object AddReport : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "AddReport"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+object EditReport : Destination() {
+    override val title: Int
+        get() = TODO("Not yet implemented")
+    override val name: String = "EditReport"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+}
+
 object GeldflussReport : Destination() {
     override val title = R.string.myReports
     override val name: String = "GeldflussReport"

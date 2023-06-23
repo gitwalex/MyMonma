@@ -117,4 +117,12 @@
     <string name="verglZeitraum">Vergleichszeitraum</string>
     <string name="myReports">Meine Reports</string>
     <string name="noEntries">Keine Einträge</string>
+    <string name="reportBearbeiten">Report Bearbeiten</string>
+    <string name="reportNeu">Neuer Report</string>
+    <string name="reportName">Name</string>
+    <string name="reportDesc">Beschreibung</string>
+    <string name="errorMissingName">name darf nicht leer sein</string>
+    <string name="reportTyp">Reporttyp</string>
+    <string name="reportStart">Startdatum</string>
+    <string name="reportEnde">Endedatum</string>
 </resources>

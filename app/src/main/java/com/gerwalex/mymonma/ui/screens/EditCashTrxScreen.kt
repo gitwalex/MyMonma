@@ -119,6 +119,7 @@ fun EditCashTrxScreen(
 ) {
     if (list.isNotEmpty()) {
         val mainTrx = list[0]
+        var memo by rememberState { mainTrx.memo }
         val lazyColumnState = rememberLazyListState()
         val scope = rememberCoroutineScope()
         var gesamtsumme by remember { mutableStateOf(mainTrx.amount) }
@@ -188,9 +189,12 @@ fun EditCashTrxScreen(
                     item {
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = mainTrx.memo ?: "",
+                            value = memo ?: "",
                             minLines = 3,
-                            onValueChange = { text -> mainTrx.memo = text },
+                            onValueChange = { text ->
+                                memo = text
+                                mainTrx.memo = text
+                            },
                             label = { Text(text = stringResource(id = R.string.memo)) },
                         )
                     }

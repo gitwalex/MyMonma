@@ -1,7 +1,9 @@
 package com.gerwalex.mymonma.database.room
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.gerwalex.mymonma.database.data.GeldflussData
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import kotlinx.coroutines.flow.Flow
@@ -38,5 +40,11 @@ abstract class ReportDao(db: DB) {
 
     @Query("Select * from Reportbasisdaten where id = :reportid")
     abstract suspend fun getReportBasisDaten(reportid: Long): ReportBasisDaten?
+
+    @Insert
+    abstract suspend fun insert(report: ReportBasisDaten)
+
+    @Update
+    abstract suspend fun update(report: ReportBasisDaten)
 
 }

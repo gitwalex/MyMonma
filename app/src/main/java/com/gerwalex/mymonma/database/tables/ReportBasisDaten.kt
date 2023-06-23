@@ -34,18 +34,16 @@ data class ReportBasisDaten(
     var id: Long? = null,
     var typ: ReportTyp = ReportTyp.Geldfluss,
     var name: String = "",
-    var von: Date = Date(System.currentTimeMillis()),
-    var bis: Date = Date(System.currentTimeMillis()),
-    var verglVon: Date? = null,
-    var verglBis: Date? = null,
+    var von: Date = ReportDateSelector.Ltz12Mnt.dateSelection.startDate,
+    var bis: Date = ReportDateSelector.Ltz12Mnt.dateSelection.endDate,
+    var verglVon: Date? = ReportDateSelector.LztJhr.dateSelection.startDate,
+    var verglBis: Date? = ReportDateSelector.LztJhr.dateSelection.startDate,
     var description: String? = null,
 )
 
 @Composable
 fun ReportBasisDatenItem(report: ReportBasisDaten, modifier: Modifier = Modifier) {
     Box(modifier) {
-
-
         Column(modifier = Modifier.padding(4.dp)) {
             Text(
                 text = report.name, fontWeight = FontWeight.Bold,
