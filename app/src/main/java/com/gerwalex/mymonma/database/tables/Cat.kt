@@ -26,20 +26,20 @@ import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
         childColumns = ["catclassid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-//    ), ForeignKey(
-//        entity = Cat::class,
-//        parentColumns = ["id"],
-//        childColumns = ["obercatid"],
-//        onDelete = ForeignKey.RESTRICT,
-//        onUpdate = ForeignKey.CASCADE,
-//    ), ForeignKey(
-//        entity = Cat::class,
-//        parentColumns = ["id"],
-//        childColumns = ["supercatid"],
-//        onDelete = ForeignKey.RESTRICT,
-//        onUpdate = ForeignKey.CASCADE,
-//
-    )]
+    ), ForeignKey(
+        entity = Cat::class,
+        parentColumns = ["id"],
+        childColumns = ["obercatid"],
+        onDelete = ForeignKey.RESTRICT,
+        onUpdate = ForeignKey.CASCADE,
+    ), ForeignKey(
+        entity = Cat::class,
+        parentColumns = ["id"],
+        childColumns = ["supercatid"],
+        onDelete = ForeignKey.RESTRICT,
+        onUpdate = ForeignKey.CASCADE,
+
+        )]
 )
 data class Cat(
 

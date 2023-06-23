@@ -45,10 +45,12 @@ data class TrxRegelmView(
     var accountname: String,
     var catname: String = "",
     var catclassid: Long? = null,
-    var gegenbuchung: CashTrx? = null,
 
 
     ) {
+    @Ignore
+    var gegenbuchung: CashTrx? = null
+
     @Ignore
     val intervall: Intervall = Intervall.values()[intervallid]
 

@@ -1,5 +1,6 @@
 package com.gerwalex.mymonma.database.tables
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -23,6 +24,8 @@ import androidx.room.PrimaryKey
 data class ReportExcludedCats(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
+    @ColumnInfo(index = true)
     var reportid: Long,
+    @ColumnInfo(index = true)
     var catid: Long,
 )

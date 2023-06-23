@@ -13,13 +13,11 @@ ertragestimated as estEarning
 from WPStammdaten where _id > 0
 
 Partner:
-select _id as id, name
-from Partner where _id > 1
+select _id as id, name from Partnerstammdaten where _id > 1
 
 
 WPKurs:
-select _id as id, btag, wpid, kurs
-from WPKurs
+select _id as id, btag, wpid, kurs from WPKurs
 
 Cashtrx:
 - LF weg :
