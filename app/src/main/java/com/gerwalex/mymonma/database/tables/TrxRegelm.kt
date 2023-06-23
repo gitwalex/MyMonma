@@ -3,6 +3,7 @@ package com.gerwalex.mymonma.database.tables
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.sql.Date
 
@@ -48,12 +49,12 @@ data class TrxRegelm(
     var memo: String? = null,
     @ColumnInfo(index = true)
     var transferid: Long? = null,
-    var isUmbuchung: Boolean? = false,
+    var isUmbuchung: Boolean = false,
 
     var cnt: Int = -1,// Anzahl der durchzufuehrenden Buchungen Default -1: unendlich
     var intervallid: Int = 0, //monatlich
     var last: Date? = null,
     var isUltimo: Boolean = false,
-
-
-    )
+    @Ignore
+    var gegenbuchung: CashTrx? = null
+)

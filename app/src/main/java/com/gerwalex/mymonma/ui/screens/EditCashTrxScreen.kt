@@ -143,10 +143,10 @@ fun EditCashTrxScreen(
                         IconButton(
                             enabled = differenz == 0L,
                             onClick = {
-                                ArrayList<CashTrx>().apply {
-                                    add(mainTrx.cashTrx)
-                                    addAll(CashTrxView.toCashTrxList(splitlist))
-                                    onFinished(this)
+                                ArrayList<CashTrxView>().apply {
+                                    add(mainTrx)
+                                    addAll(splitlist)
+                                    onFinished(CashTrxView.toCashTrxList(this))
                                 }
                             }) {
                             Icon(

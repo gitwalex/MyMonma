@@ -24,12 +24,12 @@ from WPKurs
 Cashtrx:
 - LF weg :
 UPDATE CashTrans SET memo=REPLACE(memo,Char(10), ' ')
-select _id as id, btag, accountid, catid ,partnerid, amount , memo, transferid from CashTrans
+select _id as id, btag, accountid, catid ,partnerid, amount , memo, transferid, 0 as isUmbuchung from CashTrans
 
 TrxRegelm:
 - LF weg :
 UPDATE TrxRegelm SET memo=REPLACE(memo,Char(10), ' ')
-select _id as id, btag, accountid, catid, partnerid, memo, amount, transferid, count as cnt, intervallid, last , isUltimo from TrxRegelm
+select _id as id, btag, accountid, catid, partnerid, memo, amount, transferid, count as cnt, intervallid, last , isUltimo, 0 as isUmbuchung from TrxRegelm
 
 WPTrx:
 select _id as id, accountid, btag, catid, einstand, ertrag, cast (haltedauer as int) as haltedauer, kurs, menge, paketid, wpid, zinszahl from WPTrx

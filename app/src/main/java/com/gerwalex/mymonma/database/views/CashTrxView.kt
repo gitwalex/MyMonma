@@ -68,23 +68,10 @@ data class CashTrxView(
                 transferid = transferid,
                 isUmbuchung = isUmbuchung,
                 partnername = partnername,
-                cashTrx = gegenbuchung?.cashTrx,
+                gegenbuchung = gegenbuchung?.cashTrx,
             )
         }
 
-    fun createGegenbuchung(): CashTrxView {
-        return CashTrxView(
-            id = null,
-            btag = btag,
-            accountid = catid,
-            catid = accountid,
-            partnerid = partnerid,
-            amount = -amount,
-            memo = memo,
-            partnername = partnername,
-            gegenbuchung = null,
-        )
-    }
 
     companion object {
         fun toCashTrxList(list: List<CashTrxView>): ArrayList<CashTrx> {
@@ -92,7 +79,13 @@ data class CashTrxView(
                 list.forEach { trx ->
                     if (trx.catclassid == Cat.KONTOCLASS) {
                         // Umbuchung!!
-                        trx.gegenbuchung = trx.createGegenbuchung()
+                        trx.gegenbuchung = trx.copy(
+                            id = null,
+                            accountid = trx.catid,
+                            catid = trx.accountid,
+                            amount = -trx.amount,
+                            transferid = null,
+                        )
                     } else {
                         trx.gegenbuchung = null
                     }

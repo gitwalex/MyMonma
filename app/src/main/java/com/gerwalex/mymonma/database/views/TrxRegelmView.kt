@@ -43,9 +43,9 @@ data class TrxRegelmView(
 
     var partnername: String,
     var accountname: String,
-
     var catname: String = "",
     var catclassid: Long? = null,
+    var gegenbuchung: CashTrx? = null,
 
 
     ) {

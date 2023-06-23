@@ -184,7 +184,7 @@ abstract class Dao(val db: DB) {
                     item.btag = main.btag
                 }
                 item.id = insert(item)
-                item.cashTrx?.let { umbuchung ->
+                item.gegenbuchung?.let { umbuchung ->
                     umbuchung.transferid = main.id
                     umbuchung.isUmbuchung = true
                     umbuchung.id = insert(umbuchung)
@@ -249,11 +249,21 @@ abstract class Dao(val db: DB) {
     open suspend fun execute(trx: TrxRegelmView) {
         trx.id?.let { id ->
             DB.dao.getTrxRegelm(id).also { item ->
-                val cashTrx = ArrayList<CashTrx>()
-                item.forEach {
-                    cashTrx.add(it.cashTrx)
+                val cashTrxList = ArrayList<CashTrx>()
+                item.forEach { trx ->
+                    val cashTrx = trx.cashTrx
+                    if (trx.catclassid == KONTOCLASS) {
+                        trx.gegenbuchung = cashTrx.copy(
+                            id = null,
+                            transferid = null,
+                            accountid = cashTrx.catid,
+                            catid = cashTrx.accountid,
+                            amount = -cashTrx.amount
+                        )
+                    }
+                    cashTrxList.add(cashTrx)
                 }
-                DB.dao.insertCashTrx(cashTrx)
+                DB.dao.insertCashTrx(cashTrxList)
                 when (trx.intervall) {
                     Intervall.Einmalig -> {
                         delete(id)

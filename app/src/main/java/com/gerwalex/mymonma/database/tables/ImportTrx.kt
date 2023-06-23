@@ -51,7 +51,8 @@ data class ImportTrx(
      */
 ) {
     @Ignore
-    var cashTrans: CashTrx? = null
+    var cashTrx: CashTrx? = null
+
 
     fun compareTo(other: ImportTrx): Int {
         var result = btag.compareTo(other.btag)

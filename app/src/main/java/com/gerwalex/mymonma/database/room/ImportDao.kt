@@ -84,7 +84,7 @@ abstract class ImportDao(val db: DB) {
     @Transaction
     open suspend fun update(importTrx: ImportTrx) {
         try {
-            importTrx.cashTrans?.let { cashTrx ->
+            importTrx.cashTrx?.let { cashTrx ->
                 if (cashTrx.id == null)
                     cashTrx.id = dao.insert(cashTrx) else dao.update(cashTrx)
 
@@ -93,7 +93,7 @@ abstract class ImportDao(val db: DB) {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("ImportDao", "importTrx=$importTrx, cashtrans=${importTrx.cashTrans} ")
+            Log.d("ImportDao", "importTrx=$importTrx, cashtrans=${importTrx.cashTrx} ")
         }
     }
 

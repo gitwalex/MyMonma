@@ -26,16 +26,16 @@ open class TrxImporter(private val context: Context) {
     ) {
         importdao.getCashTrx(verrechnungskonto, von, bis, newTrx.amount).onEach { cashTrxView ->
             if (cashTrxView.importTrxId == null) {
-                newTrx.cashTrans = cashTrxView.cashTrx
+                newTrx.cashTrx = cashTrxView.cashTrx
                 cashTrxView.btag = newTrx.btag
             }
         }
-        if (newTrx.cashTrans == null) {
+        if (newTrx.cashTrx == null) {
             // Bisher kein Treffer - neue Trx
             // erzeugen und ggfs. partnerid und catid aus
             // einer Cashtrans eines  bereits importierten
             // Umsatz mit gleichen Partnernamen übernehmen.
-            val newCashTrx = CashTrx.fromImportTrx(newTrx, verrechnungskonto)
+            val newCashTrx = fromImportTrx(newTrx, verrechnungskonto)
             newTrx.partnername?.let {
                 importdao.getPartnerWithCatid(it)?.also { partner ->
                     val cid = partner.catid
@@ -54,9 +54,19 @@ open class TrxImporter(private val context: Context) {
                     // mal gucken, ob nicht doch einen gibt, ansonsten Undefined
                     newCashTrx.partnerid = importdao.getPartnerid(it) ?: Undefined
                 }
-                newTrx.cashTrans = newCashTrx
+                newTrx.cashTrx = newCashTrx
             }
         }
+    }
+
+    private fun fromImportTrx(importTrx: ImportTrx, verrechnungskonto: Long): CashTrx {
+        return CashTrx(accountid = verrechnungskonto).apply {
+            btag = importTrx.btag
+            amount = importTrx.amount
+            memo = importTrx.memo
+            partnername = importTrx.partnername
+        }
+
     }
 
 
@@ -98,10 +108,10 @@ open class TrxImporter(private val context: Context) {
                         val bis = Date(newTrx.btag.time + DateUtils.DAY_IN_MILLIS * 3)
                         val trxList = importdao.getCashTrx(vKto, von, bis, newTrx.amount)
                         if (trxList.isNotEmpty() && trxList[0].importTrxId == null) {
-                            newTrx.cashTrans = trxList[0].cashTrx
+                            newTrx.cashTrx = trxList[0].cashTrx
                             trxList[0].btag = newTrx.btag
                         } else {
-                            val newCashTrx = CashTrx.fromImportTrx(newTrx, vKto)
+                            val newCashTrx = fromImportTrx(newTrx, vKto)
                             newTrx.partnername?.let {
                                 importdao.getPartnerWithCatid(it)?.also { partner ->
                                     val cid = partner.catid
@@ -122,7 +132,7 @@ open class TrxImporter(private val context: Context) {
                                         importdao.getPartnerid(it) ?: Undefined
                                 }
                             }
-                            newTrx.cashTrans = newCashTrx
+                            newTrx.cashTrx = newCashTrx
 
                         }
                         importdao.update(newTrx)
