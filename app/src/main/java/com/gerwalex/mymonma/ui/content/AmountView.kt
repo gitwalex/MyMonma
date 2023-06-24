@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.ext.getActivity
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.ComposeActivity
 import com.gerwalex.mymonma.ui.AppTheme
 import com.maltaisn.calcdialog.CalcDialog
@@ -39,7 +40,7 @@ fun AmountView(
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance() }
     val digits = remember { BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble())) }
-    val myValue = BigDecimal(value).divide(digits)
+    val myValue by rememberState(value) { BigDecimal(value).divide(digits) }
     Text(
         modifier = modifier,
         text = currency.format(myValue),

@@ -1,4 +1,4 @@
-package com.gerwalex.mymonma.ui.report
+package com.gerwalex.mymonma.ui.states
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

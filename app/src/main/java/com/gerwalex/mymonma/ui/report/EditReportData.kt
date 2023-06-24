@@ -43,6 +43,8 @@ import com.gerwalex.mymonma.ui.content.DatePickerView
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
+import com.gerwalex.mymonma.ui.states.ReportState
+import com.gerwalex.mymonma.ui.states.rememberReportState
 import kotlinx.coroutines.launch
 
 

@@ -1,6 +1,5 @@
 package com.gerwalex.mymonma.ui.content
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,7 +46,7 @@ fun <T> AutoCompleteTextView(
 ) {
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
-    var hasFocus by rememberState { false }
+    var shouldShowDropdown by rememberState(showDropdown) { showDropdown }
     Box(modifier = Modifier.imePadding()) {
         QuerySearch(
             query = query,
@@ -63,11 +62,11 @@ fun <T> AutoCompleteTextView(
             },
             onFocusChanged = { focused ->
                 onFocusChanged(focused)
-                hasFocus = focused
+                shouldShowDropdown = focused
             }
 
         )
-        if (hasFocus) {
+        if (shouldShowDropdown) {
             Popup(popupPositionProvider = WindowCenterOffsetPositionProvider(),
                 properties = PopupProperties(dismissOnClickOutside = true),
                 onDismissRequest = { onDismissRequest() }
@@ -106,25 +105,11 @@ class WindowCenterOffsetPositionProvider : PopupPositionProvider {
         layoutDirection: LayoutDirection,
         popupContentSize: IntSize
     ): IntOffset {
-        Log.d(
-            "AutocompleteTextView",
-            "calculatePosition: anchor=$anchorBounds, window=$windowSize," +
-                    "layoutDirection=$layoutDirection, popupSize=$popupContentSize"
-        )
-        val offset: IntOffset
-        if (anchorBounds.bottom + popupContentSize.height > windowSize.height) {
-            offset =
-                IntOffset(anchorBounds.left, max(anchorBounds.top - popupContentSize.height, 0))
+        return if (anchorBounds.bottom + popupContentSize.height > windowSize.height) {
+            IntOffset(anchorBounds.left, max(anchorBounds.top - popupContentSize.height, 0))
         } else {
-            offset = IntOffset(anchorBounds.left, anchorBounds.bottom)
+            IntOffset(anchorBounds.left, anchorBounds.bottom)
 
         }
-        Log.d("AutocompleteTextView", "offset:$offset")
-        return offset
-
-//        return IntOffset(
-//            (windowSize.width - popupContentSize.width) / 2,
-//            (windowSize.height - popupContentSize.height) / 2
-//        )
     }
 }
