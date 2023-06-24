@@ -7,9 +7,9 @@ import androidx.room.Update
 import com.gerwalex.mymonma.database.data.ExcludedCatClasses
 import com.gerwalex.mymonma.database.data.ExcludedCats
 import com.gerwalex.mymonma.database.data.GeldflussData
+import com.gerwalex.mymonma.database.data.GeldflussSummenData
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import kotlinx.coroutines.flow.Flow
-import java.sql.Date
 
 @Dao
 abstract class ReportDao(db: DB) {
@@ -24,26 +24,27 @@ abstract class ReportDao(db: DB) {
 
     @Query(
         """
-            select :reportid as reportid, id as catid, name    
+            select r.id as reportid, a.id as catid, a.name    
             ,(select sum(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between :from and :to) as amount   
+            where b.catid = a.id and b.btag between von and bis) as amount   
             ,(select count(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between :from and :to) as repcnt   
+            where b.catid = a.id and b.btag between von and bis) as repcnt   
+            ,(select sum(b.amount) from CashTrx b   
+            where b.catid = a.id and b.btag between verglVon and verglBis) as verglAmount   
+            ,(select count(b.amount) from CashTrx b   
+            where b.catid = a.id and b.btag between verglVon and verglBis) as verglRepcnt   
             from Cat a   
-            where catclassid > 100   
+            left outer join ReportBasisDaten r
+            where catclassid > 100 and r.id = :reportid
             and a.catclassid not in (select catclassid from ReportExcludedCatClasses d   
             where d.reportid = :reportid)   
             and a.id not in (select catid from ReportExcludedCats d   
             where d.reportid = :reportid)   
-            group by name having amount is not null   
-            order by name
+            group by a.name having repcnt > 0 or verglRepcnt > 0   
+            order by a.name
     """
     )
-    abstract fun getReportGeldflussData(
-        reportid: Long,
-        from: Date,
-        to: Date
-    ): Flow<List<GeldflussData>>
+    abstract fun getReportGeldflussData(reportid: Long): Flow<List<GeldflussData>>
 
     @Query("Select * from Reportbasisdaten where id = :reportid")
     abstract fun getReportBasisDaten(reportid: Long): Flow<ReportBasisDaten>
@@ -101,4 +102,28 @@ abstract class ReportDao(db: DB) {
     )
     abstract fun getExcludedCats(reportid: Long): Flow<List<ExcludedCats>>
 
+    @Query(
+        """
+        select :reportID as reportid, sum(einnahmen) as einnahmen, sum(ausgaben) as ausgaben,
+            sum(vergleinnahmen) as verglEinnahmen,  sum(verglausgaben) as verglAusgaben  from (   
+            select a.id   
+            ,(select sum(amount) from CashTrx b where btag between von and bis   
+            and catid = a.id and incomecat) as einnahmen   
+            ,(select sum(amount) from CashTrx b where btag between von and bis     
+            and catid = a.id and not incomecat) as ausgaben   
+            ,(select sum(amount) from CashTrx b where btag between  verglVon and verglBis   
+            and catid = a.id and incomecat) as vergleinnahmen   
+            ,(select sum(amount) from CashTrx b where btag between verglVon and verglBis   
+            and catid = a.id and not incomecat) as verglausgaben   
+            from Cat a   
+            left outer join ReportBasisDaten r  
+            where r.id = :reportID  and
+            a.id not in (select catid from ReportExcludedCats d where d.reportid = :reportID)
+            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d 
+            where d.reportid = :reportID)   
+            and catclassid > 100  )
+            
+        """
+    )
+    abstract fun getGeldflussSummendaten(reportID: Long): Flow<GeldflussSummenData>
 }

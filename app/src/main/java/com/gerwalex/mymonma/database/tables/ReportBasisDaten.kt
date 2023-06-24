@@ -47,8 +47,8 @@ data class ReportBasisDaten(
     var verglZeitraum: ReportDateSelector = ReportDateSelector.LztJhr,
     var von: Date = zeitraum.dateSelection.startDate,
     var bis: Date = zeitraum.dateSelection.endDate,
-    var verglVon: Date? = verglZeitraum.dateSelection.startDate,
-    var verglBis: Date? = verglZeitraum.dateSelection.endDate,
+    var verglVon: Date = verglZeitraum.dateSelection.startDate,
+    var verglBis: Date = verglZeitraum.dateSelection.endDate,
     var description: String? = null,
 )
 
@@ -106,9 +106,9 @@ fun ReportBasisDatenItem(
                     textAlign = TextAlign.Center,
                 )
                 Row {
-                    DateView(date = report.verglVon!!)
+                    DateView(date = report.verglVon)
                     Spacer(modifier = Modifier.weight(1f))
-                    DateView(date = report.verglBis!!)
+                    DateView(date = report.verglBis)
                 }
             }
             report.description?.let {

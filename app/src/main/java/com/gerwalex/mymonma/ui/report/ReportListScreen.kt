@@ -31,7 +31,6 @@ import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.EditReport
 import com.gerwalex.mymonma.ui.navigation.EmpfaengerReport
 import com.gerwalex.mymonma.ui.navigation.GeldflussReport
-import com.gerwalex.mymonma.ui.navigation.GeldflussVerglReport
 import com.gerwalex.mymonma.ui.navigation.ReportList
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
@@ -82,8 +81,9 @@ fun ReportListScreen(
                         indication = null,
                         onClick = {
                             when (item.typ) {
-                                ReportTyp.Geldfluss -> itemSelected(item, GeldflussReport)
-                                ReportTyp.GeldflussVergl -> itemSelected(item, GeldflussVerglReport)
+                                ReportTyp.Geldfluss,
+                                ReportTyp.GeldflussVergl -> itemSelected(item, GeldflussReport)
+
                                 ReportTyp.Empfaenger -> itemSelected(item, EmpfaengerReport)
                             }
                         })

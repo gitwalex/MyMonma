@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Popup
 import com.gerwalex.mymonma.R
@@ -27,11 +28,16 @@ import java.text.DateFormat
 
 
 @Composable
-fun DateView(date: Date, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun DateView(
+    date: Date,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.bodyLarge,
+    onClick: () -> Unit = {}
+) {
     val dateformatter = remember { DateFormat.getDateInstance(DateFormat.DEFAULT) }
     Column(modifier) {
         Text(text = dateformatter.format(date),
-            style = MaterialTheme.typography.bodyLarge,
+            style = style,
             modifier = Modifier.clickable {
                 onClick()
             }
