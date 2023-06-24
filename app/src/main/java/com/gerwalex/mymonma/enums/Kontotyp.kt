@@ -113,7 +113,7 @@ enum class Kontotyp {
 
 @Composable
 fun KontotypSpinner(typ: Kontotyp, selected: (Kontotyp) -> Unit) {
-    var myTyp by rememberState { typ }
+    var myTyp by rememberState(typ) { typ }
     var isExpanded by remember { mutableStateOf(false) }
     Box(contentAlignment = Alignment.Center) {
         Text(text = stringResource(id = myTyp.textID), modifier = Modifier.clickable {

@@ -266,7 +266,7 @@ enum class ReportDateSelector {
 
 @Composable
 fun ReportDateSpinner(selector: ReportDateSelector, selected: (ReportDateSelector) -> Unit) {
-    var mySelector by rememberState { selector }
+    var mySelector by rememberState(selector) { selector }
     var isExpanded by remember { mutableStateOf(false) }
     Box(contentAlignment = Alignment.Center) {
         Text(

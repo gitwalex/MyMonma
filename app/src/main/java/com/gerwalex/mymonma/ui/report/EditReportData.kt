@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
+import com.gerwalex.mymonma.enums.ReportDateSelector
 import com.gerwalex.mymonma.enums.ReportDateSpinner
 import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.enums.ReportTypSpinner
@@ -126,76 +126,9 @@ fun EditReportData(
             ReportTypSpinner(typ = report.typ, selected = {
                 report.typ = it
             })
-            Card(modifier = Modifier.padding(4.dp)) {
-                Column {
-                    Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(
-                            text = stringResource(id = R.string.zeitraum),
-                            maxLines = 1,
-                            textAlign = TextAlign.Center
-                        )
-                        ReportDateSpinner(selector = report.zeitraum, selected = {
-                            report.zeitraum = it
-                            report.von = it.dateSelection.startDate
-                            report.bis = it.dateSelection.endDate
-                        })
 
-                    }
-                    Row {
-                        Text(
-                            text = stringResource(id = R.string.reportStart),
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = stringResource(id = R.string.reportEnde),
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
-
-                    Row {
-                        DatePickerView(date = report.von, onChanged = {
-                            report.von = it
-                        })
-                        Spacer(modifier = Modifier.weight(1f))
-                        DatePickerView(date = report.bis, onChanged = {
-                            report.bis = it
-                        })
-                    }
-                }
-            }
-            if (report.typ.isVergl) {
-                Card(modifier = Modifier.padding(4.dp)) {
-                    Column {
-                        Text(
-                            text = stringResource(id = R.string.verglZeitraum),
-                            modifier = Modifier.fillMaxWidth(),
-                            maxLines = 1,
-                            textAlign = TextAlign.Center
-                        )
-                        Row {
-                            Text(
-                                text = stringResource(id = R.string.reportStart),
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                text = stringResource(id = R.string.reportEnde),
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
-                        Row {
-                            DatePickerView(
-                                date = report.verglVon ?: report.von,
-                                onChanged = { report.verglVon = it })
-                            Spacer(modifier = Modifier.weight(1f))
-                            DatePickerView(
-                                date = report.verglBis ?: report.bis,
-                                onChanged = { report.verglBis = it })
-                        }
-                    }
-                }
-            }
+            ZeitraumCard(report = report)
+            VerglZeitraumCard(report = report)
         }
     }
 }
@@ -232,10 +165,58 @@ fun ZeitraumCard(report: ReportState) {
             Row {
                 DatePickerView(date = report.von, onChanged = {
                     report.von = it
+                    report.zeitraum = ReportDateSelector.EigDatum
+
                 })
                 Spacer(modifier = Modifier.weight(1f))
                 DatePickerView(date = report.bis, onChanged = {
                     report.bis = it
+                    report.zeitraum = ReportDateSelector.EigDatum
+                })
+            }
+        }
+
+    }
+}
+
+@Composable
+fun VerglZeitraumCard(report: ReportState) {
+    Card(modifier = Modifier.padding(4.dp)) {
+        Column {
+            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = stringResource(id = R.string.verglZeitraum),
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
+                ReportDateSpinner(selector = report.verglZeitraum, selected = {
+                    report.verglZeitraum = it
+                    report.verglVon = it.dateSelection.startDate
+                    report.verglBis = it.dateSelection.endDate
+                })
+
+            }
+            Row {
+                Text(
+                    text = stringResource(id = R.string.reportStart),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = stringResource(id = R.string.reportEnde),
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+
+            Row {
+                DatePickerView(date = report.von, onChanged = {
+                    report.verglVon = it
+                    report.verglZeitraum = ReportDateSelector.EigDatum
+                })
+                Spacer(modifier = Modifier.weight(1f))
+                DatePickerView(date = report.bis, onChanged = {
+                    report.verglBis = it
+                    report.verglZeitraum = ReportDateSelector.EigDatum
                 })
             }
         }

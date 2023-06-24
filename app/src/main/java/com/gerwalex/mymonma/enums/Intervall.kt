@@ -99,7 +99,7 @@ enum class Intervall {
 
 @Composable
 fun IntervallSpinner(intervall: Intervall, selected: (Intervall) -> Unit) {
-    var myIntervall by rememberState { intervall }
+    var myIntervall by rememberState(intervall) { intervall }
     var isExpanded by remember { mutableStateOf(false) }
     Box(contentAlignment = Alignment.Center) {
         Text(
