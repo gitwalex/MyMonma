@@ -43,7 +43,7 @@ fun DateView(date: Date, modifier: Modifier = Modifier, onClick: () -> Unit = {}
 @Composable
 fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {
     var showDatePicker by remember { mutableStateOf(false) }
-    var myDate by remember { mutableStateOf(date) }
+    var myDate by remember(date) { mutableStateOf(date) }
     DateView(date = myDate, modifier = modifier, onClick = {
         showDatePicker = true
     })

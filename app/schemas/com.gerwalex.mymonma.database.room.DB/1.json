@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a8ee3cfc920024b2bd6d4bd0985c2d15",
+    "identityHash": "1eac574f9d77e45534f58dfbe02d8a93",
     "entities": [
       {
         "tableName": "Account",
@@ -934,7 +934,7 @@
       },
       {
         "tableName": "ReportBasisDaten",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `typ` TEXT NOT NULL, `name` TEXT NOT NULL, `von` TEXT NOT NULL, `bis` TEXT NOT NULL, `verglVon` TEXT, `verglBis` TEXT, `description` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `typ` TEXT NOT NULL, `name` TEXT NOT NULL, `zeitraum` TEXT NOT NULL, `verglZeitraum` TEXT NOT NULL, `von` TEXT NOT NULL, `bis` TEXT NOT NULL, `verglVon` TEXT, `verglBis` TEXT, `description` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -951,6 +951,18 @@
           {
             "fieldPath": "name",
             "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zeitraum",
+            "columnName": "zeitraum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verglZeitraum",
+            "columnName": "verglZeitraum",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1495,7 +1507,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8ee3cfc920024b2bd6d4bd0985c2d15')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1eac574f9d77e45534f58dfbe02d8a93')"
     ]
   }
 }

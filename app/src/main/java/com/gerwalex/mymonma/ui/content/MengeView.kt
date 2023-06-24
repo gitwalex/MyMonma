@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.ext.getActivity
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.ComposeActivity
 import com.gerwalex.mymonma.ui.AppTheme
 import com.maltaisn.calcdialog.CalcDialog
@@ -37,7 +38,9 @@ fun MengeView(
 ) {
     val number = remember { NumberFormat.getNumberInstance() }
     val digits = remember { BigDecimal(NACHKOMMA) }
-    val myValue = BigDecimal(value).divide(digits)
+    val myValue by rememberState(value) {
+        BigDecimal(value).divide(digits)
+    }
     Text(
         modifier = modifier,
         text = number.format(myValue),

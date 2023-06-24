@@ -16,6 +16,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -27,7 +30,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.enums.ReportDateSelector
+import com.gerwalex.mymonma.enums.ReportDateSpinner
 import com.gerwalex.mymonma.enums.ReportTyp
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.DateView
 import java.sql.Date
@@ -38,10 +43,12 @@ data class ReportBasisDaten(
     var id: Long? = null,
     var typ: ReportTyp = ReportTyp.Geldfluss,
     var name: String = "",
-    var von: Date = ReportDateSelector.Ltz12Mnt.dateSelection.startDate,
-    var bis: Date = ReportDateSelector.Ltz12Mnt.dateSelection.endDate,
-    var verglVon: Date? = ReportDateSelector.LztJhr.dateSelection.startDate,
-    var verglBis: Date? = ReportDateSelector.LztJhr.dateSelection.startDate,
+    var zeitraum: ReportDateSelector = ReportDateSelector.Ltz12Mnt,
+    var verglZeitraum: ReportDateSelector = ReportDateSelector.LztJhr,
+    var von: Date = zeitraum.dateSelection.startDate,
+    var bis: Date = zeitraum.dateSelection.endDate,
+    var verglVon: Date? = verglZeitraum.dateSelection.startDate,
+    var verglBis: Date? = verglZeitraum.dateSelection.endDate,
     var description: String? = null,
 )
 
@@ -51,9 +58,14 @@ fun ReportBasisDatenItem(
     modifier: Modifier = Modifier,
     onEdit: () -> Unit
 ) {
+    var zeitraum by rememberState(key = report.zeitraum) { report.zeitraum }
+    var verglZeitraum by rememberState(key = report.zeitraum) { report.verglZeitraum }
+    var von by rememberState { report.von }
+    var bis by rememberState { report.bis }
     Box(modifier) {
         Column(modifier = Modifier.padding(4.dp)) {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
                 Text(
                     text = report.name, fontWeight = FontWeight.Bold,
                 )
@@ -67,15 +79,23 @@ fun ReportBasisDatenItem(
             }
             Text(text = stringResource(id = report.typ.textID))
             Divider()
-            Text(
-                text = stringResource(id = R.string.zeitraum), fontStyle = FontStyle.Italic,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-            )
             Row {
-                DateView(date = report.von)
+                Text(
+                    text = stringResource(id = R.string.zeitraum), fontStyle = FontStyle.Italic,
+                )
+                ReportDateSpinner(selector = zeitraum, selected = {
+                    zeitraum = it
+                    von = zeitraum.dateSelection.startDate
+                    bis = zeitraum.dateSelection.endDate
+                    report.zeitraum = zeitraum
+                    report.von = von
+                    report.bis = bis
+                })
+            }
+            Row {
+                DateView(date = von)
                 Spacer(modifier = Modifier.weight(1f))
-                DateView(date = report.bis)
+                DateView(date = bis)
             }
             if (report.typ.isVergl) {
                 Divider()

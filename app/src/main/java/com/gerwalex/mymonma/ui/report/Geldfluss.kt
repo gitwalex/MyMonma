@@ -13,64 +13,70 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.gerwalex.mymonma.database.data.ExcludedCatClassesCheckBoxes
+import com.gerwalex.mymonma.database.data.ExcludedCatsCheckBoxes
 import com.gerwalex.mymonma.database.data.GeldflussData
 import com.gerwalex.mymonma.database.data.GeldflussDataItem
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
-import com.gerwalex.mymonma.ui.subscreens.GeldflussDrawer
+import com.gerwalex.mymonma.ui.navigation.Up
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-    val reportid = rememberSaveable { viewModel.reportId }
-    var report by remember { mutableStateOf(ReportBasisDaten()) }
-    LaunchedEffect(key1 = reportid) {
-        reportdao.getReportBasisDaten(reportid)?.apply {
-            report = this
-        }
-
-    }
-    report.id?.let {
+    viewModel.reportId?.let { reportid ->
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
+        var drawerContent by rememberState { ExcludedValuesSheet.Classes }
+        val scope = rememberCoroutineScope()
+        val report by reportdao.getReportBasisDaten(reportid)
+            .collectAsState(initial = ReportBasisDaten())
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
 
                 ModalDrawerSheet {
                     Spacer(Modifier.height(12.dp))
-                    GeldflussDrawer(reportid = it)
+                    when (drawerContent) {
+                        ExcludedValuesSheet.Classes -> ExcludedCatClassesCheckBoxes(reportid = reportid)
+                        ExcludedValuesSheet.Cats -> ExcludedCatsCheckBoxes(reportid = reportid)
+                    }
                 }
             }, content = {
-
                 Scaffold(
                     topBar = {
                         TopToolBar(title = report.name) {
-                            scope.launch {
-                                if (drawerState.isClosed)
-                                    drawerState.open() else drawerState.close()
-                            }
+                            navigateTo(Up)
                         }
                     },
+                    bottomBar = {
+                        BottomNavigationBar(
+                            isVergl = report.typ.isVergl,
+                            open = {
+                                drawerContent = it
+                                scope.launch {
+                                    if (drawerState.isOpen) {
+                                        drawerState.close()
+                                    }
+                                    drawerState.open()
+                                }
+                            })
+                    }
 
-                    ) { padding ->
+                ) { padding ->
                     Box(modifier = Modifier.padding(padding)) {
                         val list by reportdao.getReportGeldflussData(
-                            it,
+                            reportid,
                             from = report.von,
                             to = report.bis
                         )
@@ -83,7 +89,7 @@ fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit
                     }
                 }
             })
-    }
+    } ?: navigateTo(Up)
 }
 
 @Composable

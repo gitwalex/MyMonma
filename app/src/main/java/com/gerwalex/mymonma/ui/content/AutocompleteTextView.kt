@@ -1,5 +1,6 @@
 package com.gerwalex.mymonma.ui.content
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntOffset
@@ -24,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
+import com.gerwalex.mymonma.ext.rememberState
+import java.lang.Integer.max
 
 @Composable
 fun <T> AutoCompleteTextView(
@@ -42,6 +47,7 @@ fun <T> AutoCompleteTextView(
 ) {
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
+    var hasFocus by rememberState { false }
     Box(modifier = Modifier.imePadding()) {
         QuerySearch(
             query = query,
@@ -57,10 +63,11 @@ fun <T> AutoCompleteTextView(
             },
             onFocusChanged = { focused ->
                 onFocusChanged(focused)
+                hasFocus = focused
             }
 
         )
-        if (showDropdown && list.size > 1) {
+        if (hasFocus) {
             Popup(popupPositionProvider = WindowCenterOffsetPositionProvider(),
                 properties = PopupProperties(dismissOnClickOutside = true),
                 onDismissRequest = { onDismissRequest() }
@@ -99,25 +106,25 @@ class WindowCenterOffsetPositionProvider : PopupPositionProvider {
         layoutDirection: LayoutDirection,
         popupContentSize: IntSize
     ): IntOffset {
-//        Log.d(
-//            "AutocompleteTextView",
-//            "calculatePosition: anchor=$anchorBounds, window=$windowSize," +
-//                    "layoutDirection=$layoutDirection, popupSize=$popupContentSize"
-//        )
-//        val offset: IntOffset
-//        if (anchorBounds.bottom + popupContentSize.height > windowSize.height) {
-//            offset =
-//                IntOffset(anchorBounds.left, max(anchorBounds.top - popupContentSize.height, 0))
-//        } else {
-//            offset = IntOffset(anchorBounds.left, anchorBounds.bottom)
-//
-//        }
-//        Log.d("AutocompleteTextView", "offset:$offset")
-//        return offset
-
-        return IntOffset(
-            (windowSize.width - popupContentSize.width) / 2,
-            (windowSize.height - popupContentSize.height) / 2
+        Log.d(
+            "AutocompleteTextView",
+            "calculatePosition: anchor=$anchorBounds, window=$windowSize," +
+                    "layoutDirection=$layoutDirection, popupSize=$popupContentSize"
         )
+        val offset: IntOffset
+        if (anchorBounds.bottom + popupContentSize.height > windowSize.height) {
+            offset =
+                IntOffset(anchorBounds.left, max(anchorBounds.top - popupContentSize.height, 0))
+        } else {
+            offset = IntOffset(anchorBounds.left, anchorBounds.bottom)
+
+        }
+        Log.d("AutocompleteTextView", "offset:$offset")
+        return offset
+
+//        return IntOffset(
+//            (windowSize.width - popupContentSize.width) / 2,
+//            (windowSize.height - popupContentSize.height) / 2
+//        )
     }
 }
