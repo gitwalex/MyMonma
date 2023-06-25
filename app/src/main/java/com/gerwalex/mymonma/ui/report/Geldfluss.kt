@@ -1,25 +1,44 @@
 package com.gerwalex.mymonma.ui.report
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Card
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissState
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.database.data.ExcludedCatClassesCheckBoxes
 import com.gerwalex.mymonma.database.data.ExcludedCatsCheckBoxes
@@ -89,6 +108,7 @@ fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit
     } ?: navigateTo(Up)
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun GeldflussDetailScreen(
     report: ReportBasisDaten,
@@ -101,11 +121,41 @@ fun GeldflussDetailScreen(
             modifier = Modifier.weight(1f),
         ) {
             items(list, key = { it.catid }) { item ->
-                Card(modifier = Modifier.padding(2.dp)) {
-                    GeldflussDataItem(trx = item) {
-                        onSelected(item)
+                val scope = rememberCoroutineScope()
+                val currentItem by rememberUpdatedState(newValue = item)
+                val dismissState = rememberDismissState(
+                    confirmValueChange = { dismissValue ->
+                        when (dismissValue) {
+                            DismissValue.Default -> false
+                            DismissValue.DismissedToEnd -> false
+                            DismissValue.DismissedToStart -> {
+                                scope.launch {
+                                    reportdao.insertExcludedCat(
+                                        currentItem.reportid,
+                                        currentItem.catid
+                                    )
+                                }
+                                true
+                            }
+                        }
                     }
-                }
+                )
+                SwipeToDismiss(
+                    modifier = Modifier
+                        .padding(vertical = 1.dp)
+                        .animateItemPlacement(),
+                    state = dismissState,
+                    background = {
+                        SwipeGeldflussBackground(dismissState = dismissState)
+                    },
+                    dismissContent = {
+                        Card(modifier = Modifier.padding(2.dp)) {
+                            GeldflussDataItem(trx = item) {
+                                onSelected(item)
+                            }
+                        }
+                    })
+
             }
         }
         Card(
@@ -118,4 +168,46 @@ fun GeldflussDetailScreen(
     }
 
 }
+
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun SwipeGeldflussBackground(dismissState: DismissState) {
+    val direction = dismissState.dismissDirection ?: return
+
+    val color by animateColorAsState(
+        when (dismissState.targetValue) {
+            DismissValue.Default -> Color.LightGray
+            DismissValue.DismissedToEnd -> Color.Green
+            DismissValue.DismissedToStart -> Color.Red
+        }
+    )
+    val alignment = when (direction) {
+        DismissDirection.StartToEnd -> Alignment.CenterStart
+        DismissDirection.EndToStart -> Alignment.CenterEnd
+    }
+    val icon = when (direction) {
+        DismissDirection.StartToEnd -> Icons.Default.Done
+        DismissDirection.EndToStart -> Icons.Default.Remove
+    }
+    val scale by animateFloatAsState(
+        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+    )
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(color)
+            .padding(horizontal = 20.dp),
+        contentAlignment = alignment
+    ) {
+        Icon(
+            icon,
+            contentDescription = "Localized description",
+            modifier = Modifier.scale(scale)
+        )
+    }
+}
+
+
 

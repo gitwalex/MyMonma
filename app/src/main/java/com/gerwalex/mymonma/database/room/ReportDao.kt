@@ -24,24 +24,7 @@ abstract class ReportDao(db: DB) {
 
     @Query(
         """
-            select r.id as reportid, a.id as catid, a.name    
-            ,(select sum(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between von and bis) as amount   
-            ,(select count(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between von and bis) as repcnt   
-            ,(select sum(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between verglVon and verglBis) as verglAmount   
-            ,(select count(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between verglVon and verglBis) as verglRepcnt   
-            from Cat a   
-            left outer join ReportBasisDaten r
-            where catclassid > 100 and r.id = :reportid
-            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d   
-            where d.reportid = :reportid)   
-            and a.id not in (select catid from ReportExcludedCats d   
-            where d.reportid = :reportid)   
-            group by a.name having repcnt > 0 or verglRepcnt > 0   
-            order by a.name
+        select * from GeldflussData where reportid = :reportid
     """
     )
     abstract fun getReportGeldflussData(reportid: Long): Flow<List<GeldflussData>>
@@ -82,7 +65,7 @@ abstract class ReportDao(db: DB) {
         "REPLACE INTO ReportExcludedCats (reportid, catid) " +  //
                 "values (:reportID,  :catID)"
     )
-    abstract fun insertExcludedCat(reportID: Long, catID: Long)
+    abstract suspend fun insertExcludedCat(reportID: Long, catID: Long)
 
     @Query(
         "DELETE FROM ReportExcludedCats " +  //

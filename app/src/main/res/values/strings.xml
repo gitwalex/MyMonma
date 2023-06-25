@@ -124,8 +124,8 @@
     <string name="reportTyp">Reporttyp</string>
     <string name="reportStart">Startdatum</string>
     <string name="reportEnde">Endedatum</string>
-    <string name="excludedCatClasses">Ausgeschlossene Klassen</string>
-    <string name="excludedCats">Ausgeschossene Kategorien</string>
+    <string name="excludedCatClasses">Kategorie-Klassen</string>
+    <string name="excludedCats">Ausgeschlossene Kategorien</string>
     <string name="catClasses">Klassen</string>
     <string name="cats">Kategorien</string>
     <string name="vergleich">Vergleich</string>

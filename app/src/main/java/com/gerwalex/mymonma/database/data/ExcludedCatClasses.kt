@@ -20,12 +20,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ui.AppTheme
 import kotlinx.coroutines.launch
 
+@DatabaseView(
+    """
+            select a.id, a.name, r.id as reportid, a.id as catclassid,  
+        (select id from ReportExcludedCatClasses b   
+        where b.reportid = r.id and b.catclassid = a.id) as excluded   
+        from CatClass a   
+		join ReportBasisDaten r
+        where a.id > 100   
+        order by a.name
+
+"""
+)
 data class ExcludedCatClasses(
     val id: Long,
     val name: String,

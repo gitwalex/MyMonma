@@ -11,6 +11,7 @@ import com.gerwalex.monmang.database.room.Migration_49_50;
 import com.gerwalex.monmang.database.tables.ImportNewTrx;
 import com.gerwalex.monmang.database.tables.ImportTrx;
 import com.gerwalex.mymonma.R;
+import com.gerwalex.mymonma.database.data.GeldflussData;
 import com.gerwalex.mymonma.database.tables.Account;
 import com.gerwalex.mymonma.database.tables.CashTrx;
 import com.gerwalex.mymonma.database.tables.Cat;
@@ -38,7 +39,8 @@ import com.gerwalex.mymonma.database.views.WPStammView;
         //
         version = 1,
         //
-        views = {AccountView.class, CashTrxView.class, TrxRegelmView.class, WPStammView.class})
+        views = {AccountView.class, CashTrxView.class, TrxRegelmView.class, WPStammView.class,
+                GeldflussData.class})
 @TypeConverters({MonMaConverter.class, MyConverter.class})
 public abstract class DB extends RoomDatabase {
     public static String DBNAME;

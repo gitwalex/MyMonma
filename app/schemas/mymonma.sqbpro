@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/alexw/StudioProjects/device-explorer/SM-T970/mymonma/monma.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="7163"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainAccount"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">update cat set saldo = (
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/alexw/StudioProjects/device-explorer/SM-T970/mymonma/monma.db" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="7163"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">update cat set saldo = (
 select sum(amount) 
 from CashTrx a 
 where (transferid is null or isUmbuchung )
@@ -11,17 +11,35 @@ where transferid is null
 group by accountid</sql><sql name="SQL 3">select * from CashTrx where accountid = 16 -- or catid = 16 
 order by btag desc </sql><sql name="SQL 4">insert into CashTrx (btag, partnerid,accountid,  catid, amount, memo, transferid)
 select btag, partnerid,catid, accountid, -amount, memo, id 
-from CashTrx where catid between 1 and 99 and transferid is null</sql><sql name="SQL 6">--explain query plan
-        select a.*
-        ,(select name from Partnerstamm  p where p.id = a.partnerid) as partnername
-        ,(select name from Cat c where c.id = a.accountid) as accountname
-		,c.name as catname, c.catclassid
---		,t.id as importTrxId
-        from CashTrx a 
-        left join Cat c on c.id = catid
---        left outer join ImportTrx t on a.id = t.umsatzid 
-		where a. accountid = 46
-		        and (transferid is null or isUmbuchung)
-        order by btag desc, a.id
-
-</sql><sql name="SQL 8">select * from ImportTrx</sql><current_tab id="5"/></tab_sql></sqlb_project>
+from CashTrx where catid between 1 and 99 and transferid is null</sql><sql name="SQL 6">--explain query plan
+        select a.*
+        ,(select name from Partnerstamm  p where p.id = a.partnerid) as partnername
+        ,(select name from Cat c where c.id = a.accountid) as accountname
+		,c.name as catname, c.catclassid
+--		,t.id as importTrxId
+        from CashTrx a 
+        left join Cat c on c.id = catid
+--        left outer join ImportTrx t on a.id = t.umsatzid 
+		where a. accountid = 46
+		        and (transferid is null or isUmbuchung)
+        order by btag desc, a.id
+
+</sql><sql name="SQL 8">                select r.id as reportid, a.id as catid, a.name  
+            ,(select sum(b.amount) from CashTrx b   
+            where b.catid = a.id and b.btag between von and bis) as amount   
+            ,(select count(b.amount) from CashTrx b   
+            where b.catid = a.id and b.btag between von and bis) as repcnt   
+            ,(select sum(b.amount) from CashTrx b   
+            where b.catid = a.id and b.btag between verglVon and verglBis) as verglAmount   
+            ,(select count(b.amount) from CashTrx b   
+            where b.catid = a.id and b.btag between verglVon and verglBis) as verglRepcnt   
+            from Cat a   
+            left outer join ReportBasisDaten r
+            where catclassid &gt; 100 
+            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d   
+            where d.reportid = r.id)   
+            and a.id not in (select catid from ReportExcludedCats d   
+            where d.reportid = r.id)   
+            group by a.name having repcnt &gt; 0 or verglRepcnt &gt; 0   
+            order by a.name
+</sql><current_tab id="5"/></tab_sql></sqlb_project>
