@@ -211,12 +211,12 @@ fun VerglZeitraumCard(report: ReportState) {
             }
 
             Row {
-                DatePickerView(date = report.von, onChanged = {
+                DatePickerView(date = report.verglVon, onChanged = {
                     report.verglVon = it
                     report.verglZeitraum = ReportDateSelector.EigDatum
                 })
                 Spacer(modifier = Modifier.weight(1f))
-                DatePickerView(date = report.bis, onChanged = {
+                DatePickerView(date = report.verglBis, onChanged = {
                     report.verglBis = it
                     report.verglZeitraum = ReportDateSelector.EigDatum
                 })

@@ -26,7 +26,7 @@ enum class ExcludedValuesSheet {
 }
 
 @Composable
-fun BottomNavigationBar(isVergl: Boolean, open: (ExcludedValuesSheet) -> Unit) {
+fun BottomNavigationBar(open: (ExcludedValuesSheet) -> Unit) {
     NavigationBar {
         NavigationBarItem(
             selected = false,
@@ -38,19 +38,17 @@ fun BottomNavigationBar(isVergl: Boolean, open: (ExcludedValuesSheet) -> Unit) {
                     style = MaterialTheme.typography.labelSmall
                 )
             })
-        if (isVergl) {
-            NavigationBarItem(
-                selected = false,
-                onClick = { open(ExcludedValuesSheet.Classes) },
-                icon = { Icon(Icons.Default.DateRange, "") },
-                label = {
-                    Text(
-                        text = stringResource(id = R.string.vergleich),
-                        style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1
-                    )
-                })
-        }
+        NavigationBarItem(
+            selected = false,
+            onClick = { open(ExcludedValuesSheet.Classes) },
+            icon = { Icon(Icons.Default.DateRange, "") },
+            label = {
+                Text(
+                    text = stringResource(id = R.string.vergleich),
+                    style = MaterialTheme.typography.labelSmall,
+                    maxLines = 1
+                )
+            })
         NavigationBarItem(
             selected = false,
             onClick = { open(ExcludedValuesSheet.Classes) },
@@ -82,7 +80,7 @@ fun BottomNavigationBar(isVergl: Boolean, open: (ExcludedValuesSheet) -> Unit) {
 fun BarPreview() {
     AppTheme {
         Surface {
-            BottomNavigationBar(isVergl = true, open = {})
+            BottomNavigationBar {}
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,7 +36,7 @@ data class GeldflussData(
 )
 
 @Composable
-fun GeldflussDataItem(trx: GeldflussData, isVergl: Boolean = false, onClicked: () -> Unit) {
+fun GeldflussDataItem(trx: GeldflussData, onClicked: () -> Unit) {
     val splitted by rememberState(trx.name) {
         trx.name.split(":")
     }
@@ -76,25 +77,29 @@ fun GeldflussDataItem(trx: GeldflussData, isVergl: Boolean = false, onClicked: (
             Spacer(modifier = Modifier.weight(1f))
             Column(horizontalAlignment = Alignment.End) {
                 AmountView(value = trx.amount, fontWeight = FontWeight.Bold)
-                if (isVergl) {
-                    Text(
-                        text = stringResource(id = R.string.vergleich),
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                    AmountView(
-                        value = trx.verglAmount,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-
+                Text(
+                    text = stringResource(id = R.string.vergleich),
+                    style = MaterialTheme.typography.labelSmall
+                )
+                AmountView(
+                    value = trx.verglAmount,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.labelSmall
+                )
             }
 
         }
-        if (isVergl) {
-            Row {
-                AmountView(value = trx.amount - trx.verglAmount)
-                PercentView(value = (trx.amount * 100 / (trx.amount + trx.verglAmount)))
+        Divider()
+        Text(
+            text = stringResource(id = R.string.differenz),
+            style = MaterialTheme.typography.labelSmall
+        )
+        Row {
+            AmountView(value = trx.amount - trx.verglAmount)
+            if (trx.amount != 0L) {
+                Text(text = " (")
+                PercentView(value = (trx.amount - trx.verglAmount) * 100f / trx.verglAmount)
+                Text(text = ")")
             }
         }
     }
@@ -116,7 +121,7 @@ fun GeldflussDataItemPreview() {
                 verglRepcnt = 100,
 
                 )
-            GeldflussDataItem(trx = data, isVergl = true) {}
+            GeldflussDataItem(trx = data) {}
 
         }
     }

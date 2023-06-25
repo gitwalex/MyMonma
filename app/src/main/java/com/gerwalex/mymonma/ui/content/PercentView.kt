@@ -16,28 +16,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ui.AppTheme
-import java.math.BigDecimal
 import java.text.NumberFormat
-import kotlin.math.pow
 
 
 @Composable
 fun PercentView(
-    value: Long,
+    value: Float,
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
 ) {
     val number = remember { NumberFormat.getNumberInstance() }
-    val digits = remember { BigDecimal(10.0.pow(2)) }
-    val myValue by rememberState(value) { BigDecimal(value).divide(digits) }
+    val myValue by rememberState(value) { value }
     Text(
         modifier = modifier,
         text = "${number.format(myValue)}%",
         style = style,
         fontWeight = fontWeight,
-        color = if (colorMode && myValue < BigDecimal(0)) Color.Red else MaterialTheme.colorScheme.onSurface,
+        color = if (colorMode && myValue < 0) Color.Red else MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.End,
     )
 }
@@ -49,7 +46,7 @@ fun PercentView(
 fun PercentViewPreview() {
     AppTheme {
         Surface {
-            PercentView(12_51)
+            PercentView(12.51f)
         }
     }
 }

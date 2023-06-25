@@ -74,13 +74,11 @@ fun GeldflussSummen(
                     style = MaterialTheme.typography.labelMedium
                 )
                 AmountView(value = data.einnahmen)
-                if (report.typ.isVergl) {
-                    Text(
-                        text = stringResource(id = R.string.verglZeitraum),
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                    AmountView(value = data.verglEinnahmen)
-                }
+                Text(
+                    text = stringResource(id = R.string.verglZeitraum),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                AmountView(value = data.verglEinnahmen)
             }
 
             Column {
@@ -92,12 +90,10 @@ fun GeldflussSummen(
                     date = report.von, style = MaterialTheme.typography.labelMedium
                 )
                 AmountView(value = data.ausgaben)
-                if (report.typ.isVergl) {
-                    DateView(
-                        date = report.verglVon, style = MaterialTheme.typography.labelMedium
-                    )
-                    AmountView(value = data.verglAusgaben)
-                }
+                DateView(
+                    date = report.verglVon, style = MaterialTheme.typography.labelMedium
+                )
+                AmountView(value = data.verglAusgaben)
             }
             Column {
                 Text(
@@ -106,12 +102,10 @@ fun GeldflussSummen(
                 )
                 DateView(date = report.bis, style = MaterialTheme.typography.labelMedium)
                 AmountView(value = data.einnahmen + data.ausgaben)
-                if (report.typ.isVergl) {
-                    DateView(
-                        date = report.verglBis, style = MaterialTheme.typography.labelMedium
-                    )
-                    AmountView(value = data.verglEinnahmen)
-                }
+                DateView(
+                    date = report.verglBis, style = MaterialTheme.typography.labelMedium
+                )
+                AmountView(value = data.verglEinnahmen + data.verglAusgaben)
             }
         }
     }

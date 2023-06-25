@@ -24,14 +24,9 @@ import com.gerwalex.mymonma.ui.AppTheme
  * Created by alex on 18.06.2015.
  */
 enum class ReportTyp {
-    Geldfluss {
-        override val description = R.string.reportGeldflussDesc
-        override val textID = R.string.reportGeldfluss
-    },
     GeldflussVergl {
         override val description = R.string.reportGeldflussVerglDesc
         override val textID = R.string.reportGeldflussVergl
-        override val isVergl = true
 
     },
     Empfaenger {
@@ -51,10 +46,6 @@ enum class ReportTyp {
      */
     open val isFixDay = false
 
-    /**
-     * true, wenn es ein Vergleichsreport ist. Default = false
-     */
-    open val isVergl = false
 }
 
 @Composable
@@ -88,7 +79,7 @@ fun ReportTypSpinner(typ: ReportTyp, selected: (ReportTyp) -> Unit) {
 fun ReportSpinnerPreview() {
     AppTheme {
         Surface {
-            ReportTypSpinner(typ = ReportTyp.Geldfluss, selected = {})
+            ReportTypSpinner(typ = ReportTyp.GeldflussVergl, selected = {})
 
         }
     }

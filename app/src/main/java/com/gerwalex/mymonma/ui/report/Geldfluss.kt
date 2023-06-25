@@ -63,17 +63,15 @@ fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit
                         }
                     },
                     bottomBar = {
-                        BottomNavigationBar(
-                            isVergl = report.typ.isVergl,
-                            open = {
-                                drawerContent = it
-                                scope.launch {
-                                    if (drawerState.isOpen) {
-                                        drawerState.close()
-                                    }
-                                    drawerState.open()
+                        BottomNavigationBar {
+                            drawerContent = it
+                            scope.launch {
+                                if (drawerState.isOpen) {
+                                    drawerState.close()
                                 }
-                            })
+                                drawerState.open()
+                            }
+                        }
                     }
 
                 ) { padding ->
@@ -104,9 +102,9 @@ fun GeldflussDetailScreen(
         ) {
             items(list, key = { it.catid }) { item ->
                 Card(modifier = Modifier.padding(2.dp)) {
-                    GeldflussDataItem(trx = item, isVergl = report.typ.isVergl, onClicked = {
+                    GeldflussDataItem(trx = item) {
                         onSelected(item)
-                    })
+                    }
                 }
             }
         }

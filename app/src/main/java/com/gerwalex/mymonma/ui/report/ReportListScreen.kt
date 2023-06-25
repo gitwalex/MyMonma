@@ -81,9 +81,7 @@ fun ReportListScreen(
                         indication = null,
                         onClick = {
                             when (item.typ) {
-                                ReportTyp.Geldfluss,
                                 ReportTyp.GeldflussVergl -> itemSelected(item, GeldflussReport)
-
                                 ReportTyp.Empfaenger -> itemSelected(item, EmpfaengerReport)
                             }
                         })
