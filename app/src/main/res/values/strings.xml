@@ -131,4 +131,6 @@
     <string name="cats">Kategorien</string>
     <string name="vergleich">Vergleich</string>
     <string name="ausgaben">Ausgaben</string>
+    <string name="deleted">Gelöscht</string>
+    <string name="undo">Rückgängig?</string>
 </resources>

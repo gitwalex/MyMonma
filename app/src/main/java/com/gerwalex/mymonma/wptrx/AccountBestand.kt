@@ -2,30 +2,23 @@ package com.gerwalex.mymonma.wptrx
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.room.Ignore
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
@@ -36,8 +29,6 @@ import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
 import com.gerwalex.mymonma.ui.content.AmountView
-import com.skydoves.orchestra.spinner.Spinner
-import com.skydoves.orchestra.spinner.SpinnerProperties
 import java.sql.Date
 
 data class AccountBestand(
@@ -159,51 +150,3 @@ fun AccountBestandIncomeItemPreview() {
 
 }
 
-@Composable
-fun AccountMitBestandSpinner(wpid: Long, onItemSelected: (AccountBestand) -> Unit) {
-    val accountbestand = remember {
-        mutableStateListOf<AccountBestand>()
-    }
-    LaunchedEffect(wpid) {
-        DB.wpdao.getAccountBestand(wpid)
-            .collect {
-                if (it.isNotEmpty()) {
-                    accountbestand.addAll(it)
-                    onItemSelected(it[0])
-                }
-            }
-
-    }
-    val texte = ArrayList<String>().apply {
-        accountbestand.forEach {
-            add(it.name)
-        }
-    }
-    if (accountbestand.isNotEmpty()) {
-        val (selectedItem, setSelectedItem)
-                = remember { mutableStateOf(accountbestand[0]) }
-        Spinner(
-            text = selectedItem.name,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-//            .align(Alignment.CenterHorizontally)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            itemList = texte,
-            style = MaterialTheme.typography.bodyMedium,
-            properties = SpinnerProperties(
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                textAlign = TextAlign.Center,
-                showDivider = true,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                spinnerPadding = 16.dp,
-                spinnerBackgroundColor = MaterialTheme.colorScheme.background,
-            ),
-            onSpinnerItemSelected = { index, item ->
-                setSelectedItem(accountbestand[index])
-                onItemSelected(accountbestand[index])
-            }
-        )
-    }
-}

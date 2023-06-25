@@ -2,6 +2,7 @@ package com.gerwalex.mymonma.database.data
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,11 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ui.AppTheme
 import kotlinx.coroutines.launch
 
@@ -51,9 +55,13 @@ fun ExcludedCatClassesCheckBoxes(reportid: Long) {
 @Composable
 fun CatClassCheckbox(item: ExcludedCatClasses) {
     val scope = rememberCoroutineScope()
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    var excluded by rememberState(key = item.excluded) { item.excluded }
+    Row(verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable {
+            excluded = !excluded
+        }) {
         Checkbox(
-            checked = !item.excluded,
+            checked = !excluded,
             onCheckedChange = { selected ->
                 scope.launch {
                     if (selected)
@@ -81,7 +89,10 @@ fun CatClassChaeckBoxPreview() {
     )
     AppTheme {
         Surface {
-            CatClassCheckbox(item = item)
+            Column {
+                CatClassCheckbox(item = item)
+                CatClassCheckbox(item = item.copy(excluded = true, name = "Not Excluded"))
+            }
         }
     }
 }

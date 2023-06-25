@@ -268,7 +268,7 @@ abstract class Dao(val db: DB) {
                 DB.dao.insertCashTrx(cashTrxList)
                 when (trx.intervall) {
                     Intervall.Einmalig -> {
-                        delete(id)
+                        deleteRegelmTrx(id)
                     }
 
                     else -> {
@@ -331,8 +331,11 @@ abstract class Dao(val db: DB) {
     @Delete
     abstract suspend fun delete(trx: CashTrx)
 
+    @Query("Delete from CashTrx where id = :cashTrxId")
+    abstract suspend fun deleteCashTrx(cashTrxId: Long)
+
     @Query("Delete from TrxRegelm where id = :trxRegelmId or transferid = :trxRegelmId ")
-    abstract suspend fun delete(trxRegelmId: Long)
+    abstract suspend fun deleteRegelmTrx(trxRegelmId: Long)
 
     @Query("Select * from ImportAccount")
     abstract fun getImportAccounts(): Flow<List<ImportAccount>>

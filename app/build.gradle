@@ -148,8 +148,6 @@ dependencies {
     // calulator
     implementation 'com.github.gitwalex:calcdialoglib:2.2.1'
 
-    // Skydoves Spinner
-    implementation "com.github.skydoves:orchestra-spinner:1.2.0"
 
     // Lib für Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'

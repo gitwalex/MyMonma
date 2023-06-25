@@ -1,10 +1,7 @@
 package com.gerwalex.mymonma.enums
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -20,16 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.ui.AppTheme
-import com.skydoves.orchestra.spinner.Spinner
-import com.skydoves.orchestra.spinner.SpinnerProperties
 
 enum class WPTrxArt {
 
@@ -216,40 +207,6 @@ enum class WPTrxArt {
     }
 }
 
-@Composable
-fun WPTrxArtSpinner(onItemSelected: (WPTrxArt) -> Unit) {
-    val list = WPTrxArt.values().asList()
-    val texte = ArrayList<String>().apply {
-        list.forEach {
-            add(stringResource(id = it.bezeichnung))
-        }
-    }
-    val (selectedItem, setSelectedItem)
-            = remember { mutableStateOf(WPTrxArt.Kauf) }
-    Spinner(
-        text = stringResource(id = selectedItem.bezeichnung),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-//            .align(Alignment.CenterHorizontally)
-            .background(MaterialTheme.colorScheme.secondaryContainer),
-        itemList = texte,
-        style = MaterialTheme.typography.bodyMedium,
-        properties = SpinnerProperties(
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            textAlign = TextAlign.Center,
-            showDivider = true,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-            spinnerPadding = 4.dp,
-            spinnerBackgroundColor = MaterialTheme.colorScheme.onBackground,
-        ),
-        onSpinnerItemSelected = { index, item ->
-            setSelectedItem(list[index])
-            onItemSelected(list[index])
-        }
-    )
-}
 
 @Composable
 fun WPTrxArtMenu(
@@ -281,18 +238,6 @@ fun WPTrxArtMenu(
     }
 }
 
-@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun WPTrxArtSpinnerPreview() {
-    AppTheme {
-        Surface {
-            WPTrxArtSpinner(onItemSelected = {})
-
-        }
-    }
-
-}
 
 @Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
