@@ -8,7 +8,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -57,6 +56,7 @@ import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.CashTrxViewItem
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.AmountView
+import com.gerwalex.mymonma.ui.content.DateView
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.AddCashTrx
 import com.gerwalex.mymonma.ui.navigation.Destination
@@ -72,6 +72,7 @@ fun CashTrxListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
     val list by dao.getCashTrxList(accountid).collectAsState(initial = emptyList())
     val account by dao.getAccountData(accountid).collectAsState(initial = Cat())
     if (list.isNotEmpty()) {
+        val grouped = list.groupBy { it.btag }
         val snackbarHostState = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
         val message = stringResource(id = R.string.deleted)
@@ -90,21 +91,28 @@ fun CashTrxListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                 }
             }) {
 
-            Column(modifier = Modifier.padding(it)) {
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = stringResource(id = R.string.saldo),
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    AmountView(value = account.saldo, fontWeight = FontWeight.Bold)
+            val lazyListState = rememberLazyListState()
+            LazyColumn(
+                state = lazyListState,
+                modifier = Modifier.padding(it)
+            ) {
+                item {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(id = R.string.saldo),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        AmountView(value = account.saldo, fontWeight = FontWeight.Bold)
+                    }
                 }
-                val lazyListState = rememberLazyListState()
-                LazyColumn(state = lazyListState) {
-                    items(list, key = { item -> item.id!! }) { trx ->
+                grouped.forEach { (btag, btaglist) ->
+                    item { DateView(date = btag) }
 
-                        LazyListItem(trx = trx,
+                    items(btaglist, key = { item -> item.id!! }) { trx ->
+
+                        LazyListItem(
+                            trx = trx,
                             selectedItem = {
                                 viewModel.cashTrxId = trx.id!!
                                 navigateTo(EditCashTrx)

@@ -62,7 +62,14 @@ fun IncomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
             when (stamm.wptyp) {
                 WPTyp.Aktie -> WPTrxArt.DivIn
                 WPTyp.Anleihe -> WPTrxArt.ZinsEin
-                else -> WPTrxArt.Income
+                WPTyp.ETF,
+                WPTyp.Fonds -> WPTrxArt.Ausschuettung
+
+                WPTyp.Zertifikat,
+                WPTyp.Optionschein,
+                WPTyp.Index,
+                WPTyp.Discount -> WPTrxArt.Einnahmen
+
             }
         Scaffold(
             topBar = {

@@ -147,6 +147,8 @@ fun WPStammItem(item: WPStammView, action: (WPTrxArt) -> Unit) {
                 Text(
                     text = item.name,
                     fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f),
                     color = MaterialTheme.colorScheme.onTertiary
                 )
                 WPTrxArtMenu(selected = { trxArt ->
@@ -179,6 +181,15 @@ fun WPStammItem(item: WPStammView, action: (WPTrxArt) -> Unit) {
             ) {
                 Text(text = stringResource(id = R.string.buchgewinn))
                 AmountView(value = (item.bestand / NACHKOMMA * item.lastkurs) - item.einstand)
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = stringResource(id = R.string.einnahmen))
+                AmountView(value = (item.income))
             }
             Row(
                 modifier = Modifier

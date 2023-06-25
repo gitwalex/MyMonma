@@ -1,6 +1,6 @@
 Cat: (nur accounts)
-select _id as id, name, description, obercatid, supercatid, catclassid,
- incomecat, ausgeblendet, cnt from Type_Cat where catclassid = 2
+select _id as id, name, description, obercatid, supercatid, catclassid, saldo
+ incomecat, ausgeblendet, cnt from Type_Cat where catclassid = 2 and _id < 1000
 
 Account:
 select _id as id, _id as cat, name,inhaber,currency, iban, blz, bezeichnung,

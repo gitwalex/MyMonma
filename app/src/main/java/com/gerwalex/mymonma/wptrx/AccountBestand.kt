@@ -64,19 +64,32 @@ data class AccountBestand(
         )
         trxList.apply {
             add(main)
-            add(
-                main.copy(
-                    catid = Cat.AbgeltSteuerCatid,
-                    amount = abgeltSteuer
+            if (abgeltSteuer != 0L) {
+                add(
+                    main.copy(
+                        catid = Cat.AbgeltSteuerCatid,
+                        amount = abgeltSteuer
+                    )
                 )
-            )
-            add(
-                main.copy(
-                    accountid = verrechnungskonto ?: id,
-                    catid = id,
-                    amount = amount + abgeltSteuer,
+            }
+            if (amount + abgeltSteuer != 0L) {
+                val cashTrx = main.copy(
+                    accountid = id,
+                    catid = verrechnungskonto ?: id,
+                    amount = -(amount + abgeltSteuer),
+                ).also {
+                    it.gegenbuchung = it.copy(
+                        accountid = it.catid,
+                        catid = it.accountid,
+                        amount = -it.amount
+                    )
+
+                }
+
+                add(
+                    cashTrx
                 )
-            )
+            }
             DB.dao.insertCashTrx(trxList)
 
         }

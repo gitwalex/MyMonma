@@ -43,13 +43,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
-import com.gerwalex.mymonma.database.tables.AutoCompleteCatView
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat.Companion.NOCATID
 import com.gerwalex.mymonma.database.tables.Cat.Companion.SPLITBUCHUNGCATID
 import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
+import com.gerwalex.mymonma.database.views.AutoCompleteCatView
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel

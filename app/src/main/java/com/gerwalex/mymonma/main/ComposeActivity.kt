@@ -55,7 +55,7 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
 
     private var inProgress: Boolean = false
     private lateinit var navController: NavHostController
-    private val viewModel by viewModels<DataViewModel>()
+    private val viewModel by viewModels<MonMaViewModel>()
     private val notificationPermissionLauncher = registerforPermissionRequest()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

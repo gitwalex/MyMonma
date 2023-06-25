@@ -72,7 +72,7 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-        select * from Cat where catclassid = $KONTOCLASS
+        select * from Cat where catclassid = $KONTOCLASS order by obercatid 
         """
 //        "select * " +
 //                ",(select total(amount) from cashtrx where  transferid is null and a.id = accountid) " +
@@ -147,6 +147,12 @@ abstract class Dao(val db: DB) {
     @Query("select * from Partnerstamm where id = :partnerid ")
     abstract fun getPartnerstamm(partnerid: Long): Flow<Partnerstamm>
 
+    @Query(
+        """
+    select sum(amount) from CashTrx where accountid = :accountid and btag <= :btag and (transferid is null or isUmbuchung)
+"""
+    )
+    abstract suspend fun getSaldo(accountid: Long, btag: Date): Long
 
     @Query(
         "update cat set saldo = (" +

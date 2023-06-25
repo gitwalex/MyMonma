@@ -24,22 +24,10 @@ from CashTrx where catid between 1 and 99 and transferid is null</sql><sql name=
 		        and (transferid is null or isUmbuchung)
         order by btag desc, a.id
 
-</sql><sql name="SQL 8">                select r.id as reportid, a.id as catid, a.name  
-            ,(select sum(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between von and bis) as amount   
-            ,(select count(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between von and bis) as repcnt   
-            ,(select sum(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between verglVon and verglBis) as verglAmount   
-            ,(select count(b.amount) from CashTrx b   
-            where b.catid = a.id and b.btag between verglVon and verglBis) as verglRepcnt   
-            from Cat a   
-            left outer join ReportBasisDaten r
-            where catclassid &gt; 100 
-            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d   
-            where d.reportid = r.id)   
-            and a.id not in (select catid from ReportExcludedCats d   
-            where d.reportid = r.id)   
-            group by a.name having repcnt &gt; 0 or verglRepcnt &gt; 0   
-            order by a.name
+</sql><sql name="SQL 8">        select *
+	,(select sum(amount) from CashTrx where accountid = 2 and btag &lt;= a.btag and (transferid is null or isUmbuchung))	
+		from Cashtrxview a
+        where a.accountid = 2
+        and (transferid is null or isUmbuchung )  
+        order by btag desc, id
 </sql><current_tab id="5"/></tab_sql></sqlb_project>
