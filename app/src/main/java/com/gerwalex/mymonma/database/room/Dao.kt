@@ -74,11 +74,6 @@ abstract class Dao(val db: DB) {
         """
         select * from Cat where catclassid = $KONTOCLASS order by obercatid 
         """
-//        "select * " +
-//                ",(select total(amount) from cashtrx where  transferid is null and a.id = accountid) " +
-//                " - (select total(amount) from cashtrx where catid = a.id) as saldo " +
-//                " from account a " +
-//                "order by kontotyp, name"
     )
     abstract fun getAccountlist(): Flow<List<Cat>>
 
@@ -241,7 +236,7 @@ abstract class Dao(val db: DB) {
         order by id
     """
     )
-    abstract suspend fun getTrxRegelm(id: Long): List<TrxRegelmView>
+    abstract suspend fun getTrxRegelm(id: Long): MutableList<TrxRegelmView>
 
     //    @Transaction
     open suspend fun execute(trx: TrxRegelmView) {

@@ -31,7 +31,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -68,9 +67,12 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun AddCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun AddCashTrxScreen(
+    accountid: Long,
+    viewModel: MonMaViewModel,
+    navigateTo: (Destination) -> Unit
+) {
     val scope = rememberCoroutineScope()
-    val accountid = rememberSaveable { viewModel.accountid }
     val list = ArrayList<CashTrxView>().apply {
         add(CashTrxView(accountid = accountid))
     }
@@ -86,9 +88,8 @@ fun AddCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
 
 
 @Composable
-fun EditCashTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun EditCashTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
-    val trxid = rememberSaveable { viewModel.cashTrxId }
     var list by rememberState {
         listOf<CashTrxView>()
     }

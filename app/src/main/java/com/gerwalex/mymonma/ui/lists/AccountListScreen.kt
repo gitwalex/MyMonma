@@ -30,23 +30,22 @@ import com.gerwalex.mymonma.ui.navigation.Destination
 @Composable
 fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val list by viewModel.accountlist.collectAsState(ArrayList())
-    if (list.isNotEmpty()) {
-        // Gruppieren nach obercatid
-        val grouped = list
-            .filter { !it.ausgeblendet }
-            .groupBy { it.obercatid }
-
-        Scaffold(
+    Scaffold(
 //        topBar = {
 //            TopToolBar(title = AccountList.name) {
 //                navigateTo(Up)
 //            }
 //        }
-        )
-        {
-            Box(modifier = Modifier.padding(it)) {
-                LazyColumn {
-                    grouped.forEach { ober, accList ->
+    )
+    {
+        Box(modifier = Modifier.padding(it)) {
+            if (list.isEmpty()) {
+                NoEntriesBox()
+            }
+            LazyColumn {
+                list.filter { !it.ausgeblendet }
+                    .groupBy { it.obercatid }
+                    .forEach { (ober, accList) ->
                         // saldo ermitteln
                         var saldo = 0L
                         accList.forEach {
@@ -70,19 +69,14 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                         }
                         items(accList,
                             key = { cat -> cat.id!! })
-                        {
-                            AccountListItem(it) {
-                                viewModel.accountid = it.id!!
-                                navigateTo(CashTrxList)
+                        { accountid ->
+                            AccountListItem(accountid) {
+                                navigateTo(CashTrxList.apply { id = accountid.id!! })
                             }
-
                         }
                     }
-                }
             }
         }
-    } else {
-        NoEntriesBox()
     }
 }
 

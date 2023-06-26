@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,9 +58,12 @@ import com.gerwalex.mymonma.ui.subscreens.SplitLine
 import kotlinx.coroutines.launch
 
 @Composable
-fun AddRegelmTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun AddRegelmTrxScreen(
+    accountid: Long,
+    viewModel: MonMaViewModel,
+    navigateTo: (Destination) -> Unit
+) {
     val scope = rememberCoroutineScope()
-    val accountid = rememberSaveable { viewModel.accountid }
     val list = ArrayList<CashTrxView>().apply {
         add(CashTrxView(accountid = accountid))
     }
@@ -78,28 +80,27 @@ fun AddRegelmTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> U
 
 
 @Composable
-fun EditRegelmTrxScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun EditRegelmTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
-    viewModel.cashTrxId.let {
-        var list = remember { mutableListOf<TrxRegelmView>() }
-        LaunchedEffect(key1 = it) {
-            val trxList = dao.getTrxRegelm(it)
+    var list = remember { mutableListOf<TrxRegelmView>() }
+    LaunchedEffect(key1 = trxid) {
+        list = dao.getTrxRegelm(trxid)
 
-        }
-        if (list.isNotEmpty()) {
-            EditTrxRegelmScreen(list = list) { save ->
-                scope.launch {
-                    save?.let {
-                        TODO()
-                    }
-                    navigateTo(Up)
-
+    }
+    if (list.isNotEmpty()) {
+        EditTrxRegelmScreen(list = list) { save ->
+            scope.launch {
+                save?.let {
+                    TODO()
                 }
-            }
+                navigateTo(Up)
 
+            }
         }
+
     }
 }
+
 
 @Composable
 fun EditTrxRegelmScreen(

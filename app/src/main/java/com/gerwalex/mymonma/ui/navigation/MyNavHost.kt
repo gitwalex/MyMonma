@@ -35,22 +35,22 @@ fun MyNavHost(
             ImportScreen(navigateTo)
         }
         composable(CashTrxList.name) {
-            CashTrxListScreen(viewModel, navigateTo)
+            CashTrxListScreen(CashTrxList.id, viewModel, navigateTo)
         }
         composable(RegelmTrxList.name) {
             RegelmTrxList(viewModel, navigateTo)
         }
         composable(AddCashTrx.name) {
-            AddCashTrxScreen(viewModel, navigateTo)
+            AddCashTrxScreen(AddCashTrx.id, viewModel, navigateTo)
         }
         composable(EditCashTrx.name) {
-            EditCashTrxScreen(viewModel, navigateTo)
+            EditCashTrxScreen(EditCashTrx.id, viewModel, navigateTo)
         }
         composable(AddRegelmTrx.name) {
-            AddRegelmTrxScreen(viewModel, navigateTo)
+            AddRegelmTrxScreen(AddRegelmTrx.id, viewModel, navigateTo)
         }
         composable(EditRegelmTrx.name) {
-            EditRegelmTrxScreen(viewModel, navigateTo)
+            EditRegelmTrxScreen(EditRegelmTrx.id, viewModel, navigateTo)
         }
         composable(ReportList.name) {
             ReportListScreen(viewModel, navigateTo)

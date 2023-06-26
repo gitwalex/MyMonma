@@ -7,9 +7,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,15 +33,14 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.SwipeToDismiss
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -54,6 +53,7 @@ import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.CashTrxViewItem
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.DateView
@@ -64,111 +64,126 @@ import com.gerwalex.mymonma.ui.navigation.EditCashTrx
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import kotlinx.coroutines.launch
+import java.sql.Date
 
 
 @Composable
-fun CashTrxListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val accountid = rememberSaveable { viewModel.accountid }
-    val list by dao.getCashTrxList(accountid).collectAsState(initial = emptyList())
-    val account by dao.getAccountData(accountid).collectAsState(initial = Cat())
-    if (list.isNotEmpty()) {
-        val grouped = list.groupBy { it.btag }
-        val snackbarHostState = remember { SnackbarHostState() }
-        val scope = rememberCoroutineScope()
-        val message = stringResource(id = R.string.deleted)
-        val undo = stringResource(id = R.string.undo)
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-            topBar = {
-                TopToolBar(
-                    account.name,
-                    actions = {
-                        IconButton(onClick = { navigateTo(AddCashTrx) }) {
-                            Icon(imageVector = Icons.Default.Add, "")
-                        }
-                    }) {
-                    navigateTo(Up)
-                }
-            }) {
+fun CashTrxListScreen(
+    accountid: Long,
+    viewModel: MonMaViewModel,
+    navigateTo: (Destination) -> Unit
+) {
+    val list by viewModel.getCashTrxList(accountid).collectAsState(initial = emptyList())
+    val account by viewModel.getAccount(accountid).collectAsState(initial = Cat())
+    val snackbarHostState = remember { SnackbarHostState() }
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        topBar = {
+            TopToolBar(
+                account.name,
+                actions = {
+                    IconButton(onClick = { navigateTo(AddCashTrx.apply { id = accountid }) }) {
+                        Icon(imageVector = Icons.Default.Add, "")
+                    }
+                }) {
+                navigateTo(Up)
+            }
+        }) {
 
-            val lazyListState = rememberLazyListState()
+        val lazyListState = rememberLazyListState()
+        Box {
             LazyColumn(
                 state = lazyListState,
                 modifier = Modifier.padding(it)
             ) {
-                item {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(id = R.string.saldo),
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        AmountView(value = account.saldo, fontWeight = FontWeight.Bold)
+                list.groupBy { it.btag }
+                    .forEach { (btag, btaglist) ->
+                        item {
+                            SaldoView(accountid = accountid, btag = btag)
+                        }
+                        items(btaglist, key = { item -> item.id!! }) { trx ->
+                            LazyListItem(
+                                trx = trx,
+                                snackbarHostState,
+                                selectedItem = {
+                                    navigateTo(EditCashTrx.apply { id = trx.id!! })
+                                },
+                            )
+                        }
                     }
-                }
-                grouped.forEach { (btag, btaglist) ->
-                    item { DateView(date = btag) }
-
-                    items(btaglist, key = { item -> item.id!! }) { trx ->
-
-                        LazyListItem(
-                            trx = trx,
-                            selectedItem = {
-                                viewModel.cashTrxId = trx.id!!
-                                navigateTo(EditCashTrx)
-                            },
-                            onDismiss = { dismissValue, item ->
-                                when (dismissValue) {
-                                    DismissValue.Default -> {}
-                                    DismissValue.DismissedToEnd -> TODO()
-                                    DismissValue.DismissedToStart -> {
-                                        scope.launch {
-                                            val trxList = dao.getCashTrx(item.id!!)
-                                            dao.deleteCashTrx(item.id!!)
-                                            val result = snackbarHostState.showSnackbar(
-                                                message = message,
-                                                actionLabel = undo,
-                                                withDismissAction = true
-                                            )
-                                            when (result) {
-                                                SnackbarResult.Dismissed -> {}
-                                                SnackbarResult.ActionPerformed -> {
-                                                    scope.launch {
-                                                        dao.insertCashTrx(
-                                                            CashTrxView.toCashTrxList(
-                                                                trxList
-                                                            )
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                            })
-                    }
-                }
             }
         }
-
-    } else {
-        NoEntriesBox()
+        if (list.isEmpty()) {
+            NoEntriesBox()
+        }
     }
+
+}
+
+@Composable
+fun SaldoView(accountid: Long, btag: Date) {
+    var saldo by rememberState(key = btag) { 0L }
+    LaunchedEffect(key1 = btag) {
+        saldo = dao.getSaldo(accountid, btag)
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        DateView(
+            date = btag, fontWeight = FontWeight.Bold
+        )
+        AmountView(
+            value = saldo, fontWeight = FontWeight.Bold
+        )
+    }
+
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyItemScope.LazyListItem(
     trx: CashTrxView,
+    snackbarHostState: SnackbarHostState,
     selectedItem: (CashTrxView) -> Unit,
-    onDismiss: (DismissValue, CashTrxView) -> Unit
 ) {
-    val currentItem by rememberUpdatedState(newValue = trx)
+    val scope = rememberCoroutineScope()
+    val message = stringResource(id = R.string.deleted)
+    val undo = stringResource(id = R.string.undo)
+
     val dismissState = rememberDismissState(
         confirmValueChange = { dismissValue ->
-            onDismiss(dismissValue, currentItem)
-            true
+            when (dismissValue) {
+                DismissValue.Default,
+                DismissValue.DismissedToEnd -> false
+
+                DismissValue.DismissedToStart -> {
+                    scope.launch {
+                        val trxList = dao.getCashTrx(trx.id!!)
+                        dao.deleteCashTrx(trx.id!!)
+                        val result = snackbarHostState.showSnackbar(
+                            message = message,
+                            actionLabel = undo,
+                            withDismissAction = true
+                        )
+                        when (result) {
+                            SnackbarResult.Dismissed -> {}
+                            SnackbarResult.ActionPerformed -> {
+                                scope.launch {
+                                    dao.insertCashTrx(
+                                        CashTrxView.toCashTrxList(
+                                            trxList
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    true
+                }
+            }
         }
     )
     SwipeToDismiss(

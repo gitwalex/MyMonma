@@ -1,7 +1,5 @@
 package com.gerwalex.mymonma.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.navigation.NavController
 import com.gerwalex.mymonma.R
 
@@ -10,7 +8,7 @@ sealed class Destination {
     abstract val title: Int
     abstract val name: String
     abstract fun navigate(navController: NavController)
-    open val toolbarIcon = Icons.Filled.ArrowBack
+    var id: Long = 0L
 
 }
 
