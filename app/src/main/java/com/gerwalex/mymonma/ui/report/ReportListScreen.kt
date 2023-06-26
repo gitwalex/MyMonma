@@ -54,10 +54,7 @@ fun ReportListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
 
         Column(modifier = Modifier.padding(it)) {
             if (list.isNotEmpty()) {
-                ReportListScreen(list = list, itemSelected = { report, destination ->
-                    viewModel.reportId = report.id!!
-                    navigateTo(destination)
-                })
+                ReportListScreen(list = list, navigateTo)
             } else {
                 NoEntriesBox()
             }
@@ -68,7 +65,7 @@ fun ReportListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Uni
 @Composable
 fun ReportListScreen(
     list: List<ReportBasisDaten>,
-    itemSelected: (ReportBasisDaten, Destination) -> Unit,
+    navigateTo: (Destination) -> Unit,
 ) {
     val buttonInteractionSource = remember { MutableInteractionSource() }
     LazyColumn {
@@ -81,14 +78,17 @@ fun ReportListScreen(
                         indication = null,
                         onClick = {
                             when (item.typ) {
-                                ReportTyp.GeldflussVergl -> itemSelected(item, GeldflussReport)
-                                ReportTyp.Empfaenger -> itemSelected(item, EmpfaengerReport)
+                                ReportTyp.GeldflussVergl ->
+                                    navigateTo(GeldflussReport.apply { id = item.id!! })
+
+                                ReportTyp.Empfaenger ->
+                                    navigateTo(EmpfaengerReport.apply { id = item.id!! })
                             }
                         })
                     .scaleOnPress(buttonInteractionSource),
             ) {
                 ReportBasisDatenItem(report = item) {
-                    itemSelected(item, EditReport)
+                    navigateTo(EditReport.apply { id = item.id!! })
                 }
             }
         }

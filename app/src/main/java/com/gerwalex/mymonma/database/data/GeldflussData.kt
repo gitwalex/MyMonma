@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.ext.rememberState
+import com.gerwalex.mymonma.database.views.SplittedCatNameItem
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.PercentView
@@ -44,7 +43,7 @@ import com.gerwalex.mymonma.ui.content.PercentView
             where d.reportid = r.id)   
             and a.id not in (select catid from ReportExcludedCats d   
             where d.reportid = r.id)   
-            group by a.name having repcnt > 0 or verglRepcnt > 0   
+            group by reportid, a.name having repcnt > 0 or verglRepcnt > 0   
             order by a.name
 
 """
@@ -61,9 +60,6 @@ data class GeldflussData(
 
 @Composable
 fun GeldflussDataItem(trx: GeldflussData, onClicked: () -> Unit) {
-    val splitted by rememberState(trx.name) {
-        trx.name.split(":")
-    }
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -76,28 +72,7 @@ fun GeldflussDataItem(trx: GeldflussData, onClicked: () -> Unit) {
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                when (splitted.size) {
-                    1 -> {
-                        Text(splitted[0])
-                    }
-
-                    2 -> {
-                        Text(splitted[0], style = MaterialTheme.typography.labelMedium)
-                        Text(splitted[1])
-
-                    }
-
-                    else -> {
-                        Text(
-                            "${splitted[0]}/${splitted[1]}",
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                        Text(splitted[2])
-
-                    }
-                }
-            }
+            Column { SplittedCatNameItem(name = trx.name) }
             Spacer(modifier = Modifier.weight(1f))
             Column(horizontalAlignment = Alignment.End) {
                 AmountView(value = trx.amount, fontWeight = FontWeight.Bold)

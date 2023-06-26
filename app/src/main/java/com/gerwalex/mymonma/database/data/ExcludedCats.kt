@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.views.SplittedCatNameItem
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import kotlinx.coroutines.launch
 
@@ -73,6 +74,6 @@ fun CatCheckbox(item: ExcludedCats) {
             onCheckedChange = { selected ->
             }
         )
-        Text(text = item.name)
+        SplittedCatNameItem(name = item.name)
     }
 }

@@ -132,4 +132,5 @@
     <string name="ausgaben">Ausgaben</string>
     <string name="deleted">Gelöscht</string>
     <string name="undo">Rückgängig?</string>
+    <string name="newReport">Neuer Report</string>
 </resources>

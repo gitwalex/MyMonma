@@ -27,10 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
+import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.enums.ReportDateSelector
 import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.DateView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Date
 
 @Entity
@@ -46,7 +50,14 @@ data class ReportBasisDaten(
     var verglVon: Date = verglZeitraum.dateSelection.startDate,
     var verglBis: Date = verglZeitraum.dateSelection.endDate,
     var description: String? = null,
-)
+) {
+    fun update() {
+        CoroutineScope(Dispatchers.IO).launch {
+            reportdao.update(this@ReportBasisDaten)
+        }
+    }
+
+}
 
 @Composable
 fun ReportBasisDatenItem(

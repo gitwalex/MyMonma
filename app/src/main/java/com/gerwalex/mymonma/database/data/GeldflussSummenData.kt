@@ -43,11 +43,13 @@ import com.gerwalex.mymonma.ui.content.DateView
             and catid = a.id and not incomecat) as verglausgaben   
             ,r.id as reportid
             from Cat a   
-            left outer join ReportBasisDaten r  
+            join ReportBasisDaten r  
             where a.id not in (select catid from ReportExcludedCats d where d.reportid = r.id)
             and a.catclassid not in (select catclassid from ReportExcludedCatClasses d 
-            where d.reportid = r.id)   
+            where d.reportid = r.id
+)   
             and catclassid > 100  )
+            group by reportid
             
 
 """

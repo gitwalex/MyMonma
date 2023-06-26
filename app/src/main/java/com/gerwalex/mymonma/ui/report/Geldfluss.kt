@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissState
@@ -25,8 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -49,20 +50,23 @@ import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
+import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    viewModel.reportId?.let { reportid ->
-        val drawerState = rememberDrawerState(DrawerValue.Closed)
-        var drawerContent by rememberState { ExcludedValuesSheet.Classes }
-        val scope = rememberCoroutineScope()
-        val report by reportdao.getReportBasisDaten(reportid)
-            .collectAsState(initial = ReportBasisDaten())
+fun GeldflussScreen(reportid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    var drawerContent by rememberState { ExcludedValuesSheet.Classes }
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberBottomSheetScaffoldState()
+    val report by reportdao.getReportBasisDaten(reportid)
+        .collectAsState(initial = ReportBasisDaten())
+    report.id?.let {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -75,13 +79,10 @@ fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit
                     }
                 }
             }, content = {
-                Scaffold(
-                    topBar = {
-                        TopToolBar(title = report.name) {
-                            navigateTo(Up)
-                        }
-                    },
-                    bottomBar = {
+                BottomSheetScaffold(
+                    sheetContent = {
+                        ZeitraumCard(report = report)
+                        VerglZeitraumCard(report = report)
                         BottomNavigationBar {
                             drawerContent = it
                             scope.launch {
@@ -91,21 +92,31 @@ fun GeldflussScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit
                                 drawerState.open()
                             }
                         }
-                    }
+                    },
+                    scaffoldState = sheetState,
+                    topBar = {
+                        TopToolBar(title = report.name,
+                            actions = {}) {
+                            navigateTo(Up)
+                        }
+                    },
 
-                ) { padding ->
+                    ) { padding ->
+
                     Box(modifier = Modifier.padding(padding)) {
                         val list by reportdao.getReportGeldflussData(reportid)
                             .collectAsState(initial = emptyList())
                         if (list.isNotEmpty()) {
                             GeldflussDetailScreen(report = report, list = list) {
-
                             }
+                        } else {
+                            NoEntriesBox()
+
                         }
                     }
                 }
             })
-    } ?: navigateTo(Up)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -117,6 +128,13 @@ fun GeldflussDetailScreen(
 
 ) {
     Column {
+        Card(
+            modifier = Modifier.padding(4.dp),
+            shape = MaterialTheme.shapes.large
+        ) {
+            GeldflussSummen(report = report)
+        }
+
         LazyColumn(
             modifier = Modifier.weight(1f),
         ) {
@@ -157,13 +175,6 @@ fun GeldflussDetailScreen(
                     })
 
             }
-        }
-        Card(
-            modifier = Modifier.padding(4.dp),
-            shape = MaterialTheme.shapes.large
-        ) {
-            GeldflussSummen(report = report)
-
         }
     }
 

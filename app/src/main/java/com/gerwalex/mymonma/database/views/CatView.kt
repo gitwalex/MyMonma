@@ -1,6 +1,8 @@
 package com.gerwalex.mymonma.database.views
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -98,4 +100,40 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
         Text(text = if (it.catclassid == Cat.KONTOCLASS) "[${it.name}]" else it.name)
 
     }
+}
+
+/**
+ * Splittet einen Catnamen auf
+ * Wenn catname:
+ * -supercat: 1. Zeile supercatname
+ * -obercat: 1. Zeile supercatname als Label, 2. Zeile obercatname
+ * - normale cat: 1. Zeile supercatname + Zeile obercatname als Label, 2. Zeile name
+ */
+@Composable
+fun SplittedCatNameItem(name: String) {
+    val splitted = name.split(":")
+    Column {
+        when (splitted.size) {
+            1 -> {
+                Text(splitted[0])
+            }
+
+            2 -> {
+                Text(splitted[0], style = MaterialTheme.typography.labelMedium)
+                Text(splitted[1])
+
+            }
+
+            else -> {
+                Text(
+                    "${splitted[0]}/${splitted[1]}",
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Text(splitted[2])
+
+            }
+        }
+    }
+
+
 }

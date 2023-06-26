@@ -59,13 +59,13 @@ fun MyNavHost(
             ReportListScreen(viewModel, navigateTo)
         }
         composable(EditReport.name) {
-            EditReportData(viewModel, navigateTo)
+            EditReportData(EditReport.id, viewModel, navigateTo)
         }
         composable(AddReport.name) {
             AddReportData(viewModel, navigateTo)
         }
         composable(GeldflussReport.name) {
-            GeldflussScreen(viewModel, navigateTo)
+            GeldflussScreen(GeldflussReport.id, viewModel, navigateTo)
         }
         composable(EmpfaengerReport.name) {
             EmpfaengerScreen(viewModel, navigateTo)

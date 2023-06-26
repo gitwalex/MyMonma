@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class ReportDao(db: DB) {
     @Insert
-    abstract suspend fun insert(report: ReportBasisDaten)
+    abstract suspend fun insert(report: ReportBasisDaten): Long
 
     @Update
     abstract suspend fun update(report: ReportBasisDaten)

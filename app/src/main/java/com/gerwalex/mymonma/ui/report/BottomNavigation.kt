@@ -3,7 +3,6 @@ package com.gerwalex.mymonma.ui.report
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,27 +24,6 @@ enum class ExcludedValuesSheet {
 @Composable
 fun BottomNavigationBar(open: (ExcludedValuesSheet) -> Unit) {
     NavigationBar {
-        NavigationBarItem(
-            selected = false,
-            onClick = { open(ExcludedValuesSheet.Classes) },
-            icon = { Icon(Icons.Default.DateRange, "") },
-            label = {
-                Text(
-                    text = stringResource(id = R.string.zeitraum),
-                    style = MaterialTheme.typography.labelSmall
-                )
-            })
-        NavigationBarItem(
-            selected = false,
-            onClick = { open(ExcludedValuesSheet.Classes) },
-            icon = { Icon(Icons.Default.DateRange, "") },
-            label = {
-                Text(
-                    text = stringResource(id = R.string.vergleich),
-                    style = MaterialTheme.typography.labelSmall,
-                    maxLines = 1
-                )
-            })
         NavigationBarItem(
             selected = false,
             onClick = { open(ExcludedValuesSheet.Classes) },
