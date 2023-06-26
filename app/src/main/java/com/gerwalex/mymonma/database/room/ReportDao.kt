@@ -50,11 +50,8 @@ abstract class ReportDao(db: DB) {
 
     @Query(
         """
-        select a.id, a.name, :reportid as reportid, a.id as catclassid,  
-        (select id from ReportExcludedCatClasses b   
-        where b.reportid = :reportid and b.catclassid = a.id) as excluded   
-        from CatClass a   
-        where id > 100   
+        select * from ExcludedCatClasses
+        where reportid = :reportid
         order by name
     """
     )
@@ -75,10 +72,7 @@ abstract class ReportDao(db: DB) {
 
     @Query(
         """
-        select a.reportid, a.catid, 
-                (select name from Cat b 
-                where b.id = a.catid) as name 
-                from ReportExcludedCats a 
+        select * from ExcludedCats
                 where reportid = :reportid 
                 order by name
     """
@@ -87,24 +81,7 @@ abstract class ReportDao(db: DB) {
 
     @Query(
         """
-        select :reportID as reportid, sum(einnahmen) as einnahmen, sum(ausgaben) as ausgaben,
-            sum(vergleinnahmen) as verglEinnahmen,  sum(verglausgaben) as verglAusgaben  from (   
-            select a.id   
-            ,(select sum(amount) from CashTrx b where btag between von and bis   
-            and catid = a.id and incomecat) as einnahmen   
-            ,(select sum(amount) from CashTrx b where btag between von and bis     
-            and catid = a.id and not incomecat) as ausgaben   
-            ,(select sum(amount) from CashTrx b where btag between  verglVon and verglBis   
-            and catid = a.id and incomecat) as vergleinnahmen   
-            ,(select sum(amount) from CashTrx b where btag between verglVon and verglBis   
-            and catid = a.id and not incomecat) as verglausgaben   
-            from Cat a   
-            left outer join ReportBasisDaten r  
-            where r.id = :reportID  and
-            a.id not in (select catid from ReportExcludedCats d where d.reportid = :reportID)
-            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d 
-            where d.reportid = :reportID)   
-            and catclassid > 100  )
+        select * from GeldflussSummenData where reportid = :reportID
             
         """
     )

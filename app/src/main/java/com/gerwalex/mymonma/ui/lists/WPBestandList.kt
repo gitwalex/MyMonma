@@ -1,4 +1,4 @@
-package com.gerwalex.mymonma.ui.screens
+package com.gerwalex.mymonma.ui.lists
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells

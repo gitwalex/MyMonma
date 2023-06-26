@@ -10,11 +10,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 
+@DatabaseView(
+    """
+        select a.*, b.name as obercatname
+        from Cat a
+        join Cat b on a.obercatid = b.id
+"""
+)
 data class CatView(
     var id: Long? = null,
     var name: String = "",
@@ -65,7 +73,6 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = {
             catname = it
-            showDropdown = true
         },
         showDropdown = showDropdown,
         onClearClick = { catname = "" },
@@ -76,7 +83,6 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
             selected(cat)
         },
         onFocusChanged = { isFocused ->
-            showDropdown = isFocused
             Log.d("AutoCompleteCatView", "Focus=$isFocused")
             if (!isFocused) {
                 if (data.isNotEmpty() && catname.isNotEmpty()) {

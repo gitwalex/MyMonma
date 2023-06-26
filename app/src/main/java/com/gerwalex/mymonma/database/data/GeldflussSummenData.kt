@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
@@ -27,7 +28,32 @@ import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.DateView
 
+@DatabaseView(
+    """
+            select reportid, sum(einnahmen) as einnahmen, sum(ausgaben) as ausgaben,
+            sum(vergleinnahmen) as verglEinnahmen,  sum(verglausgaben) as verglAusgaben  from (   
+            select a.id   
+            ,(select sum(amount) from CashTrx b where btag between von and bis   
+            and catid = a.id and incomecat) as einnahmen   
+            ,(select sum(amount) from CashTrx b where btag between von and bis     
+            and catid = a.id and not incomecat) as ausgaben   
+            ,(select sum(amount) from CashTrx b where btag between  verglVon and verglBis   
+            and catid = a.id and incomecat) as vergleinnahmen   
+            ,(select sum(amount) from CashTrx b where btag between verglVon and verglBis   
+            and catid = a.id and not incomecat) as verglausgaben   
+            ,r.id as reportid
+            from Cat a   
+            left outer join ReportBasisDaten r  
+            where a.id not in (select catid from ReportExcludedCats d where d.reportid = r.id)
+            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d 
+            where d.reportid = r.id)   
+            and catclassid > 100  )
+            
+
+"""
+)
 data class GeldflussSummenData(
+    val reportid: Long = 0,
     val id: Long? = null,
     val einnahmen: Long = 0,
     val ausgaben: Long = 0,
@@ -116,6 +142,8 @@ fun GeldflussSummen(
 @Composable
 fun GeldflussSummenPreview() {
     val data = GeldflussSummenData(
+        reportid = 1,
+        id = 1,
         einnahmen = 1000_00,
         ausgaben = -5000_00,
         verglEinnahmen = 1500_00,

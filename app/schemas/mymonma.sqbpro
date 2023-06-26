@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/alexw/StudioProjects/device-explorer/SM-T970/mymonma/monma.db" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="7163"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">update cat set saldo = (
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/alexw/StudioProjects/device-explorer/SM-T970/mymonma/monma.db" readonly="0" foreign_keys="0" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="0" synchronous="1"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="7163"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainAccount"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">update cat set saldo = (
 select sum(amount) 
 from CashTrx a 
 where (transferid is null or isUmbuchung )
@@ -24,10 +24,8 @@ from CashTrx where catid between 1 and 99 and transferid is null</sql><sql name=
 		        and (transferid is null or isUmbuchung)
         order by btag desc, a.id
 
-</sql><sql name="SQL 8">        select *
-	,(select sum(amount) from CashTrx where accountid = 2 and btag &lt;= a.btag and (transferid is null or isUmbuchung))	
-		from Cashtrxview a
-        where a.accountid = 2
-        and (transferid is null or isUmbuchung )  
-        order by btag desc, id
+</sql><sql name="SQL 8">SELECT a.*
+,b.name
+from Cat a
+join cat b on b.id = a.obercatid
 </sql><current_tab id="5"/></tab_sql></sqlb_project>

@@ -226,13 +226,8 @@ abstract class Dao(val db: DB) {
      */
     @Query(
         """
-        SELECT a.* ,
-        p.name as partnername, acc.name as accountname, 
-        c.name as catname, c.catclassid 
-        from TrxRegelm a 
-        left join Partnerstamm p on p.id = partnerid 
-        left join Cat acc on   acc.id = accountid 
-        left join Cat c on c.id = catid 
+        SELECT * 
+        from TrxRegelmView
         where btag  < :btag AND  transferID IS NULL
     """
     )
@@ -240,15 +235,10 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-        SELECT a.* , 
-        p.name as partnername, acc.name as accountname, 
-        c.name as catname, c.catclassid 
-        from TrxRegelm a 
-        left join Partnerstamm p on p.id = partnerid 
-        left join Cat acc on   acc.id = accountid 
-        left join Cat c on c.id = catid 
-        where a.id = :id or a.transferid = :id 
-        order by a.id
+        SELECT * 
+        from TrxRegelmView
+        where id = :id or transferid = :id 
+        order by id
     """
     )
     abstract suspend fun getTrxRegelm(id: Long): List<TrxRegelmView>

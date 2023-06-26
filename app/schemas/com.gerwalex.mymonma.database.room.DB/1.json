@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "dc883fdbc2cf6b71e27a2e5d49cfdfe2",
+    "identityHash": "e8fae335ed087bdd44ac7bbc3e3b4a77",
     "entities": [
       {
         "tableName": "Account",
@@ -1493,8 +1493,28 @@
         "createSql": "CREATE VIEW `${VIEW_NAME}` AS select name, supercatid, ausgeblendet, saldo , description, b.* \n        from cat a  \n        join Account b on (a.id = b.catid)"
       },
       {
+        "viewName": "CatView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, b.name as obercatname\n        from Cat a\n        join Cat b on a.obercatid = b.id"
+      },
+      {
         "viewName": "CashTrxView",
         "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*\n        ,(select name from Partnerstamm  p where p.id = a.partnerid) as partnername\n        ,(select name from Cat c where c.id = a.accountid) as accountname \n\t\t,c.name as catname, c.catclassid\n\t\t,t.id as importTrxId\n        from CashTrx a \n        left join Cat c on c.id = catid\n        left outer join ImportTrx t on a.id = t.umsatzid"
+      },
+      {
+        "viewName": "GeldflussData",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select r.id as reportid, a.id as catid, a.name  \n            ,(select sum(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between von and bis) as amount   \n            ,(select count(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between von and bis) as repcnt   \n            ,(select sum(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between verglVon and verglBis) as verglAmount   \n            ,(select count(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between verglVon and verglBis) as verglRepcnt   \n            from Cat a   \n            left outer join ReportBasisDaten r\n            where catclassid > 100 \n            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d   \n            where d.reportid = r.id)   \n            and a.id not in (select catid from ReportExcludedCats d   \n            where d.reportid = r.id)   \n            group by a.name having repcnt > 0 or verglRepcnt > 0   \n            order by a.name"
+      },
+      {
+        "viewName": "GeldflussSummenData",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select reportid, sum(einnahmen) as einnahmen, sum(ausgaben) as ausgaben,\n            sum(vergleinnahmen) as verglEinnahmen,  sum(verglausgaben) as verglAusgaben  from (   \n            select a.id   \n            ,(select sum(amount) from CashTrx b where btag between von and bis   \n            and catid = a.id and incomecat) as einnahmen   \n            ,(select sum(amount) from CashTrx b where btag between von and bis     \n            and catid = a.id and not incomecat) as ausgaben   \n            ,(select sum(amount) from CashTrx b where btag between  verglVon and verglBis   \n            and catid = a.id and incomecat) as vergleinnahmen   \n            ,(select sum(amount) from CashTrx b where btag between verglVon and verglBis   \n            and catid = a.id and not incomecat) as verglausgaben   \n            ,r.id as reportid\n            from Cat a   \n            left outer join ReportBasisDaten r  \n            where a.id not in (select catid from ReportExcludedCats d where d.reportid = r.id)\n            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d \n            where d.reportid = r.id)   \n            and catclassid > 100  )"
+      },
+      {
+        "viewName": "ExcludedCatClasses",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.id, a.name, r.id as reportid, a.id as catclassid,  \n        (select id from ReportExcludedCatClasses b   \n        where b.reportid = r.id and b.catclassid = a.id) as excluded   \n        from CatClass a   \n\t\tjoin ReportBasisDaten r\n        where a.id > 100   \n        order by a.name"
+      },
+      {
+        "viewName": "ExcludedCats",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.reportid, a.catid, \n                (select name from Cat b \n                where b.id = a.catid) as name \n                from ReportExcludedCats a \n                order by name"
       },
       {
         "viewName": "TrxRegelmView",
@@ -1503,15 +1523,11 @@
       {
         "viewName": "WPStammView",
         "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, name, total(menge) as bestand, total(einstand) as einstand  \n        ,(select total(einstand) from wptrx where wpid = a.id  \n        and catid between 2001 and 2049) as gesamteinkaufpreis \n        ,(select count(einstand) from wptrx where wpid = a.id \n        and catid between 2001 and 2049) as anzahlkauf \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid  \n        and catid between 2101 and 2199) as income \n        ,(select min(btag) from wptrx where wpid = a.id) as firstums \n        ,(select max(btag) from wptrx where wpid = a.id) as lastums\n        ,(select total(amount) from CashTrx  c where a.id = c.partnerid   \n        and catid between 2001 and 2049) as gesamtkauf  \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid \n        and catid in(2201)) as kursverlust \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid \n        and catid in(2200)) as kursgewinn   \n        ,(SELECT kurs from WPKurs d where a.id = d.wpid  \n        group by wpid having max(btag)) as lastkurs    \n        ,(SELECT btag from WPKurs d  where a.id = d.wpid  \n        group by wpid having max(btag)) as lastbtag \n        from WPStamm a    \n        join Partnerstamm p on (p.id = a.partnerid)   \n        left outer join WPTrx b on (b.wpid = a.id) \n        where paketid is null    \n        group by accountid, wpid having bestand > 0   \n        order by name"
-      },
-      {
-        "viewName": "GeldflussData",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select r.id as reportid, a.id as catid, a.name  \n            ,(select sum(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between von and bis) as amount   \n            ,(select count(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between von and bis) as repcnt   \n            ,(select sum(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between verglVon and verglBis) as verglAmount   \n            ,(select count(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between verglVon and verglBis) as verglRepcnt   \n            from Cat a   \n            left outer join ReportBasisDaten r\n            where catclassid > 100 \n            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d   \n            where d.reportid = r.id)   \n            and a.id not in (select catid from ReportExcludedCats d   \n            where d.reportid = r.id)   \n            group by a.name having repcnt > 0 or verglRepcnt > 0   \n            order by a.name"
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dc883fdbc2cf6b71e27a2e5d49cfdfe2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e8fae335ed087bdd44ac7bbc3e3b4a77')"
     ]
   }
 }

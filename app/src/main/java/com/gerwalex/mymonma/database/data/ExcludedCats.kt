@@ -15,11 +15,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import kotlinx.coroutines.launch
 
+@DatabaseView(
+    """
+            select a.reportid, a.catid, 
+                (select name from Cat b 
+                where b.id = a.catid) as name 
+                from ReportExcludedCats a 
+                order by name
+
+"""
+)
 data class ExcludedCats(
     val name: String,
     val reportid: Long,

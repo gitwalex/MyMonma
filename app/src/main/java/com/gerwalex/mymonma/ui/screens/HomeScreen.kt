@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.main.MonMaViewModel
+import com.gerwalex.mymonma.ui.lists.AccountListScreen
 import com.gerwalex.mymonma.ui.navigation.BottomNavigation
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.DrawerNavigation

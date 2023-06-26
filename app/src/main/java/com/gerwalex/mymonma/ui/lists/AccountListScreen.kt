@@ -1,4 +1,4 @@
-package com.gerwalex.mymonma.ui.screens
+package com.gerwalex.mymonma.ui.lists
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

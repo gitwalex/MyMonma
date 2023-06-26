@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 
 @DatabaseView(
     """
-            select a.id, a.name, r.id as reportid, a.id as catclassid,  
+        select a.id, a.name, r.id as reportid, a.id as catclassid,  
         (select id from ReportExcludedCatClasses b   
         where b.reportid = r.id and b.catclassid = a.id) as excluded   
         from CatClass a   
