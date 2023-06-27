@@ -19,7 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.gerwalex.mymonma.database.tables.Cat
+import com.gerwalex.mymonma.database.views.AccountView
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
@@ -68,10 +68,10 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                             }
                         }
                         items(accList,
-                            key = { cat -> cat.id!! })
+                            key = { account -> account.id })
                         { accountid ->
                             AccountListItem(accountid) {
-                                navigateTo(CashTrxList.apply { id = accountid.id!! })
+                                navigateTo(CashTrxList.apply { id = accountid.id })
                             }
                         }
                     }
@@ -81,7 +81,7 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
 }
 
 @Composable
-fun AccountListItem(cat: Cat, clicked: (Cat) -> Unit) {
+fun AccountListItem(cat: AccountView, clicked: (AccountView) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -103,10 +103,10 @@ fun AccountListItem(cat: Cat, clicked: (Cat) -> Unit) {
 @Preview
 @Composable
 fun AccountListPrevView() {
-    val cat = Cat(name = "my Account")
+    val account = AccountView(name = "my Account")
     AppTheme {
         Surface {
-            AccountListItem(cat) {}
+            AccountListItem(account) {}
         }
     }
 }

@@ -276,6 +276,7 @@ fun ReportDateSpinner(selector: ReportDateSelector, selected: (ReportDateSelecto
             })
         DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
             ReportDateSelector.values()
+                .filter { it != ReportDateSelector.EigDatum }
                 .forEachIndexed { index, s ->
                     DropdownMenuItem(
                         text = { Text(text = stringResource(id = s.textResID)) },

@@ -34,7 +34,6 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
         FileUtils.loadCSVFile(`in`, db, "cat")
         `in` = am.open("init_wpstamm.csv")
         FileUtils.loadCSVFile(`in`, db, "WPStamm")
-        db.setTransactionSuccessful()
     }
 
 

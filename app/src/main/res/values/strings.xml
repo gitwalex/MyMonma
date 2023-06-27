@@ -133,4 +133,5 @@
     <string name="deleted">Gelöscht</string>
     <string name="undo">Rückgängig?</string>
     <string name="newReport">Neuer Report</string>
+    <string name="zumVergleich">"zum Vergleich: %1s"</string>
 </resources>

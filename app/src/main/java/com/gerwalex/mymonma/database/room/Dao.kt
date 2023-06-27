@@ -16,7 +16,9 @@ import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm
+import com.gerwalex.mymonma.database.views.AccountView
 import com.gerwalex.mymonma.database.views.CashTrxView
+import com.gerwalex.mymonma.database.views.CatView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import com.gerwalex.mymonma.enums.Intervall
 import kotlinx.coroutines.flow.Flow
@@ -42,14 +44,16 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-        Select * from Cat 
+        Select *, 0 as saldo
+         ,(select count(*) from CashTrx where catid = a.id) as cnt
+        from Cat a
         where name like '%'|| :filter||'%' 
         and not ausgeblendet 
         and (id > 10001 or supercatid = ${Cat.CASHKONTOCATID}) 
         order by cnt desc, name
         """
     )
-    abstract fun getCatlist(filter: String): Flow<List<Cat>>
+    abstract fun getCatlist(filter: String): Flow<List<CatView>>
 
     @Query("Select * from CatClass where name like '%'||:filter ||'%' order by name")
     abstract fun getCatClasslist(filter: String): Flow<List<CatClass>>
@@ -72,10 +76,10 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-        select * from Cat where catclassid = $KONTOCLASS order by obercatid 
+        select * from AccountView order by obercatid
         """
     )
-    abstract fun getAccountlist(): Flow<List<Cat>>
+    abstract fun getAccountlist(): Flow<List<AccountView>>
 
     @Query(
         "Select * from Partnerstamm a where name like '%'||:filter ||'%' " +
@@ -149,15 +153,6 @@ abstract class Dao(val db: DB) {
     )
     abstract suspend fun getSaldo(accountid: Long, btag: Date): Long
 
-    @Query(
-        "update cat set saldo = (" +
-                "select sum(amount) " +
-                "from CashTrx a " +
-                "where (transferid is null or isUmbuchung) " +
-                "and accountid = :accountid) " +
-                "where id = :accountid and supercatid != 1002" // ohne Depots
-    )
-    abstract suspend fun updateCashSaldo(accountid: Long)
 
     @Query("select * from partnerstamm where name = :partnername")
     abstract suspend fun getPartnerstamm(partnername: String): Partnerstamm?
@@ -174,9 +169,6 @@ abstract class Dao(val db: DB) {
         if (list.isNotEmpty()) {
             val main = list[0]
             delete(main) // Alle weg w/referientieller Integritaet
-            val accounts = HashSet<Long>().apply {
-                add(main.accountid)
-            }
             list.forEachIndexed { index, item ->
                 if (index != 0) {
                     item.partnerid = main.partnerid
@@ -189,13 +181,8 @@ abstract class Dao(val db: DB) {
                     umbuchung.transferid = main.id
                     umbuchung.isUmbuchung = true
                     umbuchung.id = insert(umbuchung)
-                    accounts.add(umbuchung.accountid)
                 }
                 Log.d("Dao", "insertCashTrxView: [$index]:$item")
-            }
-            // CashSalden aktualisieren
-            accounts.forEach {
-                updateCashSaldo(it)
             }
         }
         return list
@@ -333,9 +320,9 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-            select * from Cat where id = :catid
+            select * from AccountView where id = :accountid
         """
     )
-    abstract suspend fun getCat(catid: Long): Cat?
+    abstract suspend fun getCat(accountid: Long): AccountView?
 
 }

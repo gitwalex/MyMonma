@@ -1,32 +1,32 @@
-id;name;description;obercatid;supercatid;catclassid;saldo;incomecat;ausgeblendet;cnt
-1;[Alex Depot Gegenkonto];;1007;1001;2;224549;;0;1285
-2;[comdirect bank];;1003;1001;2;-133923;;0;5969
-3;[comdirekt Giro];;1003;1001;2;0;;1;9
-4;[comdirekt Tagesgeld];;1007;1001;2;0;;1;30
-5;[Diba Extrakonto Alex];;1007;1001;2;5000000;;0;13
-6;[DiBa Ulli];;1003;1001;2;0;;1;6
-7;[Gemeinsames Konto];;1007;1001;2;310864;;0;1604
-8;[Giro Kostenlos];;1003;1001;2;0;;1;45
-9;[Sparkonto Postbank];;1007;1001;2;0;;1;17
-11;[Ulli Gehaltskonto];;1003;1001;2;220344;;0;760
-12;[ADAC-Kartendoppel];;1004;1001;2;0;;1;0
-13;[Allianz LV];;1007;1001;2;0;;1;1
-14;[gemeinsames Konto bei FraSpa];;1007;1001;2;0;;1;36
-15;[Haus Kelkheim];;1007;1001;2;0;;1;2
-16;[Immobilie Oberursel];;1009;1001;2;0;;1;2
-17;[Immobilie Steinbach];;1009;1001;2;0;;1;6
-18;[Kautionskonto];;1009;1001;2;315000;;0;2
-19;[Ulli 1822 Spar];;1007;1001;2;1315767;;0;600
-20;[Ulli Tagesgeld FraSpa];;1007;1001;2;0;;1;1
-21;[Darlehen I Oberursel];;1008;1001;2;0;;1;87
-22;[Darlehen II Oberursel];;1008;1001;2;0;;1;19
-23;[Darlehen Steinbach];;1008;1001;2;0;;1;132
-24;[Verbindlichkeiten Finanzamt];;1008;1001;2;0;;1;16
-25;[Depot Alex];;1005;1002;2;6017154;;0;931
-26;[Depot Ulli];;1005;1002;2;20950332;;0;648
-27;[gemeinsames Depot];;1005;1002;2;186212511;;0;1597
-41;[AccountWerte: _id=41.name];;1004;1001;2;0;;1;12
-43;[BMW X1];;1006;1001;2;586505;;0;56
-45;[Festgeld Debeka];;1007;1001;2;0;;1;1
-46;[Visa Amazon];;1004;1001;2;-75408;;0;824
-47;[Bar];;1003;1001;2;85000;;0;1
+id;name;description;obercatid;supercatid;catclassid;incomecat;ausgeblendet
+1;[Alex Depot Gegenkonto];;1007;1001;2;;0
+2;[comdirect bank];;1003;1001;2;;0
+3;[comdirekt Giro];;1003;1001;2;;1
+4;[comdirekt Tagesgeld];;1007;1001;2;;1
+5;[Diba Extrakonto Alex];;1007;1001;2;;0
+6;[DiBa Ulli];;1003;1001;2;;1
+7;[Gemeinsames Konto];;1007;1001;2;;0
+8;[Giro Kostenlos];;1003;1001;2;;1
+9;[Sparkonto Postbank];;1007;1001;2;;1
+11;[Ulli Gehaltskonto];;1003;1001;2;;0
+12;[ADAC-Kartendoppel];;1004;1001;2;;1
+13;[Allianz LV];;1007;1001;2;;1
+14;[gemeinsames Konto bei FraSpa];;1007;1001;2;;1
+15;[Haus Kelkheim];;1007;1001;2;;1
+16;[Immobilie Oberursel];;1009;1001;2;;1
+17;[Immobilie Steinbach];;1009;1001;2;;1
+18;[Kautionskonto];;1009;1001;2;;0
+19;[Ulli 1822 Spar];;1007;1001;2;;0
+20;[Ulli Tagesgeld FraSpa];;1007;1001;2;;1
+21;[Darlehen I Oberursel];;1008;1001;2;;1
+22;[Darlehen II Oberursel];;1008;1001;2;;1
+23;[Darlehen Steinbach];;1008;1001;2;;1
+24;[Verbindlichkeiten Finanzamt];;1008;1001;2;;1
+25;[Depot Alex];;1005;1002;2;;0
+26;[Depot Ulli];;1005;1002;2;;0
+27;[gemeinsames Depot];;1005;1002;2;;0
+41;[AccountWerte: _id=41.name];;1004;1001;2;;1
+43;[BMW X1];;1006;1001;2;;0
+45;[Festgeld Debeka];;1007;1001;2;;1
+46;[Visa Amazon];;1004;1001;2;;0
+47;[Bar];;1003;1001;2;;0

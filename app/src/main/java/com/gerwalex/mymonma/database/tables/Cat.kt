@@ -45,13 +45,7 @@ data class Cat(
     var incomecat: Boolean? = null,
     var ausgeblendet: Boolean = false,
 
-    var saldo: Long = 0,
-
-    /**
-     * Antahl der CashTrx zu dieser catid
-     */
-    var cnt: Long = 0,
-) {
+    ) {
 
     companion object {
 

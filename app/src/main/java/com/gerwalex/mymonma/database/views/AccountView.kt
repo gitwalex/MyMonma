@@ -21,18 +21,24 @@ import java.sql.Date
 
 @DatabaseView(
     """
-        select name, supercatid, ausgeblendet, saldo , description, b.* 
-        from cat a  
-        join Account b on (a.id = b.catid)
+        select *
+        ,(select sum(amount) from CashTrx where accountid = a.id and (transferid is null or isUmbuchung)) as saldo
+        from cat a
+        join Account b using(id)
+        where supercatid = 1001
+        and catclassid != 1
     """
 )
 data class AccountView(
-    var id: Long,
-    var name: String,
-    var supercatid: Long = Cat.CASHKONTOCATID,
-    val saldo: Long = 0,
+    var id: Long = -1,
+    var name: String = "",
     var description: String? = null,
-    var catid: Long = 0,
+    var saldo: Long = 0,
+    var obercatid: Long = 0,
+    var supercatid: Long = 0,
+    var catclassid: Long = 0,
+    var incomecat: Boolean? = null,
+    var ausgeblendet: Boolean = false,
     var inhaber: String? = null,
     var currency: String? = null,
     var iban: String? = null,// IBAN, Kartnenummer, Kontonummer

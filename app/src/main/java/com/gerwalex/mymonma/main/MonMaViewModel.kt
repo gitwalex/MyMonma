@@ -11,9 +11,7 @@ import kotlinx.coroutines.flow.Flow
 class MonMaViewModel(application: Application) : AndroidViewModel(application) {
 
     val accountlist = dao.getAccountlist()
-    var cashTrxId: Long = 0
     var regelmTrxId: Long = 0
-    var reportId: Long? = null
     var wpstamm: WPStammView? = null
 
     fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>> {

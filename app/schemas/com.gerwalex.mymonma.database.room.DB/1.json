@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "819fff724e0d44620463add2e045d2a1",
+    "identityHash": "c0f504cdf5660f00930e5ad8321ca225",
     "entities": [
       {
         "tableName": "Account",
@@ -270,7 +270,7 @@
       },
       {
         "tableName": "Cat",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `obercatid` INTEGER NOT NULL, `supercatid` INTEGER NOT NULL, `catclassid` INTEGER NOT NULL, `incomecat` INTEGER, `ausgeblendet` INTEGER NOT NULL, `saldo` INTEGER NOT NULL, `cnt` INTEGER NOT NULL, FOREIGN KEY(`catclassid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`obercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`supercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `obercatid` INTEGER NOT NULL, `supercatid` INTEGER NOT NULL, `catclassid` INTEGER NOT NULL, `incomecat` INTEGER, `ausgeblendet` INTEGER NOT NULL, FOREIGN KEY(`catclassid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`obercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`supercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -317,18 +317,6 @@
           {
             "fieldPath": "ausgeblendet",
             "columnName": "ausgeblendet",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "saldo",
-            "columnName": "saldo",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "cnt",
-            "columnName": "cnt",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -1490,7 +1478,7 @@
     "views": [
       {
         "viewName": "AccountView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select name, supercatid, ausgeblendet, saldo , description, b.* \n        from cat a  \n        join Account b on (a.id = b.catid)"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select *\n        ,(select sum(amount) from CashTrx where accountid = a.id and (transferid is null or isUmbuchung)) as saldo\n        from cat a\n        join Account b using(id)\n        where supercatid = 1001\n        and catclassid != 1"
       },
       {
         "viewName": "CatView",
@@ -1527,7 +1515,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '819fff724e0d44620463add2e045d2a1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c0f504cdf5660f00930e5ad8321ca225')"
     ]
   }
 }

@@ -35,7 +35,7 @@ data class CatView(
     var incomecat: Boolean? = null,
     var ausgeblendet: Boolean = false,
     var saldo: Long = 0,
-    var cnt: Long = 0,
+    var cnt: Long? = 0,
     var obercatname: String? = null,
 
     )
@@ -44,7 +44,11 @@ data class CatView(
  * Wenn keien Kategorie ausgewählt wurde ist die cat.id == null,
  */
 @Composable
-fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected: (Cat) -> Unit) {
+fun AutoCompleteCatView(
+    filter: String,
+    modifier: Modifier = Modifier,
+    selected: (CatView) -> Unit
+) {
     var catname by remember { mutableStateOf(filter) }
     var isError by remember { mutableStateOf(false) }
     var showDropdown by remember { mutableStateOf(true) }
@@ -52,7 +56,7 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
         when (value.size) {
             0 -> {
                 isError = true
-                selected(Cat())
+                selected(CatView())
             }
 
             1 -> {
@@ -64,7 +68,7 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
             else -> {
                 isError = false
                 if (catname.isEmpty())
-                    selected(Cat()) else selected(value[0])
+                    selected(CatView()) else selected(value[0])
             }
         }
 
@@ -92,7 +96,7 @@ fun AutoCompleteCatView(filter: String, modifier: Modifier = Modifier, selected:
                     selected(data[0])
                 } else {
                     isError = true
-                    selected(Cat())
+                    selected(CatView())
                 }
             }
         }

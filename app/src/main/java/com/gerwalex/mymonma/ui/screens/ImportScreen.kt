@@ -85,7 +85,7 @@ private suspend fun executeImport(context: Context, status: (String) -> Unit): B
             db.execSQL("Delete from importaccount")
             db.execSQL("Delete from account")
             db.execSQL("Delete from partnerstamm where id > 1")
-            db.execSQL("Delete from cat where catclassid = 2")
+            db.execSQL("Delete from cat where catclassid = 2 and catclassid != 1")
             status("Lade csv-daten")
             var stream: InputStream
             val am = context.resources.assets

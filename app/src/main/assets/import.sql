@@ -1,11 +1,21 @@
 Cat: (nur accounts)
-select _id as id, name, description, obercatid, supercatid, catclassid, saldo
- incomecat, ausgeblendet, cnt from Type_Cat where catclassid = 2 and _id < 1000
+select _id as id, name, description, obercatid, supercatid, catclassid,
+ incomecat, ausgeblendet from Type_Cat where catclassid = 2 and _id < 1000
 
 Account:
-select _id as id, _id as cat, name,inhaber,currency, iban, blz, bezeichnung,
-0 as creditlimit, verrechnungskonto, kontotyp, openDate
-from Account
+select _id as id, _id as catid, inhaber,currency, iban, blz, bezeichnung,
+0 as creditlimit, verrechnungskonto, openDate
+,case kontotyp
+      when '0'  then "Giro"
+      when '1' then  "Kreditkarte"
+      when '2' then "Depot"
+      when 3  then "Vermoegen"
+      when 4 then  "Anlagen"
+      when 5 then  "Verbindlichkeiten"
+      when 6 then "Immobilien"
+
+	  end as  kontotyp
+from account
 
 WPStamm:
 select _id as id, _id as partnerid, wpname as name, wpkenn, isin, wptyp, risiko, isBeobachten as beobachten,

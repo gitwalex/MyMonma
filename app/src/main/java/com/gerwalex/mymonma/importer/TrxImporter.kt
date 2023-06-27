@@ -139,10 +139,6 @@ open class TrxImporter(private val context: Context) {
                     }
                 }
             }
-            accounts.forEach {
-                dao.updateCashSaldo(it)
-
-            }
 
 
         }
