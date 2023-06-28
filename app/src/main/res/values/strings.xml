@@ -134,4 +134,6 @@
     <string name="undo">Rückgängig?</string>
     <string name="newReport">Neuer Report</string>
     <string name="zumVergleich">"zum Vergleich: %1s"</string>
+    <string name="myDepots">Meine Depots</string>
+    <string name="vermoegen">Vermögen</string>
 </resources>

@@ -6,6 +6,7 @@ import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm
+import com.gerwalex.mymonma.database.views.AccountDepotView
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.wptrx.AccountBestand
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +29,7 @@ abstract class WPDao(val db: DB) {
     @Query(
         "select total(marktwert) " +  //
                 "from (" +  //
-                "select sum(menge) / $NACHKOMMA * (SELECT kurs from WPKurs d where a.wpid = d.wpid " +
+                "select total(menge) / $NACHKOMMA * (SELECT kurs from WPKurs d where a.wpid = d.wpid " +
                 "group by wpid having max(btag)) as marktwert " +  //
                 "from WPTrx a " +  //
                 "where paketid is null " +  //
@@ -36,18 +37,27 @@ abstract class WPDao(val db: DB) {
     )
     abstract fun getWPMarktwert(): Long
 
+    @Query(
+        """
+        select * from AccountDepotView
+    """
+    )
+    abstract fun getDepotList(): Flow<List<AccountDepotView>>
+
     /**
      * Marktwert aller Wertpapier/ Depots zu einem Bestimmten Datum
      */
     @Query(
-        "select total(marktwert) " +  //
-                "from (" +  //
-                "select sum(menge) / $NACHKOMMA * " +  //
-                "(SELECT kurs from WPKurs d where a.wpid = d.wpid and btag <= :btag " +
-                "group by wpid having max(btag)) as marktwert " +  //
-                "from WPTrx a " +  //
-                "where paketid is null " +  //
-                "group by wpid) "
+        """
+        select total(marktwert)   
+                from (  
+                select total(menge) / $NACHKOMMA *   
+                (SELECT kurs from WPKurs d where a.wpid = d.wpid and btag <= :btag 
+                group by wpid having max(btag)) as marktwert   
+                from WPTrx a   
+                where paketid is null   
+                group by wpid)  
+    """
     )
     abstract fun getWPMarktwert(btag: Date): Long
 
@@ -135,7 +145,7 @@ abstract class WPDao(val db: DB) {
      * Ermittelt die Bestände eines WP zu einem Konto. Es werden nur konto mit Bestand berücksichtigt.
      */
     @Query(
-        "select a.id, name, verrechnungskonto, sum(menge) as bestand " +
+        "select a.id, name, verrechnungskonto, total(menge) as bestand " +
                 "from cat a " +
                 "left outer join wptrx b on (a.id = b.accountid) " +
                 "left outer join Account c on (a.id = c.catid) " +

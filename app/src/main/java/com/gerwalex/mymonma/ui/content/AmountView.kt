@@ -34,6 +34,7 @@ import kotlin.math.pow
 fun AmountView(
     value: Long,
     modifier: Modifier = Modifier,
+    text: String = "",
     style: TextStyle = MaterialTheme.typography.bodyLarge,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
@@ -43,7 +44,7 @@ fun AmountView(
     val myValue by rememberState(value) { BigDecimal(value).divide(digits) }
     Text(
         modifier = modifier,
-        text = currency.format(myValue),
+        text = "$text ${currency.format(myValue)}",
         style = style,
         fontWeight = fontWeight,
         color = if (colorMode && myValue < BigDecimal(0)) Color.Red else MaterialTheme.colorScheme.onSurface,

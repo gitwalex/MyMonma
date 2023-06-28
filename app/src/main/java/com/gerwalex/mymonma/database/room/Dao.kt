@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.gerwalex.mymonma.database.data.GesamtVermoegen
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
@@ -16,7 +17,7 @@ import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm
-import com.gerwalex.mymonma.database.views.AccountView
+import com.gerwalex.mymonma.database.views.AccountCashView
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.CatView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
@@ -26,6 +27,15 @@ import java.sql.Date
 
 @Dao
 abstract class Dao(val db: DB) {
+
+    @Query(
+        """
+    select total(saldo) as saldo
+    ,(SELECT total(marktwert) from AccountDepotView) as marktwert
+    from AccountCashView a
+    """
+    )
+    abstract fun getGesamtVermoegen(): Flow<GesamtVermoegen>
 
     @Query(
         """
@@ -44,13 +54,14 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-        Select *, 0 as saldo
+        Select a.*, b.name as obercatname, 0 as saldo
          ,(select count(*) from CashTrx where catid = a.id) as cnt
         from Cat a
-        where name like '%'|| :filter||'%' 
-        and not ausgeblendet 
-        and (id > 10001 or supercatid = ${Cat.CASHKONTOCATID}) 
-        order by cnt desc, name
+        join Cat b using(id)
+        where a.name like '%'|| :filter||'%' 
+        and not a.ausgeblendet 
+        and (a.id > 10001 or a.supercatid = ${Cat.CASHKONTOCATID}) 
+        order by cnt desc, a.name
         """
     )
     abstract fun getCatlist(filter: String): Flow<List<CatView>>
@@ -76,10 +87,10 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-        select * from AccountView order by obercatid
+        select * from AccountCashView order by obercatid
         """
     )
-    abstract fun getAccountlist(): Flow<List<AccountView>>
+    abstract fun getAccountlist(): Flow<List<AccountCashView>>
 
     @Query(
         "Select * from Partnerstamm a where name like '%'||:filter ||'%' " +
@@ -148,7 +159,7 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-    select sum(amount) from CashTrx where accountid = :accountid and btag <= :btag and (transferid is null or isUmbuchung)
+    select total(amount) from CashTrx where accountid = :accountid and btag <= :btag and (transferid is null or isUmbuchung)
 """
     )
     abstract suspend fun getSaldo(accountid: Long, btag: Date): Long
@@ -320,9 +331,9 @@ abstract class Dao(val db: DB) {
 
     @Query(
         """
-            select * from AccountView where id = :accountid
+            select * from AccountCashView where id = :accountid
         """
     )
-    abstract suspend fun getCat(accountid: Long): AccountView?
+    abstract suspend fun getCashAccount(accountid: Long): AccountCashView?
 
 }

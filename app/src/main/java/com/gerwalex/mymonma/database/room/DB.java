@@ -28,7 +28,8 @@ import com.gerwalex.mymonma.database.tables.TrxRegelm;
 import com.gerwalex.mymonma.database.tables.WPKurs;
 import com.gerwalex.mymonma.database.tables.WPStamm;
 import com.gerwalex.mymonma.database.tables.WPTrx;
-import com.gerwalex.mymonma.database.views.AccountView;
+import com.gerwalex.mymonma.database.views.AccountCashView;
+import com.gerwalex.mymonma.database.views.AccountDepotView;
 import com.gerwalex.mymonma.database.views.CashTrxView;
 import com.gerwalex.mymonma.database.views.CatView;
 import com.gerwalex.mymonma.database.views.TrxRegelmView;
@@ -43,8 +44,8 @@ import com.gerwalex.mymonma.database.views.WPStammView;
         //
         version = 1,
         //
-        views = {AccountView.class, CatView.class, CashTrxView.class, GeldflussData.class,
-                GeldflussSummenData.class, ExcludedCatClasses.class,
+        views = {AccountCashView.class, AccountDepotView.class, CatView.class, CashTrxView.class,
+                GeldflussData.class, GeldflussSummenData.class, ExcludedCatClasses.class,
                 ExcludedCats.class, TrxRegelmView.class, WPStammView.class,
                 GeldflussData.class})
 @TypeConverters({MonMaConverter.class, MyConverter.class})

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c0f504cdf5660f00930e5ad8321ca225",
+    "identityHash": "05858749fece47b51f9ee9110657765b",
     "entities": [
       {
         "tableName": "Account",
@@ -1263,6 +1263,16 @@
         },
         "indices": [
           {
+            "name": "index_WPKurs_wpid_btag",
+            "unique": true,
+            "columnNames": [
+              "wpid",
+              "btag"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_WPKurs_wpid_btag` ON `${TABLE_NAME}` (`wpid`, `btag`)"
+          },
+          {
             "name": "index_WPKurs_btag",
             "unique": false,
             "columnNames": [
@@ -1477,8 +1487,12 @@
     ],
     "views": [
       {
-        "viewName": "AccountView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select *\n        ,(select sum(amount) from CashTrx where accountid = a.id and (transferid is null or isUmbuchung)) as saldo\n        from cat a\n        join Account b using(id)\n        where supercatid = 1001\n        and catclassid != 1"
+        "viewName": "AccountCashView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, b.*, c.name as obercatname\n        ,(select total(amount) from CashTrx where accountid = a.id and (transferid is null or isUmbuchung)) as saldo\n        from cat a\n        join Cat c on(a.obercatid = c.id)\n        join Account b using(id)\n        where a.supercatid = 1001\n        and a.catclassid != 1"
+      },
+      {
+        "viewName": "AccountDepotView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select *\n\t\t,(select total(marktwert) from (\n            select accountid,  sum(menge) / 1000000 *\n            (SELECT kurs from WPKurs d where a.wpid = d.wpid\n            group by wpid having max(btag)) as marktwert\n            from WPTrx a\n            where paketid is null \n            group by accountid, wpid)\n\t\t    where accountid = a.id\n            group by accountid) as marktwert\n            from cat a\n            join Account b using(id)\n            where supercatid = 1002\n            and catclassid != 1"
       },
       {
         "viewName": "CatView",
@@ -1515,7 +1529,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c0f504cdf5660f00930e5ad8321ca225')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '05858749fece47b51f9ee9110657765b')"
     ]
   }
 }

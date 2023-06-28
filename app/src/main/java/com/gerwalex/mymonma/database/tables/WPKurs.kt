@@ -11,6 +11,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
@@ -23,8 +24,8 @@ import java.sql.Date
         childColumns = ["wpid"],
         onDelete = ForeignKey.RESTRICT,
         onUpdate = ForeignKey.CASCADE,
-
-        )]
+    )],
+    indices = [Index(value = ["wpid", "btag"], unique = true)]
 )
 data class WPKurs(
     @PrimaryKey(autoGenerate = true)

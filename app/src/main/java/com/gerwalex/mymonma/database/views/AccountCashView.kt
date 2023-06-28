@@ -21,16 +21,18 @@ import java.sql.Date
 
 @DatabaseView(
     """
-        select *
-        ,(select sum(amount) from CashTrx where accountid = a.id and (transferid is null or isUmbuchung)) as saldo
+        select a.*, b.*, c.name as obercatname
+        ,(select total(amount) from CashTrx where accountid = a.id and (transferid is null or isUmbuchung)) as saldo
         from cat a
+        join Cat c on(a.obercatid = c.id)
         join Account b using(id)
-        where supercatid = 1001
-        and catclassid != 1
-    """
+        where a.supercatid = 1001
+        and a.catclassid != 1
+            """
 )
-data class AccountView(
+data class AccountCashView(
     var id: Long = -1,
+    var catid: Long = -1,
     var name: String = "",
     var description: String? = null,
     var saldo: Long = 0,
@@ -50,6 +52,7 @@ data class AccountView(
     var openDate: Date? = Date(System.currentTimeMillis()),
     var bankname: String? = null,
     var bic: String? = null,
+    var obercatname: String = ""
 )
 
 @Composable
