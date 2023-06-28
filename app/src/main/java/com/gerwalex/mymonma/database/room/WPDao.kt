@@ -145,15 +145,26 @@ abstract class WPDao(val db: DB) {
      * Ermittelt die Bestände eines WP zu einem Konto. Es werden nur konto mit Bestand berücksichtigt.
      */
     @Query(
-        "select a.id, name, verrechnungskonto, total(menge) as bestand " +
-                "from cat a " +
-                "left outer join wptrx b on (a.id = b.accountid) " +
-                "left outer join Account c on (a.id = c.catid) " +
-                "where wpid = :wpid " +
-                "and paketid is null " +
-                "group by accountid having bestand > 0"
+        """
+        select a.id, a.name, c.verrechnungskonto, v.name as vname, total(menge) as bestand 
+                from cat a 
+                left outer join wptrx b on (a.id = b.accountid) 
+                left outer join Account c on (a.id = c.catid) 
+				join Cat v on c.verrechnungskonto = v.id
+                where wpid = :wpid and  paketid is null 
+                group by accountid having bestand > 0
+           """
     )
     abstract fun getAccountBestand(wpid: Long): Flow<List<AccountBestand>>
+
+    /**
+     * Ermittelt Verrechnungskonten zu depots
+     */
+    @Query(
+        """
+              select  * from AccountDepotView           """
+    )
+    abstract fun getDepotVerrechnungBestand(): Flow<List<AccountDepotView>>
 
 
 }

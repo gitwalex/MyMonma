@@ -12,17 +12,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.room.DatabaseView
+import androidx.room.Ignore
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat
+import com.gerwalex.mymonma.database.tables.WPTrx
 import com.gerwalex.mymonma.enums.Kontotyp
+import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import java.sql.Date
 
 @DatabaseView(
     """
-        select *
+ select a.*, b.*,c.name as verrechnungskontoname
 		,(select total(marktwert) from (
             select accountid,  sum(menge) / $NACHKOMMA *
             (SELECT kurs from WPKurs d where a.wpid = d.wpid
@@ -32,10 +36,11 @@ import java.sql.Date
             group by accountid, wpid)
 		    where accountid = a.id
             group by accountid) as marktwert
-            from cat a
-            join Account b using(id)
-            where supercatid = 1002
-            and catclassid != 1    
+        from cat a
+        join Account b using(id)
+        JOIN cat c on(c.id = b.verrechnungskonto)
+        where a.supercatid = 1002
+        and a.catclassid != 1    
             """
 )
 data class AccountDepotView(
@@ -59,7 +64,53 @@ data class AccountDepotView(
     var openDate: Date? = Date(System.currentTimeMillis()),
     var bankname: String? = null,
     var bic: String? = null,
-)
+    var verrechnungskontoname: String = "",
+) {
+    @Ignore
+    var wptrx: WPTrx? = null
+
+    suspend fun insertIncome(btag: Date, wp: WPStammView, trxArt: WPTrxArt) {
+        wptrx?.let { trx ->
+            val trxList = ArrayList<CashTrx>()
+            val main = CashTrx(
+                accountid = id,
+                btag = btag,
+                amount = trx.amount,
+                catid = trxArt.catid,
+                partnerid = wp.id,
+            )
+            trxList.apply {
+                add(main)
+                if (trx.abgeltungssteuer != 0L) {
+                    add(
+                        main.copy(
+                            catid = Cat.AbgeltSteuerCatid,
+                            amount = trx.abgeltungssteuer
+                        )
+                    )
+                }
+                if (trx.ausmachenderBetrag != 0L) {
+                    val cashTrx = main.copy(
+                        accountid = id,
+                        catid = verrechnungskonto ?: id,
+                        amount = -(trx.ausmachenderBetrag),
+                    ).also {
+                        it.gegenbuchung = it.copy(
+                            accountid = it.catid,
+                            catid = it.accountid,
+                            amount = -it.amount
+                        )
+
+                    }
+                    add(cashTrx)
+                }
+                DB.dao.insertCashTrx(trxList)
+
+            }
+        }
+    }
+
+}
 
 @Composable
 fun AutoCompleteDepotView(filter: String, selected: (Cat) -> Unit) {

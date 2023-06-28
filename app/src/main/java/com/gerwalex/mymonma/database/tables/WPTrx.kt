@@ -3,6 +3,7 @@ package com.gerwalex.mymonma.database.tables
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.sql.Date
 
@@ -45,7 +46,7 @@ data class WPTrx(
     var id: Long? = null,
     var btag: Date = Date(System.currentTimeMillis()),
     @ColumnInfo(index = true)
-    val accountid: Long = -1,
+    var accountid: Long = -1,
     @ColumnInfo(index = true)
     var wpid: Long = -1,
     @ColumnInfo(index = true)
@@ -58,5 +59,15 @@ data class WPTrx(
     var einstand: Long? = null,
     var zinszahl: Long? = null,
     var haltedauer: Long? = null,
+    @Ignore
+    var amount: Long = 0,
+    @Ignore
+    var abgeltungssteuer: Long = 0,
 
-    )
+    ) {
+    val ausmachenderBetrag: Long
+        get() {
+            return amount + abgeltungssteuer
+        }
+
+}

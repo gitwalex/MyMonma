@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -275,14 +276,11 @@ abstract class Dao(val db: DB) {
     )
     protected abstract suspend fun updateNextBtag(trxRegelmId: Long, btag: Date)
 
-    suspend fun insertKurs(kursList: MutableList<WPKurs>) {
-        kursList.forEach {
-            insert(it)
-        }
 
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertKurs(kursList: MutableList<WPKurs>)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(wpkurs: WPKurs)
 
     suspend fun insert(cashTrx: CashTrx): Long {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "05858749fece47b51f9ee9110657765b",
+    "identityHash": "32d8147f5fa9cfed2980c9cb4ca4c21d",
     "entities": [
       {
         "tableName": "Account",
@@ -1492,7 +1492,7 @@
       },
       {
         "viewName": "AccountDepotView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select *\n\t\t,(select total(marktwert) from (\n            select accountid,  sum(menge) / 1000000 *\n            (SELECT kurs from WPKurs d where a.wpid = d.wpid\n            group by wpid having max(btag)) as marktwert\n            from WPTrx a\n            where paketid is null \n            group by accountid, wpid)\n\t\t    where accountid = a.id\n            group by accountid) as marktwert\n            from cat a\n            join Account b using(id)\n            where supercatid = 1002\n            and catclassid != 1"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, b.*,c.name as verrechnungskontoname\n\t\t,(select total(marktwert) from (\n            select accountid,  sum(menge) / 1000000 *\n            (SELECT kurs from WPKurs d where a.wpid = d.wpid\n            group by wpid having max(btag)) as marktwert\n            from WPTrx a\n            where paketid is null \n            group by accountid, wpid)\n\t\t    where accountid = a.id\n            group by accountid) as marktwert\n        from cat a\n        join Account b using(id)\n        JOIN cat c on(c.id = b.verrechnungskonto)\n        where a.supercatid = 1002\n        and a.catclassid != 1"
       },
       {
         "viewName": "CatView",
@@ -1529,7 +1529,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '05858749fece47b51f9ee9110657765b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '32d8147f5fa9cfed2980c9cb4ca4c21d')"
     ]
   }
 }

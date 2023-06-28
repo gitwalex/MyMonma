@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.wpdao
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
+import com.gerwalex.mymonma.database.tables.WPTrx
+import com.gerwalex.mymonma.database.views.AccountDepotView
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.enums.WPTyp
@@ -43,8 +45,7 @@ import com.gerwalex.mymonma.ui.content.MengeView
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
-import com.gerwalex.mymonma.wptrx.AccountBestand
-import com.gerwalex.mymonma.wptrx.AccountBestandIncomeItem
+import com.gerwalex.mymonma.wptrx.AccountIncomeVerrechnungItem
 import kotlinx.coroutines.launch
 import java.sql.Date
 
@@ -56,7 +57,8 @@ fun IncomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
 
 
     wp?.let { stamm ->
-        val accountbestand by wpdao.getAccountBestand(wp.id).collectAsState(initial = emptyList())
+        val verrechnungskonten by wpdao.getDepotVerrechnungBestand()
+            .collectAsState(initial = emptyList())
         var btag by remember { mutableStateOf(Date(System.currentTimeMillis())) }
         val trxArt =
             when (stamm.wptyp) {
@@ -78,7 +80,7 @@ fun IncomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
                     actions = {
                         IconButton(onClick = {
                             scope.launch {
-                                accountbestand.forEach { acc ->
+                                verrechnungskonten.forEach { acc ->
                                     acc.insertIncome(btag, wp, trxArt)
                                 }
                                 navigateTo(Up)
@@ -97,7 +99,7 @@ fun IncomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
                     Text(text = stringResource(id = R.string.bestandAktuell))
                     MengeView(value = wp.bestand)
                 }
-                IncomeScreen(accountbestand, wp = stamm, trxArt)
+                IncomeScreen(verrechnungskonten, wp = stamm, trxArt)
             }
         }
     } ?: navigateTo(Up)
@@ -106,7 +108,7 @@ fun IncomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
 
 @Composable
 fun IncomeScreen(
-    accountbestand: List<AccountBestand>,
+    depots: List<AccountDepotView>,
     wp: WPStammView,
     trxArt: WPTrxArt,
 ) {
@@ -149,19 +151,21 @@ fun IncomeScreen(
 
         }
         item { Divider(modifier = Modifier.padding(4.dp), 1.dp) }
-        items(accountbestand) {
-
-            AccountBestandIncomeItem(it) {
-                var tAmount = 0L
-                var tAbgeltSteuer = 0L
-                var ausmBetrag = 0L
-                accountbestand.forEach {
-                    tAmount += it.amount
-                    tAbgeltSteuer += it.abgeltSteuer
-                    ausmBetrag += it.amount + it.abgeltSteuer
+        items(depots) {
+            it.wptrx = WPTrx().apply {
+                AccountIncomeVerrechnungItem(it.verrechnungskontoname, this) {
+                    var tAmount = 0L
+                    var tAbgeltSteuer = 0L
+                    var ausmBetrag = 0L
+                    depots.forEach {
+                        tAmount += it.wptrx?.amount ?: 0
+                        tAbgeltSteuer += it.wptrx?.abgeltungssteuer ?: 0
+                        ausmBetrag += it.wptrx?.ausmachenderBetrag ?: 0
+                    }
+                    amount = tAmount
+                    abgeltSteuer = tAbgeltSteuer
                 }
-                amount = tAmount
-                abgeltSteuer = tAbgeltSteuer
+
             }
         }
     }
@@ -172,12 +176,11 @@ fun IncomeScreen(
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun IncomeScreenPreview() {
-    val depot = AccountBestand(id = 1, name = "Depot1", bestand = 1000 * NACHKOMMA)
-    val accountBestand = ArrayList<AccountBestand>().apply { add(depot) }
+    val depot = listOf(AccountDepotView(id = 1, name = "Depot1"))
     AppTheme {
         Surface {
             val wpstamm = WPStammView(id = 1, name = "My Share", bestand = 30000 * NACHKOMMA)
-            IncomeScreen(accountBestand, wpstamm, WPTrxArt.DivIn)
+            IncomeScreen(depot, wpstamm, WPTrxArt.DivIn)
 
         }
 
