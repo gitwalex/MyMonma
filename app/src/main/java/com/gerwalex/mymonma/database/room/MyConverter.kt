@@ -16,6 +16,8 @@ object MyConverter {
     private val df = DateFormat.getDateInstance()
     val currency = NumberFormat.getCurrencyInstance()
     val digits = BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble()))
+    private val dateformatter = DateFormat.getDateInstance(DateFormat.DEFAULT)
+
 
     val currencyFormatter: ValueFormatter = object : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
@@ -44,15 +46,6 @@ object MyConverter {
         return currency.format(BigDecimal(amount).divide(digits))
     }
 
-    @TypeConverter
-    fun convertToBigDecimal(value: String): BigDecimal {
-        return BigDecimal(value)
-    }
-
-    @TypeConverter
-    fun convertFromBigDecimal(value: BigDecimal): String {
-        return value.toString()
-    }
 
     @TypeConverter
     fun convertWPTyp(wptyp: WPTyp): String {
@@ -70,6 +63,14 @@ object MyConverter {
     fun convertDate(date: Date): String {
         val di = DateFormat.getDateInstance(DateFormat.DEFAULT)
         return di.format(date)
+    }
+
+    /**
+     * Convertiert ein Date
+     */
+    fun convertDate(date: Long): String {
+        val di = DateFormat.getDateInstance(DateFormat.DEFAULT)
+        return di.format(Date(date))
     }
 
 

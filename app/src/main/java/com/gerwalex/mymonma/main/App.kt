@@ -14,6 +14,7 @@ import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.ext.preferences
 import com.gerwalex.mymonma.ext.set
+import com.gerwalex.mymonma.workers.KursDownloadWorker
 import com.gerwalex.mymonma.workers.MaintenanceWorker
 import kotlinx.coroutines.*
 import java.io.File
@@ -33,6 +34,7 @@ class App : Application() {
 
         DB.createInstance(this)
         MaintenanceWorker.enqueueMaintenanceWorker(this)
+        KursDownloadWorker.enqueueKursDownloadWorker(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }

@@ -1,6 +1,7 @@
 package com.gerwalex.mymonma.workers
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -9,6 +10,9 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.ext.dataStore
+import com.gerwalex.mymonma.preferences.PreferenceKey
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 
@@ -23,11 +27,20 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
 
 
     override suspend fun doWork(): Result {
-        RegelmTrxWorker.doWork(context)
-        val database = sqLiteOpenHelper.writableDatabase
-        database.execSQL("analyze")
-        database.execSQL("vacuum")
-        return Result.success()
+        return try {
+            RegelmTrxWorker.doWork(context)
+            val database = sqLiteOpenHelper.writableDatabase
+            database.execSQL("analyze")
+            database.execSQL("vacuum")
+            context.dataStore.edit {
+                it[PreferenceKey.LastMaintenance] = Date().time
+            }
+            Result.success()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.retry()
+        }
     }
 
     companion object {

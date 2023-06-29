@@ -19,9 +19,8 @@ object Home : Destination() {
     override fun navigate(navController: NavController) {
         navController.popBackStack(name, false)
     }
-
-
 }
+
 
 object Up : Destination() {
     override val title: Int

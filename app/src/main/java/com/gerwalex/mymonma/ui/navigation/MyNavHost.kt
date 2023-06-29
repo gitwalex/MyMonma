@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gerwalex.mymonma.main.MonMaViewModel
+import com.gerwalex.mymonma.preferences.SettingScreen
 import com.gerwalex.mymonma.ui.lists.CashTrxListScreen
 import com.gerwalex.mymonma.ui.lists.RegelmTrxList
 import com.gerwalex.mymonma.ui.lists.WPBestandList
@@ -30,6 +31,9 @@ fun MyNavHost(
     NavHost(navController = navController, startDestination = Home.name) {
         composable(Home.name) {
             HomeScreen(viewModel = viewModel, navigateTo)
+        }
+        composable(Settings.name) {
+            SettingScreen(viewModel, navigateTo)
         }
         composable(ImportData.name) {
             ImportScreen(navigateTo)

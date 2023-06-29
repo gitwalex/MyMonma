@@ -26,6 +26,7 @@ import java.net.URL
 import java.net.URLEncoder
 import java.sql.Date
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
 import kotlin.collections.set
 
@@ -38,9 +39,8 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
         val weekday = GregorianCalendar
             .getInstance()
             .get(Calendar.DAY_OF_WEEK)
-        return when (weekday) {
+        when (weekday) {
             Calendar.SUNDAY, Calendar.SATURDAY -> {
-                Result.success()
             }
 
             else -> {
@@ -49,7 +49,10 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
                 }
             }
         }
+        enqueueKursDownloadWorker(context)
+        return Result.success()
     }
+
 
     @WorkerThread
     fun executeDownload(): Result {
@@ -117,9 +120,31 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
     companion object {
 
         private const val LOGIN_URL = "https://alt.finanztreff.de/anmeldung.htn?"
+        private val tag: String = MaintenanceWorker::class.java.name
+        fun enqueueKursDownloadWorker(context: Context): Operation {
+            val cal = GregorianCalendar.getInstance().apply {
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                if (get(Calendar.HOUR_OF_DAY) >= 17) { // nächster Lauf Morgen, 0800 Uhr
+                    set(Calendar.HOUR_OF_DAY, 8)
+                    set(Calendar.DAY_OF_MONTH, get(Calendar.DAY_OF_MONTH) + 1)
+                } else {
+                    set(Calendar.HOUR_OF_DAY, 17)
+                }
+            }
+
+            val delay = cal.time.time - System.currentTimeMillis()
+
+            return submit(context, delay)
+        }
+
+
+        fun cancel(context: Context) {
+            WorkManager.getInstance(context).cancelAllWorkByTag(tag)
+        }
 
         @JvmStatic
-        fun submit(context: Context) {
+        fun submit(context: Context, delay: Long = 0): Operation {
             val constraints = Constraints
                 .Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -127,16 +152,17 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
             val request = OneTimeWorkRequest
                 .Builder(KursDownloadWorker::class.java)
                 .setConstraints(constraints)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .build()
-            WorkManager
+            return WorkManager
                 .getInstance(context)
-                .enqueue(request)
+                .enqueueUniqueWork(
+                    tag,
+                    ExistingWorkPolicy.REPLACE,
+                    request
+                )
         }
 
-        fun cancel(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork("KursDownload-1")
-            WorkManager.getInstance(context).cancelUniqueWork("KursDownload-2")
-        }
 
     }
 

@@ -15,6 +15,9 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.preference.PreferenceManager
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.main.App
@@ -26,6 +29,7 @@ fun Context.getActivity(): AppCompatActivity? = when (this) {
     else -> null
 }
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 val Context.preferences: SharedPreferences
     get() = PreferenceManager.getDefaultSharedPreferences(this)
 
