@@ -12,7 +12,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -72,16 +71,6 @@ fun EditReportData(
     var typ by rememberState { report.typ }
     var error by rememberState { "" }
     val snackbarHostState = remember { SnackbarHostState() }
-    DisposableEffect(key1 = Unit) {
-        onDispose {
-            scope.launch {
-                report.name = name
-                report.description = description.ifEmpty { null }
-                report.typ = typ
-                reportdao.update(report)
-            }
-        }
-    }
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -105,15 +94,33 @@ fun EditReportData(
             OutlinedTextField(
                 value = name,
                 supportingText = { Text(text = error) },
-                onValueChange = { text -> name = text },
+                onValueChange = { text ->
+                    name = text
+                    scope.launch {
+                        report.name = name
+                        reportdao.update(report)
+                    }
+                },
                 label = { Text(text = stringResource(id = R.string.reportName)) }
             )
             OutlinedTextField(
                 value = description,
-                onValueChange = { description = it },
+                onValueChange = {
+                    description = it
+                    scope.launch {
+                        report.description = description.ifEmpty { null }
+                        reportdao.update(report)
+                    }
+                },
                 label = { Text(text = stringResource(id = R.string.reportDesc)) }
             )
-            ReportTypSpinner(typ = typ, selected = { typ = it })
+            ReportTypSpinner(typ = typ, selected = {
+                typ = it
+                scope.launch {
+                    report.typ = typ
+                    reportdao.update(report)
+                }
+            })
 
             ZeitraumCard(report = report)
             VerglZeitraumCard(report = report)

@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
-import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ui.AppTheme
 import kotlinx.coroutines.launch
 
@@ -49,6 +47,7 @@ data class ExcludedCatClasses(
 
 @Composable
 fun ExcludedCatClassesCheckBoxes(reportid: Long) {
+    val scope = rememberCoroutineScope()
     Column {
         Text(
             text = stringResource(id = R.string.excludedCatClasses),
@@ -58,30 +57,31 @@ fun ExcludedCatClassesCheckBoxes(reportid: Long) {
         val list by DB.reportdao.getExcludedCatClasses(reportid)
             .collectAsState(initial = emptyList())
         LazyColumn(content = {
-            items(list) { item ->
-                CatClassCheckbox(item = item)
+            items(list, key = { it.id }) { item ->
+                CatClassCheckbox(item = item) { checked ->
+                    scope.launch {
+                        if (checked)
+                            DB.reportdao.deleteExcludedCatClass(item.reportid, item.catclassid)
+                        else
+                            DB.reportdao.insertExcludedCatClass(item.reportid, item.catclassid)
+                    }
+
+                }
             }
         })
     }
 }
 
 @Composable
-fun CatClassCheckbox(item: ExcludedCatClasses) {
-    val scope = rememberCoroutineScope()
-    var excluded by rememberState(key = item.excluded) { item.excluded }
+fun CatClassCheckbox(item: ExcludedCatClasses, onCheckedChanged: (Boolean) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.clickable {
-            excluded = !excluded
+            onCheckedChanged(!item.excluded)
         }) {
         Checkbox(
-            checked = !excluded,
+            checked = !item.excluded,
             onCheckedChange = { selected ->
-                scope.launch {
-                    if (selected)
-                        DB.reportdao.deleteExcludedCatClass(item.reportid, item.catclassid)
-                    else
-                        DB.reportdao.insertExcludedCatClass(item.reportid, item.catclassid)
-                }
+                onCheckedChanged(selected)
             }
         )
         Text(text = item.name)
@@ -103,8 +103,8 @@ fun CatClassChaeckBoxPreview() {
     AppTheme {
         Surface {
             Column {
-                CatClassCheckbox(item = item)
-                CatClassCheckbox(item = item.copy(excluded = true, name = "Not Excluded"))
+                CatClassCheckbox(item = item) {}
+                CatClassCheckbox(item = item.copy(excluded = true, name = "Not Excluded")) {}
             }
         }
     }

@@ -49,9 +49,16 @@ fun ExcludedCatsCheckBoxes(reportid: Long) {
 
         val list by reportdao.getExcludedCats(reportid).collectAsState(initial = emptyList())
         if (list.isNotEmpty()) {
+            val scope = rememberCoroutineScope()
             LazyColumn(content = {
                 items(list) { item ->
-                    CatCheckbox(item = item)
+                    CatCheckbox(item = item) {
+                        scope.launch {
+                            reportdao.deleteExcludedCat(item.reportid, item.catid)
+                        }
+
+
+                    }
                 }
             })
         } else {
@@ -61,17 +68,15 @@ fun ExcludedCatsCheckBoxes(reportid: Long) {
 }
 
 @Composable
-fun CatCheckbox(item: ExcludedCats) {
-    val scope = rememberCoroutineScope()
+fun CatCheckbox(item: ExcludedCats, onCheckedChanged: (isChecked: Boolean) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.clickable {
-            scope.launch {
-                reportdao.deleteExcludedCat(item.reportid, item.catid)
-            }
+            onCheckedChanged(false)
         }) {
         Checkbox(
             checked = true,
             onCheckedChange = { selected ->
+                onCheckedChanged(selected)
             }
         )
         SplittedCatNameItem(name = item.name)

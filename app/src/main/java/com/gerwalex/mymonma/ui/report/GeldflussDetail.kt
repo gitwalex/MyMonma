@@ -47,6 +47,7 @@ fun GeldflussDetailScreen(
     onSelected: (GeldflussData) -> Unit
 
 ) {
+    val scope = rememberCoroutineScope()
     val list by DB.reportdao.getReportGeldflussData(report.id!!)
         .collectAsState(initial = emptyList())
     if (list.isEmpty()) {
@@ -64,7 +65,6 @@ fun GeldflussDetailScreen(
                 modifier = Modifier.weight(1f),
             ) {
                 items(list, key = { it.catid }) { item ->
-                    val scope = rememberCoroutineScope()
                     val currentItem by rememberUpdatedState(newValue = item)
                     val dismissState = rememberDismissState(
                         confirmValueChange = { dismissValue ->
