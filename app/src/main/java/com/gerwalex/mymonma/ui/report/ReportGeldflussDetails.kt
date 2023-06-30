@@ -54,6 +54,34 @@ fun ReportGeldflussDetails(
 }
 
 @Composable
+fun ReportGeldflussVerglDetails(
+    reportid: Long,
+    catid: Long,
+    viewModel: MonMaViewModel,
+    navigateTo: (Destination) -> Unit
+) {
+    val list by viewModel.reportDetailsVerglList(reportid, catid)
+        .collectAsState(initial = emptyList())
+    Scaffold(
+        topBar = {
+            TopToolBar(
+                stringResource(id = ReportList.title)
+            ) {
+                navigateTo(Up)
+            }
+        }) {
+
+        Column(modifier = Modifier.padding(it)) {
+            if (list.isNotEmpty()) {
+                ReportGeldflussDetails(list = list, navigateTo)
+            } else {
+                NoEntriesBox()
+            }
+        }
+    }
+}
+
+@Composable
 fun ReportGeldflussDetails(
     list: List<CashTrxView>,
     navigateTo: (Destination) -> Unit,

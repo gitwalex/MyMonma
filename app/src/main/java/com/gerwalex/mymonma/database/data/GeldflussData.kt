@@ -59,7 +59,7 @@ data class GeldflussData(
 )
 
 @Composable
-fun GeldflussDataItem(trx: GeldflussData, onClicked: () -> Unit) {
+fun GeldflussDataItem(trx: GeldflussData, onClicked: () -> Unit, onVerglClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -74,36 +74,57 @@ fun GeldflussDataItem(trx: GeldflussData, onClicked: () -> Unit) {
         ) {
             Column { SplittedCatNameItem(name = trx.name) }
             Spacer(modifier = Modifier.weight(1f))
-            Column(horizontalAlignment = Alignment.End) {
-                AmountView(value = trx.amount, fontWeight = FontWeight.Bold)
+            AmountView(value = trx.amount, fontWeight = FontWeight.Bold)
+
+
+        }
+        Divider()
+        Column(modifier = Modifier.clickable {
+            onVerglClicked()
+        }) {
+            Row {
+                Text(
+                    text = stringResource(id = R.string.differenz),
+                    style = MaterialTheme.typography.labelSmall
+                )
+                Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = stringResource(id = R.string.vergleich),
                     style = MaterialTheme.typography.labelSmall
                 )
+            }
+            Row {
+                if (trx.amount != 0L) {
+                    AmountView(
+                        value = trx.amount - trx.verglAmount,
+                        style = MaterialTheme.typography.labelSmall
+                    )
+
+                    Text(
+                        text = " (",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    PercentView(
+                        value = (trx.amount - trx.verglAmount) * 100f / trx.verglAmount,
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    Text(
+                        text = ")",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
                 AmountView(
                     value = trx.verglAmount,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.labelSmall
                 )
             }
-
-        }
-        Divider()
-        Text(
-            text = stringResource(id = R.string.differenz),
-            style = MaterialTheme.typography.labelSmall
-        )
-        Row {
-            AmountView(value = trx.amount - trx.verglAmount)
-            if (trx.amount != 0L) {
-                Text(text = " (")
-                PercentView(value = (trx.amount - trx.verglAmount) * 100f / trx.verglAmount)
-                Text(text = ")")
-            }
         }
     }
 
 }
+
 
 @Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
@@ -121,8 +142,7 @@ fun GeldflussDataItemPreview() {
                 verglRepcnt = 100,
 
                 )
-            GeldflussDataItem(trx = data) {}
-
+            GeldflussDataItem(trx = data, onClicked = {}, onVerglClicked = {})
         }
     }
 }

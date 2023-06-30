@@ -45,6 +45,10 @@ class MonMaViewModel(application: Application) : AndroidViewModel(application) {
         return reportdao.ReportGeldflussDetails(reportid, catid)
     }
 
+    fun reportDetailsVerglList(reportid: Long, catid: Long): Flow<List<CashTrxView>> {
+        return reportdao.ReportGeldflussVergleichDetails(reportid, catid)
+    }
+
     init {
         dataStore = application.dataStore
     }

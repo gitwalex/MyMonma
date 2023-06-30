@@ -15,6 +15,7 @@ import com.gerwalex.mymonma.ui.report.AddReportData
 import com.gerwalex.mymonma.ui.report.EditReportData
 import com.gerwalex.mymonma.ui.report.ReportDetailScreen
 import com.gerwalex.mymonma.ui.report.ReportGeldflussDetails
+import com.gerwalex.mymonma.ui.report.ReportGeldflussVerglDetails
 import com.gerwalex.mymonma.ui.report.ReportListScreen
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.AddRegelmTrxScreen
@@ -123,6 +124,17 @@ fun MyNavHost(
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val catid = it.arguments?.getLong("catid") ?: -1
             ReportGeldflussDetails(reportid, catid, viewModel, navigateTo)
+        }
+        composable(
+            "${ReportGeldflussVerglDetail.name}/{reportid}/{catid}",
+            arguments = listOf(
+                navArgument("reportid") { type = NavType.LongType },
+                navArgument("catid") { type = NavType.LongType },
+            )
+        ) {
+            val reportid = it.arguments?.getLong("reportid") ?: -1
+            val catid = it.arguments?.getLong("catid") ?: -1
+            ReportGeldflussVerglDetails(reportid, catid, viewModel, navigateTo)
         }
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)

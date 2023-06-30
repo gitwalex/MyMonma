@@ -26,9 +26,13 @@ fun EmpaengerDetailScreen(
     Column {
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(list, key = { it.catid }) { item ->
-                GeldflussDataItem(trx = item) {
-                    onSelected(item)
-                }
+                GeldflussDataItem(
+                    trx = item, onClicked = {
+                        onSelected(item)
+                    },
+                    onVerglClicked = {})
+
+
             }
         }
     }

@@ -13,6 +13,7 @@ import com.gerwalex.mymonma.main.App
 import com.gerwalex.mymonma.preferences.PreferenceKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
@@ -60,7 +61,7 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
 
 
     @WorkerThread
-    fun executeDownload(): Result {
+    suspend fun executeDownload(): Result {
         try {
             HttpsURLConnection.setDefaultHostnameVerifier { hostname, _ ->
                 Log.d("gerwalex", hostname)
@@ -71,7 +72,7 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
             val user = context.preferences.getString("user", "")!!
             val pw = context.preferences.getString("pw", "")!!
             if (login(user, pw)) {
-                Thread.sleep(1000)
+                delay(1000)
                 loadKurseAsCSV()
             }
             for (s in messages) {

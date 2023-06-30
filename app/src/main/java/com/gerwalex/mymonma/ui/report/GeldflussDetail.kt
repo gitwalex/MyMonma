@@ -44,9 +44,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun GeldflussDetailScreen(
     report: ReportBasisDaten,
-    onSelected: (GeldflussData) -> Unit
+    onSelected: (GeldflussData) -> Unit,
+    onVerglSelected: (GeldflussData) -> Unit,
 
-) {
+    ) {
     val scope = rememberCoroutineScope()
     val list by DB.reportdao.getReportGeldflussData(report.id!!)
         .collectAsState(initial = emptyList())
@@ -93,9 +94,14 @@ fun GeldflussDetailScreen(
                         },
                         dismissContent = {
                             Card(modifier = Modifier.padding(2.dp)) {
-                                GeldflussDataItem(trx = item) {
-                                    onSelected(item)
-                                }
+                                GeldflussDataItem(
+                                    trx = item,
+                                    onClicked = {
+                                        onSelected(item)
+                                    },
+                                    onVerglClicked = {
+                                        onVerglSelected(item)
+                                    })
                             }
                         })
 
