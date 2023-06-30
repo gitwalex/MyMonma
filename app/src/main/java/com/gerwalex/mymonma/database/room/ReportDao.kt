@@ -8,6 +8,7 @@ import com.gerwalex.mymonma.database.data.ExcludedCatClasses
 import com.gerwalex.mymonma.database.data.ExcludedCats
 import com.gerwalex.mymonma.database.data.GeldflussData
 import com.gerwalex.mymonma.database.data.GeldflussSummenData
+import com.gerwalex.mymonma.database.data.PartnerdatenReport
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.database.views.CashTrxView
 import kotlinx.coroutines.flow.Flow
@@ -117,4 +118,19 @@ abstract class ReportDao(db: DB) {
         catid: Long
     ): Flow<List<CashTrxView>>
 
+    @Query(
+        """
+        select r.id as reportid, a.id as partnerid, a.name   
+        ,(select sum(b.amount) from CashTrx b   
+        where b.partnerid = a.id and b.btag between von and bis) as amount   
+        ,(select count(b.amount) from CashTrx b   
+        where b.partnerid = a.id and b.btag between von and bis) as repcnt   
+        from Partnerstamm a   
+        left outer join ReportBasisDaten r
+        where reportid = :reportid
+        group by reportid, partnerid having repcnt > 0
+        order by a.name
+    """
+    )
+    abstract fun getPartnerdatenReport(reportid: Long): Flow<List<PartnerdatenReport>>
 }

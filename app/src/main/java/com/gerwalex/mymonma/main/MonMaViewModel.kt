@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.AndroidViewModel
 import com.gerwalex.mymonma.database.data.GesamtVermoegen
+import com.gerwalex.mymonma.database.data.PartnerdatenReport
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.room.DB.wpdao
@@ -47,6 +48,11 @@ class MonMaViewModel(application: Application) : AndroidViewModel(application) {
 
     fun reportDetailsVerglList(reportid: Long, catid: Long): Flow<List<CashTrxView>> {
         return reportdao.ReportGeldflussVergleichDetails(reportid, catid)
+    }
+
+    fun partnerdatenReport(reportid: Long): Flow<List<PartnerdatenReport>> {
+        return reportdao.getPartnerdatenReport(reportid)
+
     }
 
     init {

@@ -101,7 +101,13 @@ fun ReportDetailScreen(
 
                                     })
 
-                            else -> {}
+                            ReportTyp.Empfaenger -> PartnerdatenReportScreen(
+                                report = report,
+                                navigateTo = {
+                                })
+
+                            else -> {
+                            }
                         }
                     }
                 }

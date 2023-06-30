@@ -47,7 +47,9 @@ import com.gerwalex.mymonma.database.views.WPStammView;
         views = {AccountCashView.class, AccountDepotView.class, CatView.class, CashTrxView.class,
                 GeldflussData.class, GeldflussSummenData.class, ExcludedCatClasses.class,
                 ExcludedCats.class, TrxRegelmView.class, WPStammView.class,
-                GeldflussData.class})
+                GeldflussData.class}
+
+)
 @TypeConverters({MonMaConverter.class, MyConverter.class})
 public abstract class DB extends RoomDatabase {
     public static String DBNAME;
@@ -99,4 +101,5 @@ public abstract class DB extends RoomDatabase {
     public abstract ReportDao getReportDao();
 
     public abstract WPDao getWPDao();
+
 }
