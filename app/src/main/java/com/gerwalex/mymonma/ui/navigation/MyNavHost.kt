@@ -13,8 +13,9 @@ import com.gerwalex.mymonma.ui.lists.RegelmTrxList
 import com.gerwalex.mymonma.ui.lists.WPBestandList
 import com.gerwalex.mymonma.ui.report.AddReportData
 import com.gerwalex.mymonma.ui.report.EditReportData
+import com.gerwalex.mymonma.ui.report.GeldflussDetails
+import com.gerwalex.mymonma.ui.report.PartnerGeldflussDetails
 import com.gerwalex.mymonma.ui.report.ReportDetailScreen
-import com.gerwalex.mymonma.ui.report.ReportGeldflussDetails
 import com.gerwalex.mymonma.ui.report.ReportGeldflussVerglDetails
 import com.gerwalex.mymonma.ui.report.ReportListScreen
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
@@ -123,7 +124,7 @@ fun MyNavHost(
         ) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val catid = it.arguments?.getLong("catid") ?: -1
-            ReportGeldflussDetails(reportid, catid, viewModel, navigateTo)
+            GeldflussDetails(reportid, catid, viewModel, navigateTo)
         }
         composable(
             "${ReportGeldflussVerglDetail.name}/{reportid}/{catid}",
@@ -135,6 +136,17 @@ fun MyNavHost(
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val catid = it.arguments?.getLong("catid") ?: -1
             ReportGeldflussVerglDetails(reportid, catid, viewModel, navigateTo)
+        }
+        composable(
+            "${PartnerGeldflussDetails.name}/{reportid}/{partnerid}",
+            arguments = listOf(
+                navArgument("reportid") { type = NavType.LongType },
+                navArgument("partnerid") { type = NavType.LongType },
+            )
+        ) {
+            val reportid = it.arguments?.getLong("reportid") ?: -1
+            val partnerid = it.arguments?.getLong("partnerid") ?: -1
+            PartnerGeldflussDetails(reportid, partnerid, viewModel, navigateTo)
         }
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)

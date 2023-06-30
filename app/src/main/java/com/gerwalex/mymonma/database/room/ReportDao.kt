@@ -100,7 +100,7 @@ abstract class ReportDao(db: DB) {
         order by btag DESC
     """
     )
-    abstract fun ReportGeldflussDetails(reportid: Long, catid: Long): Flow<List<CashTrxView>>
+    abstract fun catGeldflussDetails(reportid: Long, catid: Long): Flow<List<CashTrxView>>
 
     @Query(
         """
@@ -113,7 +113,7 @@ abstract class ReportDao(db: DB) {
         order by btag DESC
     """
     )
-    abstract fun ReportGeldflussVergleichDetails(
+    abstract fun catGeldflussVergleichDetails(
         reportid: Long,
         catid: Long
     ): Flow<List<CashTrxView>>
@@ -133,4 +133,18 @@ abstract class ReportDao(db: DB) {
     """
     )
     abstract fun getPartnerdatenReport(reportid: Long): Flow<List<PartnerdatenReport>>
+
+    @Query(
+        """
+        select a.*
+        from CashTrxView a
+        left outer join ReportBasisDaten b
+        where partnerid = :partnerid
+        and btag between von and bis
+        and b.id = :reportid
+        order by btag DESC
+    """
+    )
+    abstract fun partnerGeldflussDetails(reportid: Long, partnerid: Long): Flow<List<CashTrxView>>
+
 }

@@ -15,6 +15,7 @@ import com.gerwalex.mymonma.database.data.PartnerdatenReport
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.ui.navigation.Destination
+import com.gerwalex.mymonma.ui.navigation.PartnerGeldflussDetails
 
 
 @Composable
@@ -25,7 +26,13 @@ fun PartnerdatenReportScreen(
     report.id?.let { reportid ->
         val list by reportdao.getPartnerdatenReport(reportid).collectAsState(initial = emptyList())
         if (list.isNotEmpty()) {
-            PartnerdatenReportScreen(list = list, onSelected = {})
+            PartnerdatenReportScreen(list = list, onSelected = { data ->
+                PartnerGeldflussDetails.also {
+                    it.reportid = reportid
+                    it.partnerid = data.partnerid
+                    navigateTo(it)
+                }
+            })
         }
 
     }

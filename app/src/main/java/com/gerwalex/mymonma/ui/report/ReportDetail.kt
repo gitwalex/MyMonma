@@ -103,8 +103,8 @@ fun ReportDetailScreen(
 
                             ReportTyp.Empfaenger -> PartnerdatenReportScreen(
                                 report = report,
-                                navigateTo = {
-                                })
+                                navigateTo = navigateTo
+                            )
 
                             else -> {
                             }

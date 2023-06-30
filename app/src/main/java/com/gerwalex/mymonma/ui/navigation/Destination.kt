@@ -256,14 +256,15 @@ object ReportGeldflussVerglDetail : Destination {
 
 }
 
-object PartnerdatenReportScreen : Destination {
+object PartnerGeldflussDetails : Destination {
     var reportid = 0L
+    var partnerid = 0L
     override val title = R.string.myReports
     override val name: String = "PartnerdatenReportScreen"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate("$name/$reportid")
+        navController.navigate("$name/$reportid/$partnerid")
     }
 
 }

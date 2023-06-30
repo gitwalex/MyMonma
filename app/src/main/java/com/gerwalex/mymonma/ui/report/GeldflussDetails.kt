@@ -15,11 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.CashTrxViewItem
 import com.gerwalex.mymonma.ext.scaleOnPress
 import com.gerwalex.mymonma.main.MonMaViewModel
-import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.ReportList
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
@@ -27,30 +27,15 @@ import com.gerwalex.mymonma.ui.navigation.Up
 
 
 @Composable
-fun ReportGeldflussDetails(
+fun GeldflussDetails(
     reportid: Long,
     catid: Long,
     viewModel: MonMaViewModel,
     navigateTo: (Destination) -> Unit
 ) {
-    val list by viewModel.reportDetailsList(reportid, catid).collectAsState(initial = emptyList())
-    Scaffold(
-        topBar = {
-            TopToolBar(
-                stringResource(id = ReportList.title)
-            ) {
-                navigateTo(Up)
-            }
-        }) {
-
-        Column(modifier = Modifier.padding(it)) {
-            if (list.isNotEmpty()) {
-                ReportGeldflussDetails(list = list, navigateTo)
-            } else {
-                NoEntriesBox()
-            }
-        }
-    }
+    val list by reportdao.catGeldflussDetails(reportid, catid)
+        .collectAsState(initial = emptyList())
+    GeldflussDetailsList(list = list, navigateTo)
 }
 
 @Composable
@@ -60,8 +45,28 @@ fun ReportGeldflussVerglDetails(
     viewModel: MonMaViewModel,
     navigateTo: (Destination) -> Unit
 ) {
-    val list by viewModel.reportDetailsVerglList(reportid, catid)
+    val list by reportdao.catGeldflussVergleichDetails(reportid, catid)
         .collectAsState(initial = emptyList())
+    GeldflussDetailsList(list = list, navigateTo)
+}
+
+@Composable
+fun PartnerGeldflussDetails(
+    reportid: Long,
+    partnerid: Long,
+    viewModel: MonMaViewModel,
+    navigateTo: (Destination) -> Unit
+) {
+    val list by reportdao.partnerGeldflussDetails(reportid, partnerid)
+        .collectAsState(initial = emptyList())
+    GeldflussDetailsList(list = list, navigateTo)
+}
+
+@Composable
+fun GeldflussDetailsList(
+    list: List<CashTrxView>,
+    navigateTo: (Destination) -> Unit,
+) {
     Scaffold(
         topBar = {
             TopToolBar(
@@ -73,35 +78,25 @@ fun ReportGeldflussVerglDetails(
 
         Column(modifier = Modifier.padding(it)) {
             if (list.isNotEmpty()) {
-                ReportGeldflussDetails(list = list, navigateTo)
-            } else {
-                NoEntriesBox()
+                val buttonInteractionSource = remember { MutableInteractionSource() }
+                LazyColumn {
+                    items(list) { trx ->
+                        Card(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .clickable(
+                                    interactionSource = buttonInteractionSource,
+                                    indication = null,
+                                    onClick = {
+                                    })
+                                .scaleOnPress(buttonInteractionSource),
+                        ) {
+                            CashTrxViewItem(trx = trx)
+                        }
+                    }
+                }
+
             }
         }
     }
-}
-
-@Composable
-fun ReportGeldflussDetails(
-    list: List<CashTrxView>,
-    navigateTo: (Destination) -> Unit,
-) {
-    val buttonInteractionSource = remember { MutableInteractionSource() }
-    LazyColumn {
-        items(list) { trx ->
-            Card(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .clickable(
-                        interactionSource = buttonInteractionSource,
-                        indication = null,
-                        onClick = {
-                        })
-                    .scaleOnPress(buttonInteractionSource),
-            ) {
-                CashTrxViewItem(trx = trx)
-            }
-        }
-    }
-
 }
