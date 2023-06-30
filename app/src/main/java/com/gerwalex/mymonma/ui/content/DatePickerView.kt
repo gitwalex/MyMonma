@@ -52,8 +52,7 @@ fun DateView(
 @Composable
 fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {
     var showDatePicker by remember { mutableStateOf(false) }
-    var myDate by remember(date) { mutableStateOf(date) }
-    DateView(date = myDate, modifier = modifier, onClick = {
+    DateView(date = date, modifier = modifier, onClick = {
         showDatePicker = true
     })
     Box {
@@ -66,13 +65,12 @@ fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) 
                         state = datePickerState,
                         dateValidator = {
                             Log.d("DatePickerView", "DatePickerView:  ${Date(it)}")
+                            onChanged(Date(it))
                             true
                         })
                     TextButton(onClick = {
                         datePickerState.selectedDateMillis?.let {
-                            val selectedDate = Date(it)
-                            onChanged(selectedDate)
-                            myDate = selectedDate
+                            onChanged(Date(it))
                             showDatePicker = false
 
 

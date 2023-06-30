@@ -22,15 +22,13 @@ import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.database.tables.ReportBasisDatenItem
-import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ext.scaleOnPress
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.AddReport
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.EditReport
-import com.gerwalex.mymonma.ui.navigation.EmpfaengerReport
-import com.gerwalex.mymonma.ui.navigation.GeldflussReport
+import com.gerwalex.mymonma.ui.navigation.ReportDetail
 import com.gerwalex.mymonma.ui.navigation.ReportList
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
@@ -69,7 +67,7 @@ fun ReportListScreen(
 ) {
     val buttonInteractionSource = remember { MutableInteractionSource() }
     LazyColumn {
-        items(list) { item ->
+        items(list) { reportBasisDaten ->
             Card(
                 modifier = Modifier
                     .padding(4.dp)
@@ -77,18 +75,12 @@ fun ReportListScreen(
                         interactionSource = buttonInteractionSource,
                         indication = null,
                         onClick = {
-                            when (item.typ) {
-                                ReportTyp.GeldflussVergl ->
-                                    navigateTo(GeldflussReport.apply { id = item.id!! })
-
-                                ReportTyp.Empfaenger ->
-                                    navigateTo(EmpfaengerReport.apply { id = item.id!! })
-                            }
+                            navigateTo(ReportDetail.apply { id = reportBasisDaten.id!! })
                         })
                     .scaleOnPress(buttonInteractionSource),
             ) {
-                ReportBasisDatenItem(report = item) {
-                    navigateTo(EditReport.apply { id = item.id!! })
+                ReportBasisDatenItem(report = reportBasisDaten) {
+                    navigateTo(EditReport.apply { id = reportBasisDaten.id!! })
                 }
             }
         }

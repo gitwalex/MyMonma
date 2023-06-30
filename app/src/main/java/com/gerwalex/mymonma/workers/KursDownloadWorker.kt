@@ -3,12 +3,17 @@ package com.gerwalex.mymonma.workers
 import android.content.Context
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.datastore.preferences.core.edit
 import androidx.work.*
 import com.gerwalex.mymonma.database.room.FileUtils
+import com.gerwalex.mymonma.ext.dataStore
 import com.gerwalex.mymonma.ext.preferences
 import com.gerwalex.mymonma.importer.FinanztreffOnline
 import com.gerwalex.mymonma.main.App
+import com.gerwalex.mymonma.preferences.PreferenceKey
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.BufferedReader
@@ -49,7 +54,7 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
                 }
             }
         }
-        enqueueKursDownloadWorker(context)
+        submitDelayed(context)
         return Result.success()
     }
 
@@ -121,7 +126,7 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
 
         private const val LOGIN_URL = "https://alt.finanztreff.de/anmeldung.htn?"
         private val tag: String = MaintenanceWorker::class.java.name
-        fun enqueueKursDownloadWorker(context: Context): Operation {
+        fun submitDelayed(context: Context): Operation {
             val cal = GregorianCalendar.getInstance().apply {
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
@@ -134,6 +139,9 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
             }
 
             val delay = cal.time.time - System.currentTimeMillis()
+            CoroutineScope(Dispatchers.IO).launch {
+                context.dataStore.edit { it[PreferenceKey.NextKursDownload] = cal.time.time }
+            }
 
             return submit(context, delay)
         }

@@ -33,7 +33,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeldflussScreen(reportid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
+fun ReportDetailScreen(
+    reportid: Long,
+    viewModel: MonMaViewModel,
+    navigateTo: (Destination) -> Unit
+) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     var drawerContent by rememberState { ExcludedValuesSheet.Classes }
     val scope = rememberCoroutineScope()

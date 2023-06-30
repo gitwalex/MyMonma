@@ -176,9 +176,11 @@ fun EditCashTrxScreen(
                 Row(
                     modifier = Modifier,
                 ) {
+                    var btag by rememberState { mainTrx.btag }
                     DatePickerView(
-                        date = mainTrx.btag,
+                        date = btag,
                     ) { date ->
+                        btag = date
                         mainTrx.btag = date
                     }
                     Spacer(modifier = Modifier.weight(1f))

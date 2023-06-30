@@ -11,8 +11,7 @@ import com.gerwalex.mymonma.ui.lists.RegelmTrxList
 import com.gerwalex.mymonma.ui.lists.WPBestandList
 import com.gerwalex.mymonma.ui.report.AddReportData
 import com.gerwalex.mymonma.ui.report.EditReportData
-import com.gerwalex.mymonma.ui.report.EmpfaengerScreen
-import com.gerwalex.mymonma.ui.report.GeldflussScreen
+import com.gerwalex.mymonma.ui.report.ReportDetailScreen
 import com.gerwalex.mymonma.ui.report.ReportListScreen
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
 import com.gerwalex.mymonma.ui.screens.AddRegelmTrxScreen
@@ -68,11 +67,8 @@ fun MyNavHost(
         composable(AddReport.name) {
             AddReportData(viewModel, navigateTo)
         }
-        composable(GeldflussReport.name) {
-            GeldflussScreen(GeldflussReport.id, viewModel, navigateTo)
-        }
-        composable(EmpfaengerReport.name) {
-            EmpfaengerScreen(viewModel, navigateTo)
+        composable(ReportDetail.name) {
+            ReportDetailScreen(ReportDetail.id, viewModel, navigateTo)
         }
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)

@@ -213,21 +213,9 @@ object EditReport : Destination() {
     }
 }
 
-object GeldflussReport : Destination() {
+object ReportDetail : Destination() {
     override val title = R.string.myReports
-    override val name: String = "GeldflussReport"
-
-
-    override fun navigate(navController: NavController) {
-        navController.navigate(name)
-    }
-
-}
-
-
-object EmpfaengerReport : Destination() {
-    override val title = R.string.myReports
-    override val name: String = "EmpfaengerReport"
+    override val name: String = "ReportDetail"
 
 
     override fun navigate(navController: NavController) {

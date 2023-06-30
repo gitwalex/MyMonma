@@ -7,28 +7,39 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.datastore.preferences.core.emptyPreferences
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
+import com.gerwalex.mymonma.ui.content.DateView
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
+import java.sql.Date
 
 
 @Composable
 fun SettingScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val settings = remember(key1 = viewModel) { viewModel.dataStore }
     var lastMaintenance by rememberState { 0L }
-    LaunchedEffect(key1 = settings.data) {
-        settings.data.map {
-            lastMaintenance = it[PreferenceKey.LastMaintenance] ?: 0
-        }
+    var nextKursDownload by rememberState { 0L }
+    LaunchedEffect(Unit) {
+        viewModel.dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map {
+                lastMaintenance = it[PreferenceKey.LastMaintenance] ?: -1
+                nextKursDownload = it[PreferenceKey.NextKursDownload] ?: -1
+            }
     }
     Scaffold(
         topBar = {
@@ -41,14 +52,13 @@ fun SettingScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
 
         Column(modifier = Modifier.padding(padding)) {
             Text(text = stringResource(id = R.string.settings), fontWeight = FontWeight.Bold)
-            if (lastMaintenance != 0L) {
-                Text(
-                    text = stringResource(
-                        id = R.string.lastMaintenance,
-                        MyConverter.convertDate(lastMaintenance)
-                    )
-                )
-            }
+            Text(text = stringResource(id = R.string.lastMaintenance))
+            if (lastMaintenance > 0)
+                DateView(date = Date(lastMaintenance)) else Text("--")
+            Text(text = stringResource(id = R.string.nextKursDownload))
+            if (nextKursDownload > 0)
+                DateView(date = Date(nextKursDownload)) else Text("--")
+
         }
     }
 }
