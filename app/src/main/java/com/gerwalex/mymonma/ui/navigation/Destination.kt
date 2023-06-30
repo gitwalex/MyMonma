@@ -3,16 +3,15 @@ package com.gerwalex.mymonma.ui.navigation
 import androidx.navigation.NavController
 import com.gerwalex.mymonma.R
 
-sealed class Destination {
+interface Destination {
 
-    abstract val title: Int
-    abstract val name: String
-    abstract fun navigate(navController: NavController)
-    var id: Long = 0L
+    val title: Int
+    val name: String
+    fun navigate(navController: NavController)
 
 }
 
-object Home : Destination() {
+object Home : Destination {
     override val title: Int = R.string.app_name
     override val name: String = "Home"
 
@@ -22,7 +21,7 @@ object Home : Destination() {
 }
 
 
-object Up : Destination() {
+object Up : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String
@@ -34,7 +33,7 @@ object Up : Destination() {
 
 }
 
-object ImportData : Destination() {
+object ImportData : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "ImportData"
@@ -45,7 +44,7 @@ object ImportData : Destination() {
 
 }
 
-object ImportCashTrx : Destination() {
+object ImportCashTrx : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "ImportCashTrx"
@@ -56,7 +55,7 @@ object ImportCashTrx : Destination() {
 
 }
 
-object DownloadKurse : Destination() {
+object DownloadKurse : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "DownloadKurse"
@@ -67,7 +66,7 @@ object DownloadKurse : Destination() {
 
 }
 
-object InProgress : Destination() {
+object InProgress : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String
@@ -79,7 +78,7 @@ object InProgress : Destination() {
 
 }
 
-object NotInProgress : Destination() {
+object NotInProgress : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String
@@ -91,43 +90,46 @@ object NotInProgress : Destination() {
 
 }
 
-object CashTrxList : Destination() {
+object CashTrxList : Destination {
+    var id: Long = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "CashTrxList"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate(name)
+        navController.navigate("$name/$id")
     }
 
 }
 
-object EditCashTrx : Destination() {
+object EditCashTrx : Destination {
+    var id: Long = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "EditCashTrx"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate(name)
+        navController.navigate("$name/$id")
     }
 
 }
 
-object AddCashTrx : Destination() {
+object AddCashTrx : Destination {
+    var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "AddCashTrx"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate(name)
+        navController.navigate("$name/$id")
     }
 
 }
 
-object Settings : Destination() {
+object Settings : Destination {
     override val title: Int = R.string.settings
     override val name: String = "Settings"
     override fun navigate(navController: NavController) {
@@ -136,7 +138,7 @@ object Settings : Destination() {
 
 }
 
-object AccountList : Destination() {
+object AccountList : Destination {
     override val title: Int = R.string.accountlist
     override val name: String = "AccountList"
     override fun navigate(navController: NavController) {
@@ -145,7 +147,7 @@ object AccountList : Destination() {
 
 }
 
-object RegelmTrxList : Destination() {
+object RegelmTrxList : Destination {
     override val title: Int = R.string.trxRegelm
     override val name: String = "RegelmTrxList"
 
@@ -156,30 +158,32 @@ object RegelmTrxList : Destination() {
 
 }
 
-object AddRegelmTrx : Destination() {
+object AddRegelmTrx : Destination {
+    var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "AddRegelmTrx"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate(name)
+        navController.navigate("$name/$id")
     }
 
 }
 
-object EditRegelmTrx : Destination() {
+object EditRegelmTrx : Destination {
+    var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "EditRegelmTrx"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate(name)
+        navController.navigate("$name/$id")
     }
 }
 
-object ReportList : Destination() {
+object ReportList : Destination {
     override val title = R.string.myReports
     override val name: String = "ReportList"
 
@@ -190,7 +194,7 @@ object ReportList : Destination() {
 
 }
 
-object AddReport : Destination() {
+object AddReport : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "AddReport"
@@ -202,29 +206,44 @@ object AddReport : Destination() {
 
 }
 
-object EditReport : Destination() {
+object EditReport : Destination {
+    var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "EditReport"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate(name)
+        navController.navigate("$name/$id")
     }
 }
 
-object ReportDetail : Destination() {
+object ReportDetailScreen : Destination {
+    var id = 0L
     override val title = R.string.myReports
-    override val name: String = "ReportDetail"
+    override val name: String = "ReportDetailScreen"
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate(name)
+        navController.navigate("${name}/$id")
     }
 
 }
 
-object WPBestandList : Destination() {
+object ReportGeldflussDetail : Destination {
+    var reportid = 0L
+    var catid = 0L
+    override val title = R.string.myReports
+    override val name: String = "ReportGeldflussDetail"
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate("$name/$reportid/$catid")
+    }
+
+}
+
+object WPBestandList : Destination {
     override val title = R.string.wpbestandlist
     override val name: String = "WPBestandList"
 
@@ -235,7 +254,7 @@ object WPBestandList : Destination() {
 
 }
 
-object Einnahmen : Destination() {
+object Einnahmen : Destination {
     override val title = R.string.dividende
     override val name = "Dividende"
 

@@ -9,6 +9,7 @@ import com.gerwalex.mymonma.database.data.ExcludedCats
 import com.gerwalex.mymonma.database.data.GeldflussData
 import com.gerwalex.mymonma.database.data.GeldflussSummenData
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
+import com.gerwalex.mymonma.database.views.CashTrxView
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -86,4 +87,34 @@ abstract class ReportDao(db: DB) {
         """
     )
     abstract fun getGeldflussSummendaten(reportID: Long): Flow<GeldflussSummenData>
+
+    @Query(
+        """
+        select a.*
+        from CashTrxView a
+        left outer join ReportBasisDaten b
+        where catid = :catid
+        and btag between von and bis
+        and b.id = :reportid
+        order by btag DESC
+    """
+    )
+    abstract fun ReportGeldflussDetails(reportid: Long, catid: Long): Flow<List<CashTrxView>>
+
+    @Query(
+        """
+        select a.*
+        from CashTrxView a
+        left outer join ReportBasisDaten b
+        where catid = :catid
+        and btag between verglVon and verglBis
+        and b.id = :reportid
+        order by btag DESC
+    """
+    )
+    abstract fun ReportGeldflussVergleichDetails(
+        reportid: Long,
+        catid: Long
+    ): Flow<List<CashTrxView>>
+
 }

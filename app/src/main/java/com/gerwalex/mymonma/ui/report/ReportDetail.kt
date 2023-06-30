@@ -26,6 +26,7 @@ import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.navigation.Destination
+import com.gerwalex.mymonma.ui.navigation.ReportGeldflussDetail
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import kotlinx.coroutines.launch
@@ -83,7 +84,14 @@ fun ReportDetailScreen(
                     Box(modifier = Modifier.padding(padding)) {
                         when (report.typ) {
                             ReportTyp.GeldflussVergl ->
-                                GeldflussDetailScreen(report = report) {}
+                                GeldflussDetailScreen(report = report) { data ->
+                                    ReportGeldflussDetail.also {
+                                        it.reportid = report.id!!
+                                        it.catid = data.catid
+                                        navigateTo(it)
+
+                                    }
+                                }
 
                             else -> {}
                         }
