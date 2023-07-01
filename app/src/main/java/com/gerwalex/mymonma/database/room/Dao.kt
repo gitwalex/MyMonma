@@ -24,6 +24,7 @@ import com.gerwalex.mymonma.database.views.CatView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import com.gerwalex.mymonma.enums.Intervall
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import java.sql.Date
 
 @Dao
@@ -235,12 +236,12 @@ abstract class Dao(val db: DB) {
         order by id
     """
     )
-    abstract suspend fun getTrxRegelm(id: Long): MutableList<TrxRegelmView>
+    abstract fun getTrxRegelm(id: Long): Flow<List<TrxRegelmView>>
 
     //    @Transaction
     open suspend fun execute(trx: TrxRegelmView) {
         trx.id?.let { id ->
-            DB.dao.getTrxRegelm(id).also { item ->
+            DB.dao.getTrxRegelm(id).first().also { item ->
                 val cashTrxList = ArrayList<CashTrx>()
                 item.forEach { trx ->
                     val cashTrx = trx.cashTrx

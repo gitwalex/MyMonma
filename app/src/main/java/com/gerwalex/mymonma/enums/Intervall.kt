@@ -108,10 +108,10 @@ fun IntervallSpinner(intervall: Intervall, selected: (Intervall) -> Unit) {
                 isExpanded = !isExpanded
             })
         DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
-            ReportTyp.values()
+            Intervall.values()
                 .forEachIndexed { index, s ->
                     DropdownMenuItem(
-                        text = { Text(text = stringResource(id = s.textID)) },
+                        text = { Text(text = stringResource(id = s.intervallNameTextResID)) },
                         onClick = {
                             myIntervall = Intervall.values()[index]
                             selected(myIntervall)

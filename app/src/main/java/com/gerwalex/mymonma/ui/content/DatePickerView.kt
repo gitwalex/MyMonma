@@ -34,16 +34,13 @@ fun DateView(
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge,
     fontWeight: FontWeight = FontWeight.Normal,
-    onClick: () -> Unit = {}
 ) {
     val dateformatter = remember { DateFormat.getDateInstance(DateFormat.DEFAULT) }
     Column(modifier) {
-        Text(text = dateformatter.format(date),
+        Text(
+            text = dateformatter.format(date),
             style = style,
             fontWeight = fontWeight,
-            modifier = Modifier.clickable {
-                onClick()
-            }
         )
     }
 }
@@ -52,7 +49,7 @@ fun DateView(
 @Composable
 fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {
     var showDatePicker by remember { mutableStateOf(false) }
-    DateView(date = date, modifier = modifier, onClick = {
+    DateView(date = date, modifier = modifier.clickable {
         showDatePicker = true
     })
     Box {

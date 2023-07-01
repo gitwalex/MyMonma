@@ -41,10 +41,10 @@ data class TrxRegelmView(
     var last: Date? = null,
     var isUltimo: Boolean = false,
 
-    var partnername: String,
-    var accountname: String,
+    var partnername: String = "",
+    var accountname: String = "",
     var catname: String = "",
-    var catclassid: Long? = null,
+    var catclassid: Long = 0,
 
 
     ) {
@@ -58,9 +58,10 @@ data class TrxRegelmView(
     val intervallname = intervall.intervallNameTextResID
 
 
-    val cashTrx: CashTrx
+    val cashTrxView: CashTrxView
         get() {
-            return CashTrx(
+            return CashTrxView(
+                id = id,
                 btag = btag,
                 accountid = accountid,
                 catid = catid,
@@ -69,20 +70,14 @@ data class TrxRegelmView(
                 memo = memo,
                 transferid = transferid,
                 partnername = partnername,
+                catname = catname,
+                accountname = accountname,
+                catclassid = catclassid,
             )
         }
-
-    val cashTrxView: CashTrxView
+    val cashTrx: CashTrx
         get() {
-            return CashTrxView(
-                btag = btag,
-                accountid = accountid,
-                catid = catid,
-                partnerid = partnerid,
-                amount = amount,
-                memo = memo,
-                partnername = partnername,
-            )
+            return cashTrxView.cashTrx
         }
 
     /**
@@ -91,5 +86,6 @@ data class TrxRegelmView(
     fun nextBtag(): Date {
         return intervall.getNextBtag(btag)
     }
+
 
 }

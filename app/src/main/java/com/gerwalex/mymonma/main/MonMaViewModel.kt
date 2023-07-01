@@ -29,7 +29,6 @@ class MonMaViewModel(application: Application) : AndroidViewModel(application) {
         get() {
             return wpdao.getDepotList()
         }
-    var regelmTrxId: Long = 0
     var wpstamm: WPStammView? = null
 
     fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>> {

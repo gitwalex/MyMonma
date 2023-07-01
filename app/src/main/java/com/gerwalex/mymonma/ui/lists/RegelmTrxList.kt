@@ -73,12 +73,13 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
                 }
             }
         )
-        {
-            LazyColumn(Modifier.padding(it)) {
-                items(list) { item ->
+        { padding ->
+            LazyColumn(Modifier.padding(padding)) {
+                items(list, key = { item -> item.id!! }) { item ->
                     RegelmTrxListItem(trx = item) { trx ->
-                        viewModel.regelmTrxId = trx.id!!
-                        navigateTo(EditRegelmTrx)
+                        navigateTo(EditRegelmTrx.apply {
+                            id = trx.id!!
+                        })
                     }
                 }
             }
@@ -100,7 +101,7 @@ fun RegelmTrxListItem(trx: TrxRegelmView, selected: (TrxRegelmView) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Row {
-                DateView(date = trx.btag, onClick = {})
+                DateView(date = trx.btag)
                 Text(
                     text = trx.partnername,
                     modifier = Modifier.weight(1f),
