@@ -2,10 +2,8 @@ package com.gerwalex.mymonma.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.preferences.SettingScreen
 import com.gerwalex.mymonma.ui.lists.CashTrxListScreen
@@ -42,108 +40,54 @@ fun MyNavHost(
         composable(ImportData.name) {
             ImportScreen(navigateTo)
         }
-        composable(
-            "${CashTrxList.name}/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.LongType },
-            )
-        ) {
+        composable(CashTrxList.route, CashTrxList.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             CashTrxListScreen(id, viewModel, navigateTo)
         }
         composable(RegelmTrxList.name) {
             RegelmTrxList(viewModel, navigateTo)
         }
-        composable(
-            "${AddCashTrx.name}/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.LongType },
-            )
-        ) {
+        composable(AddCashTrx.route, AddCashTrx.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             AddCashTrxScreen(id, viewModel, navigateTo)
         }
-        composable(
-            "${EditCashTrx.name}/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.LongType },
-            )
-        ) {
+        composable(EditCashTrx.route, EditCashTrx.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             EditCashTrxScreen(id, viewModel, navigateTo)
         }
-        composable(
-            "${AddRegelmTrx.name}/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.LongType },
-            )
-        ) {
+        composable(AddRegelmTrx.route, AddRegelmTrx.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             AddRegelmTrxScreen(id, viewModel, navigateTo)
         }
-        composable(
-            "${EditRegelmTrx.name}/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.LongType },
-            )
-        ) {
+        composable(EditRegelmTrx.route, EditRegelmTrx.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             EditRegelmTrxScreen(id, viewModel, navigateTo)
         }
         composable(ReportList.name) {
             ReportListScreen(viewModel, navigateTo)
         }
-        composable(
-            "${EditReport.name}/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.LongType },
-            )
-        ) {
+        composable(EditReport.route, EditReport.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             EditReportData(id, viewModel, navigateTo)
         }
         composable(AddReport.name) {
             AddReportData(viewModel, navigateTo)
         }
-        composable(
-            "${ReportDetailScreen.name}/{reportid}",
-            arguments = listOf(
-                navArgument("reportid") { type = NavType.LongType },
-            )
-
-        ) {
+        composable(ReportDetailScreen.route, ReportDetailScreen.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             ReportDetailScreen(reportid, viewModel, navigateTo)
         }
-        composable(
-            "${ReportGeldflussDetail.name}/{reportid}/{catid}",
-            arguments = listOf(
-                navArgument("reportid") { type = NavType.LongType },
-                navArgument("catid") { type = NavType.LongType },
-            )
-        ) {
+        composable(ReportGeldflussDetail.route, ReportGeldflussDetail.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val catid = it.arguments?.getLong("catid") ?: -1
             GeldflussDetails(reportid, catid, viewModel, navigateTo)
         }
-        composable(
-            "${ReportGeldflussVerglDetail.name}/{reportid}/{catid}",
-            arguments = listOf(
-                navArgument("reportid") { type = NavType.LongType },
-                navArgument("catid") { type = NavType.LongType },
-            )
-        ) {
+        composable(ReportGeldflussVerglDetail.route, ReportGeldflussVerglDetail.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val catid = it.arguments?.getLong("catid") ?: -1
             ReportGeldflussVerglDetails(reportid, catid, viewModel, navigateTo)
         }
-        composable(
-            "${PartnerGeldflussDetails.name}/{reportid}/{partnerid}",
-            arguments = listOf(
-                navArgument("reportid") { type = NavType.LongType },
-                navArgument("partnerid") { type = NavType.LongType },
-            )
-        ) {
+        composable(PartnerGeldflussDetails.route, PartnerGeldflussDetails.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val partnerid = it.arguments?.getLong("partnerid") ?: -1
             PartnerGeldflussDetails(reportid, partnerid, viewModel, navigateTo)
