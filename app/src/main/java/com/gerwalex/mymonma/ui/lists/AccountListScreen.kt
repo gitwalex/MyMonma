@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -70,13 +71,13 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                 }
 
 
-                LazyColumn {
+                LazyColumn(contentPadding = PaddingValues(4.dp)) {
                     list.filter { !it.ausgeblendet }
                         .groupBy { it.obercatid }
                         .forEach { (_, accList) ->
                             // saldo ermitteln
                             var saldo = 0L
-                            accList.forEach {
+                            accList.map {
                                 saldo += it.saldo
                             }
                             item {

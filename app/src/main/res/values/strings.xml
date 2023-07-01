@@ -138,4 +138,5 @@
     <string name="vermoegen">Vermögen</string>
     <string name="lastMaintenance">Letzte Wartung</string>
     <string name="nextKursDownload">Nächste Abholung Kurse:</string>
+    <string name="vermoegenCashKontoarten">Giro-, Kredit- und Anlagekonten</string>
 </resources>
