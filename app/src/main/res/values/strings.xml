@@ -139,4 +139,6 @@
     <string name="lastMaintenance">Letzte Wartung</string>
     <string name="nextKursDownload">Nächste Abholung Kurse:</string>
     <string name="vermoegenCashKontoarten">Giro-, Kredit- und Anlagekonten</string>
+    <string name="myGiros">Meine Girokonten</string>
+    <string name="myCreditCards">Meine Kreditkarten</string>
 </resources>

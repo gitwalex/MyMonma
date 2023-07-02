@@ -1,6 +1,6 @@
 package com.gerwalex.mymonma.ui.screens
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.main.MonMaViewModel
-import com.gerwalex.mymonma.ui.lists.AccountListScreen
+import com.gerwalex.mymonma.ui.dashboard.CreditCardsScreen
+import com.gerwalex.mymonma.ui.dashboard.GirokontenScreen
+import com.gerwalex.mymonma.ui.dashboard.VermoegenScreen
 import com.gerwalex.mymonma.ui.navigation.BottomNavigation
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.DrawerNavigation
@@ -55,8 +57,10 @@ fun HomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
                     BottomNavigation(navigateTo = navigateTo)
                 },
                 content = {
-                    Box(modifier = Modifier.padding(it)) {
-                        AccountListScreen(viewModel, navigateTo)
+                    Column(modifier = Modifier.padding(it)) {
+                        VermoegenScreen(viewModel = viewModel)
+                        GirokontenScreen(viewModel = viewModel, navigateTo = navigateTo)
+                        CreditCardsScreen(viewModel = viewModel, navigateTo = navigateTo)
                     }
                 },
             )

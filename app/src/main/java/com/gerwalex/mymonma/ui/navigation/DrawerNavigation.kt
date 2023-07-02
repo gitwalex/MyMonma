@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.ImportExport
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -191,20 +190,6 @@ private fun prepareSettingsItems(): List<NavigationDrawerItem> {
 @Composable
 private fun prepareNavigationItems(): List<NavigationDrawerItem> {
     val itemsList = arrayListOf<NavigationDrawerItem>()
-    itemsList.add(
-        NavigationDrawerItem(
-            imageVector = Icons.Filled.List,
-            label = stringResource(id = R.string.trxRegelm),
-            destination = RegelmTrxList,
-        )
-    )
-    itemsList.add(
-        NavigationDrawerItem(
-            imageVector = Icons.Filled.ImportExport,
-            label = stringResource(id = R.string.importData),
-            destination = ImportData,
-        )
-    )
     itemsList.add(
         NavigationDrawerItem(
             imageVector = Icons.Filled.ImportExport,

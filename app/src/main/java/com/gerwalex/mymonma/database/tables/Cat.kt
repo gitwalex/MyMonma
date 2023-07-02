@@ -51,6 +51,8 @@ data class Cat(
 
         const val AbgeltSteuerCatid: Long = 2500L
         const val CASHKONTOCATID = 1001L
+        const val GiroCATID = 1003L
+        const val CreditCardCATID = 1004L
         const val CATID = "CATID"
         const val DEPOTCATID = 1002L
         const val EROEFFNUNGCAT = 9000L

@@ -33,5 +33,25 @@ fun BottomNavigation(navigateTo: (Destination) -> Unit) {
                     style = MaterialTheme.typography.labelSmall
                 )
             })
+        NavigationBarItem(
+            selected = false,
+            onClick = { navigateTo(AccountList) },
+            icon = { Icon(Icons.Default.List, "") },
+            label = {
+                Text(
+                    text = "Konten",
+                    style = MaterialTheme.typography.labelSmall
+                )
+            })
+        NavigationBarItem(
+            selected = false,
+            onClick = { navigateTo(RegelmTrxList) },
+            icon = { Icon(Icons.Default.List, "") },
+            label = {
+                Text(
+                    text = "Daueraufträge",
+                    style = MaterialTheme.typography.labelSmall
+                )
+            })
     }
 }
