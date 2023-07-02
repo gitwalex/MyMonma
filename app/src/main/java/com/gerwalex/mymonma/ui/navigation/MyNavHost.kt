@@ -95,8 +95,9 @@ fun MyNavHost(
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)
         }
-        composable(Einnahmen.name) {
-            IncomeScreen(viewModel, navigateTo)
+        composable(Einnahmen.route, Einnahmen.arguments) {
+            val wpid = it.arguments?.getLong("wpid") ?: -1
+            IncomeScreen(wpid, viewModel, navigateTo)
         }
 
     }

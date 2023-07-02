@@ -5,7 +5,6 @@ import androidx.room.Query
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.WPKurs
-import com.gerwalex.mymonma.database.tables.WPStamm
 import com.gerwalex.mymonma.database.views.AccountDepotView
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.wptrx.AccountBestand
@@ -134,12 +133,10 @@ abstract class WPDao(val db: DB) {
     abstract fun getWPKurse(wpid: Long): Flow<List<WPKurs>>
 
     @Query(
-        "Select a.*  from wpstamm a " +
-//                "join partnerstamm p on (a.partnerid = p.id) " +
-                "where a.id = :wpid"
+        "Select a.*  from wpstammview a where a.id = :wpid"
     )
 
-    abstract suspend fun getWPStamm(wpid: Long): WPStamm
+    abstract suspend fun getWPStamm(wpid: Long): WPStammView
 
     /**
      * Ermittelt die Bestände eines WP zu einem Konto. Es werden nur konto mit Bestand berücksichtigt.

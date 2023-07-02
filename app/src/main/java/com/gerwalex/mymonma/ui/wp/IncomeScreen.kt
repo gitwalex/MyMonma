@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +37,7 @@ import com.gerwalex.mymonma.database.views.AccountDepotView
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.enums.WPTyp
+import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountEditView
@@ -51,17 +53,18 @@ import java.sql.Date
 
 
 @Composable
-fun IncomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val wp = viewModel.wpstamm
+fun IncomeScreen(wpid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
-
-
-    wp?.let { stamm ->
+    var wp by rememberState { WPStammView(-1) }
+    LaunchedEffect(key1 = wpid) {
+        wp = wpdao.getWPStamm(wpid)
+    }
+    if (wp.id > 0) {
         val verrechnungskonten by wpdao.getDepotVerrechnungBestand()
             .collectAsState(initial = emptyList())
         var btag by remember { mutableStateOf(Date(System.currentTimeMillis())) }
         val trxArt =
-            when (stamm.wptyp) {
+            when (wp.wptyp) {
                 WPTyp.Aktie -> WPTrxArt.DivIn
                 WPTyp.Anleihe -> WPTrxArt.ZinsEin
                 WPTyp.ETF,
@@ -99,10 +102,10 @@ fun IncomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
                     Text(text = stringResource(id = R.string.bestandAktuell))
                     MengeView(value = wp.bestand)
                 }
-                IncomeScreen(verrechnungskonten, wp = stamm, trxArt)
+                IncomeScreen(verrechnungskonten, wp = wp, trxArt)
             }
         }
-    } ?: navigateTo(Up)
+    }
 }
 
 

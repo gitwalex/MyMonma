@@ -29,10 +29,11 @@ fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
         .collectAsState(initial = emptyList())
     if (list.isNotEmpty()) {
         WPBestandList(list = list, navigateTo = navigateTo) { wp, trxArt ->
-            viewModel.wpstamm = wp
             when (trxArt) {
                 WPTrxArt.Income -> {
-                    navigateTo(Einnahmen)
+                    navigateTo(Einnahmen.apply {
+                        wpid = wp.id
+                    })
                 }
 
                 else -> {}
@@ -49,7 +50,7 @@ fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
 fun WPBestandList(
     list: List<WPStammView>,
     navigateTo: (Destination) -> Unit,
-    action: (wp: WPStammView?, trx: WPTrxArt?) -> Unit
+    action: (wp: WPStammView, trx: WPTrxArt) -> Unit
 ) {
 
     Scaffold(topBar = {
