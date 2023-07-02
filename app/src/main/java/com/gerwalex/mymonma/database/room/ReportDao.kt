@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.gerwalex.mymonma.database.data.CatYearMonth
 import com.gerwalex.mymonma.database.data.ExcludedCatClasses
 import com.gerwalex.mymonma.database.data.ExcludedCats
 import com.gerwalex.mymonma.database.data.GeldflussData
@@ -147,4 +148,23 @@ abstract class ReportDao(db: DB) {
     )
     abstract fun partnerGeldflussDetails(reportid: Long, partnerid: Long): Flow<List<CashTrxView>>
 
+    @Query(
+        """
+        select b.id, strftime('%Y', btag) as year, strftime('%m', btag) as month, 
+        sum(amount) as amount 
+        from Cat a 
+        left outer join CashTrx b on (a.id = b.catid) 
+        where catid > 9000 
+        and a.id not in (select catid from ReportExcludedCats 
+        where reportid = :reportid) 
+        and catclassid not in (select catclassid from ReportExcludedCatClasses 
+        where reportid = :reportid) 
+        group by year, month 
+    """
+    )
+    /**
+     * Erstellt einen KategorieSummenreport gruppiert nach Year/Month.
+     * Ausgeschlossen werden die cat/catclasses der reportid
+     */
+    abstract fun getYearMonthReport(reportid: Long): Flow<List<CatYearMonth>>
 }

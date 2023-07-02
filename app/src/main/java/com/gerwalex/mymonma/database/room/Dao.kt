@@ -62,7 +62,7 @@ abstract class Dao(val db: DB) {
         join Cat b using(id)
         where a.name like '%'|| :filter||'%' 
         and not a.ausgeblendet 
-        and (a.id > 10001 or a.supercatid = ${Cat.CASHKONTOCATID}) 
+        and (a.catclassid > 100 or a.catclassid = 2) 
         order by cnt desc, a.name
         """
     )

@@ -1,22 +1,21 @@
 package com.gerwalex.mymonma.database.views
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import androidx.room.DatabaseView
-import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB
-import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.enums.Kontotyp
-import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
+import com.gerwalex.mymonma.ext.rememberState
 import java.sql.Date
 
 @DatabaseView(
@@ -56,53 +55,40 @@ data class AccountCashView(
 )
 
 @Composable
-fun AutoCompleteAccountView(filter: String, selected: (Cat) -> Unit) {
-    var accountname by remember { mutableStateOf(filter) }
-    var showDropdown by remember { mutableStateOf(true) }
-    val data by DB.dao.getAccountlist(accountname).collectAsState(emptyList())
-    var error by remember { mutableStateOf(false) }
-    if (data.isEmpty()) {
-        error = true
-        selected(Cat())
-    } else {
-        selected(data[0])
-        error = false
-    }
-
-
-
-    AutoCompleteTextView(
-        modifier = Modifier.fillMaxWidth(),
-        query = accountname,
-        error = if (error) stringResource(id = R.string.errorListEmpty) else "",
-        queryLabel = stringResource(id = R.string.categorie),
-        onQueryChanged = {
-            accountname = it
-            showDropdown = true
-        },
-        list = data,
-        onClearClick = { accountname = "" },
-        onDismissRequest = { },
-        onItemClick = { acc ->
-            accountname = acc.name
-            showDropdown = false
-            selected(acc)
-
-        },
-        onFocusChanged = { isFocused ->
-            showDropdown = isFocused
-            if (!isFocused) {
-                if (data.isNotEmpty()) {
-                    accountname = data[0].name
-                    selected(data[0])
-                } else {
-                    error = true
-                    selected(Cat())
-                }
+fun AccountCashSpinner(
+    accountid: Long,
+    accounts: List<AccountCashView>,
+    selected: (AccountCashView) -> Unit
+) {
+    var myAccount by rememberState { AccountCashView() }
+    LaunchedEffect(Unit) {
+        accounts.forEach {
+            if (it.id == accountid) {
+                myAccount = it
             }
         }
-    ) { acc ->
-        Text(acc.name, fontSize = 14.sp)
+    }
+    var isExpanded by remember { mutableStateOf(false) }
+    Box(contentAlignment = Alignment.Center) {
+        Text(
+            text = myAccount.name,
+            modifier = Modifier.clickable {
+                isExpanded = !isExpanded
+            })
+        DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+            accounts
+                .forEach { account ->
+                    DropdownMenuItem(
+                        text = { Text(text = account.name) },
+                        onClick = {
+                            myAccount = account
+                            selected(account)
+                            isExpanded = false
+                        })
+                }
+
+        }
     }
 }
+
 

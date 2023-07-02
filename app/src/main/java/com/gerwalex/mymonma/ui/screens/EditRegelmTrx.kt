@@ -1,5 +1,7 @@
 package com.gerwalex.mymonma.ui.screens
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -11,18 +13,19 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.views.AccountCashSpinner
+import com.gerwalex.mymonma.database.views.AccountCashView
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import com.gerwalex.mymonma.enums.IntervallSpinner
@@ -44,7 +47,8 @@ fun AddRegelmTrxScreen(
     val list = ArrayList<TrxRegelmView>().apply {
         add(TrxRegelmView(accountid = accountid))
     }
-    EditRegelmTrxScaffold(regelmtrxlist = list) { save ->
+    val accounts by viewModel.accountlist.collectAsState(initial = emptyList())
+    EditRegelmTrxScaffold(regelmtrx = list, accounts = accounts) { save ->
         scope.launch {
             save?.let {
                 TODO()
@@ -60,8 +64,9 @@ fun AddRegelmTrxScreen(
 fun EditRegelmTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
     val list by dao.getTrxRegelm(trxid).collectAsState(initial = emptyList())
+    val accounts by viewModel.accountlist.collectAsState(initial = emptyList())
     if (list.isNotEmpty()) {
-        EditRegelmTrxScaffold(regelmtrxlist = list) { save ->
+        EditRegelmTrxScaffold(regelmtrx = list, accounts) { save ->
             scope.launch {
                 save?.let {
                     TODO()
@@ -77,19 +82,18 @@ fun EditRegelmTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Des
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditRegelmTrxScaffold(
-    regelmtrxlist: List<TrxRegelmView>,
+    regelmtrx: List<TrxRegelmView>,
+    accounts: List<AccountCashView>,
     onFinished: (List<TrxRegelmView>?) -> Unit
 ) {
-    var list by rememberState { ArrayList<CashTrxView>() }
-    LaunchedEffect(key1 = regelmtrxlist) {
-        val cashTrx = ArrayList<CashTrxView>()
-        regelmtrxlist.forEach {
-            cashTrx.add(it.cashTrxView)
+    val list by rememberState(regelmtrx) {
+        ArrayList<CashTrxView>().apply {
+            regelmtrx.forEach {
+                add(it.cashTrxView)
+            }
         }
-        list = cashTrx
     }
     if (list.isNotEmpty()) {
-
         val cashTrxState = rememberCashTrxViewState(trx = list[0])
         val snackbarHostState = remember { SnackbarHostState() }
         val keyboardController = LocalSoftwareKeyboardController.current
@@ -121,10 +125,29 @@ fun EditRegelmTrxScaffold(
             },
         ) { padding ->
             Column(modifier = Modifier.padding(padding)) {
-                IntervallSpinner(intervall = regelmtrxlist[0].intervall, selected = {})
+                IntervallSpinner(intervall = regelmtrx[0].intervall, selected = {})
+                AccountCashSpinner(
+                    accountid = list[0].accountid,
+                    accounts = accounts,
+                    selected = {})
                 EditCashTrxScreen(list = list, cashTrxState = cashTrxState)
             }
         }
     }
 }
 
+@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun EditRegelmtrxPreview() {
+    val regelmtrx = ArrayList<TrxRegelmView>().apply {
+        add(
+            TrxRegelmView(
+                accountid = 2,
+                amount = 2500_00
+            )
+        )
+    }
+    EditRegelmTrxScaffold(regelmtrx = regelmtrx, ArrayList(), onFinished = {})
+
+}

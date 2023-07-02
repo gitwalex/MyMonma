@@ -21,7 +21,7 @@ object MyConverter {
 
     val currencyFormatter: ValueFormatter = object : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
-            return convertToCurrency(value.toLong())
+           return convertToCurrency(value.toLong())
         }
     }
     val btagFormatter: DefaultValueFormatter = object : DefaultValueFormatter(10) {

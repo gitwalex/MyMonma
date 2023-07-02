@@ -21,6 +21,7 @@ import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.dashboard.CreditCardsScreen
 import com.gerwalex.mymonma.ui.dashboard.GirokontenScreen
 import com.gerwalex.mymonma.ui.dashboard.VermoegenScreen
+import com.gerwalex.mymonma.ui.dashboard.YearMonthReport
 import com.gerwalex.mymonma.ui.navigation.BottomNavigation
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.DrawerNavigation
@@ -61,6 +62,7 @@ fun HomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
                         VermoegenScreen(viewModel = viewModel)
                         GirokontenScreen(viewModel = viewModel, navigateTo = navigateTo)
                         CreditCardsScreen(viewModel = viewModel, navigateTo = navigateTo)
+                        YearMonthReport(reportid = 1L)
                     }
                 },
             )
