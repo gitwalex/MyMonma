@@ -67,7 +67,7 @@ data class CashTrxView(
                 memo = memo,
                 transferid = transferid,
                 isUmbuchung = isUmbuchung,
-                partnername = partnername,
+                partnername = partnername.ifEmpty { null },
                 gegenbuchung = gegenbuchung?.cashTrx,
             )
         }
@@ -126,7 +126,9 @@ fun CashTrxViewItem(trx: CashTrxView) {
             )
             AmountView(value = trx.amount, fontWeight = FontWeight.Bold)
         }
-        Text(text = trx.memo ?: "")
+        trx.memo?.let {
+            Text(text = it)
+        }
         Text(text = if (trx.catclassid == KONTOCLASS) "[${trx.catname}]" else trx.catname)
 
     }

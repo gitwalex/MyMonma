@@ -52,36 +52,20 @@ fun AutoCompleteCatView(
     var catname by remember { mutableStateOf(filter) }
     var isError by remember { mutableStateOf(false) }
     var showDropdown by remember { mutableStateOf(true) }
-    val data by DB.dao.getCatlist(catname).collectAsState(initial = emptyList()).apply {
-        when (value.size) {
-            0 -> {
-                isError = true
-                selected(CatView())
-            }
-
-            1 -> {
-                isError = false
-                selected(value[0])
-                showDropdown = false
-            }
-
-            else -> {
-                isError = false
-                if (catname.isEmpty())
-                    selected(CatView()) else selected(value[0])
-            }
-        }
-
-    }
+    val data by DB.dao.getCatlist(catname).collectAsState(initial = emptyList())
+    isError = data.isEmpty()
     AutoCompleteTextView(
         query = catname, list = data,
-
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = {
             catname = it
+            if (catname.isEmpty()) {
+                selected(CatView(id = 0))
+            } else if (data.isNotEmpty()) {
+                selected(data[0])
+            }
         },
         showDropdown = showDropdown,
-        onClearClick = { catname = "" },
         onDismissRequest = { showDropdown = false },
         onItemClick = { cat ->
             catname = cat.name

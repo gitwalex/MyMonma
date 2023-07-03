@@ -43,7 +43,6 @@ fun AutoCompleteCatClassView(filter: String, selected: (CatClass) -> Unit) {
         queryLabel = stringResource(id = R.string.categorie),
         onQueryChanged = { catclassname = it },
         list = data,
-        onClearClick = { catclassname = "" },
         onDismissRequest = { },
         onItemClick = { catClass ->
             catclassname = catClass.name

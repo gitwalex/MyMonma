@@ -40,27 +40,26 @@ data class Partnerstamm(
 fun AutoCompletePartnerView(filter: String, selected: (Partnerstamm) -> Unit) {
     var partnername by remember { mutableStateOf(filter) }
     var showDropdown by remember { mutableStateOf(false) }
-    val data by dao.getPartnerlist(partnername).collectAsState(initial = emptyList()).apply {
-        when (value.size) {
-            0 -> {
-                selected(Partnerstamm(name = partnername))
-            }
-
-            else -> {
-                selected(value[0])
-            }
-        }
-
-    }
+    val data by dao.getPartnerlist(partnername).collectAsState(initial = emptyList())
     AutoCompleteTextView(
         modifier = Modifier.fillMaxWidth(),
         query = partnername,
         queryLabel = stringResource(id = R.string.partnername),
         onQueryChanged = {
             partnername = it
+            if (partnername.isEmpty()) {
+                selected(Partnerstamm(id = 0, name = ""))
+            } else {
+                if (data.isNotEmpty()) {
+                    if (data[0].name == partnername) {
+                        selected(data[0])
+                    } else {
+                        selected(Partnerstamm(id = 0, name = partnername))
+                    }
+                }
+            }
         },
         list = data,
-        onClearClick = { partnername = "" },
         onDismissRequest = { },
         onItemClick = { partner ->
             partnername = partner.name

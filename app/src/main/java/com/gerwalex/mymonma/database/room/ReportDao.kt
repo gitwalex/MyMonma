@@ -160,6 +160,7 @@ abstract class ReportDao(db: DB) {
         and catclassid not in (select catclassid from ReportExcludedCatClasses 
         where reportid = :reportid) 
         group by year, month 
+        order by year, month  
     """
     )
     /**

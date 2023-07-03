@@ -39,7 +39,6 @@ fun <T> AutoCompleteTextView(
     error: String? = null,
     onQueryChanged: (query: String) -> Unit = {},
     onDismissRequest: () -> Unit = {},
-    onClearClick: () -> Unit = {},
     onItemClick: (T) -> Unit = {},
     onFocusChanged: (isFocused: Boolean) -> Unit = {},
     itemContent: @Composable (T) -> Unit = {},
@@ -58,7 +57,7 @@ fun <T> AutoCompleteTextView(
                 onDismissRequest()
             },
             onClearClick = {
-                onClearClick()
+                onQueryChanged("")
             },
             onFocusChanged = { focused ->
                 onFocusChanged(focused)

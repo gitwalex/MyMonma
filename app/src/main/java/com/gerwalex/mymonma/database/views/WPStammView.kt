@@ -115,7 +115,6 @@ fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
             wpstammname = it
         },
         list = data,
-        onClearClick = { wpstammname = "" },
         onDismissRequest = { },
         onItemClick = { wpstamm ->
             wpstammname = wpstamm.name

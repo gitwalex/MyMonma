@@ -18,7 +18,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.ext.rememberState
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -40,17 +39,17 @@ fun YearMonthReport(reportid: Long) {
         }
         val dataSet =
             BarDataSet(entries, "entries: ${entries.size}").apply {
-                setDrawValues(true)
-                color = android.R.color.holo_blue_dark
+//                setDrawValues(true)
+//                color = android.R.color.holo_blue_dark
                 axisDependency = YAxis.AxisDependency.LEFT
                 valueFormatter = MyConverter.currencyFormatter
             }
-        bardata = BarData(dataSet).apply {
-            barWidth = 200f
-        }
 
+        bardata = BarData(dataSet)
     }
-    YearMonthReport(bardata)
+    if (data.isNotEmpty()) {
+        YearMonthReport(bardata)
+    }
 }
 
 @Composable
@@ -73,9 +72,9 @@ fun YearMonthReport(
             if (chart.xChartMax - chart.xChartMin > 10) {
                 chart.setVisibleXRangeMaximum(10f)
             }
-            chart.animateX(500, Easing.EaseInOutQuad)
+//            chart.animateX(500, Easing.EaseInOutQuad)
             chart.moveViewToX(chart.xChartMax)
-            chart.invalidate()
+//            chart.invalidate()
 
         },
             factory = {
@@ -84,12 +83,14 @@ fun YearMonthReport(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
-                    axisRight.setDrawLabels(false)
+//                    axisRight.setDrawLabels(false)
                     getAxis(YAxis.AxisDependency.LEFT).apply {
                         valueFormatter = MyConverter.currencyFormatter
-                        textColor = color
                     }
-                    isScaleYEnabled = false
+                    getAxis(YAxis.AxisDependency.RIGHT).apply {
+                        valueFormatter = MyConverter.currencyFormatter
+                    }
+//                    isScaleYEnabled = false
                     isAutoScaleMinMaxEnabled = true
                     xAxis.position = XAxis.XAxisPosition.BOTTOM
                     xAxis.valueFormatter = object : ValueFormatter() {

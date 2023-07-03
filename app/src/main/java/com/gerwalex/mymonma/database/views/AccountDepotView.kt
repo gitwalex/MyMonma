@@ -138,7 +138,6 @@ fun AutoCompleteDepotView(filter: String, selected: (Cat) -> Unit) {
             showDropdown = true
         },
         list = data,
-        onClearClick = { accountname = "" },
         onDismissRequest = { },
         onItemClick = { acc ->
             accountname = acc.name
