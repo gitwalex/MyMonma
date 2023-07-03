@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.ext.rememberState
@@ -27,35 +30,34 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 
 @Composable
-fun YearMonthReport(reportid: Long) {
+fun OrdinaryIncomeReport() {
+    val ordIncome = stringResource(id = R.string.ordinaryIncome)
+    val data by reportdao.getOrdinaryIncome().collectAsState(initial = emptyList())
     var bardata by rememberState { BarData() }
-    LaunchedEffect(Unit) {
-        reportdao.getReportBasisDaten(reportid).collect { report ->
-            val data = reportdao.getYearMonthReport(reportid)
-            val entries = ArrayList<BarEntry>()
-            data.forEach {
-                val x = it.year * 12 + it.month - 1
-                val y = -it.amount
-                entries.add(BarEntry(x, y))
-            }
-            val dataSet =
-                BarDataSet(entries, report.name).apply {
+    LaunchedEffect(key1 = data) {
+        val entries = ArrayList<BarEntry>()
+        data.forEach {
+            val x = it.year
+            val y = it.amount
+            entries.add(BarEntry(x, y))
+        }
+        val dataSet =
+            BarDataSet(entries, ordIncome).apply {
 //                setDrawValues(true)
 //                color = android.R.color.holo_blue_dark
-                    axisDependency = YAxis.AxisDependency.LEFT
-                    valueFormatter = MyConverter.currencyFormatter
-                }
+                axisDependency = YAxis.AxisDependency.LEFT
+                valueFormatter = MyConverter.currencyFormatter
+            }
 
-            bardata = BarData(dataSet)
-        }
+        bardata = BarData(dataSet)
     }
-    if (bardata.dataSetCount != 0) {
-        YearMonthReport(bardata)
+    if (data.isNotEmpty()) {
+        OrdinaryIncomeReport(bardata)
     }
 }
 
 @Composable
-fun YearMonthReport(
+fun OrdinaryIncomeReport(
     data: BarData
 ) {
     val color = android.R.color.holo_blue_dark
@@ -97,9 +99,8 @@ fun YearMonthReport(
                     xAxis.position = XAxis.XAxisPosition.BOTTOM
                     xAxis.valueFormatter = object : ValueFormatter() {
                         override fun getFormattedValue(value: Float): String {
-                            val year = (value / 12).toInt()
-                            val month = (value % 12).toInt() + 1
-                            return "$month/$year"
+                            val year = value.toInt()
+                            return "$year"
                         }
                     }
                 }

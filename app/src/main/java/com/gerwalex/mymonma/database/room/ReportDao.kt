@@ -9,6 +9,7 @@ import com.gerwalex.mymonma.database.data.ExcludedCatClasses
 import com.gerwalex.mymonma.database.data.ExcludedCats
 import com.gerwalex.mymonma.database.data.GeldflussData
 import com.gerwalex.mymonma.database.data.GeldflussSummenData
+import com.gerwalex.mymonma.database.data.OrdinaryIncome
 import com.gerwalex.mymonma.database.data.PartnerdatenReport
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.database.views.CashTrxView
@@ -167,5 +168,17 @@ abstract class ReportDao(db: DB) {
      * Erstellt einen KategorieSummenreport gruppiert nach Year/Month.
      * Ausgeschlossen werden die cat/catclasses der reportid
      */
-    abstract fun getYearMonthReport(reportid: Long): Flow<List<CatYearMonth>>
+    abstract suspend fun getYearMonthReport(reportid: Long): List<CatYearMonth>
+
+    /**
+     * Summen der ordentlichen Erträge nach Jahr
+     */
+    @Query(
+        "select strftime('%Y', btag) as year, sum(amount) as amount " +  //
+                "from CashTrx " +  //
+                "where catid between 2100 and 2199 " +  //
+                "group by year"
+    )
+    abstract fun getOrdinaryIncome(): Flow<List<OrdinaryIncome>>
+
 }

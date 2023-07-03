@@ -141,4 +141,5 @@
     <string name="vermoegenCashKontoarten">Giro-, Kredit- und Anlagekonten</string>
     <string name="myGiros">Meine Girokonten</string>
     <string name="myCreditCards">Meine Kreditkarten</string>
+    <string name="ordinaryIncome">Ordentliche Erträge</string>
 </resources>
