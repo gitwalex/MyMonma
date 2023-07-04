@@ -12,7 +12,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -22,6 +22,7 @@ import com.gerwalex.mymonma.database.data.ExcludedCatClassesCheckBoxes
 import com.gerwalex.mymonma.database.data.ExcludedCatsCheckBoxes
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
+import com.gerwalex.mymonma.enums.ReportDateSelector
 import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
@@ -44,8 +45,21 @@ fun ReportDetailScreen(
     var drawerContent by rememberState { ExcludedValuesSheet.Classes }
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetScaffoldState()
-    val report by reportdao.getReportBasisDaten(reportid)
-        .collectAsState(initial = ReportBasisDaten())
+    var report by rememberState { ReportBasisDaten() }
+    LaunchedEffect(reportid) {
+        reportdao.getReportBasisDaten(reportid)?.let {
+            if (it.zeitraum != ReportDateSelector.EigDatum) {
+                it.von = it.zeitraum.dateSelection.startDate
+                it.bis = it.zeitraum.dateSelection.endDate
+            }
+            if (it.verglZeitraum != ReportDateSelector.EigDatum) {
+                it.verglVon = it.verglZeitraum.dateSelection.startDate
+                it.verglBis = it.verglZeitraum.dateSelection.endDate
+            }
+            reportdao.update(report)
+            report = it
+        }
+    }
     report.id?.let {
         ModalNavigationDrawer(
             drawerState = drawerState,

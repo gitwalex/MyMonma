@@ -29,8 +29,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 @Composable
 fun YearMonthReport(reportid: Long) {
     var bardata by rememberState { BarData() }
-    LaunchedEffect(Unit) {
-        reportdao.getReportBasisDaten(reportid).collect { report ->
+    LaunchedEffect(reportid) {
+        reportdao.getReportBasisDaten(reportid)?.let { report ->
             val data = reportdao.getYearMonthReport(reportid)
             val entries = ArrayList<BarEntry>()
             data.forEach {

@@ -34,7 +34,7 @@ abstract class ReportDao(db: DB) {
     abstract fun getReportGeldflussData(reportid: Long): Flow<List<GeldflussData>>
 
     @Query("Select * from Reportbasisdaten where id = :reportid")
-    abstract fun getReportBasisDaten(reportid: Long): Flow<ReportBasisDaten>
+    abstract suspend fun getReportBasisDaten(reportid: Long): ReportBasisDaten?
 
 
     @Query(

@@ -13,7 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,7 +51,13 @@ fun AddReportData(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
 
 @Composable
 fun EditReportData(reportid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val report by reportdao.getReportBasisDaten(reportid).collectAsState(ReportBasisDaten())
+    var report by rememberState { ReportBasisDaten() }
+    LaunchedEffect(reportid) {
+        reportdao.getReportBasisDaten(reportid)?.let {
+            report = it
+
+        }
+    }
     report.id?.let {
         EditReportData(report) {
             navigateTo(it)

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -32,26 +31,28 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 @Composable
 fun OrdinaryIncomeReport() {
     val ordIncome = stringResource(id = R.string.ordinaryIncome)
-    val data by reportdao.getOrdinaryIncome().collectAsState(initial = emptyList())
     var bardata by rememberState { BarData() }
-    LaunchedEffect(key1 = data) {
-        val entries = ArrayList<BarEntry>()
-        data.forEach {
-            val x = it.year
-            val y = it.amount
-            entries.add(BarEntry(x, y))
-        }
-        val dataSet =
-            BarDataSet(entries, ordIncome).apply {
+    LaunchedEffect(Unit) {
+        reportdao.getOrdinaryIncome().collect { data ->
+
+            val entries = ArrayList<BarEntry>()
+            data.forEach {
+                val x = it.year
+                val y = it.amount
+                entries.add(BarEntry(x, y))
+            }
+            val dataSet =
+                BarDataSet(entries, ordIncome).apply {
 //                setDrawValues(true)
 //                color = android.R.color.holo_blue_dark
-                axisDependency = YAxis.AxisDependency.LEFT
-                valueFormatter = MyConverter.currencyFormatter
-            }
+                    axisDependency = YAxis.AxisDependency.LEFT
+                    valueFormatter = MyConverter.currencyFormatter
+                }
 
-        bardata = BarData(dataSet)
+            bardata = BarData(dataSet)
+        }
     }
-    if (data.isNotEmpty()) {
+    if (bardata.dataSetCount != 0) {
         OrdinaryIncomeReport(bardata)
     }
 }
