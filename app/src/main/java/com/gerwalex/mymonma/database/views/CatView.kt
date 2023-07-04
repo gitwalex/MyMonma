@@ -1,7 +1,7 @@
 package com.gerwalex.mymonma.database.views
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 
@@ -50,39 +50,31 @@ fun AutoCompleteCatView(
     selected: (CatView) -> Unit
 ) {
     var catname by remember { mutableStateOf(filter) }
-    var isError by remember { mutableStateOf(false) }
-    var showDropdown by remember { mutableStateOf(true) }
-    val data by DB.dao.getCatlist(catname).collectAsState(initial = emptyList())
-    isError = data.isEmpty()
+    var showDropdown by remember { mutableStateOf(false) }
+    val data by dao.getCatlist(catname).collectAsState(initial = emptyList())
     AutoCompleteTextView(
-        query = catname, list = data,
-        queryLabel = stringResource(id = R.string.categorie),
+        modifier = Modifier.fillMaxWidth(),
+        query = catname,
+        queryLabel = stringResource(id = R.string.partnername),
         onQueryChanged = {
             catname = it
             if (catname.isEmpty()) {
-                selected(CatView(id = 0))
-            } else if (data.isNotEmpty()) {
-                selected(data[0])
-            }
-        },
-        showDropdown = showDropdown,
-        onDismissRequest = { showDropdown = false },
-        onItemClick = { cat ->
-            catname = cat.name
-            showDropdown = false
-            selected(cat)
-        },
-        onFocusChanged = { isFocused ->
-            Log.d("AutoCompleteCatView", "Focus=$isFocused")
-            if (!isFocused) {
-                if (data.isNotEmpty() && catname.isNotEmpty()) {
-                    catname = data[0].name
+                selected(CatView(id = 0, name = ""))
+            } else {
+                if (data.isNotEmpty()) {
                     selected(data[0])
-                } else {
-                    isError = true
-                    selected(CatView())
                 }
             }
+        },
+        list = data,
+        onDismissRequest = { },
+        onItemClick = { cat ->
+            catname = cat.name
+            selected(cat)
+            showDropdown = false
+        },
+        onFocusChanged = {
+            showDropdown = it
         }
     ) {
         Text(text = if (it.catclassid == Cat.KONTOCLASS) "[${it.name}]" else it.name)
