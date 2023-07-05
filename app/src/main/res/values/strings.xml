@@ -142,4 +142,7 @@
     <string name="myGiros">Meine Girokonten</string>
     <string name="myCreditCards">Meine Kreditkarten</string>
     <string name="ordinaryIncome">Ordentliche Erträge</string>
+    <string name="database">Datenbank</string>
+    <string name="backupNow">Jetzt sichern</string>
+    <string name="restoreDB">Datenbank zurücksichern</string>
 </resources>

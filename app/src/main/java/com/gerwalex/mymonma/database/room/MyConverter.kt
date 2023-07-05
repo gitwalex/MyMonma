@@ -9,19 +9,34 @@ import java.math.BigDecimal
 import java.sql.Date
 import java.text.DateFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.math.pow
 
 object MyConverter {
     const val NACHKOMMA = 1000000L
     private val df = DateFormat.getDateInstance()
-    val currency = NumberFormat.getCurrencyInstance()
-    val digits = BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble()))
-    private val dateformatter = DateFormat.getDateInstance(DateFormat.DEFAULT)
+    private val currency: NumberFormat = NumberFormat.getCurrencyInstance()
+    private val digits = BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble()))
 
+    /**
+     *
+     * @return yyyy-MM-dd HH:mm:ss formate date as string
+     */
+    val currentTimeStamp: String?
+        get() {
+            return try {
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.getDefault())
+                dateFormat.format(Date(System.currentTimeMillis()))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
 
     val currencyFormatter: ValueFormatter = object : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
-           return convertToCurrency(value.toLong())
+            return convertToCurrency(value.toLong())
         }
     }
     val btagFormatter: DefaultValueFormatter = object : DefaultValueFormatter(10) {
@@ -58,20 +73,21 @@ object MyConverter {
     }
 
     /**
-     * Convertiert ein Date
+     * Konvertiert Datum im Format 'yyyy-MM-dd' in ein Date
      */
-    fun convertDate(date: Date): String {
-        val di = DateFormat.getDateInstance(DateFormat.DEFAULT)
-        return di.format(date)
+    @JvmStatic
+    @TypeConverter
+    fun toDate(date: String?): Date? {
+        return date?.let { Date.valueOf(date) }
     }
 
     /**
-     * Convertiert ein Date
+     * Konvertiert Date in einen String im Format 'yyyy-MM-dd'
      */
-    fun convertDate(date: Long): String {
-        val di = DateFormat.getDateInstance(DateFormat.DEFAULT)
-        return di.format(Date(date))
+    @JvmStatic
+    @TypeConverter
+    fun toString(date: Date?): String? {
+        return date?.toString()
     }
-
 
 }

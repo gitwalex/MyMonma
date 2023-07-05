@@ -1,5 +1,7 @@
 package com.gerwalex.mymonma.ext
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
@@ -10,6 +12,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
 object FileExt {
@@ -113,6 +116,41 @@ object FileExt {
             }
         }
     }
+}
 
-
+suspend fun File.unzipTo(targetPath: String) {
+    val BUFFERSIZE = 8192
+    val directory = File(targetPath)
+    withContext(Dispatchers.IO) {
+        if (directory.isDirectory) {
+            try {
+                val data = ByteArray(BUFFERSIZE)
+                val inputStream = ZipInputStream(FileInputStream(this@unzipTo))
+                var entry: ZipEntry
+                while (inputStream.nextEntry.also { entry = it } != null) {
+                    //create dir if required while unzipping
+                    val f = File(directory, entry.name)
+                    if (entry.isDirectory && !f.isDirectory) {
+                        f.mkdirs()
+                    }
+                    val out = BufferedOutputStream(
+                        FileOutputStream(f), BUFFERSIZE
+                    )
+                    var length: Int
+                    while (inputStream.read(data).also { length = it } > 0) {
+                        out.write(data, 0, length)
+                    }
+                    f.setLastModified(entry.time)
+                    inputStream.closeEntry()
+                    out.close()
+                }
+                inputStream.close()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                throw e
+            }
+        } else {
+            throw IllegalArgumentException("Target must be Directory")
+        }
+    }
 }

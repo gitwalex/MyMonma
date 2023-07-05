@@ -73,6 +73,10 @@ fun CashTrxListScreen(
     viewModel: MonMaViewModel,
     navigateTo: (Destination) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+    val message = stringResource(id = R.string.deleted)
+    val undo = stringResource(id = R.string.undo)
+
     val list by viewModel.getCashTrxList(accountid).collectAsState(initial = emptyList())
     val account by viewModel.getAccount(accountid).collectAsState(initial = Cat())
     val snackbarHostState = remember { SnackbarHostState() }
@@ -104,10 +108,33 @@ fun CashTrxListScreen(
                         items(btaglist, key = { item -> item.id!! }) { trx ->
                             LazyListItem(
                                 trx = trx,
-                                snackbarHostState,
                                 selectedItem = {
                                     navigateTo(EditCashTrx.apply { id = trx.id!! })
                                 },
+                                onDismissed = {
+                                    scope.launch {
+                                        val trxList = dao.getCashTrx(trx.id!!)
+                                        dao.deleteCashTrx(trx.id!!)
+                                        val result = snackbarHostState.showSnackbar(
+                                            message = message,
+                                            actionLabel = undo,
+                                            withDismissAction = true
+                                        )
+                                        when (result) {
+                                            SnackbarResult.Dismissed -> {}
+                                            SnackbarResult.ActionPerformed -> {
+                                                scope.launch {
+                                                    dao.insertCashTrx(
+                                                        CashTrxView.toCashTrxList(
+                                                            trxList
+                                                        )
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
                             )
                         }
                     }
@@ -146,13 +173,9 @@ fun SaldoView(accountid: Long, btag: Date) {
 @Composable
 fun LazyItemScope.LazyListItem(
     trx: CashTrxView,
-    snackbarHostState: SnackbarHostState,
     selectedItem: (CashTrxView) -> Unit,
+    onDismissed: (CashTrxView) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    val message = stringResource(id = R.string.deleted)
-    val undo = stringResource(id = R.string.undo)
-
     val dismissState = rememberDismissState(
         confirmValueChange = { dismissValue ->
             when (dismissValue) {
@@ -160,27 +183,7 @@ fun LazyItemScope.LazyListItem(
                 DismissValue.DismissedToEnd -> false
 
                 DismissValue.DismissedToStart -> {
-                    scope.launch {
-                        val trxList = dao.getCashTrx(trx.id!!)
-                        dao.deleteCashTrx(trx.id!!)
-                        val result = snackbarHostState.showSnackbar(
-                            message = message,
-                            actionLabel = undo,
-                            withDismissAction = true
-                        )
-                        when (result) {
-                            SnackbarResult.Dismissed -> {}
-                            SnackbarResult.ActionPerformed -> {
-                                scope.launch {
-                                    dao.insertCashTrx(
-                                        CashTrxView.toCashTrxList(
-                                            trxList
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    onDismissed(trx)
                     true
                 }
             }

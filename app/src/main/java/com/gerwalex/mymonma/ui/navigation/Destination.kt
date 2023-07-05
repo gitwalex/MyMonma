@@ -152,6 +152,17 @@ object Settings : Destination {
 
 }
 
+object RestoreDatabase : Destination {
+    override val title: Int = R.string.settings
+    override val name: String = "RestoreDatabase"
+    override val route = name
+    override fun navigate(navController: NavController) {
+        navController.navigate(name)
+    }
+
+}
+
+
 object AccountList : Destination {
     override val title: Int = R.string.accountlist
     override val name: String = "AccountList"

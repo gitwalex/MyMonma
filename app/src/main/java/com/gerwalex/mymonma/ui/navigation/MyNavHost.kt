@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gerwalex.mymonma.main.MonMaViewModel
+import com.gerwalex.mymonma.preferences.ListFiles
 import com.gerwalex.mymonma.preferences.SettingScreen
 import com.gerwalex.mymonma.ui.lists.AccountListScreen
 import com.gerwalex.mymonma.ui.lists.CashTrxListScreen
@@ -37,6 +38,9 @@ fun MyNavHost(
         }
         composable(Settings.name) {
             SettingScreen(viewModel, navigateTo)
+        }
+        composable(RestoreDatabase.name) {
+            ListFiles("zip", navigateTo = navigateTo)
         }
         composable(AccountList.name) {
             AccountListScreen(viewModel, navigateTo)

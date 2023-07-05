@@ -20,8 +20,15 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.preference.PreferenceManager
 import com.gerwalex.mymonma.R
+import com.gerwalex.mymonma.database.room.DB
+import com.gerwalex.mymonma.database.room.MyConverter
+import com.gerwalex.mymonma.ext.FileExt.addToZip
 import com.gerwalex.mymonma.main.App
 import com.gerwalex.mymonma.main.ComposeActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+
 
 fun Context.getActivity(): AppCompatActivity? = when (this) {
     is AppCompatActivity -> this
@@ -82,3 +89,35 @@ fun Context.createNotification(
         Log.d("ContextExt", "createNotification: Permission missing")
     }
 }
+
+/**
+ * Erstellt Backup der Datenbank dbname als zip im DBVerzeichnis
+ * @return backupfile
+ */
+suspend fun Context.backup(dbname: String): File? {
+    return withContext(Dispatchers.IO) {
+        getDatabasePath(DB.DBNAME).parent?.let { db ->
+            File(db).listFiles()?.also { files ->
+                val targetname = "${dbname}_${MyConverter.currentTimeStamp}.zip"
+                File(filesDir, targetname).addToZip(*files)
+            }
+
+        }
+        null
+    }
+}
+
+suspend fun Context.restore(file: File, dbname: String) {
+    try {
+        withContext(Dispatchers.IO) {
+            getDatabasePath(dbname).parent?.let { dir ->
+                file.unzipTo(dir)
+            }
+        }
+    } catch (e: Exception) {
+        Log.e("Decompress", "unzip", e)
+    }
+}
+
+
+

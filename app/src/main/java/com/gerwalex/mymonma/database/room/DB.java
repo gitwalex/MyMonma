@@ -50,7 +50,7 @@ import com.gerwalex.mymonma.database.views.WPStammView;
                 GeldflussData.class}
 
 )
-@TypeConverters({MonMaConverter.class, MyConverter.class})
+@TypeConverters({MyConverter.class})
 public abstract class DB extends RoomDatabase {
     public static String DBNAME;
     public static Dao dao;
@@ -61,6 +61,7 @@ public abstract class DB extends RoomDatabase {
      * Instance der RoomDatabase
      */
     private static volatile DB INSTANCE;
+
 
     public static DB createInstance(Context context) {
         if (INSTANCE == null) {
