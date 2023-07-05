@@ -9,7 +9,6 @@ import com.gerwalex.mymonma.ext.createNotification
 import com.gerwalex.mymonma.ext.dataStore
 import com.gerwalex.mymonma.main.App
 import com.gerwalex.mymonma.preferences.PreferenceKey
-import kotlinx.coroutines.flow.map
 import java.sql.Date
 
 object RegelmTrxWorker {
@@ -17,16 +16,18 @@ object RegelmTrxWorker {
 
 
     suspend fun doWork(context: Context) {
-        context.dataStore.data.map {
-            val anzahlTage = it[PreferenceKey.AnzahlTage] ?: 3
-            val date = Date(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS * anzahlTage)
-            dao.getNextRegelmTrx(date).also { list ->
-                if (list.isNotEmpty()) {
-                    val title = context.getString(R.string.event_dauerauftrag)
-                    val text = context.getString(
-                        R.string.execute_regelTrx_anzahl,
-                        list.size
-                    )
+        try {
+            context.dataStore.data.collect {
+
+                val anzahlTage = it[PreferenceKey.AnzahlTage] ?: 3
+                val date = Date(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS * anzahlTage)
+                dao.getNextRegelmTrx(date).also { list ->
+                    if (list.isNotEmpty()) {
+                        val title = context.getString(R.string.event_dauerauftrag)
+                        val text = context.getString(
+                            R.string.execute_regelTrx_anzahl,
+                            list.size
+                        )
                     val messages = StringBuilder()
                     list.forEach { trx ->
                         messages
@@ -37,9 +38,12 @@ object RegelmTrxWorker {
                         dao.execute(trx)
 
                     }
-                    context.createNotification(msgId, title, text, messages.toString())
+                        context.createNotification(msgId, title, text, messages.toString())
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

@@ -12,9 +12,11 @@ import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
 import com.gerwalex.mymonma.ext.FileExt.copy
 import com.gerwalex.mymonma.ext.instantiate
 import com.gerwalex.mymonma.main.App
+import kotlinx.coroutines.flow.first
 import java.io.File
 import java.io.IOException
 import java.sql.Date
+import java.util.concurrent.TimeUnit
 
 open class TrxImporter(private val context: Context) {
 
@@ -104,7 +106,7 @@ open class TrxImporter(private val context: Context) {
                 }
                 verrechnungskonto?.let { vKto ->
                     if (newTrx.amount != 0L) {
-                        val von = Date(newTrx.btag.time - DateUtils.DAY_IN_MILLIS * 3)
+                        val von = Date(newTrx.btag.time - TimeUnit.DAYS.toMillis(3))
                         val bis = Date(newTrx.btag.time + DateUtils.DAY_IN_MILLIS * 3)
                         val trxList = importdao.getCashTrx(vKto, von, bis, newTrx.amount)
                         if (trxList.isNotEmpty() && trxList[0].importTrxId == null) {
@@ -147,19 +149,17 @@ open class TrxImporter(private val context: Context) {
 
     suspend fun executeImport() {
         var numFiles = 0
-        dao.getImportAccounts().collect { list ->
-            list.forEach { acc ->
-                val files = App
-                    .getAppDownloadDir(context)
-                    .listFiles { dir, name -> name.startsWith((acc.fileprefix)) }
-                if (files != null && files.isNotEmpty()) {
-                    //ok, was gefunden - erstmal alle Vormerkungen entfernen
-                    importdao.removeVormerkungen(acc.id!!)
-                    numFiles += readFiles(acc, files)
-                }
-                if (numFiles > 0) {
-                    checkOpenImportedTrx()
-                }
+        dao.getImportAccounts().first().onEach { acc ->
+            val files = App
+                .getAppDownloadDir(context)
+                .listFiles { dir, name -> name.startsWith((acc.fileprefix)) }
+            if (files != null && files.isNotEmpty()) {
+                //ok, was gefunden - erstmal alle Vormerkungen entfernen
+                importdao.removeVormerkungen(acc.id!!)
+                numFiles += readFiles(acc, files)
+            }
+            if (numFiles > 0) {
+                checkOpenImportedTrx()
             }
         }
     }

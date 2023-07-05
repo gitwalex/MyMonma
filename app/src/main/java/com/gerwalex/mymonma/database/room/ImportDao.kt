@@ -52,14 +52,17 @@ abstract class ImportDao(val db: DB) {
      * ersten Spalte (== cnt) ist die Anzahl der Trx, die noch nicht in ImportTRx vorhanden sind.
      */
     @Query(
-        "select count(*) -(select count(*) from ImportTrx b " +
-                "where a.accountid = b.accountid and a.btag = b.btag " +
-                "and a.amount = b. amount and a.partnername = b.partnername) " +  //
-                "as cnt , * " +  //
-                "from ImportNewTrx a " +  //
-                "group by accountid, btag, amount, partnername having cnt > 0"
+        """
+                select count(*) -(select count(*) from ImportTrx b 
+                where a.accountid = b.accountid and a.btag = b.btag 
+                and a.amount = b. amount and a.partnername = b.partnername)   
+                as cnt , *   
+                from ImportNewTrx a   
+                group by accountid, btag, amount, partnername having cnt > 0
+
+    """
     )
-    abstract fun getUnExistentImportTrx(): List<ImportNewTrx>
+    abstract suspend fun getUnExistentImportTrx(): List<ImportNewTrx>
 
     /**
      * Liste aller ImportTransaktionen, die (noch) nicht einem echten CashUmsatz zugeordnet sind
@@ -124,14 +127,17 @@ abstract class ImportDao(val db: DB) {
      * gleichen Partnernamen passt.
      */
     @Query(
-        "select partnerid, catid, b.accountid, count(catid) as cnt " +  //
-                "from ImportTrx a " +  //
-                "left outer join Cashtrx b on a.umsatzid = b.id " +
-                "where upper(partnername) = upper(:importpartnername)  " +  //
-                "and partnerid != 0 " +  //
-                "and catid != 1000 " +  //
-                "group by catid " +  //
-                "order by cnt desc"
+        """
+                select partnerid, catid, b.accountid, count(catid) as cnt   
+                from ImportTrx a   
+                left outer join Cashtrx b on a.umsatzid = b.id 
+                where upper(partnername) = upper(:importpartnername)    
+                and partnerid != 0   
+                and catid != 1000   
+                group by catid   
+                order by cnt desc
+
+    """
     )
     abstract suspend fun getPartnerWithCatid(importpartnername: String): TrxImporter.PartnerCatid?
 

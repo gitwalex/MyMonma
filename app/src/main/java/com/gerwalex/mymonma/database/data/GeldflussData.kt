@@ -96,7 +96,7 @@ fun GeldflussDataItem(trx: GeldflussData, onClicked: () -> Unit, onVerglClicked:
             Row {
                 if (trx.amount != 0L) {
                     AmountView(
-                        value = trx.amount - trx.verglAmount,
+                        value = trx.verglAmount - trx.amount,
                         style = MaterialTheme.typography.labelSmall
                     )
 

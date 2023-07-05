@@ -4,9 +4,12 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,12 +35,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.database.data.GeldflussData
 import com.gerwalex.mymonma.database.data.GeldflussDataItem
 import com.gerwalex.mymonma.database.data.GeldflussSummen
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
+import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import kotlinx.coroutines.launch
 
@@ -53,7 +59,8 @@ fun GeldflussDetailScreen(
         .collectAsState(initial = emptyList())
     if (list.isEmpty()) {
         NoEntriesBox()
-    } else
+    } else {
+        val grouped = list.groupBy { item -> item.name.split(":")[0] }
         Column {
             Card(
                 modifier = Modifier.padding(4.dp),
@@ -65,50 +72,68 @@ fun GeldflussDetailScreen(
             LazyColumn(
                 modifier = Modifier.weight(1f),
             ) {
-                items(list, key = { it.catid }) { item ->
-                    val currentItem by rememberUpdatedState(newValue = item)
-                    val dismissState = rememberDismissState(
-                        confirmValueChange = { dismissValue ->
-                            when (dismissValue) {
-                                DismissValue.Default -> false
-                                DismissValue.DismissedToEnd -> false
-                                DismissValue.DismissedToStart -> {
-                                    scope.launch {
-                                        DB.reportdao.insertExcludedCat(
-                                            currentItem.reportid,
-                                            currentItem.catid
-                                        )
-                                    }
-                                    true
-                                }
+                list.groupBy { item -> item.name.split(":")[0] }
+                    .forEach { (catname, catlist) ->
+
+                        item {
+                            var saldo = 0L
+                            catlist.forEach {
+                                saldo += it.amount
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(text = catname, fontWeight = FontWeight.Bold)
+                                AmountView(value = saldo, fontWeight = FontWeight.Bold)
                             }
                         }
-                    )
-                    SwipeToDismiss(
-                        modifier = Modifier
-                            .padding(vertical = 1.dp)
-                            .animateItemPlacement(),
-                        state = dismissState,
-                        background = {
-                            SwipeGeldflussBackground(dismissState = dismissState)
-                        },
-                        dismissContent = {
-                            Card(modifier = Modifier.padding(2.dp)) {
-                                GeldflussDataItem(
-                                    trx = item,
-                                    onClicked = {
-                                        onSelected(item)
-                                    },
-                                    onVerglClicked = {
-                                        onVerglSelected(item)
-                                    })
-                            }
-                        })
+                        items(catlist, key = { it.catid }) { item ->
+                            val currentItem by rememberUpdatedState(newValue = item)
+                            val dismissState = rememberDismissState(
+                                confirmValueChange = { dismissValue ->
+                                    when (dismissValue) {
+                                        DismissValue.Default -> false
+                                        DismissValue.DismissedToEnd -> false
+                                        DismissValue.DismissedToStart -> {
+                                            scope.launch {
+                                                DB.reportdao.insertExcludedCat(
+                                                    currentItem.reportid,
+                                                    currentItem.catid
+                                                )
+                                            }
+                                            true
+                                        }
+                                    }
+                                }
+                            )
+                            SwipeToDismiss(
+                                modifier = Modifier
+                                    .padding(vertical = 1.dp)
+                                    .animateItemPlacement(),
+                                state = dismissState,
+                                background = {
+                                    SwipeGeldflussBackground(dismissState = dismissState)
+                                },
+                                dismissContent = {
+                                    Card(modifier = Modifier.padding(2.dp)) {
+                                        GeldflussDataItem(
+                                            trx = item,
+                                            onClicked = {
+                                                onSelected(item)
+                                            },
+                                            onVerglClicked = {
+                                                onVerglSelected(item)
+                                            })
+                                    }
+                                })
 
-                }
+                        }
+                    }
             }
-        }
 
+        }
+    }
 }
 
 @Composable
