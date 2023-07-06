@@ -62,7 +62,7 @@ class DBTest {
             val saldoAlt1 = dao.getSaldo(account1)
             val saldoAlt2 = dao.getSaldo(account2)
 
-            val insertedList = dao.insertCashTrx(CashTrxView.toCashTrxList(testList))
+            val insertedList = CashTrxView.insert(testList)
             insertedList.forEach {
                 Log.d("DBTest", "inserted: $it ")
             }

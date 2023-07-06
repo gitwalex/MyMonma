@@ -8,8 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,35 +58,36 @@ fun AccountCashSpinner(
     accounts: List<AccountCashView>,
     selected: (AccountCashView) -> Unit
 ) {
-    var myAccount by rememberState { AccountCashView() }
-    LaunchedEffect(Unit) {
-        accounts.forEach {
-            if (it.id == accountid) {
-                myAccount = it
+    if (accounts.isNotEmpty()) {
+        var myAccount by rememberState { accounts[0] }
+        LaunchedEffect(Unit) {
+            accounts.forEach {
+                if (it.id == accountid) {
+                    myAccount = it
+                }
+            }
+        }
+        var isExpanded by rememberState { false }
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = myAccount.name,
+                modifier = Modifier.clickable {
+                    isExpanded = !isExpanded
+                })
+            DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+                accounts
+                    .forEach { account ->
+                        DropdownMenuItem(
+                            text = { Text(text = account.name) },
+                            onClick = {
+                                myAccount = account
+                                selected(account)
+                                isExpanded = false
+                            })
+                    }
+
             }
         }
     }
-    var isExpanded by remember { mutableStateOf(false) }
-    Box(contentAlignment = Alignment.Center) {
-        Text(
-            text = myAccount.name,
-            modifier = Modifier.clickable {
-                isExpanded = !isExpanded
-            })
-        DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
-            accounts
-                .forEach { account ->
-                    DropdownMenuItem(
-                        text = { Text(text = account.name) },
-                        onClick = {
-                            myAccount = account
-                            selected(account)
-                            isExpanded = false
-                        })
-                }
-
-        }
-    }
 }
-
 

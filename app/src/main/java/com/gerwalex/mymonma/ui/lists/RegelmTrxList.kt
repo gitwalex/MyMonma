@@ -1,27 +1,38 @@
 package com.gerwalex.mymonma.ui.lists
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.Card
+import androidx.compose.material3.DismissValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import com.gerwalex.mymonma.main.MonMaViewModel
@@ -53,7 +65,9 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
     val context = LocalContext.current
     val list by dao.getRegelmTrxList().collectAsState(initial = emptyList())
     if (list.isNotEmpty()) {
+        val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             topBar = {
                 TopToolBar(
                     title = RegelmTrxList.name,
@@ -74,13 +88,35 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
             }
         )
         { padding ->
+            val message = stringResource(id = R.string.deleted)
+            val undo = stringResource(id = R.string.undo)
             LazyColumn(Modifier.padding(padding)) {
                 items(list, key = { item -> item.id!! }) { item ->
-                    RegelmTrxListItem(trx = item) { trx ->
-                        navigateTo(EditRegelmTrx.apply {
-                            id = trx.id!!
+                    TrxRegelmItem(
+                        trx = item, selectedItem = { trx ->
+                            navigateTo(EditRegelmTrx.apply {
+                                id = trx.id!!
+                            })
+                        },
+                        onDismissed = { trx ->
+                            scope.launch {
+                                val trxList = dao.getTrxRegelm(trx.id!!)
+                                dao.delete(trx.trxRegelm)
+                                val result = snackbarHostState.showSnackbar(
+                                    message = message,
+                                    actionLabel = undo,
+                                    withDismissAction = true
+                                )
+                                when (result) {
+                                    SnackbarResult.Dismissed -> {}
+                                    SnackbarResult.ActionPerformed -> {
+                                        scope.launch {
+                                            TrxRegelmView.insert(trxList)
+                                        }
+                                    }
+                                }
+                            }
                         })
-                    }
                 }
             }
         }
@@ -120,6 +156,49 @@ fun RegelmTrxListItem(trx: TrxRegelmView, selected: (TrxRegelmView) -> Unit) {
             }
         }
     }
+
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun LazyItemScope.TrxRegelmItem(
+    trx: TrxRegelmView,
+    selectedItem: (TrxRegelmView) -> Unit,
+    onDismissed: (TrxRegelmView) -> Unit
+) {
+    val dismissState = rememberDismissState(
+        confirmValueChange = { dismissValue ->
+            when (dismissValue) {
+                DismissValue.Default,
+                DismissValue.DismissedToEnd -> false
+
+                DismissValue.DismissedToStart -> {
+                    onDismissed(trx)
+                    true
+                }
+            }
+        }
+    )
+    SwipeToDismiss(
+        modifier = Modifier
+            .padding(vertical = 1.dp)
+            .animateItemPlacement(),
+        state = dismissState,
+        background = {
+            SwipeBackground(dismissState = dismissState)
+        },
+        dismissContent = {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable {
+                        selectedItem(trx)
+                    }
+            ) {
+                RegelmTrxListItem(trx = trx, selectedItem)
+            }
+        })
 
 }
 

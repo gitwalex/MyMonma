@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.gerwalex.mymonma.database.views.CashTrxView
+import com.gerwalex.mymonma.enums.Intervall
 import java.sql.Date
 
 @Entity(
@@ -57,4 +59,17 @@ data class TrxRegelm(
     var isUltimo: Boolean = false,
     @Ignore
     var gegenbuchung: CashTrx? = null
-)
+) {
+    constructor(
+        intervall: Intervall,
+        accountid: Long,
+        cashTrx: CashTrxView,
+    ) : this(accountid = accountid, intervallid = intervall.ordinal) {
+        id = cashTrx.id
+        btag = cashTrx.btag
+        catid = cashTrx.catid
+        partnerid = cashTrx.partnerid
+        amount = cashTrx.amount
+        memo = cashTrx.memo
+    }
+}

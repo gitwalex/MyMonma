@@ -4,7 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.DatabaseView
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.tables.CashTrx
+import com.gerwalex.mymonma.database.tables.TrxRegelm
 import com.gerwalex.mymonma.enums.Intervall
 import java.sql.Date
 
@@ -57,7 +59,20 @@ data class TrxRegelmView(
     @Ignore
     val intervallname = intervall.intervallNameTextResID
 
-
+    val trxRegelm: TrxRegelm
+        get() {
+            return TrxRegelm(
+                id = id,
+                btag = btag,
+                accountid = accountid,
+                catid = catid,
+                partnerid = partnerid,
+                amount = amount,
+                memo = memo,
+                transferid = transferid,
+                intervallid = intervall.ordinal
+            )
+        }
     val cashTrxView: CashTrxView
         get() {
             return CashTrxView(
@@ -87,5 +102,26 @@ data class TrxRegelmView(
         return intervall.getNextBtag(btag)
     }
 
+    companion object {
+        suspend fun insert(intervall: Intervall, accountid: Long, list: List<CashTrxView>) {
+            ArrayList<TrxRegelm>().apply {
+                list.forEach { cashTrx ->
+                    add(TrxRegelm(intervall, accountid, cashTrx))
+                }
+                DB.dao.insert(this)
+            }
+
+        }
+
+        suspend fun insert(list: List<TrxRegelmView>) {
+            ArrayList<TrxRegelm>().apply {
+                list.forEach { trx ->
+                    add(trx.trxRegelm)
+                }
+                DB.dao.insert(this)
+            }
+
+        }
+    }
 
 }

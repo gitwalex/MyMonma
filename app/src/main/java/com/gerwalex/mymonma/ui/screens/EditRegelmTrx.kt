@@ -13,10 +13,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -35,47 +36,39 @@ import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import com.gerwalex.mymonma.ui.states.rememberCashTrxViewState
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Composable
 fun AddRegelmTrxScreen(
-    accountid: Long,
     viewModel: MonMaViewModel,
     navigateTo: (Destination) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    val list = ArrayList<TrxRegelmView>().apply {
-        add(TrxRegelmView(accountid = accountid))
-    }
-    val accounts by viewModel.accountlist.collectAsState(initial = emptyList())
-    EditRegelmTrxScaffold(regelmtrx = list, accounts = accounts) { save ->
-        scope.launch {
-            save?.let {
-                TODO()
-            }
-            navigateTo(Up)
+    var accounts by rememberState { listOf<AccountCashView>() }
+    LaunchedEffect(Unit) {
+        accounts = viewModel.accountlist.first()
 
+    }
+    if (accounts.isNotEmpty()) {
+        val list = ArrayList<TrxRegelmView>().apply {
+            add(TrxRegelmView(accountid = accounts[0].id))
         }
+        EditRegelmTrxScaffold(regelmtrx = list, accounts = accounts, navigateTo)
+
     }
 }
 
 
 @Composable
 fun EditRegelmTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val scope = rememberCoroutineScope()
-    val list by dao.getTrxRegelm(trxid).collectAsState(initial = emptyList())
-    val accounts by viewModel.accountlist.collectAsState(initial = emptyList())
+    var accounts by rememberState { listOf<AccountCashView>() }
+    var list by rememberState { listOf<TrxRegelmView>() }
+    LaunchedEffect(key1 = trxid) {
+        list = dao.getTrxRegelm(trxid)
+        accounts = viewModel.accountlist.first()
+    }
     if (list.isNotEmpty()) {
-        EditRegelmTrxScaffold(regelmtrx = list, accounts) { save ->
-            scope.launch {
-                save?.let {
-                    TODO()
-                }
-                navigateTo(Up)
-
-            }
-        }
-
+        EditRegelmTrxScaffold(regelmtrx = list, accounts, navigateTo)
     }
 }
 
@@ -84,8 +77,10 @@ fun EditRegelmTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Des
 fun EditRegelmTrxScaffold(
     regelmtrx: List<TrxRegelmView>,
     accounts: List<AccountCashView>,
-    onFinished: (List<TrxRegelmView>?) -> Unit
+    navigateTo: (Destination) -> Unit
+
 ) {
+    val scope = rememberCoroutineScope()
     val list by rememberState(regelmtrx) {
         ArrayList<CashTrxView>().apply {
             regelmtrx.forEach {
@@ -97,6 +92,8 @@ fun EditRegelmTrxScaffold(
         val cashTrxState = rememberCashTrxViewState(trx = list[0])
         val snackbarHostState = remember { SnackbarHostState() }
         val keyboardController = LocalSoftwareKeyboardController.current
+        var intervall by rememberState { regelmtrx[0].intervall }
+        var account by rememberState { regelmtrx[0].accountid }
         DisposableEffect(Unit) {
             onDispose {
                 keyboardController?.hide()
@@ -112,6 +109,10 @@ fun EditRegelmTrxScaffold(
                         IconButton(
                             enabled = cashTrxState.differenz == 0L,
                             onClick = {
+                                scope.launch {
+                                    TrxRegelmView.insert(intervall, account, list)
+                                    navigateTo(Up)
+                                }
                             }) {
                             Icon(
                                 imageVector = Icons.Filled.Save,
@@ -120,16 +121,18 @@ fun EditRegelmTrxScaffold(
                         }
                     }
                 ) {
-                    onFinished(null)
+                    navigateTo(Up)
                 }
             },
         ) { padding ->
             Column(modifier = Modifier.padding(padding)) {
-                IntervallSpinner(intervall = regelmtrx[0].intervall, selected = {})
+                IntervallSpinner(
+                    intervall = intervall,
+                    selected = { intervall = it })
                 AccountCashSpinner(
-                    accountid = list[0].accountid,
+                    accountid = account,
                     accounts = accounts,
-                    selected = {})
+                    selected = { account = it.id })
                 EditCashTrxScreen(list = list, cashTrxState = cashTrxState)
             }
         }
@@ -148,6 +151,6 @@ fun EditRegelmtrxPreview() {
             )
         )
     }
-    EditRegelmTrxScaffold(regelmtrx = regelmtrx, ArrayList(), onFinished = {})
+    EditRegelmTrxScaffold(regelmtrx = regelmtrx, ArrayList(), navigateTo = {})
 
 }

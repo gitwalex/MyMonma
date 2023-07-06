@@ -106,7 +106,7 @@ fun CashTrxListScreen(
                             SaldoView(accountid = accountid, btag = btag)
                         }
                         items(btaglist, key = { item -> item.id!! }) { trx ->
-                            LazyListItem(
+                            CashTrxItem(
                                 trx = trx,
                                 selectedItem = {
                                     navigateTo(EditCashTrx.apply { id = trx.id!! })
@@ -124,11 +124,7 @@ fun CashTrxListScreen(
                                             SnackbarResult.Dismissed -> {}
                                             SnackbarResult.ActionPerformed -> {
                                                 scope.launch {
-                                                    dao.insertCashTrx(
-                                                        CashTrxView.toCashTrxList(
-                                                            trxList
-                                                        )
-                                                    )
+                                                    CashTrxView.insert(trxList)
                                                 }
                                             }
                                         }
@@ -171,7 +167,7 @@ fun SaldoView(accountid: Long, btag: Date) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LazyItemScope.LazyListItem(
+fun LazyItemScope.CashTrxItem(
     trx: CashTrxView,
     selectedItem: (CashTrxView) -> Unit,
     onDismissed: (CashTrxView) -> Unit

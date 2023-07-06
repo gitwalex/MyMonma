@@ -63,9 +63,8 @@ fun MyNavHost(
             val id = it.arguments?.getLong("id") ?: -1
             EditCashTrxScreen(id, viewModel, navigateTo)
         }
-        composable(AddRegelmTrx.route, AddRegelmTrx.arguments) {
-            val id = it.arguments?.getLong("id") ?: -1
-            AddRegelmTrxScreen(id, viewModel, navigateTo)
+        composable(AddRegelmTrx.route) {
+            AddRegelmTrxScreen(viewModel, navigateTo)
         }
         composable(EditRegelmTrx.route, EditRegelmTrx.arguments) {
             val id = it.arguments?.getLong("id") ?: -1

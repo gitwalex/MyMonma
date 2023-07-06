@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.AutoCompletePartnerView
-import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat.Companion.NOCATID
 import com.gerwalex.mymonma.database.tables.Cat.Companion.SPLITBUCHUNGCATID
 import com.gerwalex.mymonma.database.tables.CatClass
@@ -74,24 +73,15 @@ fun AddCashTrxScreen(
     viewModel: MonMaViewModel,
     navigateTo: (Destination) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     val list = ArrayList<CashTrxView>().apply {
         add(CashTrxView(accountid = accountid))
     }
-    EditCashTrxScaffold(list = list) { save ->
-        scope.launch {
-            save?.let {
-                dao.insertCashTrx(save)
-            }
-            navigateTo(Up)
-        }
-    }
+    EditCashTrxScaffold(list = list, navigateTo)
 }
 
 
 @Composable
 fun EditCashTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val scope = rememberCoroutineScope()
     var list by rememberState {
         listOf<CashTrxView>()
     }
@@ -99,16 +89,7 @@ fun EditCashTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Desti
         list = dao.getCashTrx(trxid)
     }
     if (list.isNotEmpty()) {
-        EditCashTrxScaffold(list = list) { save ->
-            scope.launch {
-                save?.let {
-                    dao.insertCashTrx(save)
-                }
-                navigateTo(Up)
-
-            }
-        }
-
+        EditCashTrxScaffold(list = list, navigateTo)
     }
 }
 
@@ -116,9 +97,10 @@ fun EditCashTrxScreen(trxid: Long, viewModel: MonMaViewModel, navigateTo: (Desti
 @Composable
 fun EditCashTrxScaffold(
     list: List<CashTrxView>,
-    onFinished: (save: List<CashTrx>?) -> Unit
+    navigateTo: (Destination) -> Unit
 
 ) {
+    val scope = rememberCoroutineScope()
     val cashTrxState = rememberCashTrxViewState(trx = list[0])
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -137,10 +119,14 @@ fun EditCashTrxScaffold(
                     IconButton(
                         enabled = cashTrxState.differenz == 0L,
                         onClick = {
-                            ArrayList<CashTrxView>().apply {
-                                add(list[0])
-                                addAll(cashTrxState.splitlist)
-                                onFinished(CashTrxView.toCashTrxList(this))
+                            scope.launch {
+                                ArrayList<CashTrxView>().apply {
+                                    add(list[0])
+                                    addAll(cashTrxState.splitlist)
+                                    CashTrxView.insert(this)
+                                }
+                                navigateTo(Up)
+
                             }
                         }) {
                         Icon(
@@ -150,7 +136,7 @@ fun EditCashTrxScaffold(
                     }
                 }
             ) {
-                onFinished(null)
+                navigateTo(Up)
             }
         },
     ) { padding ->

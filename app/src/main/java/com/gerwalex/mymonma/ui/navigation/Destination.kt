@@ -192,11 +192,10 @@ object AddRegelmTrx : Destination {
     override val name: String = "AddRegelmTrx"
 
 
-    override val route = "$name/{id}"
-    val arguments = listOf(navArgument("id") { type = NavType.LongType })
+    override val route = name
 
     override fun navigate(navController: NavController) {
-        navController.navigate("$name/$id")
+        navController.navigate(name)
     }
 
 }

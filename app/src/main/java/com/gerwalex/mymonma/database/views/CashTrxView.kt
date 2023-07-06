@@ -17,11 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.room.DatabaseView
 import androidx.room.Ignore
+import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.Color
 import com.gerwalex.mymonma.ui.content.AmountView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.sql.Date
 import java.text.DateFormat
 
@@ -74,22 +77,29 @@ data class CashTrxView(
 
 
     companion object {
-        fun toCashTrxList(list: List<CashTrxView>): ArrayList<CashTrx> {
-            return ArrayList<CashTrx>().apply {
-                list.forEach { trx ->
-                    if (trx.catclassid == KONTOCLASS) {
-                        // Umbuchung!!
-                        trx.gegenbuchung = trx.copy(
-                            id = null,
-                            accountid = trx.catid,
-                            catid = trx.accountid,
-                            amount = -trx.amount,
-                            transferid = null,
-                        )
-                    } else {
-                        trx.gegenbuchung = null
+
+        /**
+         * Change a CashTrxView-list to CashTrx-list and insert it
+         */
+        suspend fun insert(list: List<CashTrxView>): ArrayList<CashTrx> {
+            return withContext(Dispatchers.IO) {
+                ArrayList<CashTrx>().apply {
+                    list.forEach { trx ->
+                        if (trx.catclassid == KONTOCLASS) {
+                            // Umbuchung!!
+                            trx.gegenbuchung = trx.copy(
+                                id = null,
+                                accountid = trx.catid,
+                                catid = trx.accountid,
+                                amount = -trx.amount,
+                                transferid = null,
+                            )
+                        } else {
+                            trx.gegenbuchung = null
+                        }
+                        add(trx.cashTrx)
                     }
-                    add(trx.cashTrx)
+                    dao.insertCashTrx(this)
                 }
             }
         }

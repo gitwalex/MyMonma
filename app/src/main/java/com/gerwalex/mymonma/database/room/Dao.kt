@@ -16,6 +16,7 @@ import com.gerwalex.mymonma.database.tables.CatClass
 import com.gerwalex.mymonma.database.tables.ImportAccount
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined
+import com.gerwalex.mymonma.database.tables.TrxRegelm
 import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm
 import com.gerwalex.mymonma.database.views.AccountCashView
@@ -24,7 +25,6 @@ import com.gerwalex.mymonma.database.views.CatView
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import com.gerwalex.mymonma.enums.Intervall
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import java.sql.Date
 
 @Dao
@@ -236,12 +236,12 @@ abstract class Dao(val db: DB) {
         order by id
     """
     )
-    abstract fun getTrxRegelm(id: Long): Flow<List<TrxRegelmView>>
+    abstract suspend fun getTrxRegelm(id: Long): List<TrxRegelmView>
 
-    //    @Transaction
+    @Transaction
     open suspend fun execute(trx: TrxRegelmView) {
         trx.id?.let { id ->
-            DB.dao.getTrxRegelm(id).first().also { item ->
+            DB.dao.getTrxRegelm(id).also { item ->
                 val cashTrxList = ArrayList<CashTrx>()
                 item.forEach { trx ->
                     val cashTrx = trx.cashTrx
@@ -256,7 +256,7 @@ abstract class Dao(val db: DB) {
                     }
                     cashTrxList.add(cashTrx)
                 }
-                DB.dao.insertCashTrx(cashTrxList)
+                insertCashTrx(cashTrxList)
                 when (trx.intervall) {
                     Intervall.Einmalig -> {
                         deleteRegelmTrx(id)
@@ -334,5 +334,25 @@ abstract class Dao(val db: DB) {
         """
     )
     abstract suspend fun getCashAccount(accountid: Long): AccountCashView?
+
+    @Delete
+    abstract suspend fun delete(trx: TrxRegelm)
+
+    @Insert
+    abstract suspend fun insert(trx: TrxRegelm): Long
+
+    @Transaction
+    open suspend fun insert(trxRegelm: List<TrxRegelm>) {
+        if (trxRegelm.isNotEmpty()) {
+            delete(trxRegelm[0])
+            trxRegelm.forEachIndexed { index, trx ->
+                if (index != 0) {
+                    trx.transferid = trxRegelm[0].id
+                }
+                trx.id = insert(trx)
+            }
+        }
+
+    }
 
 }
