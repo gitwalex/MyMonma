@@ -6,11 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -50,11 +49,11 @@ fun GirokontenScreen(
     list: List<AccountCashView>,
     onClick: (AccountCashView) -> Unit
 ) {
-    var gesamSaldo by rememberState { 0L }
+    var gesamtSaldo by rememberState { 0L }
     LaunchedEffect(key1 = list) {
         var saldo = 0L
         list.map { saldo += it.saldo }
-        gesamSaldo = saldo
+        gesamtSaldo = saldo
     }
     Box(
         modifier = Modifier
@@ -66,21 +65,16 @@ fun GirokontenScreen(
             )
             .padding(4.dp)
     ) {
-        LazyColumn(
-            userScrollEnabled = false
-        ) {
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(text = stringResource(id = R.string.myGiros), fontWeight = FontWeight.Bold)
-                    AmountView(value = gesamSaldo, fontWeight = FontWeight.Bold)
-
-                }
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = stringResource(id = R.string.myGiros), fontWeight = FontWeight.Bold)
+                AmountView(value = gesamtSaldo, fontWeight = FontWeight.Bold)
 
             }
-            items(list, key = { it.id }) { account ->
+            list.forEach { account ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

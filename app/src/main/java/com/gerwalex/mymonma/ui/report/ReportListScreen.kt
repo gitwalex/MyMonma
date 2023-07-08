@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,13 +37,16 @@ import com.gerwalex.mymonma.ui.navigation.Up
 
 @Composable
 fun ReportListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val list by reportdao.getReportList().collectAsStateWithLifecycle( emptyList())
+    val list by reportdao.getReportList().collectAsStateWithLifecycle(emptyList())
     Scaffold(
         topBar = {
             TopToolBar(
                 stringResource(id = ReportList.title),
                 actions = {
-                    IconButton(onClick = { navigateTo(AddReport) }) {
+                    IconButton(
+                        onClick = { navigateTo(AddReport) },
+                        modifier = Modifier.scale(1.5f)
+                    ) {
                         Icon(imageVector = Icons.Default.Add, "")
                     }
                 }) {

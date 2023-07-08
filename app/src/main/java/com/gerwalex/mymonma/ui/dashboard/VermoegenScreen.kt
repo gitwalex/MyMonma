@@ -42,6 +42,7 @@ fun VermoegenScreen(vermoegen: GesamtVermoegen) {
                 color = MaterialTheme.colorScheme.onSurface,
                 shape = RectangleShape
             )
+            .padding(4.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

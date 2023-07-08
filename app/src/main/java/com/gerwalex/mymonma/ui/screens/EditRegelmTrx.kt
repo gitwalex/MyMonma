@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -107,6 +108,7 @@ fun EditRegelmTrxScaffold(
                         ?: R.string.umsatzNeu),
                     actions = {
                         IconButton(
+                            modifier = Modifier.scale(1.5f),
                             enabled = cashTrxState.differenz == 0L,
                             onClick = {
                                 scope.launch {

@@ -77,8 +77,8 @@ fun CashTrxListScreen(
     val message = stringResource(id = R.string.deleted)
     val undo = stringResource(id = R.string.undo)
 
-    val list by viewModel.getCashTrxList(accountid).collectAsStateWithLifecycle( emptyList())
-    val account by viewModel.getAccount(accountid).collectAsStateWithLifecycle( Cat())
+    val list by viewModel.getCashTrxList(accountid).collectAsStateWithLifecycle(emptyList())
+    val account by viewModel.getAccount(accountid).collectAsStateWithLifecycle(Cat())
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -86,7 +86,10 @@ fun CashTrxListScreen(
             TopToolBar(
                 account.name,
                 actions = {
-                    IconButton(onClick = { navigateTo(AddCashTrx.apply { id = accountid }) }) {
+                    IconButton(
+                        onClick = { navigateTo(AddCashTrx.apply { id = accountid }) },
+                        modifier = Modifier.scale(1.5f)
+                    ) {
                         Icon(imageVector = Icons.Default.Add, "")
                     }
                 }) {

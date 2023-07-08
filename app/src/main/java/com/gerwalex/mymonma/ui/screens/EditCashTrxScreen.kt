@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -128,7 +129,9 @@ fun EditCashTrxScaffold(
                                 navigateTo(Up)
 
                             }
-                        }) {
+                        },
+                        modifier = Modifier.scale(1.5f)
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Save,
                             contentDescription = stringResource(id = R.string.save)

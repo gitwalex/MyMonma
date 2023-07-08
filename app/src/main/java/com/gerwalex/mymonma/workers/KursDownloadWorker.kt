@@ -10,12 +10,12 @@ import com.gerwalex.mymonma.ext.dataStore
 import com.gerwalex.mymonma.ext.preferences
 import com.gerwalex.mymonma.importer.FinanztreffOnline
 import com.gerwalex.mymonma.main.App
+import com.gerwalex.mymonma.main.MonMaViewModel.Companion.KEY_PROGRESS
 import com.gerwalex.mymonma.preferences.PreferenceKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -42,19 +42,16 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
 
     private val messages: MutableList<String> = ArrayList()
     override suspend fun doWork(): Result {
-        val weekday = GregorianCalendar
-            .getInstance()
-            .get(Calendar.DAY_OF_WEEK)
-        when (weekday) {
-            Calendar.SUNDAY, Calendar.SATURDAY -> {
-            }
-
-            else -> {
-                withContext(Dispatchers.IO) {
-                    executeDownload()
-                }
-            }
-        }
+        val start = Data.Builder().putInt(KEY_PROGRESS, 0).build()
+        setProgress(start)
+        delay(5000)
+//        withContext(Dispatchers.IO) {
+//            executeDownload()
+//        }
+        val end = Data.Builder().putInt(KEY_PROGRESS, 100).build()
+        setProgress(end)
+        // Verzögerung notwendig, um ggfs. den Progress beenden zu können...
+        delay(1000)
         submitDelayed(context)
         return Result.success()
     }
@@ -94,7 +91,7 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
             "https://alt.finanztreff.de/depot_portfolio.htn?sektion=masterportfolio&mpId=507&ansicht=ascii",
             "GET", null
         )
-        if (list.size > 0) {
+        if (list.isNotEmpty()) {
             val df = Date(System.currentTimeMillis())
             val fn = FinanztreffOnline.prefix + df + ".csv"
             val file = File(App.getAppDownloadDir(context), fn)
@@ -127,18 +124,21 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
 
         private const val LOGIN_URL = "https://alt.finanztreff.de/anmeldung.htn?"
         private val tag: String = MaintenanceWorker::class.java.name
-        fun submitDelayed(context: Context): Operation {
+        fun submitDelayed(context: Context): UUID {
             val cal = GregorianCalendar.getInstance().apply {
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
                 if (get(Calendar.HOUR_OF_DAY) >= 17) { // nächster Lauf Morgen, 0800 Uhr
+                    add(Calendar.DAY_OF_MONTH, 1)
                     set(Calendar.HOUR_OF_DAY, 8)
-                    set(Calendar.DAY_OF_MONTH, get(Calendar.DAY_OF_MONTH) + 1)
                 } else {
                     set(Calendar.HOUR_OF_DAY, 17)
                 }
             }
-
+            when (cal.get(Calendar.DAY_OF_WEEK)) {
+                Calendar.SATURDAY -> cal.add(Calendar.DAY_OF_MONTH, 2)
+                Calendar.SUNDAY -> cal.add(Calendar.DAY_OF_MONTH, 1)
+            }
             val delay = cal.time.time - System.currentTimeMillis()
             CoroutineScope(Dispatchers.IO).launch {
                 context.dataStore.edit { it[PreferenceKey.NextKursDownload] = cal.time.time }
@@ -153,7 +153,7 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
         }
 
         @JvmStatic
-        fun submit(context: Context, delay: Long = 0): Operation {
+        fun submit(context: Context, delay: Long = 0): UUID {
             val constraints = Constraints
                 .Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -163,13 +163,14 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
                 .setConstraints(constraints)
                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .build()
-            return WorkManager
+            WorkManager
                 .getInstance(context)
                 .enqueueUniqueWork(
                     tag,
                     ExistingWorkPolicy.REPLACE,
                     request
                 )
+            return request.id
         }
 
 

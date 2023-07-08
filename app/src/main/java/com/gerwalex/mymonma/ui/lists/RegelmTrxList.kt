@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -63,7 +64,7 @@ import kotlinx.coroutines.launch
 fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val list by dao.getRegelmTrxList().collectAsStateWithLifecycle( emptyList())
+    val list by dao.getRegelmTrxList().collectAsStateWithLifecycle(emptyList())
     if (list.isNotEmpty()) {
         val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(
@@ -72,7 +73,10 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
                 TopToolBar(
                     title = RegelmTrxList.name,
                     actions = {
-                        IconButton(onClick = { navigateTo(AddRegelmTrx) }) {
+                        IconButton(
+                            onClick = { navigateTo(AddRegelmTrx) },
+                            modifier = Modifier.scale(1.5f)
+                        ) {
                             Icon(imageVector = Icons.Default.Add, "")
                         }
                         IconButton(onClick = {

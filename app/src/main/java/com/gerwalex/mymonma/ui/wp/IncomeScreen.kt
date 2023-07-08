@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -81,14 +82,16 @@ fun IncomeScreen(wpid: Long, viewModel: MonMaViewModel, navigateTo: (Destination
                 TopToolBar(
                     title = wp.name, navigateTo = navigateTo,
                     actions = {
-                        IconButton(onClick = {
-                            scope.launch {
-                                verrechnungskonten.forEach { acc ->
-                                    acc.insertIncome(btag, wp, trxArt)
+                        IconButton(
+                            modifier = Modifier.scale(1.5f),
+                            onClick = {
+                                scope.launch {
+                                    verrechnungskonten.forEach { acc ->
+                                        acc.insertIncome(btag, wp, trxArt)
+                                    }
+                                    navigateTo(Up)
                                 }
-                                navigateTo(Up)
-                            }
-                        }) {
+                            }) {
                             Icon(Icons.Default.Save, "")
                         }
                     }
