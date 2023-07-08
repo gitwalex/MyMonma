@@ -12,13 +12,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.reportdao
@@ -70,7 +70,7 @@ fun GeldflussSummen(
 ) {
     report.id?.let { reportid ->
         val reportsummen by reportdao.getGeldflussSummendaten(reportid)
-            .collectAsState(initial = GeldflussSummenData())
+            .collectAsStateWithLifecycle( GeldflussSummenData())
         GeldflussSummen(report, reportsummen, modifier)
 
     }

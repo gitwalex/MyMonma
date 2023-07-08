@@ -27,7 +27,6 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -37,6 +36,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.database.data.GeldflussData
 import com.gerwalex.mymonma.database.data.GeldflussDataItem
 import com.gerwalex.mymonma.database.data.GeldflussSummen
@@ -56,11 +56,10 @@ fun GeldflussDetailScreen(
     ) {
     val scope = rememberCoroutineScope()
     val list by DB.reportdao.getReportGeldflussData(report.id!!)
-        .collectAsState(initial = emptyList())
+        .collectAsStateWithLifecycle( emptyList())
     if (list.isEmpty()) {
         NoEntriesBox()
     } else {
-        val grouped = list.groupBy { item -> item.name.split(":")[0] }
         Column {
             Card(
                 modifier = Modifier.padding(4.dp),

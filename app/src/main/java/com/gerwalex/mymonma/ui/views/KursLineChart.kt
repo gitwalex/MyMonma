@@ -5,11 +5,11 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.database.room.DB.wpdao
 import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.database.views.WPStammView
@@ -24,7 +24,7 @@ import com.github.mikephil.charting.data.LineDataSet
 
 @Composable
 fun KursLineChart(wpStamm: WPStammView) {
-    val kurse by wpdao.getWPKurse(wpStamm.id!!).collectAsState(initial = emptyList())
+    val kurse by wpdao.getWPKurse(wpStamm.id).collectAsStateWithLifecycle( emptyList())
     val context = LocalContext.current
 
 

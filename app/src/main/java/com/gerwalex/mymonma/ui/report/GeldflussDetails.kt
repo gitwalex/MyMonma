@@ -9,12 +9,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.CashTrxViewItem
@@ -34,7 +34,7 @@ fun GeldflussDetails(
     navigateTo: (Destination) -> Unit
 ) {
     val list by reportdao.catGeldflussDetails(reportid, catid)
-        .collectAsState(initial = emptyList())
+        .collectAsStateWithLifecycle( emptyList())
     GeldflussDetailsList(list = list, navigateTo)
 }
 
@@ -46,7 +46,7 @@ fun ReportGeldflussVerglDetails(
     navigateTo: (Destination) -> Unit
 ) {
     val list by reportdao.catGeldflussVergleichDetails(reportid, catid)
-        .collectAsState(initial = emptyList())
+        .collectAsStateWithLifecycle( emptyList())
     GeldflussDetailsList(list = list, navigateTo)
 }
 
@@ -58,7 +58,7 @@ fun PartnerGeldflussDetails(
     navigateTo: (Destination) -> Unit
 ) {
     val list by reportdao.partnerGeldflussDetails(reportid, partnerid)
-        .collectAsState(initial = emptyList())
+        .collectAsStateWithLifecycle( emptyList())
     GeldflussDetailsList(list = list, navigateTo)
 }
 

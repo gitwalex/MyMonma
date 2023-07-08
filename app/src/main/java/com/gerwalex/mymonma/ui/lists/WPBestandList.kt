@@ -6,10 +6,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.database.room.DB.wpdao
 import com.gerwalex.mymonma.database.views.WPStammItem
 import com.gerwalex.mymonma.database.views.WPStammView
@@ -26,7 +26,7 @@ import java.sql.Date
 @Composable
 fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val list by wpdao.getWPBestandListe(Date(System.currentTimeMillis()))
-        .collectAsState(initial = emptyList())
+        .collectAsStateWithLifecycle( emptyList())
     if (list.isNotEmpty()) {
         WPBestandList(list = list, navigateTo = navigateTo) { wp, trxArt ->
             when (trxArt) {

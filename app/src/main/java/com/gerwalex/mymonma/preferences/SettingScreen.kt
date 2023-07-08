@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -28,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.ext.backup
@@ -49,7 +49,7 @@ import java.sql.Date
 fun SettingScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val settings by viewModel.dataStore.data.collectAsState(initial = emptyPreferences())
+    val settings by viewModel.dataStore.data.collectAsStateWithLifecycle( emptyPreferences())
     var lastMaintenance by rememberState { 0L }
     var nextKursDownload by rememberState { 0L }
     lastMaintenance = settings[PreferenceKey.LastMaintenance] ?: -1

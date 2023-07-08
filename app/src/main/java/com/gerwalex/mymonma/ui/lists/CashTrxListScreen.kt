@@ -36,7 +36,6 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.Cat
@@ -77,8 +77,8 @@ fun CashTrxListScreen(
     val message = stringResource(id = R.string.deleted)
     val undo = stringResource(id = R.string.undo)
 
-    val list by viewModel.getCashTrxList(accountid).collectAsState(initial = emptyList())
-    val account by viewModel.getAccount(accountid).collectAsState(initial = Cat())
+    val list by viewModel.getCashTrxList(accountid).collectAsStateWithLifecycle( emptyList())
+    val account by viewModel.getAccount(accountid).collectAsStateWithLifecycle( Cat())
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },

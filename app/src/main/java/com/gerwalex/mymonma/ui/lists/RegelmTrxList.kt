@@ -30,7 +30,6 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.views.TrxRegelmView
@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val list by dao.getRegelmTrxList().collectAsState(initial = emptyList())
+    val list by dao.getRegelmTrxList().collectAsStateWithLifecycle( emptyList())
     if (list.isNotEmpty()) {
         val snackbarHostState = remember { SnackbarHostState() }
         Scaffold(

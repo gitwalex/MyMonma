@@ -16,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.views.AccountCashView
@@ -37,7 +37,7 @@ import com.gerwalex.mymonma.ui.navigation.Destination
 
 @Composable
 fun CreditCardsScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
-    val accountList by viewModel.accountlist.collectAsState(initial = emptyList())
+    val accountList by viewModel.accountlist.collectAsStateWithLifecycle(emptyList())
     CreditCardsScreen(list = accountList.filter { it.obercatid == Cat.CreditCardCATID && !it.ausgeblendet }) {
         navigateTo(CashTrxList.apply {
             id = it.id

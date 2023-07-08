@@ -16,15 +16,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class MonMaViewModel(application: Application) : AndroidViewModel(application) {
     private val collector: Job
     val dataStore: DataStore<Preferences>
-    val gesamtvermoegen = MutableSharedFlow<GesamtVermoegen>(1)
-    val accountlist = MutableSharedFlow<List<AccountCashView>>(1)
-    val depotlist = MutableSharedFlow<List<AccountDepotView>>(1)
+    val gesamtvermoegen = MutableStateFlow(GesamtVermoegen())
+    val accountlist = MutableStateFlow<List<AccountCashView>>(emptyList())
+    val depotlist = MutableStateFlow<List<AccountDepotView>>(emptyList())
 
     fun getCashTrxList(accountid: Long): Flow<List<CashTrxView>> {
         return dao.getCashTrxList(accountid)
