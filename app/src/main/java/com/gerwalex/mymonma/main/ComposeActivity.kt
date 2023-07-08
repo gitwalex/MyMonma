@@ -3,7 +3,6 @@ package com.gerwalex.mymonma.main
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -153,8 +152,6 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
                 }
                 //                    DocumentsContract.deleteDocument(getContentResolver(), resultData.getData());
             }
-        } else {
-            throw Resources.NotFoundException("File uri not found")
         }
     }
 
