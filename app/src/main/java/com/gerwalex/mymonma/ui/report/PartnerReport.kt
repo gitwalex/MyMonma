@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.database.data.PartnerdatenItem
 import com.gerwalex.mymonma.database.data.PartnerdatenReport
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.PartnerGeldflussDetails

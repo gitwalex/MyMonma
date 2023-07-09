@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.CashTrxViewItem
 import com.gerwalex.mymonma.ext.scaleOnPress

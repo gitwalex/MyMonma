@@ -5,7 +5,7 @@ import android.text.format.DateUtils
 import android.util.Log
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
-import com.gerwalex.mymonma.database.room.DB.wpdao
+import com.gerwalex.mymonma.database.room.DB.Companion.wpdao
 import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.database.tables.WPKurs
 import com.gerwalex.mymonma.database.tables.WPStamm

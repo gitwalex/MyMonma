@@ -8,7 +8,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.gerwalex.monmang.database.tables.ImportNewTrx
 import com.gerwalex.monmang.database.tables.ImportTrx
-import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.tables.ImportAccount
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.importer.TrxImporter

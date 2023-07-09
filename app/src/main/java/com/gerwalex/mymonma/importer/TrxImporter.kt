@@ -4,8 +4,8 @@ import android.content.Context
 import android.text.format.DateUtils
 import com.gerwalex.monmang.database.tables.ImportNewTrx
 import com.gerwalex.monmang.database.tables.ImportTrx
-import com.gerwalex.mymonma.database.room.DB.dao
-import com.gerwalex.mymonma.database.room.DB.importdao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.importdao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.ImportAccount
 import com.gerwalex.mymonma.database.tables.Partnerstamm.Companion.Undefined

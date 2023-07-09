@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.enums.ReportTypSpinner

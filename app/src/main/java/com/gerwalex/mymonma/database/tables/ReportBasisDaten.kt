@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.enums.ReportDateSelector
 import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ui.AppTheme

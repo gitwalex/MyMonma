@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.ext.rememberState
 import com.github.mikephil.charting.animation.Easing

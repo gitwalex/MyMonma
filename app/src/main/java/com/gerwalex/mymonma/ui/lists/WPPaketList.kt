@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.database.data.WPPaket
 import com.gerwalex.mymonma.database.data.WPPaketItem
-import com.gerwalex.mymonma.database.room.DB.wpdao
+import com.gerwalex.mymonma.database.room.DB.Companion.wpdao
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ui.navigation.Destination

@@ -3,7 +3,7 @@ package com.gerwalex.mymonma.workers
 import android.content.Context
 import android.text.format.DateUtils
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.ext.createNotification
 import com.gerwalex.mymonma.ext.dataStore

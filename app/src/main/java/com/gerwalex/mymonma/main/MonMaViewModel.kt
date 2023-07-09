@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.gerwalex.mymonma.database.data.GesamtVermoegen
-import com.gerwalex.mymonma.database.room.DB.dao
-import com.gerwalex.mymonma.database.room.DB.wpdao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.wpdao
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.views.AccountCashView
 import com.gerwalex.mymonma.database.views.AccountDepotView

@@ -52,7 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.CashTrxViewItem

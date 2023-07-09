@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.tables.Cat
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 

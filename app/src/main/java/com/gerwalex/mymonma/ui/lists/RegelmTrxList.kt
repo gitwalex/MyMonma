@@ -47,7 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.views.TrxRegelmView
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme

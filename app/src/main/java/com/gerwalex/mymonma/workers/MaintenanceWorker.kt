@@ -20,10 +20,9 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
     context.applicationContext,
     params
 ) {
-    val context = context.applicationContext
+   private val context = context.applicationContext
 
-    private val sqLiteOpenHelper: SupportSQLiteOpenHelper = DB.createInstance(context)
-        .openHelper
+    private val sqLiteOpenHelper: SupportSQLiteOpenHelper = DB.get().openHelper
 
 
     override suspend fun doWork(): Result {

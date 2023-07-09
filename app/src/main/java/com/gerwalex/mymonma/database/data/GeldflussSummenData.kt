@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.DatabaseView
 import com.gerwalex.mymonma.R
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ui.AppTheme

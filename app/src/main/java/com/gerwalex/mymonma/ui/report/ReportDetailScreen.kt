@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.gerwalex.mymonma.database.data.ExcludedCatClassesCheckBoxes
 import com.gerwalex.mymonma.database.data.ExcludedCatsCheckBoxes
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.enums.ReportDateSelector
 import com.gerwalex.mymonma.enums.ReportTyp

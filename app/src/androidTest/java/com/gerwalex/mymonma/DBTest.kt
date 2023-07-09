@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gerwalex.mymonma.database.room.DB
-import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.views.CashTrxView
 import kotlinx.coroutines.runBlocking

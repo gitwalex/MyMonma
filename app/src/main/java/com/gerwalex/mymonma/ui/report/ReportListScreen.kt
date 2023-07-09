@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gerwalex.mymonma.database.room.DB.reportdao
+import com.gerwalex.mymonma.database.room.DB.Companion.reportdao
 import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.database.tables.ReportBasisDatenItem
 import com.gerwalex.mymonma.ext.scaleOnPress

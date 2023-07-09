@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gerwalex.mymonma.database.room.DB.wpdao
+import com.gerwalex.mymonma.database.room.DB.Companion.wpdao
 import com.gerwalex.mymonma.database.room.MyConverter
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTyp

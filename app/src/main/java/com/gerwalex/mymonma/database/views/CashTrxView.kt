@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.DatabaseView
 import androidx.room.Ignore
-import com.gerwalex.mymonma.database.room.DB.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.ui.AppTheme

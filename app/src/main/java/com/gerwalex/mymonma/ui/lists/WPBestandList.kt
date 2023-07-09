@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gerwalex.mymonma.database.room.DB.wpdao
+import com.gerwalex.mymonma.database.room.DB.Companion.wpdao
 import com.gerwalex.mymonma.database.views.WPStammItem
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.enums.WPTrxArt
