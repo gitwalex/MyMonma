@@ -36,16 +36,17 @@ fun PartnerdatenItem(
             },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = data.name, maxLines = 1)
+        Text(text = data.name, maxLines = 1, modifier = Modifier.weight(1f))
         AmountView(value = data.amount)
     }
 }
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
+@Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO, widthDp = 200)
 @Composable
 fun PartnerdateItemPreview() {
-    val data = PartnerdatenReport()
+    val data = PartnerdatenReport(name = "ein ganz langer name mit zeilenumbruch")
     AppTheme {
         Surface {
             PartnerdatenItem(data) {}
