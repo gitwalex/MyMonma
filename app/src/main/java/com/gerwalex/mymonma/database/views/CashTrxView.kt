@@ -5,7 +5,6 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -14,14 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.room.DatabaseView
 import androidx.room.Ignore
 import com.gerwalex.mymonma.database.room.DB.dao
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Cat.Companion.KONTOCLASS
 import com.gerwalex.mymonma.ui.AppTheme
-import com.gerwalex.mymonma.ui.Color
+import com.gerwalex.mymonma.ui.LocalAppColors
 import com.gerwalex.mymonma.ui.content.AmountView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -107,19 +105,15 @@ data class CashTrxView(
 }
 
 @Composable
-fun CashTrxViewItem(trx: CashTrxView) {
-    Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .padding(8.dp)
-    ) {
+fun CashTrxViewItem(trx: CashTrxView, modifier: Modifier = Modifier) {
+    Column(modifier) {
         Row(
             modifier = Modifier
                 .wrapContentHeight()
                 .background(
                     trx.importTrxId?.let {
-                        Color.importedCashTrx
-                    } ?: Color.cashTrx
+                        LocalAppColors.current.importedCashTrx
+                    } ?: LocalAppColors.current.cashTrx
                 )
         ) {
             Text(

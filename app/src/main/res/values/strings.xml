@@ -146,4 +146,9 @@
     <string name="backupNow">Jetzt sichern</string>
     <string name="restoreDB">Datenbank zurücksichern</string>
     <string name="inportCashTrx">Importiere Umsätze</string>
+    <string name="kaufkurs">Kaufkurs</string>
+    <string name="btag">Datum</string>
+    <string name="haltedauer">Haltedauer</string>
+    <string name="gewinn_verlust">Gewinn/Verlust</string>
+    <string name="buchwert">Buchwert</string>
 </resources>

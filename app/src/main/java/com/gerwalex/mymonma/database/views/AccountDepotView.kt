@@ -3,7 +3,6 @@ package com.gerwalex.mymonma.database.views
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.room.DatabaseView
 import androidx.room.Ignore
 import com.gerwalex.mymonma.R
@@ -116,7 +116,7 @@ data class AccountDepotView(
 fun AutoCompleteDepotView(filter: String, selected: (Cat) -> Unit) {
     var accountname by remember { mutableStateOf(filter) }
     var showDropdown by remember { mutableStateOf(true) }
-    val data by DB.dao.getAccountlist(accountname).collectAsState(emptyList())
+    val data by DB.dao.getAccountlist(accountname).collectAsStateWithLifecycle(emptyList())
     var error by remember { mutableStateOf(false) }
     if (data.isEmpty()) {
         error = true

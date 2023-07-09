@@ -43,7 +43,7 @@ import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import com.gerwalex.mymonma.ui.content.MengeView
 import com.gerwalex.mymonma.ui.views.KursLineChart
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.sql.Date
 
 @DatabaseView(
@@ -77,7 +77,7 @@ import java.sql.Date
 )
 @Parcelize
 data class WPStammView(
-    val id: Long,
+    val id: Long = -1,
     val name: String = "",
     val partnerid: Long = 0,
     val wpkenn: String = "",

@@ -8,11 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
-object Color {
-    val appBarColor = Color(0xFF000000)
-    val cashTrx = Color(0x0Fffff00)
-    val importedCashTrx = Color(0x0F0fff00)
-}
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -78,20 +73,7 @@ private val DarkColors = darkColorScheme(
     outlineVariant = md_theme_dark_outlineVariant,
     scrim = md_theme_dark_scrim,
 )
-val OnLightCustomColorsPalette = CustomColorsPalette(
-    Reports = Color(0xFF006A60),
-    onReports = Color(0xFFFFFFFF),
-    ReportsContainer = Color(0xFF74F8E5),
-    onReportsContainer = Color(0xFF00201C),
-    Wertpapier = Color(0xFF7948A0),
-    onWertpapier = Color(0xFFFFFFFF),
-    WertpapierContainer = Color(0xFFF2DAFF),
-    onWertpapierContainer = Color(0xFF2E004E),
-    Import = Color(0xFF6D5E00),
-    onImport = Color(0xFFFFFFFF),
-    ImportContainer = Color(0xFFFBE365),
-    onImportContainer = Color(0xFF211B00)
-)
+val OnLightCustomColorsPalette = CustomColorsPalette()
 
 val OnDarkCustomColorsPalette = CustomColorsPalette(
     Reports = Color(0xFF53DBC9),
@@ -111,7 +93,7 @@ val OnDarkCustomColorsPalette = CustomColorsPalette(
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     val colors = if (!useDarkTheme) {
         LightColors

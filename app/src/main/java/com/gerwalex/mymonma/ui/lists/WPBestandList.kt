@@ -20,16 +20,23 @@ import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.Einnahmen
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
+import com.gerwalex.mymonma.ui.navigation.WPPaketList
 import java.sql.Date
 
 
 @Composable
 fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val list by wpdao.getWPBestandListe(Date(System.currentTimeMillis()))
-        .collectAsStateWithLifecycle( emptyList())
+        .collectAsStateWithLifecycle(emptyList())
     if (list.isNotEmpty()) {
         WPBestandList(list = list, navigateTo = navigateTo) { wp, trxArt ->
             when (trxArt) {
+                WPTrxArt.Pakete -> {
+                    navigateTo(WPPaketList.apply {
+                        wpid = wp.id
+                    })
+                }
+
                 WPTrxArt.Income -> {
                     navigateTo(Einnahmen.apply {
                         wpid = wp.id

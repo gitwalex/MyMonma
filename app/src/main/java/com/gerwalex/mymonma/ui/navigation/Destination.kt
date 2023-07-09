@@ -340,6 +340,23 @@ object WPBestandList : Destination {
 
 }
 
+object WPPaketList : Destination {
+    var wpid: Long = 0
+    override val title = R.string.dividende
+    override val name = "WPPaketList"
+
+    override val route = "$name/{wpid}"
+    val arguments = listOf(
+        navArgument("wpid") { type = NavType.LongType },
+    )
+
+    override fun navigate(navController: NavController) {
+        navController.navigate("$name/${wpid}")
+    }
+
+}
+
+
 object Einnahmen : Destination {
     var wpid: Long = 0
     override val title = R.string.dividende

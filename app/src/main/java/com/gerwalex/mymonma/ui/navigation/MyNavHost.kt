@@ -11,6 +11,7 @@ import com.gerwalex.mymonma.ui.lists.AccountListScreen
 import com.gerwalex.mymonma.ui.lists.CashTrxListScreen
 import com.gerwalex.mymonma.ui.lists.RegelmTrxList
 import com.gerwalex.mymonma.ui.lists.WPBestandList
+import com.gerwalex.mymonma.ui.lists.WPPaketList
 import com.gerwalex.mymonma.ui.report.AddReportData
 import com.gerwalex.mymonma.ui.report.EditReportData
 import com.gerwalex.mymonma.ui.report.GeldflussDetails
@@ -101,6 +102,10 @@ fun MyNavHost(
         }
         composable(WPBestandList.name) {
             WPBestandList(viewModel, navigateTo)
+        }
+        composable(WPPaketList.route, WPPaketList.arguments) {
+            val wpid = it.arguments?.getLong("wpid") ?: -1
+            WPPaketList(wpid, navigateTo)
         }
         composable(Einnahmen.route, Einnahmen.arguments) {
             val wpid = it.arguments?.getLong("wpid") ?: -1

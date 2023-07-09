@@ -2,6 +2,7 @@ package com.gerwalex.mymonma.database.room
 
 import androidx.room.Dao
 import androidx.room.Query
+import com.gerwalex.mymonma.database.data.WPPaket
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.WPKurs
@@ -163,5 +164,25 @@ abstract class WPDao(val db: DB) {
     )
     abstract fun getDepotVerrechnungBestand(): Flow<List<AccountDepotView>>
 
+    @Query(
+        """
+        select a.id, name, a.btag, a.accountid, a.wpid, a.catid, a.kurs as kaufkurs, a.menge 
+            ,cast(a.menge + (select total(menge) from wptrx 
+            where a.id = paketid ) as int) as bestand 
+            ,(SELECT kurs from WPKurs d where a.wpid = d.wpid 
+            group by wpid having max(btag)) as lastkurs 
+            ,(SELECT btag from WPKurs d where a.wpid = d.wpid  
+            group by wpid having max(btag)) as lastbtag 
+            from wptrx a 
+            left outer join wptrx b on (b.id = a.paketid) 
+            join WPStamm c on (a.wpid = c.id) 
+			join Partnerstamm p on (a.wpid = p.id)
+            where a.catid in (2001,2002) 
+			and a.wpid = :wpid
+            group by a.id having bestand > 0 
+            order by a.id desc
+    """
+    )
+    abstract suspend fun getWPPaketList(wpid: Long): List<WPPaket>
 
 }

@@ -99,18 +99,21 @@ val dark_onImportContainer = Color(0xFFFBE365)
 // see https://stackoverflow.com/a/75557863/792632
 @Immutable
 data class CustomColorsPalette(
-    val Reports: Color = Color.Unspecified,
-    val onReports: Color = Color.Unspecified,
-    val ReportsContainer: Color = Color.Unspecified,
-    val onReportsContainer: Color = Color.Unspecified,
-    val Wertpapier: Color = Color.Unspecified,
-    val onWertpapier: Color = Color.Unspecified,
-    val WertpapierContainer: Color = Color.Unspecified,
-    val onWertpapierContainer: Color = Color.Unspecified,
-    val Import: Color = Color.Unspecified,
-    val onImport: Color = Color.Unspecified,
-    val ImportContainer: Color = Color.Unspecified,
-    val onImportContainer: Color = Color.Unspecified
+    val Reports: Color = Color(0xFF006A60),
+    val onReports: Color = Color(0xFFFFFFFF),
+    val ReportsContainer: Color = Color(0xFF74F8E5),
+    val onReportsContainer: Color = Color(0xFF00201C),
+    val Wertpapier: Color = Color(0xFF7948A0),
+    val onWertpapier: Color = Color(0xFFFFFFFF),
+    val WertpapierContainer: Color = Color(0xFFF2DAFF),
+    val onWertpapierContainer: Color = Color(0xFF2E004E),
+    val Import: Color = Color(0xFF6D5E00),
+    val onImport: Color = Color(0xFFFFFFFF),
+    val ImportContainer: Color = Color(0xFFFBE365),
+    val onImportContainer: Color = Color(0xFF211B00),
+    val cashTrx: Color = Color(0x0Fffff00),
+    val importedCashTrx: Color = Color(0x0F0fff00)
+
 )
 
 val LocalAppColors = staticCompositionLocalOf { CustomColorsPalette() }
