@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
 object Color {
@@ -77,6 +78,35 @@ private val DarkColors = darkColorScheme(
     outlineVariant = md_theme_dark_outlineVariant,
     scrim = md_theme_dark_scrim,
 )
+val OnLightCustomColorsPalette = CustomColorsPalette(
+    Reports = Color(0xFF006A60),
+    onReports = Color(0xFFFFFFFF),
+    ReportsContainer = Color(0xFF74F8E5),
+    onReportsContainer = Color(0xFF00201C),
+    Wertpapier = Color(0xFF7948A0),
+    onWertpapier = Color(0xFFFFFFFF),
+    WertpapierContainer = Color(0xFFF2DAFF),
+    onWertpapierContainer = Color(0xFF2E004E),
+    Import = Color(0xFF6D5E00),
+    onImport = Color(0xFFFFFFFF),
+    ImportContainer = Color(0xFFFBE365),
+    onImportContainer = Color(0xFF211B00)
+)
+
+val OnDarkCustomColorsPalette = CustomColorsPalette(
+    Reports = Color(0xFF53DBC9),
+    onReports = Color(0xFF003731),
+    ReportsContainer = Color(0xFF005048),
+    onReportsContainer = Color(0xFF74F8E5),
+    Wertpapier = Color(0xFFE1B6FF),
+    onWertpapier = Color(0xFF47146E),
+    WertpapierContainer = Color(0xFF602F86),
+    onWertpapierContainer = Color(0xFFF2DAFF),
+    Import = Color(0xFFDEC74C),
+    onImport = Color(0xFF393000),
+    ImportContainer = Color(0xFF524700),
+    onImportContainer = Color(0xFFFBE365)
+)
 
 @Composable
 fun AppTheme(
@@ -89,8 +119,16 @@ fun AppTheme(
         DarkColors
     }
 
-    MaterialTheme(
-        colorScheme = colors,
-        content = content
-    )
+    val customColorsPalette =
+        if (useDarkTheme) OnDarkCustomColorsPalette
+        else OnLightCustomColorsPalette
+
+    CompositionLocalProvider(
+        LocalAppColors provides customColorsPalette
+    ) {
+        MaterialTheme(
+            colorScheme = colors,
+            content = content
+        )
+    }
 }

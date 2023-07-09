@@ -2,6 +2,7 @@ package com.gerwalex.mymonma.database.tables
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import com.gerwalex.mymonma.database.room.DB.reportdao
 import com.gerwalex.mymonma.enums.ReportDateSelector
 import com.gerwalex.mymonma.enums.ReportTyp
 import com.gerwalex.mymonma.ui.AppTheme
+import com.gerwalex.mymonma.ui.LocalAppColors
 import com.gerwalex.mymonma.ui.content.DateView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,8 +65,14 @@ fun ReportBasisDatenItem(
     onEdit: () -> Unit
 ) {
     Box(modifier) {
-        Column(modifier = Modifier.padding(4.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            modifier = Modifier
+                .padding(4.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.background(color = LocalAppColors.current.ReportsContainer)
+            ) {
 
                 Text(
                     text = report.name, fontWeight = FontWeight.Bold,

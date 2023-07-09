@@ -1,9 +1,12 @@
 package com.gerwalex.mymonma.ui.lists
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,11 +19,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Work
-import androidx.compose.material3.Card
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -35,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -131,7 +135,7 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
 
 @Composable
 fun RegelmTrxListItem(trx: TrxRegelmView, selected: (TrxRegelmView) -> Unit) {
-    Card(modifier = Modifier
+    Box(modifier = Modifier
         .padding(4.dp)
         .clickable {
             selected(trx)
@@ -192,10 +196,14 @@ fun LazyItemScope.TrxRegelmItem(
             SwipeBackground(dismissState = dismissState)
         },
         dismissContent = {
-            Card(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
+                    .border(
+                        BorderStroke(1.dp, color = MaterialTheme.colorScheme.surfaceTint),
+                        shape = RectangleShape
+                    )
                     .clickable {
                         selectedItem(trx)
                     }

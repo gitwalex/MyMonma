@@ -1,5 +1,7 @@
 package com.gerwalex.mymonma.ui
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF0056D0)
@@ -64,7 +66,6 @@ val md_theme_dark_surfaceTint = Color(0xFFB1C5FF)
 val md_theme_dark_outlineVariant = Color(0xFF44464F)
 val md_theme_dark_scrim = Color(0xFF000000)
 
-
 val seed = Color(0xFF126EFF)
 val Reports = Color(0xFF9FD7CD)
 val Wertpapier = Color(0xFFD6A0FF)
@@ -73,23 +74,44 @@ val light_Reports = Color(0xFF006A60)
 val light_onReports = Color(0xFFFFFFFF)
 val light_ReportsContainer = Color(0xFF74F8E5)
 val light_onReportsContainer = Color(0xFF00201C)
-val dark_Reports = Color(0xFF53DBC9)
-val dark_onReports = Color(0xFF003731)
-val dark_ReportsContainer = Color(0xFF005048)
-val dark_onReportsContainer = Color(0xFF74F8E5)
 val light_Wertpapier = Color(0xFF7948A0)
 val light_onWertpapier = Color(0xFFFFFFFF)
 val light_WertpapierContainer = Color(0xFFF2DAFF)
 val light_onWertpapierContainer = Color(0xFF2E004E)
-val dark_Wertpapier = Color(0xFFE1B6FF)
-val dark_onWertpapier = Color(0xFF47146E)
-val dark_WertpapierContainer = Color(0xFF602F86)
-val dark_onWertpapierContainer = Color(0xFFF2DAFF)
 val light_Import = Color(0xFF6D5E00)
 val light_onImport = Color(0xFFFFFFFF)
 val light_ImportContainer = Color(0xFFFBE365)
 val light_onImportContainer = Color(0xFF211B00)
+val dark_Reports = Color(0xFF53DBC9)
+val dark_onReports = Color(0xFF003731)
+val dark_ReportsContainer = Color(0xFF005048)
+val dark_onReportsContainer = Color(0xFF74F8E5)
+val dark_Wertpapier = Color(0xFFE1B6FF)
+val dark_onWertpapier = Color(0xFF47146E)
+val dark_WertpapierContainer = Color(0xFF602F86)
+val dark_onWertpapierContainer = Color(0xFFF2DAFF)
 val dark_Import = Color(0xFFDEC74C)
 val dark_onImport = Color(0xFF393000)
 val dark_ImportContainer = Color(0xFF524700)
 val dark_onImportContainer = Color(0xFFFBE365)
+
+
+// see https://stackoverflow.com/a/75557863/792632
+@Immutable
+data class CustomColorsPalette(
+    val Reports: Color = Color.Unspecified,
+    val onReports: Color = Color.Unspecified,
+    val ReportsContainer: Color = Color.Unspecified,
+    val onReportsContainer: Color = Color.Unspecified,
+    val Wertpapier: Color = Color.Unspecified,
+    val onWertpapier: Color = Color.Unspecified,
+    val WertpapierContainer: Color = Color.Unspecified,
+    val onWertpapierContainer: Color = Color.Unspecified,
+    val Import: Color = Color.Unspecified,
+    val onImport: Color = Color.Unspecified,
+    val ImportContainer: Color = Color.Unspecified,
+    val onImportContainer: Color = Color.Unspecified
+)
+
+val LocalAppColors = staticCompositionLocalOf { CustomColorsPalette() }
+

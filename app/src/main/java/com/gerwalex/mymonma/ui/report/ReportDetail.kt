@@ -119,9 +119,6 @@ fun ReportDetailScreen(
                                 report = report,
                                 navigateTo = navigateTo
                             )
-
-                            else -> {
-                            }
                         }
                     }
                 }

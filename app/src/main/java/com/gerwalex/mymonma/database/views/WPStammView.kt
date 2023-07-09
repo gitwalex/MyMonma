@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,6 +38,7 @@ import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.enums.WPTrxArtMenu
 import com.gerwalex.mymonma.enums.WPTyp
 import com.gerwalex.mymonma.ui.AppTheme
+import com.gerwalex.mymonma.ui.LocalAppColors
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.AutoCompleteTextView
 import com.gerwalex.mymonma.ui.content.MengeView
@@ -104,7 +104,7 @@ data class WPStammView(
 fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
     var wpstammname by remember { mutableStateOf(filter) }
     var showDropdown by remember { mutableStateOf(true) }
-    val data by DB.dao.getWPStammlist(wpstammname).collectAsStateWithLifecycle( emptyList())
+    val data by DB.dao.getWPStammlist(wpstammname).collectAsStateWithLifecycle(emptyList())
 
 
     AutoCompleteTextView(
@@ -131,100 +131,98 @@ fun AutoCompleteWPStammView(filter: String, selected: (Partnerstamm) -> Unit) {
 
 @Composable
 fun WPStammItem(item: WPStammView, action: (WPTrxArt) -> Unit) {
-    Card(modifier = Modifier.padding(4.dp)) {
-        Column(
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
+        Row(
             modifier = Modifier
-                .padding(8.dp),
+                .background(LocalAppColors.current.Wertpapier)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.tertiary),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = item.name,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colorScheme.onTertiary
-                )
-                WPTrxArtMenu(selected = { trxArt ->
-                    action(trxArt)
-                })
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(id = R.string.marktwert), fontWeight = FontWeight.Bold)
-                AmountView(value = item.bestand / NACHKOMMA * item.lastkurs)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(id = R.string.einstand))
-                AmountView(value = item.einstand)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(id = R.string.buchgewinn))
-                AmountView(value = (item.bestand / NACHKOMMA * item.lastkurs) - item.einstand)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(id = R.string.einnahmen))
-                AmountView(value = (item.income))
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(id = R.string.kurs))
-                AmountView(value = item.lastkurs)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(id = R.string.bestand))
-                MengeView(value = item.bestand)
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(2.dp)
-                    .border(1.dp, MaterialTheme.colorScheme.onSurface)
-            ) {
-                if (!LocalInspectionMode.current)
-                    KursLineChart(wpStamm = item)
-
-            }
+            Text(
+                text = item.name,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                modifier = Modifier.weight(1f),
+                color = LocalAppColors.current.onWertpapier
+            )
+            WPTrxArtMenu(selected = { trxArt ->
+                action(trxArt)
+            })
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(id = R.string.marktwert), fontWeight = FontWeight.Bold)
+            AmountView(value = item.bestand / NACHKOMMA * item.lastkurs)
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(id = R.string.einstand))
+            AmountView(value = item.einstand)
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(id = R.string.buchgewinn))
+            AmountView(value = (item.bestand / NACHKOMMA * item.lastkurs) - item.einstand)
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(id = R.string.einnahmen))
+            AmountView(value = (item.income))
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(id = R.string.kurs))
+            AmountView(value = item.lastkurs)
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(id = R.string.bestand))
+            MengeView(value = item.bestand)
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(2.dp)
+                .border(1.dp, MaterialTheme.colorScheme.onSurface)
+        ) {
+            if (!LocalInspectionMode.current)
+                KursLineChart(wpStamm = item)
 
         }
 
     }
 
 }
+
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)
