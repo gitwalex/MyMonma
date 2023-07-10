@@ -1,0 +1,1550 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "000ff50e85540351931ac8fbf0783445",
+    "entities": [
+      {
+        "tableName": "Account",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `catid` INTEGER NOT NULL, `inhaber` TEXT, `currency` TEXT, `iban` TEXT, `blz` TEXT, `bezeichnung` TEXT, `creditlimit` INTEGER, `verrechnungskonto` INTEGER, `kontotyp` TEXT NOT NULL, `openDate` TEXT, `bankname` TEXT, `bic` TEXT, FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inhaber",
+            "columnName": "inhaber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iban",
+            "columnName": "iban",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "blz",
+            "columnName": "blz",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bezeichnung",
+            "columnName": "bezeichnung",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "creditlimit",
+            "columnName": "creditlimit",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "verrechnungskonto",
+            "columnName": "verrechnungskonto",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "kontotyp",
+            "columnName": "kontotyp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openDate",
+            "columnName": "openDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bankname",
+            "columnName": "bankname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bic",
+            "columnName": "bic",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Account_catid",
+            "unique": false,
+            "columnNames": [
+              "catid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Account_catid` ON `${TABLE_NAME}` (`catid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CashTrx",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER NOT NULL, FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`transferid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnerid",
+            "columnName": "partnerid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memo",
+            "columnName": "memo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transferid",
+            "columnName": "transferid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isUmbuchung",
+            "columnName": "isUmbuchung",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_CashTrx_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CashTrx_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          },
+          {
+            "name": "index_CashTrx_catid",
+            "unique": false,
+            "columnNames": [
+              "catid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CashTrx_catid` ON `${TABLE_NAME}` (`catid`)"
+          },
+          {
+            "name": "index_CashTrx_partnerid",
+            "unique": false,
+            "columnNames": [
+              "partnerid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CashTrx_partnerid` ON `${TABLE_NAME}` (`partnerid`)"
+          },
+          {
+            "name": "index_CashTrx_transferid",
+            "unique": false,
+            "columnNames": [
+              "transferid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CashTrx_transferid` ON `${TABLE_NAME}` (`transferid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Account",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "CashTrx",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "transferid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Partnerstamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "partnerid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Cat",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `obercatid` INTEGER NOT NULL, `supercatid` INTEGER NOT NULL, `catclassid` INTEGER NOT NULL, `incomecat` INTEGER, `ausgeblendet` INTEGER NOT NULL, FOREIGN KEY(`catclassid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`obercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`supercatid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "obercatid",
+            "columnName": "obercatid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supercatid",
+            "columnName": "supercatid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catclassid",
+            "columnName": "catclassid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "incomecat",
+            "columnName": "incomecat",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ausgeblendet",
+            "columnName": "ausgeblendet",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Cat_obercatid",
+            "unique": false,
+            "columnNames": [
+              "obercatid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Cat_obercatid` ON `${TABLE_NAME}` (`obercatid`)"
+          },
+          {
+            "name": "index_Cat_supercatid",
+            "unique": false,
+            "columnNames": [
+              "supercatid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Cat_supercatid` ON `${TABLE_NAME}` (`supercatid`)"
+          },
+          {
+            "name": "index_Cat_catclassid",
+            "unique": false,
+            "columnNames": [
+              "catclassid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Cat_catclassid` ON `${TABLE_NAME}` (`catclassid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "CatClass",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catclassid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "obercatid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "supercatid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CatClass",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `intern` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "intern",
+            "columnName": "intern",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ImportAccount",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT, `typ` INTEGER NOT NULL, `verrechnungskonto` INTEGER NOT NULL, `fileprefix` TEXT NOT NULL, `classname` TEXT NOT NULL, FOREIGN KEY(`verrechnungskonto`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "typ",
+            "columnName": "typ",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verrechnungskonto",
+            "columnName": "verrechnungskonto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileprefix",
+            "columnName": "fileprefix",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classname",
+            "columnName": "classname",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ImportAccount_verrechnungskonto",
+            "unique": false,
+            "columnNames": [
+              "verrechnungskonto"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ImportAccount_verrechnungskonto` ON `${TABLE_NAME}` (`verrechnungskonto`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Account",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "verrechnungskonto"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ImportNewTrx",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `partnername` TEXT, `amount` INTEGER NOT NULL, `bonus` INTEGER NOT NULL, `memo` TEXT, `vormerkung` INTEGER NOT NULL, `bankverbindung` TEXT, FOREIGN KEY(`accountid`) REFERENCES `ImportAccount`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnername",
+            "columnName": "partnername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bonus",
+            "columnName": "bonus",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memo",
+            "columnName": "memo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "vormerkung",
+            "columnName": "vormerkung",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankverbindung",
+            "columnName": "bankverbindung",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ImportNewTrx_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ImportNewTrx_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ImportAccount",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ImportTrx",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `partnername` TEXT, `amount` INTEGER NOT NULL, `bonus` INTEGER NOT NULL, `memo` TEXT, `newTrx` INTEGER NOT NULL, `vormerkung` INTEGER NOT NULL, `umsatzid` INTEGER, `bankverbindung` TEXT, FOREIGN KEY(`accountid`) REFERENCES `ImportAccount`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`umsatzid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnername",
+            "columnName": "partnername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bonus",
+            "columnName": "bonus",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memo",
+            "columnName": "memo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "newTrx",
+            "columnName": "newTrx",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vormerkung",
+            "columnName": "vormerkung",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "umsatzid",
+            "columnName": "umsatzid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bankverbindung",
+            "columnName": "bankverbindung",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ImportTrx_umsatzid",
+            "unique": true,
+            "columnNames": [
+              "umsatzid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_ImportTrx_umsatzid` ON `${TABLE_NAME}` (`umsatzid`)"
+          },
+          {
+            "name": "index_ImportTrx_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ImportTrx_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ImportAccount",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "CashTrx",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "umsatzid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "TrxRegelm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `partnerid` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `memo` TEXT, `transferid` INTEGER, `isUmbuchung` INTEGER NOT NULL, `cnt` INTEGER NOT NULL, `intervallid` INTEGER NOT NULL, `last` TEXT, `isUltimo` INTEGER NOT NULL, FOREIGN KEY(`transferid`) REFERENCES `TrxRegelm`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partnerid",
+            "columnName": "partnerid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memo",
+            "columnName": "memo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "transferid",
+            "columnName": "transferid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isUmbuchung",
+            "columnName": "isUmbuchung",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cnt",
+            "columnName": "cnt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervallid",
+            "columnName": "intervallid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "last",
+            "columnName": "last",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isUltimo",
+            "columnName": "isUltimo",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_TrxRegelm_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          },
+          {
+            "name": "index_TrxRegelm_catid",
+            "unique": false,
+            "columnNames": [
+              "catid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_catid` ON `${TABLE_NAME}` (`catid`)"
+          },
+          {
+            "name": "index_TrxRegelm_partnerid",
+            "unique": false,
+            "columnNames": [
+              "partnerid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_partnerid` ON `${TABLE_NAME}` (`partnerid`)"
+          },
+          {
+            "name": "index_TrxRegelm_transferid",
+            "unique": false,
+            "columnNames": [
+              "transferid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_TrxRegelm_transferid` ON `${TABLE_NAME}` (`transferid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "TrxRegelm",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "transferid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Account",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Partnerstamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "partnerid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Partnerstamm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ReportBasisDaten",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `typ` TEXT NOT NULL, `name` TEXT NOT NULL, `zeitraum` TEXT NOT NULL, `verglZeitraum` TEXT NOT NULL, `von` TEXT NOT NULL, `bis` TEXT NOT NULL, `verglVon` TEXT NOT NULL, `verglBis` TEXT NOT NULL, `description` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "typ",
+            "columnName": "typ",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zeitraum",
+            "columnName": "zeitraum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verglZeitraum",
+            "columnName": "verglZeitraum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "von",
+            "columnName": "von",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bis",
+            "columnName": "bis",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verglVon",
+            "columnName": "verglVon",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verglBis",
+            "columnName": "verglBis",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ReportExcludedCats",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reportid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, FOREIGN KEY(`reportid`) REFERENCES `ReportBasisDaten`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reportid",
+            "columnName": "reportid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ReportExcludedCats_reportid",
+            "unique": false,
+            "columnNames": [
+              "reportid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ReportExcludedCats_reportid` ON `${TABLE_NAME}` (`reportid`)"
+          },
+          {
+            "name": "index_ReportExcludedCats_catid",
+            "unique": false,
+            "columnNames": [
+              "catid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ReportExcludedCats_catid` ON `${TABLE_NAME}` (`catid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ReportBasisDaten",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "reportid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ReportExcludedCatClasses",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reportid` INTEGER NOT NULL, `catclassid` INTEGER NOT NULL, FOREIGN KEY(`reportid`) REFERENCES `ReportBasisDaten`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`catclassid`) REFERENCES `CatClass`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reportid",
+            "columnName": "reportid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catclassid",
+            "columnName": "catclassid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ReportExcludedCatClasses_reportid",
+            "unique": false,
+            "columnNames": [
+              "reportid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ReportExcludedCatClasses_reportid` ON `${TABLE_NAME}` (`reportid`)"
+          },
+          {
+            "name": "index_ReportExcludedCatClasses_catclassid",
+            "unique": false,
+            "columnNames": [
+              "catclassid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ReportExcludedCatClasses_catclassid` ON `${TABLE_NAME}` (`catclassid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "ReportBasisDaten",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "reportid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "CatClass",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catclassid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "WPStamm",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `partnerid` INTEGER NOT NULL, `wpkenn` TEXT, `isin` TEXT, `wptyp` TEXT NOT NULL, `risiko` INTEGER NOT NULL, `beobachten` INTEGER NOT NULL, `estEarning` INTEGER NOT NULL, FOREIGN KEY(`partnerid`) REFERENCES `Partnerstamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "partnerid",
+            "columnName": "partnerid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wpkenn",
+            "columnName": "wpkenn",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isin",
+            "columnName": "isin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "wptyp",
+            "columnName": "wptyp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "risiko",
+            "columnName": "risiko",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "beobachten",
+            "columnName": "beobachten",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estEarning",
+            "columnName": "estEarning",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_WPStamm_partnerid",
+            "unique": false,
+            "columnNames": [
+              "partnerid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPStamm_partnerid` ON `${TABLE_NAME}` (`partnerid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Partnerstamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "partnerid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "WPKurs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `btag` TEXT NOT NULL, `wpid` INTEGER NOT NULL, `kurs` INTEGER NOT NULL, FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wpid",
+            "columnName": "wpid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kurs",
+            "columnName": "kurs",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_WPKurs_wpid_btag",
+            "unique": true,
+            "columnNames": [
+              "wpid",
+              "btag"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_WPKurs_wpid_btag` ON `${TABLE_NAME}` (`wpid`, `btag`)"
+          },
+          {
+            "name": "index_WPKurs_btag",
+            "unique": false,
+            "columnNames": [
+              "btag"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPKurs_btag` ON `${TABLE_NAME}` (`btag`)"
+          },
+          {
+            "name": "index_WPKurs_wpid",
+            "unique": false,
+            "columnNames": [
+              "wpid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPKurs_wpid` ON `${TABLE_NAME}` (`wpid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "WPStamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "wpid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "WPTrx",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `cashtrxid` INTEGER, `btag` TEXT NOT NULL, `accountid` INTEGER NOT NULL, `wpid` INTEGER NOT NULL, `catid` INTEGER NOT NULL, `paketid` INTEGER, `kurs` INTEGER NOT NULL, `menge` INTEGER, `ertrag` INTEGER NOT NULL, `einstand` INTEGER, `zinszahl` INTEGER, `haltedauer` INTEGER, FOREIGN KEY(`cashtrxid`) REFERENCES `CashTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`paketid`) REFERENCES `WPTrx`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`accountid`) REFERENCES `Account`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`catid`) REFERENCES `Cat`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT , FOREIGN KEY(`wpid`) REFERENCES `WPStamm`(`id`) ON UPDATE CASCADE ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cashtrxid",
+            "columnName": "cashtrxid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "btag",
+            "columnName": "btag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountid",
+            "columnName": "accountid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wpid",
+            "columnName": "wpid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "catid",
+            "columnName": "catid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paketid",
+            "columnName": "paketid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "kurs",
+            "columnName": "kurs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "menge",
+            "columnName": "menge",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ertrag",
+            "columnName": "ertrag",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "einstand",
+            "columnName": "einstand",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zinszahl",
+            "columnName": "zinszahl",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "haltedauer",
+            "columnName": "haltedauer",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_WPTrx_cashtrxid",
+            "unique": false,
+            "columnNames": [
+              "cashtrxid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_cashtrxid` ON `${TABLE_NAME}` (`cashtrxid`)"
+          },
+          {
+            "name": "index_WPTrx_accountid",
+            "unique": false,
+            "columnNames": [
+              "accountid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_accountid` ON `${TABLE_NAME}` (`accountid`)"
+          },
+          {
+            "name": "index_WPTrx_wpid",
+            "unique": false,
+            "columnNames": [
+              "wpid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_wpid` ON `${TABLE_NAME}` (`wpid`)"
+          },
+          {
+            "name": "index_WPTrx_catid",
+            "unique": false,
+            "columnNames": [
+              "catid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_catid` ON `${TABLE_NAME}` (`catid`)"
+          },
+          {
+            "name": "index_WPTrx_paketid",
+            "unique": false,
+            "columnNames": [
+              "paketid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_WPTrx_paketid` ON `${TABLE_NAME}` (`paketid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "CashTrx",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "cashtrxid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "WPTrx",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "paketid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Account",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "accountid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Cat",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "catid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "WPStamm",
+            "onDelete": "RESTRICT",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "wpid"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewName": "AccountCashView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, b.*, c.name as obercatname\n        ,(select total(amount) from CashTrx where accountid = a.id and (transferid is null or isUmbuchung)) as saldo\n        from cat a\n        join Cat c on(a.obercatid = c.id)\n        join Account b using(id)\n        where a.supercatid = 1001\n        and a.catclassid != 1"
+      },
+      {
+        "viewName": "AccountDepotView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, b.*,c.name as verrechnungskontoname\n\t\t,(select total(marktwert) from (\n            select accountid,  sum(menge) / 1000000 *\n            (SELECT kurs from WPKurs d where a.wpid = d.wpid\n            group by wpid having max(btag)) as marktwert\n            from WPTrx a\n            where paketid is null \n            group by accountid, wpid)\n\t\t    where accountid = a.id\n            group by accountid) as marktwert\n        from cat a\n        join Account b using(id)\n        JOIN cat c on(c.id = b.verrechnungskonto)\n        where a.supercatid = 1002\n        and a.catclassid != 1"
+      },
+      {
+        "viewName": "CatView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, b.name as obercatname\n        from Cat a\n        join Cat b on a.obercatid = b.id"
+      },
+      {
+        "viewName": "CashTrxView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*\n        ,(select name from Partnerstamm  p where p.id = a.partnerid) as partnername\n        ,(select name from Cat c where c.id = a.accountid) as accountname \n\t\t,c.name as catname, c.catclassid\n\t\t,t.id as importTrxId\n        from CashTrx a \n        left join Cat c on c.id = catid\n        left outer join ImportTrx t on a.id = t.umsatzid"
+      },
+      {
+        "viewName": "GeldflussData",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select r.id as reportid, a.id as catid, a.name  \n            ,(select sum(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between von and bis) as amount   \n            ,(select count(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between von and bis) as repcnt   \n            ,(select sum(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between verglVon and verglBis) as verglAmount   \n            ,(select count(b.amount) from CashTrx b   \n            where b.catid = a.id and b.btag between verglVon and verglBis) as verglRepcnt   \n            from Cat a   \n            left outer join ReportBasisDaten r\n            where catclassid > 100 \n            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d   \n            where d.reportid = r.id)   \n            and a.id not in (select catid from ReportExcludedCats d   \n            where d.reportid = r.id)   \n            group by reportid, a.name having repcnt > 0 or verglRepcnt > 0   \n            order by a.name"
+      },
+      {
+        "viewName": "GeldflussSummenData",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select reportid, sum(einnahmen) as einnahmen, sum(ausgaben) as ausgaben,\n            sum(vergleinnahmen) as verglEinnahmen,  sum(verglausgaben) as verglAusgaben  from (   \n            select a.id   \n            ,(select sum(amount) from CashTrx b where btag between von and bis   \n            and catid = a.id and incomecat) as einnahmen   \n            ,(select sum(amount) from CashTrx b where btag between von and bis     \n            and catid = a.id and not incomecat) as ausgaben   \n            ,(select sum(amount) from CashTrx b where btag between  verglVon and verglBis   \n            and catid = a.id and incomecat) as vergleinnahmen   \n            ,(select sum(amount) from CashTrx b where btag between verglVon and verglBis   \n            and catid = a.id and not incomecat) as verglausgaben   \n            ,r.id as reportid\n            from Cat a   \n            join ReportBasisDaten r  \n            where a.id not in (select catid from ReportExcludedCats d where d.reportid = r.id)\n            and a.catclassid not in (select catclassid from ReportExcludedCatClasses d \n            where d.reportid = r.id\n)   \n            and catclassid > 100  )\n            group by reportid"
+      },
+      {
+        "viewName": "ExcludedCatClasses",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.id, a.name, r.id as reportid, a.id as catclassid,  \n        (select id from ReportExcludedCatClasses b   \n        where b.reportid = r.id and b.catclassid = a.id) as excluded   \n        from CatClass a   \n\t\tjoin ReportBasisDaten r\n        where a.id > 100   \n        order by a.name"
+      },
+      {
+        "viewName": "ExcludedCats",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.reportid, a.catid, \n                (select name from Cat b \n                where b.id = a.catid) as name \n                from ReportExcludedCats a \n                order by name"
+      },
+      {
+        "viewName": "TrxRegelmView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT a.* ,\n        p.name as partnername, acc.name as accountname, c.name as catname,\n        c.catclassid\n        from TrxRegelm a \n        left join Partnerstamm p on p.id = partnerid    \n        left join Cat acc on   acc.id = accountid \n        left join Cat c on c.id = catid"
+      },
+      {
+        "viewName": "WPStammView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS select a.*, name, total(menge) as bestand, total(einstand) as einstand  \n        ,(select total(einstand) from wptrx where wpid = a.id  \n        and catid between 2001 and 2049) as gesamteinkaufpreis \n        ,(select count(einstand) from wptrx where wpid = a.id \n        and catid between 2001 and 2049) as anzahlkauf \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid  \n        and catid between 2101 and 2199) as income \n        ,(select min(btag) from wptrx where wpid = a.id) as firstums \n        ,(select max(btag) from wptrx where wpid = a.id) as lastums\n        ,(select total(amount) from CashTrx  c where a.id = c.partnerid   \n        and catid between 2001 and 2049) as gesamtkauf  \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid \n        and catid in(2201)) as kursverlust \n        ,(select total(amount) from CashTrx c where a.id = c.partnerid \n        and catid in(2200)) as kursgewinn   \n        ,(SELECT kurs from WPKurs d where a.id = d.wpid  \n        group by wpid having max(btag)) as lastkurs    \n        ,(SELECT btag from WPKurs d  where a.id = d.wpid  \n        group by wpid having max(btag)) as lastbtag \n        from WPStamm a    \n        join Partnerstamm p on (p.id = a.partnerid)   \n        left outer join WPTrx b on (b.wpid = a.id) \n        where paketid is null    \n        group by accountid, wpid having bestand > 0   \n        order by name"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '000ff50e85540351931ac8fbf0783445')"
+    ]
+  }
+}

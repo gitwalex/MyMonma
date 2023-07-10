@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -44,10 +45,9 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
     override suspend fun doWork(): Result {
         val start = Data.Builder().putInt(KEY_PROGRESS, 0).build()
         setProgress(start)
-        delay(5000)
-//        withContext(Dispatchers.IO) {
-//            executeDownload()
-//        }
+        withContext(Dispatchers.IO) {
+            executeDownload()
+        }
         val end = Data.Builder().putInt(KEY_PROGRESS, 100).build()
         setProgress(end)
         // Verzögerung notwendig, um ggfs. den Progress beenden zu können...

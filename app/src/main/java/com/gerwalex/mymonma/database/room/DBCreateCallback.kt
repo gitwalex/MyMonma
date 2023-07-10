@@ -54,6 +54,7 @@ internal class DBCreateCallback(context: Context) : RoomDatabase.Callback() {
 
 
     override fun onOpen(db: SupportSQLiteDatabase) {
+
     }
 
     /**

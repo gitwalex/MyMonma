@@ -11,7 +11,7 @@ import java.sql.Date
     foreignKeys = [ForeignKey(
         entity = CashTrx::class,
         parentColumns = ["id"],
-        childColumns = ["id"],
+        childColumns = ["cashtrxid"],
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE
     ), ForeignKey(
@@ -44,6 +44,8 @@ import java.sql.Date
 data class WPTrx(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
+    @ColumnInfo(index = true)
+    var cashtrxid: Long? = null, // id der zugehörigen CashTrx
     var btag: Date = Date(System.currentTimeMillis()),
     @ColumnInfo(index = true)
     var accountid: Long = -1,

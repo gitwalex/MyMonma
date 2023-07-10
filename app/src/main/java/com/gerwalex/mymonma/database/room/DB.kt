@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.gerwalex.monmang.database.room.Migration_49_50
 import com.gerwalex.monmang.database.tables.ImportNewTrx
 import com.gerwalex.monmang.database.tables.ImportTrx
 import com.gerwalex.mymonma.R
@@ -34,11 +33,18 @@ import com.gerwalex.mymonma.database.views.TrxRegelmView
 import com.gerwalex.mymonma.database.views.WPStammView
 
 @Database(
-    entities = [Account::class, CashTrx::class, Cat::class, CatClass::class, ImportAccount::class, ImportNewTrx::class, ImportTrx::class, TrxRegelm::class, Partnerstamm::class, ReportBasisDaten::class, ReportExcludedCats::class, ReportExcludedCatClasses::class, WPStamm::class, WPKurs::class, WPTrx::class],
-    version = 1,
-    views = [AccountCashView::class, AccountDepotView::class, CatView::class, CashTrxView::class, GeldflussData::class, GeldflussSummenData::class, ExcludedCatClasses::class, ExcludedCats::class, TrxRegelmView::class, WPStammView::class, GeldflussData::class]
+    entities = [Account::class, CashTrx::class, Cat::class, CatClass::class, ImportAccount::class,
+        ImportNewTrx::class, ImportTrx::class, TrxRegelm::class, Partnerstamm::class,
+        ReportBasisDaten::class, ReportExcludedCats::class, ReportExcludedCatClasses::class,
+        WPStamm::class, WPKurs::class, WPTrx::class],
+    version = 2,
+    exportSchema = true,
+    views = [AccountCashView::class, AccountDepotView::class, CatView::class,
+        CashTrxView::class, GeldflussData::class, GeldflussSummenData::class,
+        ExcludedCatClasses::class, ExcludedCats::class, TrxRegelmView::class,
+        WPStammView::class, GeldflussData::class]
 )
-@TypeConverters(*[MyConverter::class])
+@TypeConverters(MyConverter::class)
 abstract class DB : RoomDatabase() {
     override fun close() {
         super.close()
@@ -82,11 +88,11 @@ abstract class DB : RoomDatabase() {
                 synchronized(DB::class.java) {
                     if (INSTANCE == null) {
                         val callback = DBCreateCallback(context)
-                        val DBNAME = context.getString(R.string.dbname)
+                        DBNAME = context.getString(R.string.dbname)
                         INSTANCE =
                             databaseBuilder(context.applicationContext, DB::class.java, DBNAME)
                                 .addCallback(callback)
-                                .addMigrations(Migration_49_50(49, 50)) //
+                                .addMigrations(Migration_1_2(1, 2)) //
                                 .build()
                     }
                 }
