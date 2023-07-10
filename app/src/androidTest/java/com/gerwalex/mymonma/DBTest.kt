@@ -7,14 +7,21 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.room.DB.Companion.dao
+import com.gerwalex.mymonma.database.room.DB.Companion.wpdao
+import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.database.tables.CashTrx
+import com.gerwalex.mymonma.database.tables.WPTrx
 import com.gerwalex.mymonma.database.views.CashTrxView
+import com.gerwalex.mymonma.database.views.WPStammView
+import com.gerwalex.mymonma.ui.wp.insertKauf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import java.sql.Date
 
 @RunWith(AndroidJUnit4::class)
 class DBTest {
@@ -81,6 +88,45 @@ class DBTest {
                 assert(saldoAlt2 - 300_00 == saldoNeu2)
                 assert(get(0).partnerid == insertedList[0].partnerid)
                 assert(get(0).partnerid > 0)
+            }
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun executeWPKauf() {
+        val wp: WPStammView
+        val date = Date(System.currentTimeMillis())
+        val menge = 100 * NACHKOMMA
+        val kurs = 50_00L
+        val ausmBetrag = 5005_55L
+        val gebuehren = 5_55L
+        val wptrx: WPTrx
+        runBlocking {
+            val list = wpdao.getWPBestandListe(date).first().filter { it.id == 20L }
+            wp = list[0]
+            val depot = wpdao.getDepot(26)
+
+            wptrx = insertKauf(
+                date = date,
+                menge = menge,
+                kurs = kurs,
+                ausmBetrag = ausmBetrag,
+                gebuehren = gebuehren,
+                wp = wp,
+                depot = depot
+            )
+        }
+        runBlocking {
+            wpdao.getWPBestandListe(date).first().filter { it.id == 20L }.apply {
+                val neuWP = this[0]
+                Log.d("DBTest", "WPNeu: $neuWP ")
+                Log.d("DBTest", "WPAlt: $wp ")
+                assert(wp.bestand + menge == neuWP.bestand)
+                assert(wp.anzahlkauf + 1 == neuWP.anzahlkauf)
+                assert(neuWP.lastums.toString() == date.toString())
+                dao.deleteCashTrx(wptrx.id!!)
+
             }
         }
     }

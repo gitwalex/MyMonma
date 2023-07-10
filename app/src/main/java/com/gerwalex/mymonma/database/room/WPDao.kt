@@ -1,11 +1,15 @@
 package com.gerwalex.mymonma.database.room
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import com.gerwalex.mymonma.database.data.WPPaket
+import com.gerwalex.mymonma.database.room.DB.Companion.dao
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
+import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.Partnerstamm
 import com.gerwalex.mymonma.database.tables.WPKurs
+import com.gerwalex.mymonma.database.tables.WPTrx
 import com.gerwalex.mymonma.database.views.AccountDepotView
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.wptrx.AccountBestand
@@ -184,5 +188,33 @@ abstract class WPDao(val db: DB) {
     """
     )
     abstract suspend fun getWPPaketList(wpid: Long): List<WPPaket>
+
+    @Insert
+    protected abstract suspend fun insert(wptrx: WPTrx): Long
+    suspend fun insert(wpTrx: List<WPTrx>) {
+        if (wpTrx.isNotEmpty()) {
+            val cashTrxList = ArrayList<CashTrx>().apply {
+                wpTrx[0].cashtrx?.forEach {
+                    add(it)
+                }
+                dao.insertCashTrx(this)
+            }
+            val cashtrxid = if (cashTrxList.isNotEmpty()) cashTrxList[0].id else null
+            wpTrx.forEachIndexed { index, trx ->
+                trx.cashtrxid = cashtrxid
+                if (index != 0) {
+                    trx.paketid = wpTrx[0].id
+                }
+                trx.id = insert(trx)
+            }
+        }
+    }
+
+    @Query(
+        """
+        select * from AccountDepotView where id = :depotid
+    """
+    )
+    abstract fun getDepot(depotid: Long): AccountDepotView
 
 }

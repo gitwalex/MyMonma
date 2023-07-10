@@ -26,6 +26,7 @@ import com.gerwalex.mymonma.ui.screens.EditRegelmTrxScreen
 import com.gerwalex.mymonma.ui.screens.HomeScreen
 import com.gerwalex.mymonma.ui.screens.ImportScreen
 import com.gerwalex.mymonma.ui.wp.IncomeScreen
+import com.gerwalex.mymonma.ui.wp.WPKaufScreen
 
 @Composable
 fun MyNavHost(
@@ -106,6 +107,10 @@ fun MyNavHost(
         composable(WPPaketList.route, WPPaketList.arguments) {
             val wpid = it.arguments?.getLong("wpid") ?: -1
             WPPaketList(wpid, navigateTo)
+        }
+        composable(WPKauf.route, WPKauf.arguments) {
+            val wpid = it.arguments?.getLong("wpid") ?: -1
+            WPKaufScreen(wpid, viewModel, navigateTo)
         }
         composable(Einnahmen.route, Einnahmen.arguments) {
             val wpid = it.arguments?.getLong("wpid") ?: -1

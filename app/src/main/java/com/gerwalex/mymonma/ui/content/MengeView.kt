@@ -66,9 +66,10 @@ fun MengeEditView(
             context.getActivity()?.supportFragmentManager?.let { fm ->
                 CalcDialog().apply {
                     settings.also { settings ->
+                        settings.isSignBtnShown = false
                         settings.numberFormat = NumberFormat.getCurrencyInstance()
                         settings.initialValue = BigDecimal(myValue).divide(BigDecimal(NACHKOMMA))
-                        settings.requestCode = ComposeActivity.CalcAmountResultRequest
+                        settings.requestCode = ComposeActivity.CalcMengeResultRequest
                     }
                     fm.setFragmentResultListener(
                         ComposeActivity.CalcMengeResult,
@@ -84,7 +85,7 @@ fun MengeEditView(
                 }
             }
         }) {
-        AmountView(
+        MengeView(
             value = myValue,
             modifier = modifier,
             fontWeight = fontWeight,

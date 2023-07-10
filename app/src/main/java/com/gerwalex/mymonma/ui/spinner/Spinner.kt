@@ -12,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.gerwalex.mymonma.database.views.AccountCashView
+import com.gerwalex.mymonma.database.views.AccountDepotView
 import com.gerwalex.mymonma.ext.rememberState
 
 
@@ -20,6 +21,45 @@ fun AccountCashSpinner(
     accountid: Long,
     accounts: List<AccountCashView>,
     selected: (AccountCashView) -> Unit
+) {
+    if (accounts.isNotEmpty()) {
+        var myAccount by rememberState { accounts[0] }
+        LaunchedEffect(Unit) {
+            accounts.forEach {
+                if (it.id == accountid) {
+                    myAccount = it
+                }
+            }
+        }
+        var isExpanded by rememberState { false }
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = myAccount.name,
+                modifier = Modifier.clickable {
+                    isExpanded = !isExpanded
+                })
+            DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+                accounts
+                    .forEach { account ->
+                        DropdownMenuItem(
+                            text = { Text(text = account.name) },
+                            onClick = {
+                                myAccount = account
+                                selected(account)
+                                isExpanded = false
+                            })
+                    }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun DepotSpinner(
+    accountid: Long,
+    accounts: List<AccountDepotView>,
+    selected: (AccountDepotView) -> Unit
 ) {
     if (accounts.isNotEmpty()) {
         var myAccount by rememberState { accounts[0] }

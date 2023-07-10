@@ -20,6 +20,7 @@ import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.Einnahmen
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
+import com.gerwalex.mymonma.ui.navigation.WPKauf
 import com.gerwalex.mymonma.ui.navigation.WPPaketList
 import java.sql.Date
 
@@ -33,6 +34,12 @@ fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
             when (trxArt) {
                 WPTrxArt.Pakete -> {
                     navigateTo(WPPaketList.apply {
+                        wpid = wp.id
+                    })
+                }
+
+                WPTrxArt.Kauf -> {
+                    navigateTo(WPKauf.apply {
                         wpid = wp.id
                     })
                 }

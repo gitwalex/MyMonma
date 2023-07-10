@@ -58,12 +58,12 @@ fun AmountEditView(
     modifier: Modifier = Modifier,
     fontWeight: FontWeight = FontWeight.Normal,
     colorMode: Boolean = true,
+    isSignBtnShown: Boolean = true,
     onChanged: (Long) -> Unit
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance() }
     val digits = remember { BigDecimal(10.0.pow(currency.maximumFractionDigits.toDouble())) }
-    var myValue by remember { mutableStateOf(0L) }
-    myValue = value
+    var myValue by remember { mutableStateOf(value) }
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     Box(
@@ -71,6 +71,7 @@ fun AmountEditView(
             context.getActivity()?.supportFragmentManager?.let { fm ->
                 CalcDialog().apply {
                     settings.also { settings ->
+                        settings.isSignBtnShown = isSignBtnShown
                         settings.numberFormat = NumberFormat.getCurrencyInstance()
                         settings.initialValue = BigDecimal(myValue).divide(digits)
                         settings.requestCode = ComposeActivity.CalcAmountResultRequest

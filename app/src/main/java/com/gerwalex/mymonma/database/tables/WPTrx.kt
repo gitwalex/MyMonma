@@ -67,6 +67,8 @@ data class WPTrx(
     var abgeltungssteuer: Long = 0,
 
     ) {
+    @Ignore
+    var cashtrx: List<CashTrx>? = null
     val ausmachenderBetrag: Long
         get() {
             return amount + abgeltungssteuer
