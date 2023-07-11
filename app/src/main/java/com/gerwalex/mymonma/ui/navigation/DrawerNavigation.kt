@@ -118,7 +118,7 @@ fun DrawerNavigation(
             Text(
                 modifier = Modifier
                     .padding(top = 8.dp, bottom = 30.dp)
-                    .clickable { navigateTo(Settings) },
+                    .clickable { navigateTo(SettingsDest) },
                 text = stringResource(id = R.string.settings),
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
@@ -181,7 +181,7 @@ private fun prepareSettingsItems(): List<NavigationDrawerItem> {
         NavigationDrawerItem(
             imageVector = Icons.Filled.Settings,
             label = stringResource(id = R.string.settings),
-            destination = Settings
+            destination = SettingsDest
         )
     )
     return itemsList
@@ -194,14 +194,14 @@ private fun prepareNavigationItems(): List<NavigationDrawerItem> {
         NavigationDrawerItem(
             imageVector = Icons.Filled.ImportExport,
             label = stringResource(id = R.string.imporCashTrx),
-            destination = ImportCashTrx,
+            destination = ImportCashTrxDest,
         )
     )
     itemsList.add(
         NavigationDrawerItem(
             imageVector = Icons.Filled.Download,
             label = stringResource(id = R.string.event_download_kurse),
-            destination = DownloadKurse,
+            destination = DownloadKurseDest,
         )
     )
 

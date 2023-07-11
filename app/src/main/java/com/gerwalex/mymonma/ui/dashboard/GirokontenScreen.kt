@@ -31,14 +31,14 @@ import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
-import com.gerwalex.mymonma.ui.navigation.CashTrxList
+import com.gerwalex.mymonma.ui.navigation.CashTrxListDest
 import com.gerwalex.mymonma.ui.navigation.Destination
 
 @Composable
 fun GirokontenScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val accountList by viewModel.accountlist.collectAsStateWithLifecycle(emptyList())
     GirokontenScreen(list = accountList.filter { it.obercatid == Cat.GiroCATID && !it.ausgeblendet }) {
-        navigateTo(CashTrxList.apply {
+        navigateTo(CashTrxListDest.apply {
             id = it.id
         })
     }

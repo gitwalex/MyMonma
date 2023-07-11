@@ -1,6 +1,5 @@
 package com.gerwalex.mymonma.main
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
@@ -10,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
-class WorkProgressObserver(context: Context) {
-    private val workmanager = WorkManager.getInstance(context.applicationContext)
+object WorkProgressObserver {
+    private lateinit var workmanager: WorkManager
     private var lastWorkId: UUID? = null
     private val workInfoObserver = Observer { workInfo: WorkInfo? ->
         onWorkInfoChanged(workInfo)
@@ -38,7 +37,8 @@ class WorkProgressObserver(context: Context) {
         }
     }
 
-    suspend fun observe(workId: UUID) {
+    suspend fun observe(workmanager: WorkManager, workId: UUID) {
+        this.workmanager = workmanager
         withContext(Dispatchers.Main) {
             removeObserverFromLastWork()
             workmanager

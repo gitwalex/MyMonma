@@ -14,7 +14,7 @@ interface Destination {
 
 }
 
-object Home : Destination {
+object HomeDest : Destination {
     override val title: Int = R.string.app_name
     override val name: String = "Home"
     override val route = name
@@ -37,7 +37,7 @@ object Up : Destination {
 
 }
 
-object ImportData : Destination {
+object ImportDataDest : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "ImportData"
@@ -49,7 +49,7 @@ object ImportData : Destination {
 
 }
 
-object ImportCashTrx : Destination {
+object ImportCashTrxDest : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "ImportCashTrx"
@@ -61,7 +61,7 @@ object ImportCashTrx : Destination {
 
 }
 
-object DownloadKurse : Destination {
+object DownloadKurseDest : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "DownloadKurse"
@@ -97,7 +97,7 @@ object NotInProgress : Destination {
 
 }
 
-object CashTrxList : Destination {
+object CashTrxListDest : Destination {
     var id: Long = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
@@ -111,7 +111,7 @@ object CashTrxList : Destination {
 
 }
 
-object EditCashTrx : Destination {
+object EditCashTrxDest : Destination {
     var id: Long = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
@@ -127,7 +127,7 @@ object EditCashTrx : Destination {
 
 }
 
-object AddCashTrx : Destination {
+object AddCashTrxDest : Destination {
     var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
@@ -142,7 +142,7 @@ object AddCashTrx : Destination {
 
 }
 
-object Settings : Destination {
+object SettingsDest : Destination {
     override val title: Int = R.string.settings
     override val name: String = "Settings"
     override val route = name
@@ -152,7 +152,7 @@ object Settings : Destination {
 
 }
 
-object RestoreDatabase : Destination {
+object RestoreDatabaseDest : Destination {
     override val title: Int = R.string.settings
     override val name: String = "RestoreDatabase"
     override val route = name
@@ -163,7 +163,7 @@ object RestoreDatabase : Destination {
 }
 
 
-object AccountList : Destination {
+object AccountListDest : Destination {
     override val title: Int = R.string.accountlist
     override val name: String = "AccountList"
     override val route = name
@@ -173,7 +173,7 @@ object AccountList : Destination {
 
 }
 
-object RegelmTrxList : Destination {
+object RegelmTrxListDest : Destination {
     override val title: Int = R.string.trxRegelm
     override val name: String = "RegelmTrxList"
 
@@ -185,7 +185,7 @@ object RegelmTrxList : Destination {
 
 }
 
-object AddRegelmTrx : Destination {
+object AddRegelmTrxDest : Destination {
     var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
@@ -200,7 +200,7 @@ object AddRegelmTrx : Destination {
 
 }
 
-object EditRegelmTrx : Destination {
+object EditRegelmTrxDest : Destination {
     var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
@@ -215,7 +215,7 @@ object EditRegelmTrx : Destination {
     }
 }
 
-object ReportList : Destination {
+object ReportListDest : Destination {
     override val title = R.string.myReports
     override val name: String = "ReportList"
 
@@ -227,7 +227,7 @@ object ReportList : Destination {
 
 }
 
-object AddReport : Destination {
+object AddReportDest : Destination {
     override val title: Int
         get() = TODO("Not yet implemented")
     override val name: String = "AddReport"
@@ -240,7 +240,7 @@ object AddReport : Destination {
 
 }
 
-object EditReport : Destination {
+object EditReportDest : Destination {
     var id = 0L
     override val title: Int
         get() = TODO("Not yet implemented")
@@ -255,10 +255,10 @@ object EditReport : Destination {
     }
 }
 
-object ReportDetailScreen : Destination {
-    var id = 0L
+object GeldflussDetailScreenDest : Destination {
+    var reportid = 0L
     override val title = R.string.myReports
-    override val name: String = "ReportDetailScreen"
+    override val name: String = "GeldflussDetailScreen"
 
 
     override val route = "$name/{reportid}"
@@ -266,12 +266,28 @@ object ReportDetailScreen : Destination {
 
 
     override fun navigate(navController: NavController) {
-        navController.navigate("${name}/$id")
+        navController.navigate("${name}/$reportid")
     }
 
 }
 
-object ReportGeldflussDetail : Destination {
+object PartnerDetailScreenDest : Destination {
+    var reportid = 0L
+    override val title = R.string.myReports
+    override val name: String = "PartnerDetailScreen"
+
+
+    override val route = "$name/{reportid}"
+    val arguments = listOf(navArgument("reportid") { type = NavType.LongType })
+
+
+    override fun navigate(navController: NavController) {
+        navController.navigate("${name}/$reportid")
+    }
+
+}
+
+object ReportGeldflussDetailDest : Destination {
     var reportid = 0L
     var catid = 0L
     override val title = R.string.myReports
@@ -290,7 +306,7 @@ object ReportGeldflussDetail : Destination {
 
 }
 
-object ReportGeldflussVerglDetail : Destination {
+object ReportGeldflussVerglDetailDest : Destination {
     var reportid = 0L
     var catid = 0L
     override val title = R.string.myReports
@@ -309,7 +325,7 @@ object ReportGeldflussVerglDetail : Destination {
 
 }
 
-object PartnerGeldflussDetails : Destination {
+object PartnerGeldflussDetailsDest : Destination {
     var reportid = 0L
     var partnerid = 0L
     override val title = R.string.myReports
@@ -328,7 +344,7 @@ object PartnerGeldflussDetails : Destination {
 
 }
 
-object WPBestandList : Destination {
+object WPBestandListDest : Destination {
     override val title = R.string.wpbestandlist
     override val name: String = "WPBestandList"
 
@@ -340,7 +356,7 @@ object WPBestandList : Destination {
 
 }
 
-object WPPaketList : Destination {
+object WPPaketListDest : Destination {
     var wpid: Long = 0
     override val title = R.string.dividende
     override val name = "WPPaketList"
@@ -356,7 +372,7 @@ object WPPaketList : Destination {
 
 }
 
-object WPKauf : Destination {
+object WPKaufDest : Destination {
     var wpid: Long = 0
     override val title = R.string.dividende
     override val name = "WPKauf"
@@ -372,7 +388,7 @@ object WPKauf : Destination {
 
 }
 
-object Einnahmen : Destination {
+object EinnahmenDest : Destination {
     var wpid: Long = 0
     override val title = R.string.dividende
     override val name = "Dividende"

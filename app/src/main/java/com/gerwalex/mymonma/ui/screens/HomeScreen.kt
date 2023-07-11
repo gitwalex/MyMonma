@@ -40,7 +40,7 @@ import com.gerwalex.mymonma.ui.dashboard.YearMonthReport
 import com.gerwalex.mymonma.ui.navigation.BottomNavigation
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.DrawerNavigation
-import com.gerwalex.mymonma.ui.navigation.ImportCashTrx
+import com.gerwalex.mymonma.ui.navigation.ImportCashTrxDest
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import kotlinx.coroutines.launch
 
@@ -77,7 +77,7 @@ fun HomeScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
                         Icons.Default.Menu,
                         actions = {
                             IconButton(
-                                onClick = { navigateTo(ImportCashTrx) },
+                                onClick = { navigateTo(ImportCashTrxDest) },
                                 modifier = Modifier.scale(1.5f)
                             ) {
                                 Icon(

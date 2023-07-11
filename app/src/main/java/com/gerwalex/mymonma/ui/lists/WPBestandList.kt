@@ -17,11 +17,11 @@ import com.gerwalex.mymonma.enums.WPTrxArt
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.Destination
-import com.gerwalex.mymonma.ui.navigation.Einnahmen
+import com.gerwalex.mymonma.ui.navigation.EinnahmenDest
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
-import com.gerwalex.mymonma.ui.navigation.WPKauf
-import com.gerwalex.mymonma.ui.navigation.WPPaketList
+import com.gerwalex.mymonma.ui.navigation.WPKaufDest
+import com.gerwalex.mymonma.ui.navigation.WPPaketListDest
 import java.sql.Date
 
 
@@ -33,19 +33,19 @@ fun WPBestandList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
         WPBestandList(list = list, navigateTo = navigateTo) { wp, trxArt ->
             when (trxArt) {
                 WPTrxArt.Pakete -> {
-                    navigateTo(WPPaketList.apply {
+                    navigateTo(WPPaketListDest.apply {
                         wpid = wp.id
                     })
                 }
 
                 WPTrxArt.Kauf -> {
-                    navigateTo(WPKauf.apply {
+                    navigateTo(WPKaufDest.apply {
                         wpid = wp.id
                     })
                 }
 
                 WPTrxArt.Income -> {
-                    navigateTo(Einnahmen.apply {
+                    navigateTo(EinnahmenDest.apply {
                         wpid = wp.id
                     })
                 }

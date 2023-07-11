@@ -35,8 +35,8 @@ import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
-import com.gerwalex.mymonma.ui.navigation.AccountList
-import com.gerwalex.mymonma.ui.navigation.CashTrxList
+import com.gerwalex.mymonma.ui.navigation.AccountListDest
+import com.gerwalex.mymonma.ui.navigation.CashTrxListDest
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
@@ -45,7 +45,7 @@ import com.gerwalex.mymonma.ui.navigation.Up
 fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     Scaffold(
         topBar = {
-            TopToolBar(title = AccountList.name) {
+            TopToolBar(title = AccountListDest.name) {
                 navigateTo(Up)
             }
         }
@@ -103,7 +103,7 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                                 key = { account -> account.id })
                             { accountid ->
                                 AccountCashListItem(accountid) {
-                                    navigateTo(CashTrxList.apply { id = accountid.id })
+                                    navigateTo(CashTrxListDest.apply { id = accountid.id })
                                 }
                             }
                         }
@@ -136,7 +136,7 @@ fun AccountListScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Un
                         key = { account -> account.id })
                     { accountid ->
                         AccountDepotListItem(accountid) {
-                            navigateTo(CashTrxList.apply { id = accountid.id })
+                            navigateTo(CashTrxListDest.apply { id = accountid.id })
                         }
                     }
                 }

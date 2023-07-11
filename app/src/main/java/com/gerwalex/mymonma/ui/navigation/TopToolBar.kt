@@ -59,7 +59,7 @@ fun TopToolBar(
 fun Preview() {
     AppTheme {
         Surface {
-            TopToolBar(title = stringResource(id = Home.title)) {}
+            TopToolBar(title = stringResource(id = HomeDest.title)) {}
         }
     }
 }

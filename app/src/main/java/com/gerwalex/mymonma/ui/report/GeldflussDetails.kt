@@ -21,7 +21,7 @@ import com.gerwalex.mymonma.database.views.CashTrxViewItem
 import com.gerwalex.mymonma.ext.scaleOnPress
 import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.navigation.Destination
-import com.gerwalex.mymonma.ui.navigation.ReportList
+import com.gerwalex.mymonma.ui.navigation.ReportListDest
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 
@@ -70,7 +70,7 @@ fun GeldflussDetailsList(
     Scaffold(
         topBar = {
             TopToolBar(
-                stringResource(id = ReportList.title)
+                stringResource(id = ReportListDest.title)
             ) {
                 navigateTo(Up)
             }

@@ -54,10 +54,10 @@ import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.DateView
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
-import com.gerwalex.mymonma.ui.navigation.AddRegelmTrx
+import com.gerwalex.mymonma.ui.navigation.AddRegelmTrxDest
 import com.gerwalex.mymonma.ui.navigation.Destination
-import com.gerwalex.mymonma.ui.navigation.EditRegelmTrx
-import com.gerwalex.mymonma.ui.navigation.RegelmTrxList
+import com.gerwalex.mymonma.ui.navigation.EditRegelmTrxDest
+import com.gerwalex.mymonma.ui.navigation.RegelmTrxListDest
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import com.gerwalex.mymonma.workers.RegelmTrxWorker
@@ -75,10 +75,10 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             topBar = {
                 TopToolBar(
-                    title = RegelmTrxList.name,
+                    title = RegelmTrxListDest.name,
                     actions = {
                         IconButton(
-                            onClick = { navigateTo(AddRegelmTrx) },
+                            onClick = { navigateTo(AddRegelmTrxDest) },
                             modifier = Modifier.scale(1.5f)
                         ) {
                             Icon(imageVector = Icons.Default.Add, "")
@@ -102,7 +102,7 @@ fun RegelmTrxList(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
                 items(list, key = { item -> item.id!! }) { item ->
                     TrxRegelmItem(
                         trx = item, selectedItem = { trx ->
-                            navigateTo(EditRegelmTrx.apply {
+                            navigateTo(EditRegelmTrxDest.apply {
                                 id = trx.id!!
                             })
                         },

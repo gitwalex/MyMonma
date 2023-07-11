@@ -37,7 +37,7 @@ import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.DateView
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.Destination
-import com.gerwalex.mymonma.ui.navigation.RestoreDatabase
+import com.gerwalex.mymonma.ui.navigation.RestoreDatabaseDest
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import kotlinx.coroutines.launch
@@ -72,7 +72,7 @@ fun SettingScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
                 Text(text = stringResource(id = R.string.backupNow))
             }
             TextButton(onClick = {
-                navigateTo(RestoreDatabase)
+                navigateTo(RestoreDatabaseDest)
             }) {
                 Text(text = stringResource(id = R.string.restoreDB))
             }

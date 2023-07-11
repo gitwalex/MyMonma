@@ -26,7 +26,7 @@ import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.room.FileUtils
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.navigation.Destination
-import com.gerwalex.mymonma.ui.navigation.Home
+import com.gerwalex.mymonma.ui.navigation.HomeDest
 import com.gerwalex.mymonma.ui.navigation.InProgress
 import com.gerwalex.mymonma.ui.navigation.NotInProgress
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +63,7 @@ fun ImportScreen(navigateTo: (Destination) -> Unit) {
 
             }
         }
-        Button(onClick = { navigateTo(Home) }, enabled = finished) {
+        Button(onClick = { navigateTo(HomeDest) }, enabled = finished) {
             Text(text = "zurück")
         }
     }

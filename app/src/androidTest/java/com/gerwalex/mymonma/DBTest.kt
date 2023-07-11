@@ -11,6 +11,7 @@ import com.gerwalex.mymonma.database.room.DB.Companion.wpdao
 import com.gerwalex.mymonma.database.room.MyConverter.NACHKOMMA
 import com.gerwalex.mymonma.database.tables.CashTrx
 import com.gerwalex.mymonma.database.tables.WPTrx
+import com.gerwalex.mymonma.database.views.AccountCashView
 import com.gerwalex.mymonma.database.views.CashTrxView
 import com.gerwalex.mymonma.database.views.WPStammView
 import com.gerwalex.mymonma.ui.wp.insertKauf
@@ -102,10 +103,12 @@ class DBTest {
         val ausmBetrag = 5005_55L
         val gebuehren = 5_55L
         val wptrx: WPTrx
+        val cashAccount: AccountCashView
         runBlocking {
             val list = wpdao.getWPBestandListe(date).first().filter { it.id == 20L }
             wp = list[0]
             val depot = wpdao.getDepot(26)
+            cashAccount = dao.getCashAccount(depot.verrechnungskonto!!)!!
 
             wptrx = insertKauf(
                 date = date,
@@ -125,9 +128,13 @@ class DBTest {
                 assert(wp.bestand + menge == neuWP.bestand)
                 assert(wp.anzahlkauf + 1 == neuWP.anzahlkauf)
                 assert(neuWP.lastums.toString() == date.toString())
-                dao.deleteCashTrx(wptrx.id!!)
 
             }
+            dao.getCashAccount(cashAccount.id).also {
+                assert(cashAccount.saldo - ausmBetrag == it?.saldo)
+            }
+            dao.deleteCashTrx(wptrx.id!!)
+
         }
     }
 }

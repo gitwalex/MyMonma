@@ -14,7 +14,7 @@ fun BottomNavigation(navigateTo: (Destination) -> Unit) {
     NavigationBar {
         NavigationBarItem(
             selected = false,
-            onClick = { navigateTo(WPBestandList) },
+            onClick = { navigateTo(WPBestandListDest) },
             icon = { Icon(Icons.Default.List, "") },
             label = {
                 Text(
@@ -25,7 +25,7 @@ fun BottomNavigation(navigateTo: (Destination) -> Unit) {
 
         NavigationBarItem(
             selected = false,
-            onClick = { navigateTo(ReportList) },
+            onClick = { navigateTo(ReportListDest) },
             icon = { Icon(Icons.Default.List, "") },
             label = {
                 Text(
@@ -35,7 +35,7 @@ fun BottomNavigation(navigateTo: (Destination) -> Unit) {
             })
         NavigationBarItem(
             selected = false,
-            onClick = { navigateTo(AccountList) },
+            onClick = { navigateTo(AccountListDest) },
             icon = { Icon(Icons.Default.List, "") },
             label = {
                 Text(
@@ -45,7 +45,7 @@ fun BottomNavigation(navigateTo: (Destination) -> Unit) {
             })
         NavigationBarItem(
             selected = false,
-            onClick = { navigateTo(RegelmTrxList) },
+            onClick = { navigateTo(RegelmTrxListDest) },
             icon = { Icon(Icons.Default.List, "") },
             label = {
                 Text(

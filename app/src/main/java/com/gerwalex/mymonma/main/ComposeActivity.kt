@@ -35,8 +35,8 @@ import com.gerwalex.mymonma.ext.registerActivityForResult
 import com.gerwalex.mymonma.ext.registerforPermissionRequest
 import com.gerwalex.mymonma.ui.AppTheme
 import com.gerwalex.mymonma.ui.navigation.Destination
-import com.gerwalex.mymonma.ui.navigation.DownloadKurse
-import com.gerwalex.mymonma.ui.navigation.ImportCashTrx
+import com.gerwalex.mymonma.ui.navigation.DownloadKurseDest
+import com.gerwalex.mymonma.ui.navigation.ImportCashTrxDest
 import com.gerwalex.mymonma.ui.navigation.InProgress
 import com.gerwalex.mymonma.ui.navigation.MyNavHost
 import com.gerwalex.mymonma.ui.navigation.NotInProgress
@@ -97,8 +97,8 @@ class ComposeActivity : AppCompatActivity(), CalcDialog.CalcDialogCallback {
 
     fun navigateTo(destination: Destination) {
         when (destination) {
-            DownloadKurse -> KursDownloadWorker.submit(this)
-            ImportCashTrx -> performFileSearch()
+            DownloadKurseDest -> KursDownloadWorker.submit(this)
+            ImportCashTrxDest -> performFileSearch()
             else -> destination.navigate(navController)
         }
     }

@@ -61,9 +61,9 @@ import com.gerwalex.mymonma.main.MonMaViewModel
 import com.gerwalex.mymonma.ui.content.AmountView
 import com.gerwalex.mymonma.ui.content.DateView
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
-import com.gerwalex.mymonma.ui.navigation.AddCashTrx
+import com.gerwalex.mymonma.ui.navigation.AddCashTrxDest
 import com.gerwalex.mymonma.ui.navigation.Destination
-import com.gerwalex.mymonma.ui.navigation.EditCashTrx
+import com.gerwalex.mymonma.ui.navigation.EditCashTrxDest
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
 import kotlinx.coroutines.launch
@@ -80,8 +80,8 @@ fun CashTrxListScreen(
     val message = stringResource(id = R.string.deleted)
     val undo = stringResource(id = R.string.undo)
 
-    val list by viewModel.getCashTrxList(accountid).collectAsStateWithLifecycle(emptyList())
-    val account by viewModel.getAccount(accountid).collectAsStateWithLifecycle(Cat())
+    val list by dao.getCashTrxList(accountid).collectAsStateWithLifecycle(emptyList())
+    val account by dao.getAccountData(accountid).collectAsStateWithLifecycle(Cat())
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -90,7 +90,7 @@ fun CashTrxListScreen(
                 account.name,
                 actions = {
                     IconButton(
-                        onClick = { navigateTo(AddCashTrx.apply { id = accountid }) },
+                        onClick = { navigateTo(AddCashTrxDest.apply { id = accountid }) },
                         modifier = Modifier.scale(1.5f)
                     ) {
                         Icon(imageVector = Icons.Default.Add, "")
@@ -115,7 +115,7 @@ fun CashTrxListScreen(
                             CashTrxItem(
                                 trx = trx,
                                 selectedItem = {
-                                    navigateTo(EditCashTrx.apply { id = trx.id!! })
+                                    navigateTo(EditCashTrxDest.apply { id = trx.id!! })
                                 },
                                 onDismissed = {
                                     scope.launch {

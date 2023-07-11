@@ -14,9 +14,10 @@ import com.gerwalex.mymonma.ui.lists.WPBestandList
 import com.gerwalex.mymonma.ui.lists.WPPaketList
 import com.gerwalex.mymonma.ui.report.AddReportData
 import com.gerwalex.mymonma.ui.report.EditReportData
+import com.gerwalex.mymonma.ui.report.GeldflussDetailScreen
 import com.gerwalex.mymonma.ui.report.GeldflussDetails
+import com.gerwalex.mymonma.ui.report.PartnerDetailScreen
 import com.gerwalex.mymonma.ui.report.PartnerGeldflussDetails
-import com.gerwalex.mymonma.ui.report.ReportDetailScreen
 import com.gerwalex.mymonma.ui.report.ReportGeldflussVerglDetails
 import com.gerwalex.mymonma.ui.report.ReportListScreen
 import com.gerwalex.mymonma.ui.screens.AddCashTrxScreen
@@ -34,85 +35,89 @@ fun MyNavHost(
     viewModel: MonMaViewModel,
     navigateTo: (destination: Destination) -> Unit
 ) {
-    NavHost(navController = navController, startDestination = Home.name) {
-        composable(Home.name) {
+    NavHost(navController = navController, startDestination = HomeDest.name) {
+        composable(HomeDest.name) {
             HomeScreen(viewModel = viewModel, navigateTo)
         }
-        composable(Settings.name) {
+        composable(SettingsDest.name) {
             SettingScreen(viewModel, navigateTo)
         }
-        composable(RestoreDatabase.name) {
+        composable(RestoreDatabaseDest.name) {
             ListFiles("zip", navigateTo = navigateTo)
         }
-        composable(AccountList.name) {
+        composable(AccountListDest.name) {
             AccountListScreen(viewModel, navigateTo)
         }
-        composable(ImportData.name) {
+        composable(ImportDataDest.name) {
             ImportScreen(navigateTo)
         }
-        composable(CashTrxList.route, CashTrxList.arguments) {
+        composable(CashTrxListDest.route, CashTrxListDest.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             CashTrxListScreen(id, viewModel, navigateTo)
         }
-        composable(RegelmTrxList.name) {
+        composable(RegelmTrxListDest.name) {
             RegelmTrxList(viewModel, navigateTo)
         }
-        composable(AddCashTrx.route, AddCashTrx.arguments) {
+        composable(AddCashTrxDest.route, AddCashTrxDest.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             AddCashTrxScreen(id, viewModel, navigateTo)
         }
-        composable(EditCashTrx.route, EditCashTrx.arguments) {
+        composable(EditCashTrxDest.route, EditCashTrxDest.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             EditCashTrxScreen(id, viewModel, navigateTo)
         }
-        composable(AddRegelmTrx.route) {
+        composable(AddRegelmTrxDest.route) {
             AddRegelmTrxScreen(viewModel, navigateTo)
         }
-        composable(EditRegelmTrx.route, EditRegelmTrx.arguments) {
+        composable(EditRegelmTrxDest.route, EditRegelmTrxDest.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             EditRegelmTrxScreen(id, viewModel, navigateTo)
         }
-        composable(ReportList.name) {
+        composable(ReportListDest.name) {
             ReportListScreen(viewModel, navigateTo)
         }
-        composable(EditReport.route, EditReport.arguments) {
+        composable(EditReportDest.route, EditReportDest.arguments) {
             val id = it.arguments?.getLong("id") ?: -1
             EditReportData(id, viewModel, navigateTo)
         }
-        composable(AddReport.name) {
+        composable(AddReportDest.name) {
             AddReportData(viewModel, navigateTo)
         }
-        composable(ReportDetailScreen.route, ReportDetailScreen.arguments) {
+        composable(GeldflussDetailScreenDest.route, GeldflussDetailScreenDest.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
-            ReportDetailScreen(reportid, viewModel, navigateTo)
+            GeldflussDetailScreen(reportid, navigateTo)
         }
-        composable(ReportGeldflussDetail.route, ReportGeldflussDetail.arguments) {
+        composable(PartnerDetailScreenDest.route, PartnerDetailScreenDest.arguments) {
+            val reportid = it.arguments?.getLong("reportid") ?: -1
+            PartnerDetailScreen(reportid, navigateTo)
+        }
+        composable(ReportGeldflussDetailDest.route, ReportGeldflussDetailDest.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val catid = it.arguments?.getLong("catid") ?: -1
             GeldflussDetails(reportid, catid, viewModel, navigateTo)
         }
-        composable(ReportGeldflussVerglDetail.route, ReportGeldflussVerglDetail.arguments) {
+        composable(ReportGeldflussVerglDetailDest.route, ReportGeldflussVerglDetailDest.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val catid = it.arguments?.getLong("catid") ?: -1
             ReportGeldflussVerglDetails(reportid, catid, viewModel, navigateTo)
         }
-        composable(PartnerGeldflussDetails.route, PartnerGeldflussDetails.arguments) {
+        composable(PartnerGeldflussDetailsDest.route, PartnerGeldflussDetailsDest.arguments) {
             val reportid = it.arguments?.getLong("reportid") ?: -1
             val partnerid = it.arguments?.getLong("partnerid") ?: -1
             PartnerGeldflussDetails(reportid, partnerid, viewModel, navigateTo)
         }
-        composable(WPBestandList.name) {
+        composable(WPBestandListDest.name) {
             WPBestandList(viewModel, navigateTo)
         }
-        composable(WPPaketList.route, WPPaketList.arguments) {
+        composable(WPPaketListDest.route, WPPaketListDest.arguments) {
             val wpid = it.arguments?.getLong("wpid") ?: -1
             WPPaketList(wpid, navigateTo)
         }
-        composable(WPKauf.route, WPKauf.arguments) {
+        composable(WPKaufDest.route, WPKaufDest.arguments) {
             val wpid = it.arguments?.getLong("wpid") ?: -1
             WPKaufScreen(wpid, viewModel, navigateTo)
         }
-        composable(Einnahmen.route, Einnahmen.arguments) {
+        composable(EinnahmenDest.route, EinnahmenDest.arguments) {
             val wpid = it.arguments?.getLong("wpid") ?: -1
             IncomeScreen(wpid, viewModel, navigateTo)
         }
