@@ -30,7 +30,6 @@ fun QuerySearch(
     label: String,
     error: String? = null,
     onDoneActionClick: () -> Unit = {},
-    onClearClick: () -> Unit = {},
     onQueryChanged: (String) -> Unit,
     onFocusChanged: (isFocused: Boolean) -> Unit = {}
 ) {
@@ -78,7 +77,7 @@ fun QuerySearch(
         textStyle = MaterialTheme.typography.bodyLarge,
         trailingIcon = {
             if (showClearButton) {
-                IconButton(onClick = { onClearClick() }) {
+                IconButton(onClick = { onQueryChanged("") }) {
                     Icon(imageVector = Icons.Filled.Close, contentDescription = "Clear")
                 }
             }

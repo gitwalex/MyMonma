@@ -116,7 +116,13 @@ fun GeldflussDetailScreen(
                     },
 
                     sheetContent = {
-                        ZeitraumCard(report = report)
+                        ZeitraumCard(report = report, selected = {
+                            report.zeitraum = it
+                            report.von = it.dateSelection.startDate
+                            report.bis = it.dateSelection.endDate
+                            report.update()
+
+                        })
                         VerglZeitraumCard(report = report)
                         BottomNavigationBar {
                             drawerContent = it

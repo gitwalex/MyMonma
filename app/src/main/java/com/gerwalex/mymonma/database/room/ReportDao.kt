@@ -131,12 +131,12 @@ abstract class ReportDao(db: DB) {
         where b.partnerid = a.id and b.btag between von and bis) as repcnt   
         from Partnerstamm a   
         left outer join ReportBasisDaten r
-        where reportid = :reportid
+        where reportid = :reportid and a.name like '%'||:filter ||'%'
         group by reportid, partnerid having repcnt > 0
         order by a.name
     """
     )
-    abstract fun getPartnerdatenReport(reportid: Long): Flow<List<PartnerdatenReport>>
+    abstract suspend fun getPartnerdaten(reportid: Long, filter: String): List<PartnerdatenReport>
 
     @Query(
         """

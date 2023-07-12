@@ -20,7 +20,7 @@ import com.gerwalex.mymonma.enums.ReportDateSpinner
 import com.gerwalex.mymonma.ui.content.DatePickerView
 
 @Composable
-fun ZeitraumCard(report: ReportBasisDaten) {
+fun ZeitraumCard(report: ReportBasisDaten, selected: (ReportDateSelector) -> Unit) {
     Card(modifier = Modifier.padding(4.dp)) {
         Column {
             Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -30,10 +30,7 @@ fun ZeitraumCard(report: ReportBasisDaten) {
                     textAlign = TextAlign.Center
                 )
                 ReportDateSpinner(selector = report.zeitraum, selected = {
-                    report.zeitraum = it
-                    report.von = it.dateSelection.startDate
-                    report.bis = it.dateSelection.endDate
-                    report.update()
+                    selected(it)
                 })
 
             }
@@ -66,3 +63,26 @@ fun ZeitraumCard(report: ReportBasisDaten) {
 
     }
 }
+
+@Composable
+fun ZeitraumCard(
+    zeitraum: ReportDateSelector,
+    onChanged: (zeitraum: ReportDateSelector) -> Unit
+) {
+    Card(modifier = Modifier.padding(4.dp)) {
+        Column {
+            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = stringResource(id = R.string.zeitraum),
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
+                ReportDateSpinner(selector = zeitraum, selected = {
+                    onChanged(it)
+                })
+
+            }
+        }
+    }
+}
+

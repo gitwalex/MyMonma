@@ -56,9 +56,6 @@ fun <T> AutoCompleteTextView(
                 view.clearFocus()
                 onDismissRequest()
             },
-            onClearClick = {
-                onQueryChanged("")
-            },
             onFocusChanged = { focused ->
                 onFocusChanged(focused)
                 shouldShowDropdown = focused

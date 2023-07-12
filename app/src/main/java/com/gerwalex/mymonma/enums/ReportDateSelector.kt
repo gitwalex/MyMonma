@@ -179,6 +179,10 @@ enum class ReportDateSelector {
      */
     abstract val dateSelection: VonBisDate
 
+    override fun toString(): String {
+        return "DateSelector: name=$name, von=${dateSelection.startDate}, bis=${dateSelection.endDate}"
+    }
+
     /**
      * @param cal Basisdatum
      * @return Liefert den Quartalsbeginn zum Basisdatum cal
