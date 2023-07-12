@@ -31,15 +31,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.ext.backup
+import com.gerwalex.mymonma.ext.getUniqueWorkInfoState
 import com.gerwalex.mymonma.ext.rememberState
 import com.gerwalex.mymonma.ext.restore
 import com.gerwalex.mymonma.main.MonMaViewModel
-import com.gerwalex.mymonma.ui.content.DateView
+import com.gerwalex.mymonma.ui.content.DateTimeView
 import com.gerwalex.mymonma.ui.content.NoEntriesBox
 import com.gerwalex.mymonma.ui.navigation.Destination
 import com.gerwalex.mymonma.ui.navigation.RestoreDatabaseDest
 import com.gerwalex.mymonma.ui.navigation.TopToolBar
 import com.gerwalex.mymonma.ui.navigation.Up
+import com.gerwalex.mymonma.workers.KursDownloadWorker
+import com.gerwalex.mymonma.workers.MaintenanceWorker
 import kotlinx.coroutines.launch
 import java.io.File
 import java.sql.Date
@@ -49,12 +52,19 @@ import java.sql.Date
 fun SettingScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val settings by viewModel.dataStore.data.collectAsStateWithLifecycle( emptyPreferences())
-    var lastMaintenance by rememberState { 0L }
-    var nextKursDownload by rememberState { 0L }
-    lastMaintenance = settings[PreferenceKey.LastMaintenance] ?: -1
-    nextKursDownload = settings[PreferenceKey.NextKursDownload] ?: -1
-
+    val settings by viewModel.dataStore.data.collectAsStateWithLifecycle(emptyPreferences())
+    val lastMaintenance by rememberState(settings) { settings[PreferenceKey.LastMaintenance] ?: -1 }
+    val nextKursDownload by rememberState(settings) {
+        settings[PreferenceKey.NextKursDownload] ?: -1
+    }
+    var maintenceWorkerStatus by rememberState { "Unknown" }
+    var downloadWorkerStatus by rememberState { "Unknown" }
+    LaunchedEffect(Unit) {
+        maintenceWorkerStatus =
+            context.getUniqueWorkInfoState(MaintenanceWorker.tag)?.name ?: "No Work found"
+        downloadWorkerStatus =
+            context.getUniqueWorkInfoState(KursDownloadWorker.tag)?.name ?: "No Work found"
+    }
     Scaffold(
         topBar = {
             TopToolBar(
@@ -85,10 +95,12 @@ fun SettingScreen(viewModel: MonMaViewModel, navigateTo: (Destination) -> Unit) 
             )
             Text(text = stringResource(id = R.string.lastMaintenance))
             if (lastMaintenance > 0)
-                DateView(date = Date(lastMaintenance)) else Text("--")
+                DateTimeView(date = Date(lastMaintenance)) else Text("--")
+            Text("($maintenceWorkerStatus)")
             Text(text = stringResource(id = R.string.nextKursDownload))
             if (nextKursDownload > 0)
-                DateView(date = Date(nextKursDownload)) else Text("--")
+                DateTimeView(date = Date(nextKursDownload)) else Text("--")
+            Text("($downloadWorkerStatus)")
 
         }
     }

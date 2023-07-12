@@ -19,6 +19,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.preference.PreferenceManager
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.await
 import com.gerwalex.mymonma.R
 import com.gerwalex.mymonma.database.room.DB
 import com.gerwalex.mymonma.database.room.MyConverter
@@ -118,6 +121,36 @@ suspend fun Context.restore(file: File, dbname: String) {
         Log.e("Decompress", "unzip", e)
     }
 }
+
+/**
+ * Prüft auf einen Job im Workmanager
+ * @param workName Name of Work
+ * @return WorkInfo.State state of Work or null, when not found
+ */
+suspend fun Context.getUniqueWorkInfoState(workName: String): WorkInfo.State? {
+    val workManager = WorkManager.getInstance(this)
+    val workInfos = workManager.getWorkInfosForUniqueWork(workName).await()
+    val result = if (workInfos.size == 1) {
+        // for (workInfo in workInfos) {
+        val workInfo = workInfos[0]
+        Log.d("WorkManager", "workInfo.state=${workInfo.state}, id=${workInfo.id}")
+        when (workInfo.state) {
+            WorkInfo.State.ENQUEUED -> Log.d("WorkManager", "$workName is enqueued and alive")
+            WorkInfo.State.RUNNING -> Log.d("WorkManager", "$workName is running and alive")
+            WorkInfo.State.SUCCEEDED -> Log.d("WorkManager", "$workName has succeded")
+            WorkInfo.State.FAILED -> Log.d("WorkManager", "$workName has failed")
+            WorkInfo.State.BLOCKED -> Log.d("WorkManager", "$workName is blocked and Alive")
+            WorkInfo.State.CANCELLED -> Log.d("WorkManager", "$workName is cancelled")
+        }
+        workInfo.state
+    } else {
+        null
+    }
+    return result
+}
+
+
+
 
 
 

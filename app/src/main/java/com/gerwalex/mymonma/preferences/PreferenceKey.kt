@@ -9,5 +9,5 @@ object PreferenceKey {
      */
     val AnzahlTage = intPreferencesKey("AnzahlTage")
     val LastMaintenance = longPreferencesKey("LastMaintenance")
-    val NextKursDownload = longPreferencesKey("LastMaintenance")
+    val NextKursDownload = longPreferencesKey("NextKursDownload")
 }

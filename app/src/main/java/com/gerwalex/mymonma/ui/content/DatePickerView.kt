@@ -45,6 +45,23 @@ fun DateView(
     }
 }
 
+@Composable
+fun DateTimeView(
+    date: Date,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.bodyLarge,
+    fontWeight: FontWeight = FontWeight.Normal,
+) {
+    val dateformatter = remember { DateFormat.getDateTimeInstance().format(date) }
+    Column(modifier) {
+        Text(
+            text = dateformatter.format(date),
+            style = style,
+            fontWeight = fontWeight,
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {

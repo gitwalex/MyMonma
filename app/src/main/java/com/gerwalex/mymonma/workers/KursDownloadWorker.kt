@@ -123,7 +123,7 @@ class KursDownloadWorker(private val context: Context, params: WorkerParameters)
     companion object {
 
         private const val LOGIN_URL = "https://alt.finanztreff.de/anmeldung.htn?"
-        private val tag: String = MaintenanceWorker::class.java.name
+        val tag: String = MaintenanceWorker::class.java.name
         fun submitDelayed(context: Context): UUID {
             val cal = GregorianCalendar.getInstance().apply {
                 set(Calendar.MINUTE, 0)

@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.work.CoroutineWorker
-import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.gerwalex.mymonma.database.room.DB
@@ -20,7 +20,7 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
     context.applicationContext,
     params
 ) {
-   private val context = context.applicationContext
+    private val context = context.applicationContext
 
     private val sqLiteOpenHelper: SupportSQLiteOpenHelper = DB.get().openHelper
 
@@ -34,6 +34,7 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
             context.dataStore.edit {
                 it[PreferenceKey.LastMaintenance] = Date().time
             }
+            enqueueMaintenanceWorker(context, TimeUnit.DAYS.toMillis(1))
             Result.success()
 
         } catch (e: Exception) {
@@ -44,14 +45,18 @@ class MaintenanceWorker(context: Context, params: WorkerParameters) : CoroutineW
 
     companion object {
 
-        private val tag: String = MaintenanceWorker::class.java.name
-        fun enqueueMaintenanceWorker(context: Context): Operation {
-            val maintenanceWork = PeriodicWorkRequestBuilder<MaintenanceWorker>(24, TimeUnit.HOURS)
-                .build()
-            return WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        val tag: String = MaintenanceWorker::class.java.name
+        fun enqueueMaintenanceWorker(
+            context: Context,
+            delay: Long = TimeUnit.HOURS.toMillis(1)
+        ): Operation {
+            val maintenanceWork =
+                OneTimeWorkRequest.Builder(MaintenanceWorker::class.java)
+                    .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                    .build()
+            return WorkManager.getInstance(context).enqueueUniqueWork(
                 tag,
-//                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingWorkPolicy.REPLACE,
                 maintenanceWork
             )
         }

@@ -36,6 +36,8 @@ abstract class ReportDao(db: DB) {
     @Query("Select * from Reportbasisdaten where id = :reportid")
     abstract suspend fun getReportBasisDaten(reportid: Long): ReportBasisDaten?
 
+    @Query("Select * from Reportbasisdaten where id = :reportid")
+    abstract fun getReportBasisDatenAsFlow(reportid: Long): Flow<ReportBasisDaten>
 
     @Query(
         """
