@@ -20,10 +20,13 @@ import java.sql.Date
 abstract class WPDao(val db: DB) {
 
     @Query(
-        "select a.*" +
-                "from Partnerstamm a " +
-                "join WPStamm b on a.id = b.partnerid " +
-                "where wpkenn = :wpkenn"
+        """
+                select a.*
+                from Partnerstamm a 
+                join WPStamm b on a.id = b.partnerid 
+                where wpkenn = :wpkenn
+
+    """
     )
     abstract fun getPartner(wpkenn: String): Flow<Partnerstamm?>
 
@@ -31,13 +34,16 @@ abstract class WPDao(val db: DB) {
      * Marktwert aller Wertpapier/ Depots
      */
     @Query(
-        "select total(marktwert) " +  //
-                "from (" +  //
-                "select total(menge) / $NACHKOMMA * (SELECT kurs from WPKurs d where a.wpid = d.wpid " +
-                "group by wpid having max(btag)) as marktwert " +  //
-                "from WPTrx a " +  //
-                "where paketid is null " +  //
-                "group by wpid) "
+        """
+                select total(marktwert)   
+                from (  
+                select total(menge) / $NACHKOMMA * (SELECT kurs from WPKurs d where a.wpid = d.wpid 
+                group by wpid having max(btag)) as marktwert   
+                from WPTrx a   
+                where paketid is null   
+                group by wpid) 
+
+    """
     )
     abstract fun getWPMarktwert(): Long
 
@@ -71,32 +77,34 @@ abstract class WPDao(val db: DB) {
      * @param btag Datum, zu dem die Liste erstellt sein soll
      */
     @Query(
-        "select a.*, name, total(menge) as bestand, total(einstand) as einstand " +
-                ",(select total(einstand) from wptrx where wpid = a.id " +
-                "and catid between 2001 and 2049) as gesamteinkaufpreis " +
-                ",(select count(einstand) from wptrx where wpid = a.id " +
-                "and catid between 2001 and 2049) as anzahlkauf " +
-                ",(select total(amount) from CashTrx c where a.id = c.partnerid and btag <= :btag " +
-                "and catid between 2101 and 2199) as income " +
-                ",(select min(btag) from wptrx where wpid = a.id) as firstums " +
-                ",(select max(btag) from wptrx where wpid = a.id) as lastums " +
-                ",(select total(amount) from CashTrx  c where a.id = c.partnerid " +  //
-                "and catid between 2001 and 2049) as gesamtkauf  " +  //
-                ",(select total(amount) from CashTrx c where a.id = c.partnerid and btag <= :btag " +
-                "and catid in(2201)) as kursverlust " +
-                ",(select total(amount) from CashTrx c where a.id = c.partnerid and btag <= :btag " +
-                "and catid in(2200)) as kursgewinn " +  //
-                ",(SELECT kurs from WPKurs d where a.id = d.wpid and btag <= :btag " +
-                "group by wpid having max(btag)) as lastkurs  " +  //
-                ",(SELECT btag from WPKurs d  where a.id = d.wpid and btag <= :btag " +
-                "group by wpid having max(btag)) as lastbtag  " +
-                "from WPStamm a  " +  //
-                "join Partnerstamm p on (p.id = a.partnerid) " +  //
-                "left outer join WPTrx b on (b.wpid = a.id) " +
-                "where paketid is null  " +  //
-                "and btag <= :btag " +  //
-                "group by wpid having bestand > 0 " +  //
-                "order by name"
+        """
+        select a.*, name, total(menge) as bestand, total(einstand) as einstand 
+                ,(select total(einstand) from wptrx where wpid = a.id 
+                and catid between 2001 and 2049) as gesamteinkaufpreis 
+                ,(select count(einstand) from wptrx where wpid = a.id 
+                and catid between 2001 and 2049) as anzahlkauf 
+                ,(select total(amount) from CashTrx c where a.id = c.partnerid and btag <= :btag 
+                and catid between 2101 and 2199) as income 
+                ,(select min(btag) from wptrx where wpid = a.id) as firstums 
+                ,(select max(btag) from wptrx where wpid = a.id) as lastums 
+                ,(select total(amount) from CashTrx  c where a.id = c.partnerid   
+                and catid between 2001 and 2049) as gesamtkauf    
+                ,(select total(amount) from CashTrx c where a.id = c.partnerid and btag <= :btag 
+                and catid in(2201)) as kursverlust 
+                ,(select total(amount) from CashTrx c where a.id = c.partnerid and btag <= :btag 
+                and catid in(2200)) as kursgewinn   
+                ,(SELECT kurs from WPKurs d where a.id = d.wpid and btag <= :btag 
+                group by wpid having max(btag)) as lastkurs    
+                ,(SELECT btag from WPKurs d  where a.id = d.wpid and btag <= :btag 
+                group by wpid having max(btag)) as lastbtag  
+                from WPStamm a    
+                join Partnerstamm p on (p.id = a.partnerid)   
+                left outer join WPTrx b on (b.wpid = a.id) 
+                where paketid is null    
+                and btag <= :btag   
+                group by wpid having bestand > 0   
+                order by name
+         """
     )
     abstract fun getWPBestandListe(btag: Date): Flow<List<WPStammView>>
 
@@ -104,30 +112,32 @@ abstract class WPDao(val db: DB) {
      * Liefert eine filterbare Liste aller Wertpapiere.
      */
     @Query(
-        "select a.*, name, total(menge) as bestand, total(einstand) as einstand  " +  //
-                ",(select total(einstand) from wptrx where wpid = a.id " +
-                "and catid between 2001 and 2049) as gesamteinkaufpreis " +
-                ",(select count(einstand) from wptrx where wpid = a.id " +
-                "and catid between 2001 and 2049) as anzahlkauf " +
-                ",(select min(btag) from wptrx where wpid = a.id) as firstums " +
-                ",(select max(btag) from wptrx where wpid = a.id) as lastums " +
-                ",(select total(amount) from CashTrx  c where a.id = c.partnerid " +  //
-                "and catid between 2001 and 2049) as gesamtkauf  " +  //
-                ",(select total(amount) from CashTrx c where a.id = c.partnerid " +  //
-                "and catid in(2201)) as kursverlust " +  //
-                ",(select total(amount) from CashTrx c where a.id = c.partnerid " +  //
-                "and catid in(2200)) as kursgewinn " +  //
-                ",(select total(amount) from CashTrx c where a.id = c.partnerid " +  //
-                "and catid between 2101 and 2199) as income  " +  //
-                ",(SELECT kurs from WPKurs d where a.id = d.wpid " + "group by wpid having max(btag)) as lastkurs  " +  //
-                "from WPStamm a   " +  //
-                "join Partnerstamm p on (p.id = a.partnerid) " +  //
-                "left outer join WPTrx b on (b.wpid = a.id)  " +  //
-                "where paketid is null  " +  //
-                "and (name like '%' || :search || '%' or  wpkenn like '%' || :search || '%')  " +  //
-                "and wptyp in (:filter)" +  //
-                "group by wpid " +  //
-                "order by name "
+        """
+                select a.*, name, total(menge) as bestand, total(einstand) as einstand    
+                ,(select total(einstand) from wptrx where wpid = a.id 
+                and catid between 2001 and 2049) as gesamteinkaufpreis 
+                ,(select count(einstand) from wptrx where wpid = a.id 
+                and catid between 2001 and 2049) as anzahlkauf 
+                ,(select min(btag) from wptrx where wpid = a.id) as firstums 
+                ,(select max(btag) from wptrx where wpid = a.id) as lastums 
+                ,(select total(amount) from CashTrx  c where a.id = c.partnerid   
+                and catid between 2001 and 2049) as gesamtkauf    
+                ,(select total(amount) from CashTrx c where a.id = c.partnerid   
+                and catid in(2201)) as kursverlust   
+                ,(select total(amount) from CashTrx c where a.id = c.partnerid   
+                and catid in(2200)) as kursgewinn   
+                ,(select total(amount) from CashTrx c where a.id = c.partnerid   
+                and catid between 2101 and 2199) as income    
+                ,(SELECT kurs from WPKurs d where a.id = d.wpid  group by wpid having max(btag)) as lastkurs    
+                from WPStamm a     
+                join Partnerstamm p on (p.id = a.partnerid)   
+                left outer join WPTrx b on (b.wpid = a.id)    
+                where paketid is null    
+                and (name like '%' || :search || '%' or  wpkenn like '%' || :search || '%')    
+                and wptyp in (:filter)  
+                group by wpid   
+                order by name 
+ """
     )
     abstract fun getWPStammListe(search: String, filter: List<String>): List<WPStammView>
 

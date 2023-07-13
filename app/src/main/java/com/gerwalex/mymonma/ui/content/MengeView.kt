@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -57,8 +56,7 @@ fun MengeEditView(
     fontWeight: FontWeight = FontWeight.Normal,
     onChanged: (Long) -> Unit
 ) {
-    var myValue by remember { mutableStateOf(0L) }
-    myValue = value
+    var myValue by rememberState { value }
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     Box(
@@ -67,7 +65,6 @@ fun MengeEditView(
                 CalcDialog().apply {
                     settings.also { settings ->
                         settings.isSignBtnShown = false
-                        settings.numberFormat = NumberFormat.getCurrencyInstance()
                         settings.initialValue = BigDecimal(myValue).divide(BigDecimal(NACHKOMMA))
                         settings.requestCode = ComposeActivity.CalcMengeResultRequest
                     }

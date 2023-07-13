@@ -75,7 +75,7 @@ fun WPKaufScreen(
     var kurs by rememberState { 0L }
     var gebuehren by rememberState { 0L }
     var depot by rememberState { AccountDepotView(id = -1) }
-    val ausmBetrag by remember { derivedStateOf { (kurs * (menge / NACHKOMMA)) + gebuehren } }
+    val ausmBetrag by remember { derivedStateOf { ((kurs * menge) / NACHKOMMA) + gebuehren } }
 
     Scaffold(topBar = {
         TopToolBar(

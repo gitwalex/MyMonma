@@ -134,7 +134,13 @@ fun EditReportData(
                 report.update()
 
             })
-            VerglZeitraumCard(report = report)
+            VerglZeitraumCard(report = report, selected = {
+                report.verglZeitraum = it
+                report.verglVon = it.dateSelection.startDate
+                report.verglBis = it.dateSelection.endDate
+                report.update()
+
+            })
         }
     }
 }

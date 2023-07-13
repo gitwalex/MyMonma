@@ -20,11 +20,11 @@ import java.util.*
  * Created by K.K. Ho on 3/9/2017.
  */
 object FileUtils {
-    fun loadCSVFile(`in`: InputStream, database: SupportSQLiteDatabase, tablename: String) {
+    fun loadCSVFile(stream: InputStream, database: SupportSQLiteDatabase, tablename: String) {
         val cv = ContentValues()
         try {
             Log.d("gerwalex", "Lade Tabelle $tablename")
-            val buffer = BufferedReader(InputStreamReader(`in`))
+            val buffer = BufferedReader(InputStreamReader(stream))
             val colnames = buffer.readLine().split(";".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()
             var line: String?
@@ -49,7 +49,7 @@ object FileUtils {
             Log.d("gerwalex", "Werte: $cv")
         } finally {
             try {
-                `in`.close()
+                stream.close()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

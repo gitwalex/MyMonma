@@ -176,10 +176,13 @@ abstract class ReportDao(db: DB) {
      * Summen der ordentlichen Erträge nach Jahr
      */
     @Query(
-        "select strftime('%Y', btag) as year, sum(amount) as amount " +  //
-                "from CashTrx " +  //
-                "where catid between 2100 and 2199 " +  //
-                "group by year"
+        """
+                select strftime('%Y', btag) as year, sum(amount) as amount   
+                from CashTrx   
+                where catid between 2100 and 2199   
+                group by year
+
+    """
     )
     abstract fun getOrdinaryIncome(): Flow<List<OrdinaryIncome>>
 

@@ -119,9 +119,12 @@ abstract class Dao(val db: DB) {
      * komplett (mit Aufbau der Gegenbuchungen) neu eingefügt.
      */
     @Query(
-        "select * from CashTrxView a " +
-                "where a.id = :id or a.transferid = :id " +
-                "order by a.id"
+        """
+                select * from CashTrxView a 
+                where a.id = :id or a.transferid = :id 
+                order by a.id
+
+    """
     )
     abstract fun getCashTrxFlow(id: Long): Flow<List<CashTrxView>>
 
@@ -133,9 +136,12 @@ abstract class Dao(val db: DB) {
      * komplett (mit Aufbau der Gegenbuchungen) neu eingefügt.
      */
     @Query(
-        "select * from CashTrxView a " +
-                "where a.id = :id or a.transferid = :id " +
-                "order by a.id"
+        """
+                select * from CashTrxView a 
+                where a.id = :id or a.transferid = :id 
+                order by a.id
+
+    """
     )
     protected abstract suspend fun _getCashTrx(id: Long): List<CashTrxView>
 

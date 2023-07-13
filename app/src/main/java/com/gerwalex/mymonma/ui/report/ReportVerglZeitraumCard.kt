@@ -21,7 +21,7 @@ import com.gerwalex.mymonma.ui.content.DatePickerView
 
 
 @Composable
-fun VerglZeitraumCard(report: ReportBasisDaten) {
+fun VerglZeitraumCard(report: ReportBasisDaten, selected: (ReportDateSelector) -> Unit) {
     Card(modifier = Modifier.padding(4.dp)) {
         Column {
             Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -31,10 +31,7 @@ fun VerglZeitraumCard(report: ReportBasisDaten) {
                     textAlign = TextAlign.Center
                 )
                 ReportDateSpinner(selector = report.verglZeitraum, selected = {
-                    report.verglZeitraum = it
-                    report.verglVon = it.dateSelection.startDate
-                    report.verglBis = it.dateSelection.endDate
-                    report.update()
+                    selected(it)
                 })
 
             }

@@ -123,7 +123,12 @@ fun GeldflussDetailScreen(
                             report.update()
 
                         })
-                        VerglZeitraumCard(report = report)
+                        VerglZeitraumCard(report = report, selected = {
+                            report.verglZeitraum = it
+                            report.verglVon = it.dateSelection.startDate
+                            report.verglBis = it.dateSelection.endDate
+                            report.update()
+                        })
                         BottomNavigationBar {
                             drawerContent = it
                             scope.launch {
@@ -200,7 +205,7 @@ fun GeldflussDetailScreen(
                                                         onClicked = {
                                                             navigateTo(
                                                                 ReportGeldflussDetailDest.also {
-                                                                    it.reportid = report.id!!
+                                                                    it.reportid = reportid
                                                                     it.catid = item.catid
                                                                     navigateTo(it)
                                                                 })
@@ -208,7 +213,7 @@ fun GeldflussDetailScreen(
                                                         onVerglClicked = {
                                                             navigateTo(
                                                                 ReportGeldflussVerglDetailDest.also {
-                                                                    it.reportid = report.id!!
+                                                                    it.reportid = reportid
                                                                     it.catid = item.catid
                                                                     navigateTo(it)
                                                                 })

@@ -18,6 +18,7 @@ import com.gerwalex.mymonma.database.tables.ReportBasisDaten
 import com.gerwalex.mymonma.enums.ReportDateSelector
 import com.gerwalex.mymonma.enums.ReportDateSpinner
 import com.gerwalex.mymonma.ui.content.DatePickerView
+import java.sql.Date
 
 @Composable
 fun ZeitraumCard(report: ReportBasisDaten, selected: (ReportDateSelector) -> Unit) {
@@ -57,6 +58,54 @@ fun ZeitraumCard(report: ReportBasisDaten, selected: (ReportDateSelector) -> Uni
                     report.bis = it
                     report.zeitraum = ReportDateSelector.EigDatum
                     report.update()
+                })
+            }
+        }
+
+    }
+}
+
+@Composable
+fun ZeitraumCard(
+    zeitraum: ReportDateSelector,
+    von: Date,
+    bis: Date,
+    onZeitraumChanged: (ReportDateSelector) -> Unit,
+    onVonChanged: (Date) -> Unit,
+    onBisChanged: (Date) -> Unit,
+) {
+    Card(modifier = Modifier.padding(4.dp)) {
+        Column {
+            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = stringResource(id = R.string.zeitraum),
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
+                ReportDateSpinner(selector = zeitraum, selected = {
+                    onZeitraumChanged(it)
+                })
+
+            }
+            Row {
+                Text(
+                    text = stringResource(id = R.string.reportStart),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = stringResource(id = R.string.reportEnde),
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+
+            Row {
+                DatePickerView(date = von, onChanged = {
+                    onVonChanged(it)
+                })
+                Spacer(modifier = Modifier.weight(1f))
+                DatePickerView(date = bis, onChanged = {
+                    onBisChanged(it)
                 })
             }
         }
