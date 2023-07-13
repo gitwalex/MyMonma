@@ -153,4 +153,6 @@
     <string name="buchwert">Buchwert</string>
     <string name="anzahl">Anzahl</string>
     <string name="depotname">Depot</string>
+    <string name="Lzt2Years">Letzte 2 Jahre</string>
+    <string name="Lzt5Years">Letzte 5 Jahre</string>
 </resources>

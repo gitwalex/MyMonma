@@ -126,6 +126,36 @@ enum class ReportDateSelector {
                 return VonBisDate(vonDate, bisDate)
             }
     },  //
+    Lzt2Years {
+        override val textResID = R.string.Lzt2Years
+        override val dateSelection: VonBisDate
+            get() {
+                val bisDate = actualDate
+                bisDate.add(Calendar.YEAR, -1)
+                bisDate[Calendar.MONTH] = Calendar.DECEMBER
+                bisDate[Calendar.DAY_OF_MONTH] = 31
+                val vonDate = actualDate
+                vonDate[Calendar.YEAR] = bisDate[Calendar.YEAR] - 1
+                vonDate[Calendar.MONTH] = Calendar.JANUARY
+                vonDate[Calendar.DAY_OF_MONTH] = 1
+                return VonBisDate(vonDate, bisDate)
+            }
+    },  //
+    Lzt5Years {
+        override val textResID = R.string.Lzt5Years
+        override val dateSelection: VonBisDate
+            get() {
+                val bisDate = actualDate
+                bisDate.add(Calendar.YEAR, -1)
+                bisDate[Calendar.MONTH] = Calendar.DECEMBER
+                bisDate[Calendar.DAY_OF_MONTH] = 31
+                val vonDate = actualDate
+                vonDate[Calendar.YEAR] = bisDate[Calendar.YEAR] - 4
+                vonDate[Calendar.MONTH] = Calendar.JANUARY
+                vonDate[Calendar.DAY_OF_MONTH] = 1
+                return VonBisDate(vonDate, bisDate)
+            }
+    },  //
     Ltz12Mnt {
         override val textResID = R.string.Ltz12Mnt
 
@@ -150,20 +180,6 @@ enum class ReportDateSelector {
                 return VonBisDate(von.time, bis.time)
             }
     },  //
-    EigDatum {
-        override val textResID = R.string.EigDatum
-
-
-        /**
-         * @throws UnsupportedOperationException,
-         * da hier kein automatisierter Auswertungszeitraum ermittelbar ist
-         */
-        override val dateSelection: VonBisDate
-            get() {
-                // Keine Standarauswahl moeglich
-                throw UnsupportedOperationException("Keine Standarauswahl moeglich")
-            }
-    } //
     ;
 
     /**
@@ -280,7 +296,6 @@ fun ReportDateSpinner(selector: ReportDateSelector, selected: (ReportDateSelecto
             })
         DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
             ReportDateSelector.values()
-                .filter { it != ReportDateSelector.EigDatum }
                 .forEachIndexed { index, s ->
                     DropdownMenuItem(
                         text = { Text(text = stringResource(id = s.textResID)) },

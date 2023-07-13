@@ -92,12 +92,10 @@ fun ReportBasisDatenItem(
                     text = stringResource(id = report.zeitraum.textResID)
                 )
             }
-            if (report.zeitraum == ReportDateSelector.EigDatum) {
-                Row {
-                    DateView(date = report.von)
-                    Spacer(modifier = Modifier.weight(1f))
-                    DateView(date = report.bis)
-                }
+            Row {
+                DateView(date = report.von)
+                Spacer(modifier = Modifier.weight(1f))
+                DateView(date = report.bis)
             }
             Divider()
             Text(
@@ -106,13 +104,10 @@ fun ReportBasisDatenItem(
                     stringResource(id = report.verglZeitraum.textResID)
                 )
             )
-
-            if (report.zeitraum == ReportDateSelector.EigDatum) {
-                Row {
-                    DateView(date = report.verglVon)
-                    Spacer(modifier = Modifier.weight(1f))
-                    DateView(date = report.verglBis)
-                }
+            Row {
+                DateView(date = report.verglVon)
+                Spacer(modifier = Modifier.weight(1f))
+                DateView(date = report.verglBis)
             }
             report.description?.let {
                 Divider()

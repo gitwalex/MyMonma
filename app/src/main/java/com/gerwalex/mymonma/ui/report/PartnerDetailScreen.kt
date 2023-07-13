@@ -45,10 +45,8 @@ fun PartnerDetailScreen(
     var filter by rememberState { "" }
     LaunchedEffect(reportid) {
         reportdao.getReportBasisDaten(reportid)?.let {
-            if (it.zeitraum != ReportDateSelector.EigDatum) {
-                it.von = it.zeitraum.dateSelection.startDate
-                it.bis = it.zeitraum.dateSelection.endDate
-            }
+            it.von = it.zeitraum.dateSelection.startDate
+            it.bis = it.zeitraum.dateSelection.endDate
             zeitraum = it.zeitraum
             reportdao.update(it)
             report = it

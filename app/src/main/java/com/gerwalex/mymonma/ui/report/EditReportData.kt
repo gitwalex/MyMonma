@@ -70,6 +70,15 @@ fun EditReportData(
     report: ReportBasisDaten,
     navigateTo: (Destination) -> Unit
 ) {
+    var zeitraumState = rememberZeitraumCardState(selector = report.zeitraum).apply {
+        von = report.von
+        bis = report.bis
+    }
+    var zeitraumVerglState = rememberZeitraumCardState(selector = report.verglZeitraum).apply {
+        von = report.von
+        bis = report.bis
+
+    }
     val scope = rememberCoroutineScope()
     var name by rememberState { report.name }
     var description by rememberState { report.description ?: "" }
@@ -127,24 +136,27 @@ fun EditReportData(
                 }
             })
 
-            ZeitraumCard(report = report, selected = {
-                report.zeitraum = it
-                report.von = it.dateSelection.startDate
-                report.bis = it.dateSelection.endDate
-                report.update()
-
-            })
-            VerglZeitraumCard(report = report, selected = {
-                report.verglZeitraum = it
-                report.verglVon = it.dateSelection.startDate
-                report.verglBis = it.dateSelection.endDate
-                report.update()
-
-            })
+            ZeitraumCard(
+                state = zeitraumState,
+                onChanged = {
+                    zeitraumState = it
+                    report.zeitraum = it.zeitraum
+                    report.von = it.von
+                    report.bis = it.bis
+                    report.update()
+                })
+            ZeitraumCard(
+                state = zeitraumVerglState,
+                onChanged = {
+                    zeitraumVerglState = it
+                    report.verglZeitraum = it.zeitraum
+                    report.verglVon = it.von
+                    report.verglBis = it.bis
+                    report.update()
+                })
         }
     }
 }
-
 
 @Preview(name = "Light", uiMode = UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES)

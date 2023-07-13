@@ -31,12 +31,14 @@ import java.text.DateFormat
 @Composable
 fun DateView(
     date: Date,
-    modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyLarge,
     fontWeight: FontWeight = FontWeight.Normal,
+    onClick: () -> Unit = {}
 ) {
     val dateformatter = remember { DateFormat.getDateInstance(DateFormat.DEFAULT) }
-    Column(modifier) {
+    Column(modifier = Modifier.clickable {
+        onClick()
+    }) {
         Text(
             text = dateformatter.format(date),
             style = style,
@@ -64,9 +66,14 @@ fun DateTimeView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) -> Unit) {
+fun DatePickerView(
+    date: Date,
+    style: TextStyle = MaterialTheme.typography.bodyLarge,
+    fontWeight: FontWeight = FontWeight.Normal,
+    onChanged: (Date) -> Unit
+) {
     var showDatePicker by remember { mutableStateOf(false) }
-    DateView(date = date, modifier = modifier.clickable {
+    DateView(date = date, style = style, fontWeight = fontWeight, onClick = {
         showDatePicker = true
     })
     Box {
@@ -103,5 +110,42 @@ fun DatePickerView(date: Date, modifier: Modifier = Modifier, onChanged: (Date) 
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerView(
+    date: Date,
+    onChanged: (Date) -> Unit
+) {
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = date.time)
+    Popup {
+        Column {
+            DatePicker(
+                modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                state = datePickerState,
+                dateValidator = {
+                    Log.d("DatePickerView", "DatePickerView:  ${Date(it)}")
+                    onChanged(Date(it))
+                    true
+                })
+            TextButton(onClick = {
+                datePickerState.selectedDateMillis?.let {
+                    onChanged(Date(it))
+                }
+            }) {
+                Text(
+                    text = stringResource(id = R.string.ok),
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.End,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+            }
+        }
+    }
+
+
 }
 
